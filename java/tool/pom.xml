@@ -28,16 +28,6 @@
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jsersey-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-            <version>${jsersey-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${jsersey-version}</version>
         </dependency>
@@ -76,7 +66,7 @@
                         -->
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>com.nedap.retail.bus.push.App</mainClass>
+                            <mainClass>com.nedap.retail.services.tool.push.App</mainClass>
                         </transformer>
                     </transformers> 
                     <filters>
@@ -110,7 +100,7 @@
                 <version>1.1.1</version>
                 <configuration>
                     <executable>java</executable>
-                    <mainClass>com.nedap.retail.bus.push.App</mainClass>
+                    <mainClass>com.nedap.retail.services.tool.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>

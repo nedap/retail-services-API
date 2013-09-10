@@ -83,7 +83,7 @@ public abstract class AbstractBusRequest implements Serializable {
     }
 
     /**
-     * Creates an AMQP routing key in the form off: <namespace>.<version>.<type>
+     * Creates a routing key in the form off: <namespace>.<version>.<type>
      */
     @JsonIgnore
     public String getRoutingKey() {

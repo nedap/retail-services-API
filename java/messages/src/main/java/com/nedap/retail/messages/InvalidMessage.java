@@ -1,8 +1,5 @@
 package com.nedap.retail.messages;
 
-/**
- * @author Jasper Kremer
- */
 public class InvalidMessage extends Exception {
 
     private final int status;
