@@ -18,15 +18,15 @@ public class Util {
         throw new InvalidMessage("required field missing: " + key);
     }
 
-    public static String getString(Map params, String key, String defaultS) {
+    public static String getString(Map params, String key, String defaultValue) {
         if (params != null) {
             Object value = params.get(key);
             if (value != null) {
                 return value.toString();
             }
-            return defaultS;
+            return defaultValue;
         }
-        return defaultS;
+        return defaultValue;
     }
 
     public static int getInt(Map params, String key) throws InvalidMessage {
@@ -177,14 +177,14 @@ public class Util {
     }
 
 
-    public static Map getMap(Map params, String key, Map def) {
+    public static Map getMap(Map params, String key, Map defaultValue) {
         Object value = params.get(key);
         if (value == null) {
-            return def;
+            return defaultValue;
         } else if (value instanceof Map) {
             return (Map) value;
         } else {
-            return def;
+            return defaultValue;
         }
     }
 }

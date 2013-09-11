@@ -1,9 +1,5 @@
 package com.nedap.retail.messages;
 
-import com.nedap.retail.messages.AbstractBusResponse;
-import com.nedap.retail.messages.BusResponse;
-import com.nedap.retail.messages.InvalidMessage;
-import com.nedap.retail.messages.OAuthResponse;
 import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.subscription.SubscriptionListResponse;
 import com.nedap.retail.messages.system.SystemListPayload;
@@ -18,12 +14,15 @@ import java.util.List;
 import java.util.Map;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Nedap Retail Services Client.
  */
 public class Client {
 
+    private static final Logger logger = LoggerFactory.getLogger(Client.class);
     private final String url;
     private final String clientId;
     private final String secret;
@@ -68,49 +67,16 @@ public class Client {
     }
 
     /**
-     * Push API: subscribe.
-     */
-    public void subscriptionSubscribe(final String topic, final String callback, final String secret,
-            final int lease_seconds) throws InvalidMessage {
-
-        final WebResource resource = resource("/subscription/1.0/subscribe").
-                queryParam("hub.topic", topic).
-                queryParam("hub.callback", callback).
-                queryParam("hub.secret", secret).
-                queryParam("hub.lease_seconds", "" + lease_seconds);
-
-        post(resource, BusResponse.class);
-    }
-
-    /**
-     * Push API: unsubscribe
-     */
-    public void subscriptionUnsubscribe(final String topic) throws InvalidMessage {
-
-        final WebResource resource = resource("/subscription/1.0/unsubscribe").queryParam("hub.topic", topic);
-        post(resource, BusResponse.class);
-    }
-
-    /**
-     * Push API: list
-     */
-    public List<Subscription> subscriptionList() throws InvalidMessage {
-
-        final WebResource resource = resource("/subscription/1.0/list");
-        return get(resource, SubscriptionListResponse.class).getPayload();
-    }
-
-    /**
      * To update a system to a new firmware version, you need to know which updates are available for the system.
      * This could depend on the current firmware version, or on the installed hardware.
      *
      * @param systemId Identifies the system.
      * @return List of fimware versions available for upgrade.
      */
-    public List<String> firmwareList(final String systemId) throws InvalidMessage {
+    public List<String> getFirmwareList(final String systemId) throws InvalidMessage {
 
         final WebResource resource = resource("/system/1.0/firmware_versions").queryParam("system_id", systemId);
-        final BusResponse response = get(resource, BusResponse.class);
+        final ApiResponse response = get(resource, ApiResponse.class);
         return (List<String>) response.getPayload();
     }
 
@@ -129,12 +95,45 @@ public class Client {
      * @param systemId Identifies the system to be upgraded.
      * @param firmwareVersion Requested firmware version to upgrade to.
      */
-    public void firmwareUpgrade(final String systemId, final String firmwareVersion) throws InvalidMessage {
+    public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) throws InvalidMessage {
 
         final WebResource resource = resource("/system/1.0/update").
                 queryParam("system_id", systemId).
                 queryParam("firmware_version", firmwareVersion);
-        post(resource, BusResponse.class);
+        post(resource, ApiResponse.class);
+    }
+
+    /**
+     * Push API: subscribe.
+     */
+    public void subscribe(final String topic, final String callback, final String secret,
+            final int lease_seconds) throws InvalidMessage {
+
+        final WebResource resource = resource("/subscription/1.0/subscribe").
+                queryParam("hub.topic", topic).
+                queryParam("hub.callback", callback).
+                queryParam("hub.secret", secret).
+                queryParam("hub.lease_seconds", "" + lease_seconds);
+
+        post(resource, ApiResponse.class);
+    }
+
+    /**
+     * Push API: unsubscribe
+     */
+    public void unsubscribe(final String topic) throws InvalidMessage {
+
+        final WebResource resource = resource("/subscription/1.0/unsubscribe").queryParam("hub.topic", topic);
+        post(resource, ApiResponse.class);
+    }
+
+    /**
+     * Push API: list
+     */
+    public List<Subscription> getSubscriptionList() throws InvalidMessage {
+
+        final WebResource resource = resource("/subscription/1.0/list");
+        return get(resource, SubscriptionListResponse.class).getPayload();
     }
 
     private WebResource resource(String uri) {
@@ -142,33 +141,44 @@ public class Client {
         return httpClient.resource(url + uri);
     }
 
-    private <T extends AbstractBusResponse> T get(final WebResource resource, final Class<T> responseClass)
+    private <T extends AbstractApiResponse> T get(final WebResource resource, final Class<T> responseClass)
             throws InvalidMessage {
 
         return method("GET", resource, responseClass);
     }
 
-    private <T extends AbstractBusResponse> T post(final WebResource resource, final Class<T> responseClass)
+    private <T extends AbstractApiResponse> T post(final WebResource resource, final Class<T> responseClass)
             throws InvalidMessage {
 
         return method("POST", resource, responseClass);
     }
 
-    private <T extends AbstractBusResponse> T method(final String method, final WebResource resource,
+    private <T extends AbstractApiResponse> T method(final String method, final WebResource resource,
             final Class<T> responseClass) throws InvalidMessage {
 
-        if (accessToken == null) {
-            accessToken = authorize();
+        T response = null;
+        for (int trycount = 0; trycount < 3; trycount++) {
+            if (accessToken == null) {
+                accessToken = authorize();
+            }
+
+            // Add access token.
+            logger.debug("method: {}, resource: {}", method, resource);
+            final Builder builder = resource.header("Authorization", accessToken).accept(APPLICATION_JSON);
+            response = builder.method(method, responseClass);
+
+            // Check if access_token is expired. If so get new access_token and repeat request.
+            if (response.getStatus() == ApiResponse.Unauthorized) {
+                logger.debug("access token is expired or invalid. try again");
+                accessToken = null;
+            } else {
+                break;
+            }
         }
 
-        // Add access token.
-        final Builder builder = resource.header("Authorization", accessToken).accept(APPLICATION_JSON);
-        final T response = builder.method(method, responseClass);
-
         final int status = response.getStatus();
-        // @todo check if access_token is expired. If so get new access_token and repeat request.
-        // @todo check for error message: "invalid scope". In that case do NOT repeat request!
-        if (status == BusResponse.OK) {
+        logger.debug("response status: {}", status);
+        if (status == ApiResponse.OK) {
             return response;
         } else {
             throw new InvalidMessage(status, getErrorMessage(response));
@@ -179,23 +189,25 @@ public class Client {
      * Login with Nedap OAuth 2.0 Authorization Server.
      *
      * @return OAuth 2.0 access token
+     * @throws UniformInterfaceException - if the status of the HTTP response is greater than or equal to 300 and
+     * c is not the type ClientResponse.
+     * @throws ClientHandlerException - if the client handler fails to process the request or response.
      */
     private String authorize() {
 
+        logger.debug("getting OAuth 2.0 access token: {}", clientId);
         final Builder builder = resource("/login/oauth/token").
                 queryParam("grant_type", "client_credentials").
                 queryParam("client_id", clientId).
                 queryParam("client_secret", secret).
                 accept(APPLICATION_JSON);
 
-        // Throws:
-        // UniformInterfaceException - if the status of the HTTP response is greater than or equal to 300 and c is not the type ClientResponse. 
-        // ClientHandlerException - if the client handler fails to process the request or response.
         final OAuthResponse result = builder.post(OAuthResponse.class);
+        logger.debug("successfull. access token: {}", result.getAccess_token());
         return result.getAccess_token();
     }
 
-    private String getErrorMessage(final AbstractBusResponse response) {
+    private String getErrorMessage(final AbstractApiResponse response) {
 
         String reason = response.getError();
         if (reason == null) {

@@ -1,9 +1,9 @@
 package com.nedap.retail.messages.subscription;
 
-import com.nedap.retail.messages.AbstractBusResponse;
+import com.nedap.retail.messages.AbstractApiResponse;
 import java.util.List;
 
-public class SubscriptionListResponse extends AbstractBusResponse {
+public class SubscriptionListResponse extends AbstractApiResponse {
 
     private static final long serialVersionUID = 1L;
     private List<Subscription> payload;
