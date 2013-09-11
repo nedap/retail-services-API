@@ -4,7 +4,7 @@ import java.io.Serializable;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public abstract class AbstractBusResponse implements Serializable {
+public abstract class AbstractApiResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -37,7 +37,7 @@ public abstract class AbstractBusResponse implements Serializable {
     protected String error;
     protected Integer status;
 
-    public AbstractBusResponse() {
+    public AbstractApiResponse() {
     }
 
     public String getCorr_id() {

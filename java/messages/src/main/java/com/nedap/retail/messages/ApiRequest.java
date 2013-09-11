@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-public class BusRequest extends AbstractBusRequest {
+public class ApiRequest extends AbstractApiRequest {
 
     private static final long serialVersionUID = 1L;
     protected Map<String, Object> payload;

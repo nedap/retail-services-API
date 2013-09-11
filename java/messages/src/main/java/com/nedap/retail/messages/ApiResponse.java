@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Response message
  */
 @XmlRootElement
-public class BusResponse extends AbstractBusResponse {
+public class ApiResponse extends AbstractApiResponse {
 
     private static final long serialVersionUID = 1L;
     protected Object payload;
@@ -14,7 +14,7 @@ public class BusResponse extends AbstractBusResponse {
     /**
      * Default constructor.
      */
-    public BusResponse() {
+    public ApiResponse() {
     }
 
     @Override

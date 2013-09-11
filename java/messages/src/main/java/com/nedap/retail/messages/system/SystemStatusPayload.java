@@ -8,8 +8,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * Contains the status_response as described here:
- * http://nvs0272/confluence/display/bus/System+API#SystemAPI-Systemstatus
+ * System status payload.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class SystemStatusPayload implements Serializable {

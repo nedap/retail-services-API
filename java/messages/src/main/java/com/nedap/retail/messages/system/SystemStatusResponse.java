@@ -1,9 +1,9 @@
 package com.nedap.retail.messages.system;
 
-import com.nedap.retail.messages.AbstractBusResponse;
+import com.nedap.retail.messages.AbstractApiResponse;
 import java.util.List;
 
-public class SystemStatusResponse extends AbstractBusResponse {
+public class SystemStatusResponse extends AbstractApiResponse {
 
     private static final long serialVersionUID = 1L;
     private List<SystemStatusPayload> payload;

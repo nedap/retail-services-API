@@ -171,7 +171,7 @@ public class App {
     }
 
     private void subscriptionList() throws InvalidMessage {
-        final List<Subscription> list = apiClient.subscriptionList();
+        final List<Subscription> list = apiClient.getSubscriptionList();
         if (list.size() > 0) {
             System.out.printf("%-20s %s\n", "topic", "callback");
             System.out.printf("---------------------------------------------------------------------------------------\n");
@@ -195,7 +195,7 @@ public class App {
         System.out.printf("subscribing topic: %s, callback: %s, secret: %s, lease_seconds: %d\n", topic, callback,
                 hub_secret, lease_seconds);
 
-        apiClient.subscriptionSubscribe(topic, callback, hub_secret, lease_seconds);
+        apiClient.subscribe(topic, callback, hub_secret, lease_seconds);
         System.out.println("ok");
     }
 
@@ -205,13 +205,13 @@ public class App {
         final String topic = "metrics";
         System.out.printf("unsubscribing topic: %s...\n", topic);
 
-        apiClient.subscriptionUnsubscribe(topic);
+        apiClient.unsubscribe(topic);
         System.out.println("ok");
     }
 
     private void firmwareList(final Scanner scanner) throws InvalidMessage {
         final String systemId = scanner.next();
-        final List<String> list = apiClient.firmwareList(systemId);
+        final List<String> list = apiClient.getFirmwareList(systemId);
         for (final String version : list) {
             System.out.printf(" %s\n", version);
         }
@@ -220,7 +220,7 @@ public class App {
     private void firmwareUpgrade(final Scanner scanner) throws InvalidMessage {
         final String systemId = scanner.next();
         final String version = scanner.next();
-        apiClient.firmwareUpgrade(systemId, version);
+        apiClient.triggerFirmwareUpgrade(systemId, version);
     }
 
     private void printMenu() {

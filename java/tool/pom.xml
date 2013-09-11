@@ -49,7 +49,7 @@
                 invalid and won’t load or run your JAR file.
               - Collate the various META-INF/services entries in the JARs instead of overwriting them. (Jersey doesn’t
                 work without those.)
-              - Set com.nedap.retail.bus.keys.KeysRegistrator as the JAR’s MainClass. This will allow you to run
+              - Set com.nedap.retail.services.tool.push.App as the JAR’s MainClass. This will allow you to run
                 the JAR using java -jar.
   
               See also http://dropwizard.codahale.com/getting-started/
@@ -92,7 +92,7 @@
 
             <!--
               Usage:
-              mvn compile exec:java -Dexec.args="-clientid com.nedap.retail.test.2 -secret bla -url https://api-test.nedapretail.com"
+              mvn compile exec:java -Dexec.args="-clientid <CLIENTID> -secret <SECRET>"
             -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

@@ -73,10 +73,10 @@ public class Client {
      * @param systemId Identifies the system.
      * @return List of fimware versions available for upgrade.
      */
-    public List<String> firmwareList(final String systemId) throws InvalidMessage {
+    public List<String> getFirmwareList(final String systemId) throws InvalidMessage {
 
         final WebResource resource = resource("/system/1.0/firmware_versions").queryParam("system_id", systemId);
-        final BusResponse response = get(resource, BusResponse.class);
+        final ApiResponse response = get(resource, ApiResponse.class);
         return (List<String>) response.getPayload();
     }
 
@@ -95,18 +95,18 @@ public class Client {
      * @param systemId Identifies the system to be upgraded.
      * @param firmwareVersion Requested firmware version to upgrade to.
      */
-    public void firmwareUpgrade(final String systemId, final String firmwareVersion) throws InvalidMessage {
+    public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) throws InvalidMessage {
 
         final WebResource resource = resource("/system/1.0/update").
                 queryParam("system_id", systemId).
                 queryParam("firmware_version", firmwareVersion);
-        post(resource, BusResponse.class);
+        post(resource, ApiResponse.class);
     }
 
     /**
      * Push API: subscribe.
      */
-    public void subscriptionSubscribe(final String topic, final String callback, final String secret,
+    public void subscribe(final String topic, final String callback, final String secret,
             final int lease_seconds) throws InvalidMessage {
 
         final WebResource resource = resource("/subscription/1.0/subscribe").
@@ -115,22 +115,22 @@ public class Client {
                 queryParam("hub.secret", secret).
                 queryParam("hub.lease_seconds", "" + lease_seconds);
 
-        post(resource, BusResponse.class);
+        post(resource, ApiResponse.class);
     }
 
     /**
      * Push API: unsubscribe
      */
-    public void subscriptionUnsubscribe(final String topic) throws InvalidMessage {
+    public void unsubscribe(final String topic) throws InvalidMessage {
 
         final WebResource resource = resource("/subscription/1.0/unsubscribe").queryParam("hub.topic", topic);
-        post(resource, BusResponse.class);
+        post(resource, ApiResponse.class);
     }
 
     /**
      * Push API: list
      */
-    public List<Subscription> subscriptionList() throws InvalidMessage {
+    public List<Subscription> getSubscriptionList() throws InvalidMessage {
 
         final WebResource resource = resource("/subscription/1.0/list");
         return get(resource, SubscriptionListResponse.class).getPayload();
@@ -141,19 +141,19 @@ public class Client {
         return httpClient.resource(url + uri);
     }
 
-    private <T extends AbstractBusResponse> T get(final WebResource resource, final Class<T> responseClass)
+    private <T extends AbstractApiResponse> T get(final WebResource resource, final Class<T> responseClass)
             throws InvalidMessage {
 
         return method("GET", resource, responseClass);
     }
 
-    private <T extends AbstractBusResponse> T post(final WebResource resource, final Class<T> responseClass)
+    private <T extends AbstractApiResponse> T post(final WebResource resource, final Class<T> responseClass)
             throws InvalidMessage {
 
         return method("POST", resource, responseClass);
     }
 
-    private <T extends AbstractBusResponse> T method(final String method, final WebResource resource,
+    private <T extends AbstractApiResponse> T method(final String method, final WebResource resource,
             final Class<T> responseClass) throws InvalidMessage {
 
         T response = null;
@@ -168,7 +168,7 @@ public class Client {
             response = builder.method(method, responseClass);
 
             // Check if access_token is expired. If so get new access_token and repeat request.
-            if (response.getStatus() == BusResponse.Unauthorized) {
+            if (response.getStatus() == ApiResponse.Unauthorized) {
                 logger.debug("access token is expired or invalid. try again");
                 accessToken = null;
             } else {
@@ -178,7 +178,7 @@ public class Client {
 
         final int status = response.getStatus();
         logger.debug("response status: {}", status);
-        if (status == BusResponse.OK) {
+        if (status == ApiResponse.OK) {
             return response;
         } else {
             throw new InvalidMessage(status, getErrorMessage(response));
@@ -207,7 +207,7 @@ public class Client {
         return result.getAccess_token();
     }
 
-    private String getErrorMessage(final AbstractBusResponse response) {
+    private String getErrorMessage(final AbstractApiResponse response) {
 
         String reason = response.getError();
         if (reason == null) {

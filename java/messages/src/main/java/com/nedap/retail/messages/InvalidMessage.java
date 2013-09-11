@@ -5,11 +5,11 @@ public class InvalidMessage extends Exception {
     private final int status;
 
     public InvalidMessage(String string, Throwable thrwbl) {
-        this(BusResponse.BadRequest, string, thrwbl);
+        this(ApiResponse.BadRequest, string, thrwbl);
     }
 
     public InvalidMessage(String string) {
-        this(BusResponse.BadRequest, string);
+        this(ApiResponse.BadRequest, string);
     }
 
     public InvalidMessage(int status, String string, Throwable thrwbl) {
