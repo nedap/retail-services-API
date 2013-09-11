@@ -8,7 +8,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 @JsonSerialize(include = Inclusion.NON_NULL) //  to prevent writing of null properties
-public abstract class AbstractBusRequest implements Serializable {
+public abstract class AbstractApiRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
     protected String id;
@@ -83,7 +83,7 @@ public abstract class AbstractBusRequest implements Serializable {
     }
 
     /**
-     * Creates an AMQP routing key in the form off: <namespace>.<version>.<type>
+     * Creates a routing key in the form off: <namespace>.<version>.<type>
      */
     @JsonIgnore
     public String getRoutingKey() {
