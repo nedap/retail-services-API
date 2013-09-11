@@ -12,9 +12,9 @@ import java.util.Scanner;
 import org.apache.commons.cli.*;
 
 /**
- * This tool can be used to test the Nedap Retail App API.
+ * This tool can be used to test the Nedap Retail API.
  *
- * usage: java -jar toole.jar -clientid <id> -secret <secret> [-url <url>]
+ * usage: java -jar tool.jar -clientid <CLIENTID> -secret <SECRET> [-url <url>]
  *
  * Exit codes:
  * 0: successfull.
