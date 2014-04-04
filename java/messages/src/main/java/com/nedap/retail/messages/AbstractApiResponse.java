@@ -25,11 +25,15 @@ public abstract class AbstractApiResponse implements Serializable {
      * Forbidden to access resource (invalid client-scopes and/or user-roles).
      * Authorization will not help and the request SHOULD NOT be repeated.
      */
-    public final static int Forbidded = 403;
+    public final static int Forbidden = 403;
     /**
      * Something is broken. Please post to the group so the team can investigate.
      */
     public final static int InternalError = 500;
+    /**
+     * Signature in message is not correct. This normally indicates a bug in the client-software.
+     */
+    public final static int SignatureError = 800;
     protected String corr_id;
     protected String version;
     protected String namespace;
