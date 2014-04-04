@@ -44,6 +44,14 @@ public class Client {
         httpClient = com.sun.jersey.api.client.Client.create(cfg);
     }
 
+    public Client(final String url, final String clientId, final String secret,
+            final com.sun.jersey.api.client.Client httpClient) {
+        this.url = url;
+        this.clientId = clientId;
+        this.secret = secret;        
+        this.httpClient = httpClient;
+    }
+
     public void destroy() {
         httpClient.destroy();
     }
@@ -136,25 +144,31 @@ public class Client {
         return get(resource, SubscriptionListResponse.class).getPayload();
     }
 
-    private WebResource resource(String uri) {
+    protected WebResource resource(String uri) {
 
         return httpClient.resource(url + uri);
     }
 
-    private <T extends AbstractApiResponse> T get(final WebResource resource, final Class<T> responseClass)
+    protected <T extends AbstractApiResponse> T get(final WebResource resource, final Class<T> responseClass)
             throws InvalidMessage {
 
-        return method("GET", resource, responseClass);
+        return method("GET", resource, responseClass, null);
     }
 
-    private <T extends AbstractApiResponse> T post(final WebResource resource, final Class<T> responseClass)
+    protected <T extends AbstractApiResponse> T post(final WebResource resource, final Class<T> responseClass)
             throws InvalidMessage {
 
-        return method("POST", resource, responseClass);
+        return method("POST", resource, responseClass, null);
+    }
+
+    protected <T extends AbstractApiResponse> T post(final WebResource resource, final Class<T> responseClass,
+            final Object requestEntity) throws InvalidMessage {
+
+        return method("POST", resource, responseClass, requestEntity);
     }
 
     private <T extends AbstractApiResponse> T method(final String method, final WebResource resource,
-            final Class<T> responseClass) throws InvalidMessage {
+            final Class<T> responseClass, final Object requestEntity) throws InvalidMessage {
 
         T response = null;
         for (int trycount = 0; trycount < 3; trycount++) {
@@ -164,8 +178,14 @@ public class Client {
 
             // Add access token.
             logger.debug("method: {}, resource: {}", method, resource);
-            final Builder builder = resource.header("Authorization", accessToken).accept(APPLICATION_JSON);
-            response = builder.method(method, responseClass);
+            if (requestEntity == null) {
+                final Builder builder = resource.header("Authorization", accessToken).accept(APPLICATION_JSON);
+                response = builder.method(method, responseClass);
+            } else {
+                final Builder builder = resource.header("Authorization", accessToken).accept(APPLICATION_JSON).
+                        type(APPLICATION_JSON);
+                response = builder.method(method, responseClass, requestEntity);
+            }
 
             // Check if access_token is expired. If so get new access_token and repeat request.
             if (response.getStatus() == ApiResponse.Unauthorized) {

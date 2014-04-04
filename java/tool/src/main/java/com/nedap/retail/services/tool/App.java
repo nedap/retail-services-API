@@ -38,7 +38,7 @@ public class App {
         final Options options = createCliOption();
         try {
             // Parse command-line parameters.
-            final CommandLineParser parser = new DefaultParser();
+            final CommandLineParser parser = new BasicParser();
             final CommandLine cmd = parser.parse(options, args);
 
             // Get command-line parameters.
