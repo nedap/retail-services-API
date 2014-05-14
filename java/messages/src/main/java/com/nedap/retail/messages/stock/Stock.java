@@ -1,7 +1,9 @@
 package com.nedap.retail.messages.stock;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -9,7 +11,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 public class Stock extends StockSummary {
 
-//    private HashMap<String,Integer> quantities = new HashMap<String,Integer>();
+    @JsonIgnore
+    private HashMap<String,Integer> quantities = new HashMap<String,Integer>();
     
     @JsonProperty("quantity_list")
     private List<GtinQuantity> quantityList;
@@ -29,10 +32,10 @@ public class Stock extends StockSummary {
     }
 
     public List<GtinQuantity> getQuantityList() {
-//        quantityList.clear();
-//        for (String key : quantities.keySet()) {
-//            quantityList.add(new GtinQuantity(key, quantities.get(key)));
-//        }
+        quantityList.clear();
+        for (String key : quantities.keySet()) {
+            quantityList.add(new GtinQuantity(key, quantities.get(key)));
+        }
         return quantityList;
     }
     
@@ -47,16 +50,16 @@ public class Stock extends StockSummary {
     }
 
     public void addQuantity(String gtin14, int quantity) {
-        this.quantityList.add(new GtinQuantity(gtin14, quantity));
+//        this.quantityList.add(new GtinQuantity(gtin14, quantity));
         // Check if gtin14 already existed. If so, retrieve it and update its quantity. 
         // A gtin14 might be listed numerous times, for example when each gtin has only 1 quantity per row.
-//        Integer gtinQuantity;
-//        if (quantities.containsKey(gtin14)) {
-//            gtinQuantity = quantities.get(gtin14);
-//            gtinQuantity += quantity;
-//        } else {
-//            gtinQuantity = new Integer(quantity);
-//        }
-//        quantities.put(gtin14, gtinQuantity);
+        Integer gtinQuantity;
+        if (quantities.containsKey(gtin14)) {
+            gtinQuantity = quantities.get(gtin14);
+            gtinQuantity += quantity;
+        } else {
+            gtinQuantity = new Integer(quantity);
+        }
+        quantities.put(gtin14, gtinQuantity);
     }
 }
