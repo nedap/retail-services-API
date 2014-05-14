@@ -104,19 +104,16 @@ public class Client {
         return response;
     }
     
-    public List getLocationFromBranchId(final Long organizationId, final String branchId) throws InvalidMessage {
+    public List getLocationFromBranchId(final String branchId) throws InvalidMessage {
         final WebResource resource;
         try {
-            resource = resource("/organization/v1/sites")/*.queryParam("organization_id", organizationId.toString())*/.queryParam("branch_id", branchId);
-            logger.info("requesting organization branchID from {}", resource.getURI());
-//            resource = resource("/api/sitegroup/" + organizationId + "/branch/" + URLEncoder.encode(branchId, "UTF-8"));
+            resource = resource("/organization/v1/sites").queryParam("branch_id", branchId);
         } catch (Exception ex) {
-            logger.info("Cannot GET location identifier for branch_id '{}'", branchId);
             throw new InvalidMessage("Cannot GET location identifier for branch_id '" + branchId + "'");
         }
 
         List response = get(resource, List.class);
-        logger.info("response {}", response);
+        logger.debug("response {}", response);
         return response;
     }
 
