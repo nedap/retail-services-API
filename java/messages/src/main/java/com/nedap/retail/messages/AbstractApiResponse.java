@@ -1,6 +1,7 @@
 package com.nedap.retail.messages;
 
 import java.io.Serializable;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -18,7 +19,7 @@ public abstract class AbstractApiResponse implements Serializable {
     public final static int BadRequest = 400;
     /**
      * Unauthorized access.
-     * Access token is expired or is invalid. A new access token must be aquired.
+     * Access token is expired or is invalid. A new access token must be acquired.
      */
     public final static int Unauthorized = 401;
     /**
