@@ -32,10 +32,10 @@ public class Stock extends StockSummary {
     }
 
     public List<GtinQuantity> getQuantityList() {
-        quantityList.clear();
-        for (String key : quantities.keySet()) {
-            quantityList.add(new GtinQuantity(key, quantities.get(key)));
-        }
+//        quantityList.clear();
+//        for (String key : quantities.keySet()) {
+//            quantityList.add(new GtinQuantity(key, quantities.get(key)));
+//        }
         return quantityList;
     }
     
@@ -50,15 +50,16 @@ public class Stock extends StockSummary {
     }
 
     public void addQuantity(String gtin14, int quantity) {
-        // Check if gtin14 already existed. If so, retrieve it and update its quantity. 
-        // A gtin14 might be listed numerous times, for example when each gtin has only 1 quantity per row.
-        Integer gtinQuantity;
-        if (quantities.containsKey(gtin14)) {
-            gtinQuantity = quantities.get(gtin14);
-            gtinQuantity += quantity;
-        } else {
-            gtinQuantity = new Integer(quantity);
-        }
-        quantities.put(gtin14, gtinQuantity);
+        quantityList.add(new GtinQuantity(gtin14, quantity));
+//        // Check if gtin14 already existed. If so, retrieve it and update its quantity. 
+//        // A gtin14 might be listed numerous times, for example when each gtin has only 1 quantity per row.
+//        Integer gtinQuantity;
+//        if (quantities.containsKey(gtin14)) {
+//            gtinQuantity = quantities.get(gtin14);
+//            gtinQuantity += quantity;
+//        } else {
+//            gtinQuantity = new Integer(quantity);
+//        }
+//        quantities.put(gtin14, gtinQuantity);
     }
 }
