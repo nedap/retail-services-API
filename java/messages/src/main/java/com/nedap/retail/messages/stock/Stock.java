@@ -50,7 +50,6 @@ public class Stock extends StockSummary {
     }
 
     public void addQuantity(String gtin14, int quantity) {
-//        this.quantityList.add(new GtinQuantity(gtin14, quantity));
         // Check if gtin14 already existed. If so, retrieve it and update its quantity. 
         // A gtin14 might be listed numerous times, for example when each gtin has only 1 quantity per row.
         Integer gtinQuantity;
