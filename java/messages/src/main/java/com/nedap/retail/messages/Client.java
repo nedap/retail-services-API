@@ -107,7 +107,7 @@ public class Client {
     public List getLocationFromBranchId(final String branchId) throws InvalidMessage {
         final WebResource resource;
         try {
-            resource = resource("/organization/v1/sites").queryParam("branch_id", branchId);
+            resource = resource("/organization/v1/sites").queryParam("store_code", branchId);
         } catch (Exception ex) {
             throw new InvalidMessage("Cannot GET location identifier for branch_id '" + branchId + "'");
         }
