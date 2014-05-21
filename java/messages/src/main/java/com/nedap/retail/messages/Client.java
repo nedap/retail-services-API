@@ -104,12 +104,12 @@ public class Client {
         return response;
     }
     
-    public List getLocationFromBranchId(final String branchId) throws InvalidMessage {
+    public List getLocationFromStoreCode(final String storeCode) throws InvalidMessage {
         final WebResource resource;
         try {
-            resource = resource("/organization/v1/sites").queryParam("store_code", branchId);
+            resource = resource("/organization/v1/sites").queryParam("store_code", storeCode);
         } catch (Exception ex) {
-            throw new InvalidMessage("Cannot GET location identifier for branch_id '" + branchId + "'");
+            throw new InvalidMessage("Cannot GET location identifier for store_code '" + storeCode + "'");
         }
 
         List response = get(resource, List.class);
@@ -274,7 +274,6 @@ public class Client {
 
     private String getErrorMessage(final ClientResponse response) {
         final Map payload = response.getEntity(Map.class);
-        String reason = (String) payload.get("reason");
-        return reason;
+        return (String) payload.get("reason");
     }
 }
