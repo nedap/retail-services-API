@@ -92,24 +92,29 @@ public class Client {
 
         Map response = post(resource, Map.class, stock);
         logger.debug("response {}", response);
-        return (String)response.get("id");
+        return (String) response.get("id");
     }
-    
+
     public Map captureArticles(final List<Article> articles) throws InvalidMessage {
         logger.debug("Article API: capturing {} articles", articles.size());
         final WebResource resource = resource("/article/v2/create_or_replace");
-        
+
         Map response = post(resource, Map.class, new Articles(articles));
         logger.debug("response {}", response);
         return response;
     }
-    
-    public List getLocationFromBranchId(final String branchId) throws InvalidMessage {
-        final WebResource resource;
-        try {
-            resource = resource("/organization/v1/sites").queryParam("branch_id", branchId);
-        } catch (Exception ex) {
-            throw new InvalidMessage("Cannot GET location identifier for branch_id '" + branchId + "'");
+
+    /**
+     * Retrieves list of sites.
+     * @param storeCode (Optional) Store code (branch id) to search for. Can be null.
+     * @return List of sites.
+     * @throws InvalidMessage 
+     */
+    public List getSites(final String storeCode) throws InvalidMessage {
+
+        WebResource resource = resource("/organization/v1/sites");
+        if (storeCode != null) {
+            resource = resource.queryParam("store_code", storeCode);
         }
 
         List response = get(resource, List.class);
