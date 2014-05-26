@@ -1,5 +1,14 @@
 package com.nedap.retail.messages;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import java.util.List;
+import java.util.Map;
+
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.stock.Stock;
@@ -15,12 +24,6 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import java.util.List;
-import java.util.Map;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Nedap Retail Services Client.
@@ -29,32 +32,38 @@ public class Client {
 
     private static final Logger logger = LoggerFactory.getLogger(Client.class);
     private final String url;
-    private final String clientId;
-    private final String secret;
-    private final com.sun.jersey.api.client.Client httpClient;
+    private com.sun.jersey.api.client.Client httpClient;
+    private final IAccessTokenResolver accessTokenResolver;
     private String accessToken;
 
     public Client(final String url, final String clientId, final String secret) {
         this.url = url;
-        this.clientId = clientId;
-        this.secret = secret;
-
-        // http://stackoverflow.com/questions/9627170/cannot-unmarshal-a-json-array-of-objects-using-jersey-client
-        // Jackson's MessageBodyReader implementation appears to be more well-behaved than the Jersey JSON one.
-        ClientConfig cfg = new DefaultClientConfig();
-        cfg.getClasses().add(JacksonJsonProvider.class);
-
-        // Creating an instance of a Client is an expensive operation, so try to avoid creating an unnecessary
-        // number of client instances. A good approach is to reuse an existing instance, when possible.
-        httpClient = com.sun.jersey.api.client.Client.create(cfg);
+        initHttpClient();
+        this.accessTokenResolver = new AccessTokenResolver(url, clientId, secret, httpClient);
     }
 
     public Client(final String url, final String clientId, final String secret,
             final com.sun.jersey.api.client.Client httpClient) {
         this.url = url;
-        this.clientId = clientId;
-        this.secret = secret;
         this.httpClient = httpClient;
+        this.accessTokenResolver = new AccessTokenResolver(clientId, secret, url, httpClient);
+    }
+
+    public Client(final String url, final IAccessTokenResolver accessTokenResolver) {
+        this.url = url;
+        initHttpClient();
+        this.accessTokenResolver = accessTokenResolver;
+    }
+
+    private void initHttpClient() {
+        // http://stackoverflow.com/questions/9627170/cannot-unmarshal-a-json-array-of-objects-using-jersey-client
+        // Jackson's MessageBodyReader implementation appears to be more well-behaved than the Jersey JSON one.
+        final ClientConfig cfg = new DefaultClientConfig();
+        cfg.getClasses().add(JacksonJsonProvider.class);
+
+        // Creating an instance of a Client is an expensive operation, so try to avoid creating an unnecessary
+        // number of client instances. A good approach is to reuse an existing instance, when possible.
+        httpClient = com.sun.jersey.api.client.Client.create(cfg);
     }
 
     public void destroy() {
@@ -90,7 +99,7 @@ public class Client {
         logger.debug("ERP API capturing {}", stock);
         final WebResource resource = resource("/erp/v2/stock.capture");
 
-        Map response = post(resource, Map.class, stock);
+        final Map response = post(resource, Map.class, stock);
         logger.debug("response {}", response);
         return (String) response.get("id");
     }
@@ -99,7 +108,7 @@ public class Client {
         logger.debug("Article API: capturing {} articles", articles.size());
         final WebResource resource = resource("/article/v2/create_or_replace");
 
-        Map response = post(resource, Map.class, new Articles(articles));
+        final Map response = post(resource, Map.class, new Articles(articles));
         logger.debug("response {}", response);
         return response;
     }
@@ -108,7 +117,7 @@ public class Client {
      * Retrieves list of sites.
      * @param storeCode (Optional) Store code (branch id) to search for. Can be null.
      * @return List of sites.
-     * @throws InvalidMessage 
+     * @throws InvalidMessage
      */
     public List getSites(final String storeCode) throws InvalidMessage {
 
@@ -117,7 +126,20 @@ public class Client {
             resource = resource.queryParam("store_code", storeCode);
         }
 
-        List response = get(resource, List.class);
+        final List response = get(resource, List.class);
+        logger.debug("response {}", response);
+        return response;
+    }
+
+    public String getLocations(final Long organizationId) throws InvalidMessage {
+        final WebResource resource;
+        try {
+            resource = resource("/organization/v1/sites").queryParam("organization_id", organizationId.toString());
+        } catch (final Exception ex) {
+            throw new InvalidMessage("Cannot GET location identifier for organization_id '" + organizationId + "'");
+        }
+
+        final String response = get(resource, String.class);
         logger.debug("response {}", response);
         return response;
     }
@@ -197,7 +219,7 @@ public class Client {
         return get(resource, SubscriptionListResponse.class).getPayload();
     }
 
-    public WebResource resource(String uri) {
+    public WebResource resource(final String uri) {
 
         return httpClient.resource(url + uri);
     }
@@ -228,7 +250,7 @@ public class Client {
         for (int trycount = 0; trycount < 3; trycount++) {
             try {
                 if (accessToken == null) {
-                    accessToken = authorize();
+                    accessToken = accessTokenResolver.resolve();
                 }
 
                 // Add access token.
@@ -241,7 +263,7 @@ public class Client {
                             type(APPLICATION_JSON);
                     return builder.method(method, responseClass, requestEntity);
                 }
-            } catch (UniformInterfaceException ex) {
+            } catch (final UniformInterfaceException ex) {
                 response = ex.getResponse();
                 status = response.getStatus();
                 logger.debug("response status: {}", status);
@@ -255,31 +277,9 @@ public class Client {
         throw new InvalidMessage(status, getErrorMessage(response));
     }
 
-    /**
-     * Login with Nedap OAuth 2.0 Authorization Server.
-     *
-     * @return OAuth 2.0 access token
-     * @throws UniformInterfaceException - if the status of the HTTP response is
-     * greater than or equal to 300 and c is not the type ClientResponse.
-     * @throws ClientHandlerException - if the client handler fails to process
-     * the request or response.
-     */
-    private String authorize() {
-        logger.debug("getting OAuth 2.0 access token: {}", clientId);
-        final Builder builder = resource("/login/oauth/token").
-                queryParam("grant_type", "client_credentials").
-                queryParam("client_id", clientId).
-                queryParam("client_secret", secret).
-                accept(APPLICATION_JSON);
-
-        final OAuthResponse result = builder.post(OAuthResponse.class);
-        logger.debug("successful. access token: {}", result.getAccess_token());
-        return result.getAccess_token();
-    }
-
     private String getErrorMessage(final ClientResponse response) {
         final Map payload = response.getEntity(Map.class);
-        String reason = (String) payload.get("reason");
+        final String reason = (String) payload.get("reason");
         return reason;
     }
 }
