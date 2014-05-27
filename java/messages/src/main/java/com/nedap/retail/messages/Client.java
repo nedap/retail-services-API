@@ -2,15 +2,19 @@ package com.nedap.retail.messages;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
+import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.subscription.SubscriptionListResponse;
@@ -35,6 +39,9 @@ public class Client {
     private com.sun.jersey.api.client.Client httpClient;
     private final IAccessTokenResolver accessTokenResolver;
     private String accessToken;
+    private final static ObjectMapper objectMapper = new ObjectMapper();
+    private final static TypeReference<List<Location>> LOCATION_LIST_TYPE = new TypeReference<List<Location>>() {
+    };
 
     public Client(final String url, final String clientId, final String secret) {
         this.url = url;
@@ -119,29 +126,41 @@ public class Client {
      * @return List of sites.
      * @throws InvalidMessage
      */
-    public List getSites(final String storeCode) throws InvalidMessage {
+    public List<Location> getSites(final String storeCode) throws InvalidMessage {
 
         WebResource resource = resource("/organization/v1/sites");
         if (storeCode != null) {
             resource = resource.queryParam("store_code", storeCode);
         }
 
-        final List response = get(resource, List.class);
-        logger.debug("response {}", response);
-        return response;
-    }
-
-    public String getLocations(final Long organizationId) throws InvalidMessage {
-        final WebResource resource;
-        try {
-            resource = resource("/organization/v1/sites").queryParam("organization_id", organizationId.toString());
-        } catch (final Exception ex) {
-            throw new InvalidMessage("Cannot GET location identifier for organization_id '" + organizationId + "'");
-        }
-
         final String response = get(resource, String.class);
         logger.debug("response {}", response);
-        return response;
+
+        final List<Location> sites = parseSites(response);
+
+        return sites;
+    }
+
+    public List<Location> getSites(final long organizationId) throws InvalidMessage {
+        WebResource resource = resource("/organization/v1/sites");
+
+        resource = resource.queryParam("organization_id", Long.toString(organizationId));
+        final String response = get(resource, String.class);
+        logger.debug("response {}", response);
+
+        final List<Location> sites = parseSites(response);
+
+        return sites;
+    }
+
+    private List<Location> parseSites(final String response) {
+        List<Location> sites = null;
+        try {
+            sites = objectMapper.readValue(response, LOCATION_LIST_TYPE);
+        } catch (final IOException ex) {
+            logger.debug("Locations could not be parsed : {} ", ex.getCause());
+        }
+        return sites;
     }
 
     /**
