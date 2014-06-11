@@ -146,6 +146,7 @@ public class Client {
 
         resource = resource.queryParam("organization_id", Long.toString(organizationId));
         final String response = get(resource, String.class);
+
         logger.debug("response {}", response);
 
         final List<Location> sites = parseSites(response);
@@ -161,6 +162,15 @@ public class Client {
             logger.debug("Locations could not be parsed : {} ", ex.getCause());
         }
         return sites;
+    }
+
+    public Location getSite(final long organizationId, final String locationId) throws InvalidMessage {
+        WebResource resource = resource("/organization/v1/sites");
+
+        resource = resource.queryParam("id", locationId)
+                .queryParam("organizationId", Long.toString(organizationId));
+
+        return get(resource, Location.class);
     }
 
     /**
