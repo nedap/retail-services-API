@@ -156,7 +156,6 @@ namespace Nedap.Retail.Api.OAuth
             Uri Url = NormalizeUrl(url, parameters);
             CheckOAuthToken();
             String result = WebClient.DownloadString(Url);
-            Console.WriteLine(result);
             return FromJson<T>(result);
         }
 
