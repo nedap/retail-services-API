@@ -134,6 +134,19 @@ public class Client {
         return getLocations(resource);
     }
 
+    /**
+     * Retrieves list of sites for given Organization ID and User ID.
+     *
+     * Note that:
+     * - The Organization ID must matched one of the Organization ID for which the access token is authorized.
+     * If not the request will be rejected.
+     * - When access token has User ID associated, the server will use the access token User ID
+     * (and thus ignore the supplied User ID parameter).
+     *
+     * @param organizationId Organization ID.
+     * @param userId User ID.
+     * @return List of sites.
+     */
     public List<Location> getSites(final long organizationId, final String userId) {
 
         final WebResource resource = resource("/organization/v1/sites").queryParam("organization_id",

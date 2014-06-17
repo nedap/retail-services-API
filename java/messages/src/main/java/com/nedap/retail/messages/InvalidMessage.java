@@ -6,30 +6,30 @@ public class InvalidMessage extends Exception {
     /**
      * Success! Message is successfully processed.
      */
-    public final static int OK = 200;
+    public static final int OK = 200;
     /**
      * The request cannot be fulfilled due to bad syntax. An accompanying error message will explain why.
      * For example invalid JSON format.
      */
-    public final static int BadRequest = 400;
+    public static final int BadRequest = 400;
     /**
      * Unauthorized access.
      * Access token is expired or is invalid. A new access token must be acquired.
      */
-    public final static int Unauthorized = 401;
+    public static final int Unauthorized = 401;
     /**
      * Forbidden to access resource (invalid client-scopes and/or user-roles).
      * Authorization will not help and the request SHOULD NOT be repeated.
      */
-    public final static int Forbidden = 403;
+    public static final int Forbidden = 403;
     /**
      * Something is broken. Please post to the group so the team can investigate.
      */
-    public final static int InternalError = 500;
+    public static final int InternalError = 500;
     /**
      * Signature in message is not correct. This normally indicates a bug in the client-software.
      */
-    public final static int SignatureError = 800;
+    public static final int SignatureError = 800;
 
     private final int status;
 
