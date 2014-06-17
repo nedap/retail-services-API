@@ -11,8 +11,8 @@ namespace Nedap.Retail.Api.Example
         static void Main(string[] args)
         {
             // OAuth client ID and secret should be included in oauth.config. See oauth.config.sample for the layout of this file.
-            string oauthClientId = "com.nedap.retail.test.1"; // ConfigurationManager.AppSettings.Get("OauthClientId");
-            string oauthSecret = "OHcsQ0BbIVG5vj614bMmPAkp"; // ConfigurationManager.AppSettings.Get("OauthSecret");
+            string oauthClientId = ConfigurationManager.AppSettings.Get("OauthClientId");
+            string oauthSecret = ConfigurationManager.AppSettings.Get("OauthSecret");
 
             if ((oauthClientId == null) || (oauthSecret == null))
             {
