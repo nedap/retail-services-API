@@ -80,7 +80,7 @@ namespace Nedap.Retail.Api.OAuth
             requestParameters.Add("client_id", clientId);
             requestParameters.Add("client_secret", secret);
             byte[] responsebytes = client.UploadValues(oAuthTokenUri, requestParameters);
-            string response = System.Text.Encoding.UTF8.GetString(responsebytes);
+            string response = global::System.Text.Encoding.UTF8.GetString(responsebytes);
 
             // parse response
             AccessTokenInfo token = JsonConvert.DeserializeObject<AccessTokenInfo>(response);
