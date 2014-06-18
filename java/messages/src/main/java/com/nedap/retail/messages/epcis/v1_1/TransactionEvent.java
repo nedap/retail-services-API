@@ -1,15 +1,17 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.joda.time.DateTime;
+
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
 import com.nedap.retail.messages.epcis.v1_1.elements.BizTransactionElement;
 import com.nedap.retail.messages.epcis.v1_1.elements.QuantityElement;
-import java.util.List;
-import java.util.Objects;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.joda.time.DateTime;
 
 public class TransactionEvent extends EpcisEvent {
 
@@ -55,9 +57,10 @@ public class TransactionEvent extends EpcisEvent {
      * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained. A TransactionEvent must contain either an epc_list or a quantity_list.
      * @param bizTransactionList An unordered list of business transactions that define the context of this event.
      */
-    public TransactionEvent(String id, DateTime eventTime, DateTime recordTime, long eventTimeZoneOffset, Action action,
-            String bizLocation, String readPoint, Disposition disposition, String parentId, List<String> epcList,
-            List<QuantityElement> quantityList, List<BizTransactionElement> bizTransactionList) {
+    public TransactionEvent(final String id, final DateTime eventTime, final DateTime recordTime,
+            final String eventTimeZoneOffset, final Action action, final String bizLocation, final String readPoint,
+            final Disposition disposition, final String parentId, final List<String> epcList,
+            final List<QuantityElement> quantityList, final List<BizTransactionElement> bizTransactionList) {
         this.id = id;
         this.eventTime = eventTime;
         this.recordTime = recordTime;
@@ -75,15 +78,15 @@ public class TransactionEvent extends EpcisEvent {
 
     @Override
     public String toString() {
-        String epcListSize = epcList == null ? "null" : Integer.toString(epcList.size());
-        String quantityListSize = quantityList == null ? "null" : Integer.toString(quantityList.size());
+        final String epcListSize = epcList == null ? "null" : Integer.toString(epcList.size());
+        final String quantityListSize = quantityList == null ? "null" : Integer.toString(quantityList.size());
 
         return "TransactionEvent" + super.toString() + "[parent_id(" + parentId + "),epc_list(" + epcListSize
                 + "),quantity_list(" + quantityListSize + ")]";
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!super.equals(obj)) {
             return false;
         }
