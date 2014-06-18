@@ -1,18 +1,20 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
-import com.google.gson.annotations.SerializedName;
-import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
-import com.nedap.retail.messages.epcis.v1_1.elements.BizTransactionElement;
-import com.nedap.retail.messages.epcis.v1_1.elements.DestinationElement;
-import com.nedap.retail.messages.epcis.v1_1.elements.SourceElement;
 import java.util.List;
 import java.util.Objects;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
+
+import com.google.gson.annotations.SerializedName;
+import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
+import com.nedap.retail.messages.epcis.v1_1.elements.BizTransactionElement;
+import com.nedap.retail.messages.epcis.v1_1.elements.DestinationElement;
+import com.nedap.retail.messages.epcis.v1_1.elements.SourceElement;
 
 /**
  * Required parameters to construct any EpcisEvent are:
@@ -53,7 +55,7 @@ abstract public class EpcisEvent {
     public static final String EVENT_TIME_ZONE_OFFSET = "event_time_zone_offset";
     @JsonProperty(EVENT_TIME_ZONE_OFFSET)
     @SerializedName(EVENT_TIME_ZONE_OFFSET)
-    public long eventTimeZoneOffset = 0;
+    public String eventTimeZoneOffset = "+00:00";
 
     public static final String TYPE = "type";
     @JsonProperty(TYPE)
@@ -107,7 +109,7 @@ abstract public class EpcisEvent {
 
     @Override
     // do not compare record time, that is determined when event is stored in DB, not when sent by client
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
@@ -121,7 +123,7 @@ abstract public class EpcisEvent {
         if (!Objects.equals(this.eventTime.toDate(), other.eventTime.toDate())) {
             return false;
         }
-        if (this.eventTimeZoneOffset != other.eventTimeZoneOffset) {
+        if (!Objects.equals(this.eventTimeZoneOffset, other.eventTimeZoneOffset)) {
             return false;
         }
         if (this.type != other.type) {
