@@ -98,7 +98,35 @@ namespace Nedap.Retail.Api
             return ApiCaller.Get<List<Erp.V1.StockSummary>>("/erp/v1/stock.list", parameters);
         }
 
+        /// <summary>
+        /// Retrieves a list of systems you have access to
+        /// </summary>
+        /// <returns>List of systems</returns>
+        public List<System.V1.System> SystemV1List()
+        {
+            return ApiCaller.Get<List<System.V1.System>>("/system/1.0/list");
+        }
 
+        /// <summary>
+        /// Retrieves detailed system status information about all systems you have access to
+        /// </summary>
+        /// <returns>A list of system statuses</returns>
+        public List<System.V1.SystemStatus> SystemV1Status()
+        {
+            return ApiCaller.Get<List<System.V1.SystemStatus>>("/system/1.0/status");
+        }
+
+        /// <summary>
+        /// Retrieves detailed system status information about a specific system
+        /// </summary>
+        /// <param name="systemId">The system ID of a system</param>
+        /// <returns>The detailed system status of the specified system</returns>
+        public System.V1.SystemStatus SystemV1Status(string systemId)
+        {
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("system_id", systemId);
+            return ApiCaller.Get<System.V1.SystemStatus>("/system/1.0/status", parameters);
+        }
 
     }
 }
