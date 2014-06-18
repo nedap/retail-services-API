@@ -59,4 +59,9 @@ public class Organizations implements Serializable {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Organizations{" + "own=" + own + ", linked=" + linked + '}';
+    }
 }

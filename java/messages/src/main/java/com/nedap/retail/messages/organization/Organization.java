@@ -51,4 +51,8 @@ public class Organization implements Serializable {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "Organization{" + "id=" + id + ", type=" + type + ", name=" + name + '}';
+    }
 }
