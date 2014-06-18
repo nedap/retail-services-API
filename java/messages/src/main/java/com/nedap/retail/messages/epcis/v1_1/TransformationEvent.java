@@ -1,13 +1,15 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.joda.time.DateTime;
+
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
 import com.nedap.retail.messages.epcis.v1_1.elements.QuantityElement;
-import java.util.List;
-import java.util.Objects;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.joda.time.DateTime;
 
 public class TransformationEvent extends EpcisEvent {
 
@@ -31,6 +33,11 @@ public class TransformationEvent extends EpcisEvent {
     @SerializedName(OUTPUT_QUANTITY_LIST)
     public List<QuantityElement> outputQuantityList;
 
+    public static final String TRANSFORMATION_ID = "transformation_id";
+    @JsonProperty(TRANSFORMATION_ID)
+    @SerializedName(TRANSFORMATION_ID)
+    public String transformationId;
+
     public TransformationEvent() {
         type = EventType.TransformationEvent;
     }
@@ -50,8 +57,9 @@ public class TransformationEvent extends EpcisEvent {
      * @param readPoint The read point at which the event took place.
      * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until contradicted by a subsequent event.
      */
-    public TransformationEvent(String id, DateTime eventTime, DateTime recordTime, long eventTimeZoneOffset,
-            String bizLocation, String readPoint, Disposition disposition) {
+    public TransformationEvent(final String id, final DateTime eventTime, final DateTime recordTime,
+            final String eventTimeZoneOffset, final String bizLocation, final String readPoint,
+            final Disposition disposition) {
         this.id = id;
         this.eventTime = eventTime;
         this.recordTime = recordTime;
@@ -64,18 +72,18 @@ public class TransformationEvent extends EpcisEvent {
 
     @Override
     public String toString() {
-        String inputEpcListSize = inputEpcList == null ? "null" : Integer.toString(inputEpcList.size());
-        String outputEpcListSize = outputEpcList == null ? "null" : Integer.toString(outputEpcList.size());
-        String inputQuantityListSize = inputQuantityList == null ? "null" : Integer.toString(inputQuantityList.size());
-        String outputQuantityListSize = outputQuantityList == null ? "null" : Integer.toString(outputQuantityList.size());
+        final String inputEpcListSize = inputEpcList == null ? "null" : Integer.toString(inputEpcList.size());
+        final String outputEpcListSize = outputEpcList == null ? "null" : Integer.toString(outputEpcList.size());
+        final String inputQuantityListSize = inputQuantityList == null ? "null" : Integer.toString(inputQuantityList.size());
+        final String outputQuantityListSize = outputQuantityList == null ? "null" : Integer.toString(outputQuantityList.size());
 
         return "TransformationEvent" + super.toString() + "[input_epc_list(" + inputEpcListSize + "),output_epc_list("
-                + outputEpcListSize + "),input_quantity_list(" + inputQuantityListSize + "),output_quantity_list("
-                + outputQuantityListSize + ")";
+        + outputEpcListSize + "),input_quantity_list(" + inputQuantityListSize + "),output_quantity_list("
+        + outputQuantityListSize + ")";
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!super.equals(obj)) {
             return false;
         }

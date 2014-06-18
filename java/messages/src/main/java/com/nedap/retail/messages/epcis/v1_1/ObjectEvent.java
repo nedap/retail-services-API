@@ -1,14 +1,16 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.joda.time.DateTime;
+
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
 import com.nedap.retail.messages.epcis.v1_1.elements.QuantityElement;
-import java.util.List;
-import java.util.Objects;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.joda.time.DateTime;
 
 /**
  * Required parameters to construct an object_event are:
@@ -56,9 +58,10 @@ public class ObjectEvent extends EpcisEvent {
      * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained.
      * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained.
      */
-    public ObjectEvent(String id, DateTime eventTime, DateTime recordTime, long eventTimeZoneOffset, Action action,
-            String bizLocation, String readPoint, Disposition disposition, List<String> epcList,
-            List<QuantityElement> quantityList) {
+    public ObjectEvent(final String id, final DateTime eventTime, final DateTime recordTime,
+            final String eventTimeZoneOffset, final Action action, final String bizLocation, final String readPoint,
+            final Disposition disposition, final List<String> epcList,
+            final List<QuantityElement> quantityList) {
         this.id = id;
         this.eventTime = eventTime;
         this.recordTime = recordTime;
@@ -74,14 +77,14 @@ public class ObjectEvent extends EpcisEvent {
 
     @Override
     public String toString() {
-        String epcListSize = epcList == null ? "null" : Integer.toString(epcList.size());
-        String quantityListSize = quantityList == null ? "null" : Integer.toString(quantityList.size());
+        final String epcListSize = epcList == null ? "null" : Integer.toString(epcList.size());
+        final String quantityListSize = quantityList == null ? "null" : Integer.toString(quantityList.size());
 
         return "ObjectEvent" + super.toString() + "[epcList(" + epcListSize + "),quantityList(" + quantityListSize + ")]";
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!super.equals(obj)) {
             return false;
         }
