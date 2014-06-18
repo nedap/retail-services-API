@@ -1,31 +1,26 @@
 package com.nedap.retail.messages;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.organization.Location;
+import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.subscription.Subscription;
-import com.nedap.retail.messages.subscription.SubscriptionListResponse;
 import com.nedap.retail.messages.system.SystemListPayload;
-import com.nedap.retail.messages.system.SystemListResponse;
 import com.nedap.retail.messages.system.SystemStatusPayload;
-import com.nedap.retail.messages.system.SystemStatusResponse;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
@@ -36,33 +31,22 @@ public class Client {
 
     private static final Logger logger = LoggerFactory.getLogger(Client.class);
     private final String url;
-    private com.sun.jersey.api.client.Client httpClient;
-    private final IAccessTokenResolver accessTokenResolver;
-    private String accessToken;
-    private final static ObjectMapper objectMapper = new ObjectMapper();
-    private final static TypeReference<List<Location>> LOCATION_LIST_TYPE = new TypeReference<List<Location>>() {
-    };
+    private final com.sun.jersey.api.client.Client httpClient;
 
     public Client(final String url, final String clientId, final String secret) {
         this.url = url;
-        initHttpClient();
-        this.accessTokenResolver = new AccessTokenResolver(url, clientId, secret, httpClient);
-    }
-
-    public Client(final String url, final String clientId, final String secret,
-            final com.sun.jersey.api.client.Client httpClient) {
-        this.url = url;
-        this.httpClient = httpClient;
-        this.accessTokenResolver = new AccessTokenResolver(clientId, secret, url, httpClient);
+        this.httpClient = initHttpClient();
+        final AccessTokenResolver accessTokenResolver = new AccessTokenResolver(url, clientId, secret, httpClient);
+        this.httpClient.addFilter(new AuthorizationClientFilter(accessTokenResolver));
     }
 
     public Client(final String url, final IAccessTokenResolver accessTokenResolver) {
         this.url = url;
-        initHttpClient();
-        this.accessTokenResolver = accessTokenResolver;
+        this.httpClient = initHttpClient();
+        this.httpClient.addFilter(new AuthorizationClientFilter(accessTokenResolver));
     }
 
-    private void initHttpClient() {
+    private static com.sun.jersey.api.client.Client initHttpClient() {
         // http://stackoverflow.com/questions/9627170/cannot-unmarshal-a-json-array-of-objects-using-jersey-client
         // Jackson's MessageBodyReader implementation appears to be more well-behaved than the Jersey JSON one.
         final ClientConfig cfg = new DefaultClientConfig();
@@ -70,7 +54,7 @@ public class Client {
 
         // Creating an instance of a Client is an expensive operation, so try to avoid creating an unnecessary
         // number of client instances. A good approach is to reuse an existing instance, when possible.
-        httpClient = com.sun.jersey.api.client.Client.create(cfg);
+        return com.sun.jersey.api.client.Client.create(cfg);
     }
 
     public void destroy() {
@@ -80,19 +64,21 @@ public class Client {
     /**
      * System API: list
      */
-    public List<SystemListPayload> getSystemList() throws InvalidMessage {
+    public List<SystemListPayload> getSystemList() {
 
         final WebResource resource = resource("/system/1.0/list");
-        return get(resource, SystemListResponse.class).getPayload();
+        return get(resource, new GenericType<List<SystemListPayload>>() {
+        });
     }
 
     /**
      * System API: status
      */
-    public List<SystemStatusPayload> getSystemStatus() throws InvalidMessage {
+    public List<SystemStatusPayload> getSystemStatus() {
 
         final WebResource resource = resource("/system/1.0/status");
-        return get(resource, SystemStatusResponse.class).getPayload();
+        return get(resource, new GenericType<List<SystemStatusPayload>>() {
+        });
     }
 
     /**
@@ -100,67 +86,72 @@ public class Client {
      *
      * @param stock Stock entry to capture
      * @return ID of processed stock
-     * @throws com.nedap.retail.messages.InvalidMessage
      */
-    public String captureErpStock(final Stock stock) throws InvalidMessage {
-        logger.debug("ERP API capturing {}", stock);
-        final WebResource resource = resource("/erp/v2/stock.capture");
+    public String captureErpStock(final Stock stock) {
 
+        final WebResource resource = resource("/erp/v2/stock.capture");
         final Map response = post(resource, Map.class, stock);
-        logger.debug("response {}", response);
         return (String) response.get("id");
     }
 
-    public Map captureArticles(final List<Article> articles) throws InvalidMessage {
-        logger.debug("Article API: capturing {} articles", articles.size());
-        final WebResource resource = resource("/article/v2/create_or_replace");
+    public Map captureArticles(final List<Article> articles) {
 
-        final Map response = post(resource, Map.class, new Articles(articles));
-        logger.debug("response {}", response);
-        return response;
+        final WebResource resource = resource("/article/v2/create_or_replace");
+        return post(resource, Map.class, new Articles(articles));
+    }
+
+    /**
+     * Retrieves organizations.
+     *
+     * @return organizations.
+     */
+    public Organizations getOrganizations() {
+
+        final WebResource resource = resource("/organization/v1/retrieve");
+        return get(resource, Organizations.class);
     }
 
     /**
      * Retrieves list of sites.
+     *
+     * @return List of sites.
+     */
+    public List<Location> getSites() {
+
+        final WebResource resource = resource("/organization/v1/sites");
+        return getLocations(resource);
+    }
+
+    /**
+     * Retrieves list of sites.
+     *
      * @param storeCode (Optional) Store code (branch id) to search for. Can be null.
      * @return List of sites.
-     * @throws InvalidMessage
      */
-    public List<Location> getSites(final String storeCode) throws InvalidMessage {
+    public List<Location> getSites(final String storeCode) {
 
-        WebResource resource = resource("/organization/v1/sites");
-        if (storeCode != null) {
-            resource = resource.queryParam("store_code", storeCode);
-        }
-
-        final String response = get(resource, String.class);
-        logger.debug("response {}", response);
-
-        final List<Location> sites = parseSites(response);
-
-        return sites;
+        final WebResource resource = resource("/organization/v1/sites").queryParam("store_code", storeCode);
+        return getLocations(resource);
     }
 
-    public List<Location> getSites(final long organizationId) throws InvalidMessage {
-        WebResource resource = resource("/organization/v1/sites");
+    /**
+     * Retrieves list of sites for given Organization ID and User ID.
+     *
+     * Note that:
+     * - The Organization ID must matched one of the Organization ID for which the access token is authorized.
+     * If not the request will be rejected.
+     * - When access token has User ID associated, the server will use the access token User ID
+     * (and thus ignore the supplied User ID parameter).
+     *
+     * @param organizationId Organization ID.
+     * @param userId User ID.
+     * @return List of sites.
+     */
+    public List<Location> getSites(final long organizationId, final String userId) {
 
-        resource = resource.queryParam("organization_id", Long.toString(organizationId));
-        final String response = get(resource, String.class);
-        logger.debug("response {}", response);
-
-        final List<Location> sites = parseSites(response);
-
-        return sites;
-    }
-
-    private List<Location> parseSites(final String response) {
-        List<Location> sites = null;
-        try {
-            sites = objectMapper.readValue(response, LOCATION_LIST_TYPE);
-        } catch (final IOException ex) {
-            logger.debug("Locations could not be parsed : {} ", ex.getCause());
-        }
-        return sites;
+        final WebResource resource = resource("/organization/v1/sites").queryParam("organization_id",
+                Long.toString(organizationId)).queryParam("user_id", userId);
+        return getLocations(resource);
     }
 
     /**
@@ -171,11 +162,11 @@ public class Client {
      * @param systemId Identifies the system.
      * @return List of fimware versions available for upgrade.
      */
-    public List<String> getFirmwareList(final String systemId) throws InvalidMessage {
+    public List<String> getFirmwareList(final String systemId) {
 
         final WebResource resource = resource("/system/1.0/firmware_versions").queryParam("system_id", systemId);
-        final ApiResponse response = get(resource, ApiResponse.class);
-        return (List<String>) response.getPayload();
+        return get(resource, new GenericType<List<String>>() {
+        });
     }
 
     /**
@@ -197,19 +188,19 @@ public class Client {
      * @param systemId Identifies the system to be upgraded.
      * @param firmwareVersion Requested firmware version to upgrade to.
      */
-    public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) throws InvalidMessage {
+    public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) {
 
         final WebResource resource = resource("/system/1.0/update").
                 queryParam("system_id", systemId).
                 queryParam("firmware_version", firmwareVersion);
-        post(resource, ApiResponse.class);
+        post(resource);
     }
 
     /**
      * Push API: subscribe.
      */
     public void subscribe(final String topic, final String callback, final String secret,
-            final int lease_seconds) throws InvalidMessage {
+            final int lease_seconds) {
 
         final WebResource resource = resource("/subscription/1.0/subscribe").
                 queryParam("hub.topic", topic).
@@ -217,86 +208,64 @@ public class Client {
                 queryParam("hub.secret", secret).
                 queryParam("hub.lease_seconds", "" + lease_seconds);
 
-        post(resource, ApiResponse.class);
+        post(resource);
     }
 
     /**
      * Push API: unsubscribe
      */
-    public void unsubscribe(final String topic) throws InvalidMessage {
+    public void unsubscribe(final String topic) {
 
         final WebResource resource = resource("/subscription/1.0/unsubscribe").queryParam("hub.topic", topic);
-        post(resource, ApiResponse.class);
+        post(resource);
     }
 
     /**
      * Push API: list
      */
-    public List<Subscription> getSubscriptionList() throws InvalidMessage {
+    public List<Subscription> getSubscriptionList() {
 
         final WebResource resource = resource("/subscription/1.0/list");
-        return get(resource, SubscriptionListResponse.class).getPayload();
+        return get(resource, new GenericType<List<Subscription>>() {
+        });
     }
 
-    public WebResource resource(final String uri) {
+    protected WebResource resource(final String uri) {
 
+        logger.debug("resource {}", uri);
         return httpClient.resource(url + uri);
     }
 
-    protected <T> T get(final WebResource resource, final Class<T> responseClass)
-            throws InvalidMessage {
-
-        return method("GET", resource, responseClass, null);
+    static protected List<Location> getLocations(final WebResource resource) {
+        return get(resource, new GenericType<List<Location>>() {
+        });
     }
 
-    protected <T> T post(final WebResource resource, final Class<T> responseClass)
-            throws InvalidMessage {
-
-        return method("POST", resource, responseClass, null);
+    static protected <T> T get(final WebResource resource, final Class<T> responseClass)
+            throws UniformInterfaceException {
+        return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
     }
 
-    protected <T> T post(final WebResource resource, final Class<T> responseClass,
-            final Object requestEntity) throws InvalidMessage {
-
-        return method("POST", resource, responseClass, requestEntity);
+    static private <T> T get(final WebResource resource, final GenericType<T> responseClass)
+            throws UniformInterfaceException {
+        return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
     }
 
-    private <T> T method(final String method, final WebResource resource,
-            final Class<T> responseClass, final Object requestEntity) throws InvalidMessage {
-
-        ClientResponse response = null;
-        int status = 500;
-        for (int trycount = 0; trycount < 3; trycount++) {
-            try {
-                if (accessToken == null) {
-                    accessToken = accessTokenResolver.resolve();
-                }
-
-                // Add access token.
-                logger.debug("method: {}, resource: {}", method, resource);
-                if (requestEntity == null) {
-                    final Builder builder = resource.header("Authorization", accessToken).accept(APPLICATION_JSON);
-                    return builder.method(method, responseClass);
-                } else {
-                    final Builder builder = resource.header("Authorization", accessToken).accept(APPLICATION_JSON).
-                            type(APPLICATION_JSON);
-                    return builder.method(method, responseClass, requestEntity);
-                }
-            } catch (final UniformInterfaceException ex) {
-                response = ex.getResponse();
-                status = response.getStatus();
-                logger.debug("response status: {}", status);
-                // Check if access_token is expired. If so get new access_token and repeat request.
-                if (status == ApiResponse.Unauthorized) {
-                    logger.debug("access token is expired or invalid. try again");
-                    accessToken = null;
-                }
-            }
-        }
-        throw new InvalidMessage(status, getErrorMessage(response));
+    static protected void post(final WebResource resource) throws UniformInterfaceException {
+        resource.accept(APPLICATION_JSON_TYPE).post();
     }
 
-    private String getErrorMessage(final ClientResponse response) {
+    static protected <T> T post(final WebResource resource, final Class<T> responseClass)
+            throws UniformInterfaceException {
+        return resource.accept(APPLICATION_JSON_TYPE).post(responseClass);
+    }
+
+    static protected <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
+            throws UniformInterfaceException {
+        return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
+    }
+
+    public static String getErrorMessage(final ClientResponse response) {
         final Map payload = response.getEntity(Map.class);
         final String reason = (String) payload.get("reason");
         return reason;

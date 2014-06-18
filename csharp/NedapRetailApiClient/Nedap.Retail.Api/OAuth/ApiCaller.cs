@@ -138,6 +138,17 @@ namespace Nedap.Retail.Api.OAuth
         /// </summary>
         /// <typeparam name="T">Class name of expected response</typeparam>
         /// <param name="url">Full (https://api.nedapretail.com/example/v1/url) or relative (/example/v1/url) URL</param>
+        /// <returns>The response of the API call</returns>
+        public T Get<T>(string url)
+        {
+            return Get<T>(url, null);
+        }
+
+        /// <summary>
+        /// Sends HTTP GET request to API endpoint
+        /// </summary>
+        /// <typeparam name="T">Class name of expected response</typeparam>
+        /// <param name="url">Full (https://api.nedapretail.com/example/v1/url) or relative (/example/v1/url) URL</param>
         /// <param name="parameters">Extra parameters that need to be added</param>
         /// <returns>The response of the API call</returns>
         public T Get<T>(string url, NameValueCollection parameters)

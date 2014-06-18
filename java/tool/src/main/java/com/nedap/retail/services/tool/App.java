@@ -1,11 +1,11 @@
 package com.nedap.retail.services.tool;
 
 import com.nedap.retail.messages.Client;
-import com.nedap.retail.messages.InvalidMessage;
 import com.nedap.retail.messages.metrics.Status;
 import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -119,8 +119,8 @@ public class App {
                     } else if (cmd.equals("?")) {
                         printMenu();
                     }
-                } catch (final InvalidMessage ex) {
-                    System.out.println("error status: " + ex.getStatus() + " message: " + ex.getMessage());
+                } catch (final UniformInterfaceException ex) {
+                    System.out.println(ex.getResponse().toString());
                 }
             }
         } finally {
@@ -130,7 +130,7 @@ public class App {
         }
     }
 
-    private void systemList() throws InvalidMessage {
+    private void systemList() {
         final List<SystemListPayload> list = apiClient.getSystemList();
         if (list.size() > 0) {
             System.out.printf("%-40s %-20s %s\n", "system ID", "name", "location");
@@ -144,7 +144,7 @@ public class App {
         System.out.println();
     }
 
-    private void systemStatus() throws InvalidMessage {
+    private void systemStatus() {
         final List<SystemStatusPayload> list = apiClient.getSystemStatus();
         if (list.size() > 0) {
             System.out.printf("%-40s %-20s %s\n", "system ID", "firmware version", "status");
@@ -170,7 +170,7 @@ public class App {
         System.out.println();
     }
 
-    private void subscriptionList() throws InvalidMessage {
+    private void subscriptionList() {
         final List<Subscription> list = apiClient.getSubscriptionList();
         if (list.size() > 0) {
             System.out.printf("%-20s %s\n", "topic", "callback");
@@ -184,7 +184,7 @@ public class App {
         System.out.println();
     }
 
-    private void subscribe() throws InvalidMessage {
+    private void subscribe() {
 
         // @todo: read parameters from console.
         final String topic = "metrics";
@@ -199,7 +199,7 @@ public class App {
         System.out.println("ok");
     }
 
-    private void unsubscribe() throws InvalidMessage {
+    private void unsubscribe() {
 
         // @todo: read from console.
         final String topic = "metrics";
@@ -209,7 +209,7 @@ public class App {
         System.out.println("ok");
     }
 
-    private void firmwareList(final Scanner scanner) throws InvalidMessage {
+    private void firmwareList(final Scanner scanner) {
         final String systemId = scanner.next();
         final List<String> list = apiClient.getFirmwareList(systemId);
         for (final String version : list) {
@@ -217,7 +217,7 @@ public class App {
         }
     }
 
-    private void firmwareUpgrade(final Scanner scanner) throws InvalidMessage {
+    private void firmwareUpgrade(final Scanner scanner) {
         final String systemId = scanner.next();
         final String version = scanner.next();
         apiClient.triggerFirmwareUpgrade(systemId, version);
