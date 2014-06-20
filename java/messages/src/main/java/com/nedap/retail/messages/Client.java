@@ -29,6 +29,8 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
  */
 public class Client {
 
+    private static final String ORGANIZATION_ID = "organization_id";
+    private static final String USER_ID = "user_id";
     private static final Logger logger = LoggerFactory.getLogger(Client.class);
     private final String url;
     private final com.sun.jersey.api.client.Client httpClient;
@@ -149,16 +151,27 @@ public class Client {
      */
     public List<Location> getSites(final long organizationId, final String userId) {
 
-        final WebResource resource = resource("/organization/v1/sites").queryParam("organization_id",
-                Long.toString(organizationId)).queryParam("user_id", userId);
+        final WebResource resource = resource("/organization/v1/sites").queryParam(ORGANIZATION_ID,
+                Long.toString(organizationId)).queryParam(USER_ID, userId);
         return getLocations(resource);
     }
 
-    public Location getSite(final long organizationId, final String locationId) throws InvalidMessage {
-        WebResource resource = resource("/organization/v1/sites");
+    /**
+     * Retrieves one location object for the given Organization ID, User ID, and locationId.
+     * 
+     * If location object is of type "SITE", it will also include the "children" having all (direct) sub-locations for
+     * that site.
+     * 
+     * @param organizationId
+     * @param locationId
+     * @return Location
+     */
+    public Location getLocation(final long organizationId, final String userId, final String locationId) {
+        WebResource resource = resource("/organization/v1/location");
 
-        resource = resource.queryParam("id", locationId)
-                .queryParam("organizationId", Long.toString(organizationId));
+        resource = resource.queryParam(ORGANIZATION_ID, Long.toString(organizationId))
+                .queryParam(USER_ID, userId)
+                .queryParam("id", locationId);
 
         return get(resource, Location.class);
     }
