@@ -161,6 +161,10 @@ namespace Nedap.Retail.Api.System.V1
         /// </summary>
         DirectionSensorsConnected = 40,
         /// <summary>
+        /// Direction sensors are not blocked
+        /// </summary>
+        DirectionSensorsNotBlocked = 42,
+        /// <summary>
         /// System is muted
         /// </summary>
         MutingStatus = 50,
