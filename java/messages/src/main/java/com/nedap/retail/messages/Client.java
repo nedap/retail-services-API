@@ -258,36 +258,36 @@ public class Client {
         return httpClient.resource(url + uri);
     }
 
-    static protected List<Location> getLocations(final WebResource resource) {
+    protected static List<Location> getLocations(final WebResource resource) {
         return get(resource, new GenericType<List<Location>>() {
         });
     }
 
-    static protected <T> T get(final WebResource resource, final Class<T> responseClass)
+    protected static <T> T get(final WebResource resource, final Class<T> responseClass)
             throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
     }
 
-    static private <T> T get(final WebResource resource, final GenericType<T> responseClass)
+    private static <T> T get(final WebResource resource, final GenericType<T> responseClass)
             throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
     }
 
-    static protected void post(final WebResource resource) throws UniformInterfaceException {
+    protected static void post(final WebResource resource) throws UniformInterfaceException {
         resource.accept(APPLICATION_JSON_TYPE).post();
     }
 
-    static protected <T> T post(final WebResource resource, final Class<T> responseClass)
+    protected static <T> T post(final WebResource resource, final Class<T> responseClass)
             throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).post(responseClass);
     }
 
-    static protected void post(final WebResource resource, final Object requestEntity)
+    protected static void post(final WebResource resource, final Object requestEntity)
             throws UniformInterfaceException {
         resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
     }
     
-    static protected <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
+    protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
             throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
     }
