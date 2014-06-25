@@ -96,10 +96,10 @@ public class Client {
         return (String) response.get("id");
     }
 
-    public Map captureArticles(final List<Article> articles) {
+    public void captureArticles(final List<Article> articles) {
 
         final WebResource resource = resource("/article/v2/create_or_replace");
-        return post(resource, Map.class, new Articles(articles));
+        post(resource, new Articles(articles));
     }
 
     /**
@@ -282,6 +282,11 @@ public class Client {
         return resource.accept(APPLICATION_JSON_TYPE).post(responseClass);
     }
 
+    static protected void post(final WebResource resource, final Object requestEntity)
+            throws UniformInterfaceException {
+        resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
+    }
+    
     static protected <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
             throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
