@@ -100,7 +100,7 @@ public class Location {
 
     @Override
     public String toString() {
-        return StringUtils.join(new Object[] {"location ", id, parentId, type, name, address, "children(size)",
+        return StringUtils.join(new Object[] {"location ", id, parentId, type, subtype, name, address, "children(size)",
                 children == null ? null : children.size()}, ";");
     }
 

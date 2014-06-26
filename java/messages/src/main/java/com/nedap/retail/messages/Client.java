@@ -163,15 +163,23 @@ public class Client {
      * that site.
      * 
      * @param organizationId
+     * @param userId
      * @param locationId
      * @return Location
      */
-    public Location getLocation(final long organizationId, final String userId, final String locationId) {
+    public Location getLocation(final long organizationId, final String userId, final String locationId) 
+            throws UniformInterfaceException {
+        if (locationId == null) {
+            throw new IllegalArgumentException("location_id is required");
+        }
+
         WebResource resource = resource("/organization/v1/location");
 
         resource = resource.queryParam(ORGANIZATION_ID, Long.toString(organizationId))
-                .queryParam(USER_ID, userId)
                 .queryParam("id", locationId);
+        if (userId != null) {
+            resource = resource.queryParam(USER_ID, userId);
+        }
 
         return get(resource, Location.class);
     }
