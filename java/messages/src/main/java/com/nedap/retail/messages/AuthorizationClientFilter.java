@@ -44,7 +44,7 @@ public class AuthorizationClientFilter extends ClientFilter {
         }
 
         // Add access token as header.
-        request.getHeaders().add(AUTHORIZATION, accessToken);
+        request.getHeaders().putSingle(AUTHORIZATION, accessToken);
 
         // Forward the request to the next filter and get the result back
         final ClientResponse response = getNext().handle(request);
@@ -56,6 +56,8 @@ public class AuthorizationClientFilter extends ClientFilter {
 
         logger.info("access token is expired or invalid. get new access token...");
         accessToken = accessTokenResolver.resolve();
+        // Overwrite access token in header. Don't use "add"!
+        request.getHeaders().putSingle(AUTHORIZATION, accessToken);
 
         // Forward the request to the next filter and get the result back
         return getNext().handle(request);
