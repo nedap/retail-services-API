@@ -151,8 +151,12 @@ public class Client {
      */
     public List<Location> getSites(final long organizationId, final String userId) {
 
-        final WebResource resource = resource("/organization/v1/sites").queryParam(ORGANIZATION_ID,
-                Long.toString(organizationId)).queryParam(USER_ID, userId);
+        WebResource resource = resource("/organization/v1/sites").
+                queryParam(ORGANIZATION_ID, Long.toString(organizationId));
+        if (userId != null) {
+            resource = resource.queryParam(USER_ID, userId);
+        }
+
         return getLocations(resource);
     }
 
