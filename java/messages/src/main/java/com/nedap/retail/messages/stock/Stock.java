@@ -2,6 +2,7 @@ package com.nedap.retail.messages.stock;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -23,8 +24,9 @@ public class Stock extends StockSummary {
     }
 
     public Stock(final StockSummary stockSummary, final List<GtinQuantity> quantityList) {
-        super(stockSummary.getId(), stockSummary.getLocation(), stockSummary.getEventTime(), stockSummary.getExternRef(),
-                stockSummary.getStatus().toString());
+        super(stockSummary.getId(), stockSummary.getLocation(), stockSummary.getEventTime(), stockSummary
+                .getExternRef(), stockSummary.getStatus().toString(), stockSummary.getQuantity(), stockSummary
+                .getGtinQuantity());
         this.quantityList = quantityList;
     }
 
@@ -32,21 +34,22 @@ public class Stock extends StockSummary {
         return quantityList;
     }
 
-    public void setQuantityList(List<GtinQuantity> quantityList) {
+    public void setQuantityList(final List<GtinQuantity> quantityList) {
         this.quantityList = quantityList;
     }
 
     @Override
     public String toString() {
-        String result = "[location=" + getLocation() + "; eventTime=" + getEventTime() + "; quantity(gtins)=" + quantityList.size() + "; quantity(total)=";
+        final String result = "[location=" + getLocation() + "; eventTime=" + getEventTime() + "; quantity(gtins)="
+                + quantityList.size() + "; quantity(total)=";
         long total = 0;
-        for (GtinQuantity q : quantityList) {
+        for (final GtinQuantity q : quantityList) {
             total += q.getQuantity();
         }
         return result + total + "]";
     }
 
-    public void addQuantity(String gtin14, int quantity) {
+    public void addQuantity(final String gtin14, final int quantity) {
         quantityList.add(new GtinQuantity(gtin14, quantity));
     }
 }
