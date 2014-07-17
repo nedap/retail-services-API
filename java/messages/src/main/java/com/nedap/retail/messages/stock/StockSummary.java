@@ -3,7 +3,8 @@ package com.nedap.retail.messages.stock;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) //  to prevent writing of null properties
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+// to prevent writing of null properties
 public class StockSummary {
 
     public enum Status {
@@ -19,11 +20,16 @@ public class StockSummary {
     @JsonProperty("extern_ref")
     private String externRef;
     private Status status;
+    @JsonProperty("quantity")
+    private Integer quantity;
+    @JsonProperty("gtin_quantity")
+    private Integer gtinQuantity;
 
     public StockSummary() {
     }
 
-    public StockSummary(String id, String location, String eventTime, String externRef, String status) {
+    public StockSummary(final String id, final String location, final String eventTime, final String externRef,
+            final String status) {
         this.id = id;
         this.location = location;
         this.eventTime = eventTime;
@@ -33,11 +39,18 @@ public class StockSummary {
         }
     }
 
+    public StockSummary(final String id, final String location, final String eventTime, final String externRef,
+            final String status, final Integer quantity, final Integer gtinQuantity) {
+        this(id, location, eventTime, externRef, status);
+        this.quantity = quantity;
+        this.gtinQuantity = gtinQuantity;
+    }
+
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -45,7 +58,7 @@ public class StockSummary {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(final String location) {
         this.location = location;
     }
 
@@ -53,7 +66,7 @@ public class StockSummary {
         return eventTime;
     }
 
-    public void setEventTime(String eventTime) {
+    public void setEventTime(final String eventTime) {
         this.eventTime = eventTime;
     }
 
@@ -61,7 +74,7 @@ public class StockSummary {
         return externRef;
     }
 
-    public void setExternRef(String externRef) {
+    public void setExternRef(final String externRef) {
         this.externRef = externRef;
     }
 
@@ -69,12 +82,29 @@ public class StockSummary {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(final Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Integer getGtinQuantity() {
+        return gtinQuantity;
+    }
+
+    public void setGtinQuantity(final Integer gtinQuantity) {
+        this.gtinQuantity = gtinQuantity;
     }
 
     @Override
     public String toString() {
-        return "StockSummary{" + "id=" + id + ", location=" + location + ", eventTime=" + eventTime + ", externRef=" + externRef + ", status=" + status + '}';
+        return "StockSummary{" + "id=" + id + ", location=" + location + ", eventTime=" + eventTime + ", externRef="
+                + externRef + ", status=" + status + ", quantity=" + quantity + ", gtinQuantity=" + gtinQuantity + '}';
     }
 }
