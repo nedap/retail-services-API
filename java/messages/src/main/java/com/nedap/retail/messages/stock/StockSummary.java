@@ -21,9 +21,9 @@ public class StockSummary {
     private String externRef;
     private Status status;
     @JsonProperty("quantity")
-    private int quantity;
+    private Integer quantity;
     @JsonProperty("gtin_quantity")
-    private int gtinQuantity;
+    private Integer gtinQuantity;
 
     public StockSummary() {
     }
@@ -40,7 +40,7 @@ public class StockSummary {
     }
 
     public StockSummary(final String id, final String location, final String eventTime, final String externRef,
-            final String status, final int quantity, final int gtinQuantity) {
+            final String status, final Integer quantity, final Integer gtinQuantity) {
         this(id, location, eventTime, externRef, status);
         this.quantity = quantity;
         this.gtinQuantity = gtinQuantity;
@@ -86,19 +86,19 @@ public class StockSummary {
         this.status = status;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final int quantity) {
+    public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
     }
 
-    public int getGtinQuantity() {
+    public Integer getGtinQuantity() {
         return gtinQuantity;
     }
 
-    public void setGtinQuantity(final int gtinQuantity) {
+    public void setGtinQuantity(final Integer gtinQuantity) {
         this.gtinQuantity = gtinQuantity;
     }
 
