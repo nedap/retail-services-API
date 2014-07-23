@@ -3,6 +3,7 @@ package com.nedap.retail.messages.stock;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -30,6 +31,7 @@ public class Stock extends StockSummary {
         this.quantityList = quantityList;
     }
 
+    @JsonIgnore
     public List<GtinQuantity> getQuantityList() {
         return quantityList;
     }

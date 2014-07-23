@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.stock;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -13,14 +14,12 @@ public class StockSummary {
     }
 
     private String id;
-    @JsonProperty("location")
     private String location;
     @JsonProperty("event_time")
     private String eventTime;
     @JsonProperty("extern_ref")
     private String externRef;
     private Status status;
-    @JsonProperty("quantity")
     private Integer quantity;
     @JsonProperty("gtin_quantity")
     private Integer gtinQuantity;
@@ -62,6 +61,7 @@ public class StockSummary {
         this.location = location;
     }
 
+    @JsonIgnore
     public String getEventTime() {
         return eventTime;
     }
@@ -70,6 +70,7 @@ public class StockSummary {
         this.eventTime = eventTime;
     }
 
+    @JsonIgnore
     public String getExternRef() {
         return externRef;
     }
@@ -94,6 +95,7 @@ public class StockSummary {
         this.quantity = quantity;
     }
 
+    @JsonIgnore
     public Integer getGtinQuantity() {
         return gtinQuantity;
     }

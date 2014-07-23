@@ -2,6 +2,7 @@ package com.nedap.retail.messages.organization;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -27,6 +28,7 @@ public class Organization implements Serializable {
         this.name = name;
     }
 
+    @JsonIgnore
     public long getId() {
         return id;
     }
