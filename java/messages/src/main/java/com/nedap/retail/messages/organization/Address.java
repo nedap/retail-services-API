@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.organization;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -17,7 +18,8 @@ public class Address {
     public Address() {
     }
 
-    public Address(final String address, final String zipcode, final String city, final String countryCode, final Double latitude, final Double longitude) {
+    public Address(final String address, final String zipcode, final String city, final String countryCode,
+            final Double latitude, final Double longitude) {
         this.address = address;
         this.zipcode = zipcode;
         this.city = city;
@@ -50,6 +52,7 @@ public class Address {
         this.city = city;
     }
 
+    @JsonIgnore
     public String getCountryCode() {
         return countryCode;
     }

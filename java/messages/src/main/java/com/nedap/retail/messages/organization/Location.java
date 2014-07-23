@@ -3,6 +3,7 @@ package com.nedap.retail.messages.organization;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -23,7 +24,8 @@ public class Location {
     public Location() {
     }
 
-    public Location(final String id, final String parentId, final LocationType type, final LocationSubType subtype, final String name, final String storeCode, final Address address, final List<Location> children) {
+    public Location(final String id, final String parentId, final LocationType type, final LocationSubType subtype,
+            final String name, final String storeCode, final Address address, final List<Location> children) {
         this.id = id;
         this.parentId = parentId;
         this.type = type;
@@ -42,6 +44,7 @@ public class Location {
         this.id = id;
     }
 
+    @JsonIgnore
     public String getParentId() {
         return parentId;
     }
@@ -74,6 +77,7 @@ public class Location {
         this.name = name;
     }
 
+    @JsonIgnore
     public String getStoreCode() {
         return storeCode;
     }
@@ -100,8 +104,8 @@ public class Location {
 
     @Override
     public String toString() {
-        return StringUtils.join(new Object[] {"location ", id, parentId, type, subtype, name, address, "children(size)",
-                children == null ? null : children.size()}, ";");
+        return StringUtils.join(new Object[] {"location ", id, parentId, type, subtype, name, address,
+                "children(size)", children == null ? null : children.size()}, ";");
     }
 
     @Override
