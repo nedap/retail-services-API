@@ -1,7 +1,9 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -154,5 +156,26 @@ abstract public class EpcisEvent {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns true if every member of list A is contained in list B (and vise versa).
+     * The order of the elements is not relevant and may contain duplicates.
+     * (compares 2 lists as if they were sets).
+     */
+    public static boolean compareAsSet(final List<String> a, final List<String> b) {
+        if (Objects.equals(a, b)) {
+            return true;
+        } else {
+            // We need to do an extra test. Transform list's into set's (this will eliminate out of order elements
+            // as well as duplicates).
+            if (a != null && b != null) {
+                final Set<String> setA = new HashSet<>(a);
+                final Set<String> setB = new HashSet<>(b);
+                return setA.equals(setB);
+            } else {
+                return false;
+            }
+        }
     }
 }

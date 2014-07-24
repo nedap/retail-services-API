@@ -3,9 +3,8 @@ package com.nedap.retail.messages.epcis.v1_1;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Bizstep;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Arrays;
+import java.util.List;
 import org.joda.time.DateTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -22,47 +21,28 @@ public class ObjectEventTest {
 
     @Test
     public void test_equals_object_event_epc_test() {
-        final Set<String> set1 = new HashSet<>();
-        set1.add("a");
-        set1.add("b");
-        final ObjectEvent event1 = createObjectEvent(set1);
-
-        final Set<String> set2 = new HashSet<>();
-        set2.add("b"); // Different order, should not mather.
-        set2.add("a");
-        final ObjectEvent event2 = createObjectEvent(set2);
-
-        final Set<String> set3 = new TreeSet<>();
-        set3.add("a");
-        set3.add("b");
-        final ObjectEvent event3 = createObjectEvent(set3);
+        final ObjectEvent event1 = createObjectEvent(Arrays.asList("a", "b"));
+        final ObjectEvent event2 = createObjectEvent(Arrays.asList("b", "a"));
+        final ObjectEvent event3 = createObjectEvent(Arrays.asList("a", "b", "b"));
+        final ObjectEvent event4 = createObjectEvent(Arrays.asList("a"));
+        final ObjectEvent event5 = createObjectEvent(Arrays.asList("b"));
 
         assertEquals(event1, event2);
+        assertEquals(event1, event3);
+        assertNotEquals(event1, event4);
+        assertNotEquals(event1, event5);
+
         assertEquals(event2, event3);
-        assertEquals(event3, event1);
+        assertNotEquals(event2, event4);
+        assertNotEquals(event2, event5);
+
+        assertNotEquals(event3, event4);
+        assertNotEquals(event3, event5);
+
+        assertNotEquals(event4, event5);
     }
 
-    @Test
-    public void test_not_equals_object_event_epc_test() {
-        final Set<String> set1 = new HashSet<>();
-        set1.add("a");
-        set1.add("b");
-        final ObjectEvent event1 = createObjectEvent(set1);
-
-        final Set<String> set2 = new HashSet<>();
-        set2.add("a");
-        final ObjectEvent event2 = createObjectEvent(set2);
-
-        final Set<String> set3 = new TreeSet<>();
-        set3.add("b");
-        final ObjectEvent event3 = createObjectEvent(set3);
-
-        assertNotEquals(event1, event2);
-        assertNotEquals(event2, event3);
-        assertNotEquals(event3, event1);
-    }
-
-    private static ObjectEvent createObjectEvent(final Set<String> epcSet) {
+    private static ObjectEvent createObjectEvent(final List<String> epcSet) {
         final ObjectEvent event = new ObjectEvent();
         event.id = "some-id";
         event.eventTime = new DateTime(2014, 07, 21, 8, 30, 0, 0);

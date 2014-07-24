@@ -100,7 +100,7 @@ public class TransactionEvent extends EpcisEvent {
         if (!Objects.equals(this.parentId, other.parentId)) {
             return false;
         }
-        if (!Objects.equals(this.epcList, other.epcList)) {
+        if (!compareAsSet(this.epcList, other.epcList)) {
             return false;
         }
         if (!Objects.equals(this.quantityList, other.quantityList)) {

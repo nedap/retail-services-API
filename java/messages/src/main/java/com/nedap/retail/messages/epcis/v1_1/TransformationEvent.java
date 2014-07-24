@@ -94,10 +94,10 @@ public class TransformationEvent extends EpcisEvent {
             return false;
         }
         final TransformationEvent other = (TransformationEvent) obj;
-        if (!Objects.equals(this.inputEpcList, other.inputEpcList)) {
+        if (!compareAsSet(this.inputEpcList, other.inputEpcList)) {
             return false;
         }
-        if (!Objects.equals(this.outputEpcList, other.outputEpcList)) {
+        if (!compareAsSet(this.outputEpcList, other.outputEpcList)) {
             return false;
         }
         if (!Objects.equals(this.inputQuantityList, other.inputQuantityList)) {

@@ -2,7 +2,6 @@ package com.nedap.retail.messages.epcis.v1_1;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
@@ -25,7 +24,7 @@ public class ObjectEvent extends EpcisEvent {
     public static final String EPC_LIST = "epc_list";
     @JsonProperty(EPC_LIST)
     @SerializedName(EPC_LIST)
-    public Set<String> epcList;
+    public List<String> epcList;
 
     public static final String QUANTITY_LIST = "quantity_list";
     @JsonProperty(QUANTITY_LIST)
@@ -61,7 +60,7 @@ public class ObjectEvent extends EpcisEvent {
      */
     public ObjectEvent(final String id, final DateTime eventTime, final DateTime recordTime,
             final String eventTimeZoneOffset, final Action action, final String bizLocation, final String readPoint,
-            final Disposition disposition, final Set<String> epcList,
+            final Disposition disposition, final List<String> epcList,
             final List<QuantityElement> quantityList) {
         this.id = id;
         this.eventTime = eventTime;
@@ -96,7 +95,7 @@ public class ObjectEvent extends EpcisEvent {
             return false;
         }
         final ObjectEvent other = (ObjectEvent) obj;
-        if (!Objects.equals(this.epcList, other.epcList)) {
+        if (!compareAsSet(this.epcList, other.epcList)) {
             return false;
         }
         if (!Objects.equals(this.quantityList, other.quantityList)) {
