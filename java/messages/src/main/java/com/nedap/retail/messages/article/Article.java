@@ -3,8 +3,10 @@ package com.nedap.retail.messages.article;
 import java.io.Serializable;
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Article implements Serializable {
@@ -23,6 +25,7 @@ public class Article implements Serializable {
     public static final String SEASON = "season";
     public static final String NAME = "name";
     public static final String BARCODES = "barcodes";
+    public static final String LAST_UPDATED = "last_updated";
 
     private String gtin;
     private List<Barcode> barcodes;
@@ -36,6 +39,8 @@ public class Article implements Serializable {
     private List<Size> sizes;
     private String supplier;
     private List<Price> prices;
+    @JsonProperty(LAST_UPDATED)
+    public DateTime lastUpdated;
 
     // Empty constructor used by Jackson
     public Article() {
@@ -43,7 +48,7 @@ public class Article implements Serializable {
 
     public Article(final String gtin, final List<Barcode> barcodes, final String code, final String brand,
             final String season, final String name, final String option, final String style, final String color,
-            final List<Size> sizes, final String supplier, final List<Price> prices) {
+            final List<Size> sizes, final String supplier, final List<Price> prices, final DateTime lastUpdated) {
         this.gtin = gtin;
         this.barcodes = barcodes;
         this.code = code;
@@ -56,6 +61,7 @@ public class Article implements Serializable {
         this.sizes = sizes;
         this.supplier = supplier;
         this.prices = prices;
+        this.lastUpdated = lastUpdated;
     }
 
     public List<Barcode> getBarcodes() {
@@ -154,12 +160,21 @@ public class Article implements Serializable {
         return gtin;
     }
 
+    public DateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(final DateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
 
     @Override
     public String toString() {
-        return "Article [gtin=" + gtin + ", barcodes=" + StringUtils.join(barcodes,";") + ", code=" + code + ", brand=" + brand + ", season="
-                + season + ", name=" + name + ", option=" + option + ", style=" + style + ", color=" + color
-                + ", sizes=" + StringUtils.join(sizes,";") + ", supplier=" + supplier + ", prices=" + StringUtils.join(prices,";") + "]";
+        return "Article [gtin=" + gtin + ", barcodes=" + StringUtils.join(barcodes, ";") + ", code=" + code
+                + ", brand=" + brand + ", season=" + season + ", name=" + name + ", option=" + option + ", style="
+                + style + ", color=" + color + ", sizes=" + StringUtils.join(sizes, ";") + ", supplier=" + supplier
+                + ", prices=" + StringUtils.join(prices, ";") + ", last updated=" + lastUpdated + "]";
     }
 
     @Override
