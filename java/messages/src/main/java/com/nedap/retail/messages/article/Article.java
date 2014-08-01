@@ -8,8 +8,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
-import com.google.gson.annotations.SerializedName;
-
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Article implements Serializable {
 
@@ -42,7 +40,6 @@ public class Article implements Serializable {
     private String supplier;
     private List<Price> prices;
     @JsonProperty(LAST_UPDATED)
-    @SerializedName(LAST_UPDATED)
     public DateTime lastUpdated;
 
     // Empty constructor used by Jackson
