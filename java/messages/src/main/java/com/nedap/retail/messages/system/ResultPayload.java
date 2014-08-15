@@ -9,6 +9,9 @@ public class ResultPayload {
     private String result;
     private String reason;
 
+    public ResultPayload() {
+    }
+
     public ResultPayload(final String result) {
         this.result = result;
     }
