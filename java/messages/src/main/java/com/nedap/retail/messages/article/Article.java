@@ -2,8 +2,10 @@ package com.nedap.retail.messages.article;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
@@ -41,6 +43,8 @@ public class Article implements Serializable {
     private List<Price> prices;
     @JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
+    @JsonIgnore
+    public UUID lastUpdatedUUID;
 
     // Empty constructor used by Jackson
     public Article() {
