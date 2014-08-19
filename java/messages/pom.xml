@@ -6,8 +6,8 @@
 
     <groupId>com.nedap.retail.services</groupId>
     <artifactId>messages</artifactId>
-    <version>1.12</version>
-    
+    <version>1.13</version>
+
     <name>Nedap Retail Api Client</name>
     <packaging>jar</packaging>
 
@@ -63,7 +63,7 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>1.6</version>
-        </dependency>    
+        </dependency>
     </dependencies>
 
     <build>
