@@ -29,7 +29,7 @@ public enum Bizstep {
      * Associating an instance-level identifier (i.e. EPC) with a particular object. A tag may have been encoded and
      * applied in this step, or may have been previously encoded.
      */
-    COMMISIONING(5, "urn:epcglobal:cbv:bizstep:commissioning"),
+    COMMISSIONING(5, "urn:epcglobal:cbv:bizstep:commissioning"),
     /**
      * Similar to shipping but includes a change in possession and/or ownership at the outbound side.
      *
@@ -211,7 +211,7 @@ public enum Bizstep {
     private final int number;
     private final String bizStep;
 
-    private Bizstep(int aNumber, String aBizStep) {
+    private Bizstep(final int aNumber, final String aBizStep) {
         number = aNumber;
         bizStep = aBizStep;
     }
@@ -227,5 +227,27 @@ public enum Bizstep {
     @Override
     public String toString() {
         return number + ":" + bizStep;
+    }
+
+    /**
+     * Provides similar functionality to valueOf(..). However, valueOf does not know how to access values() to lookup
+     * the biz step. Instead, it will access name() which does not match its serialized counterpart.
+     * 
+     * Example: Enum value: UNPACKING Serialized value (which is looked for): urn:epcglobal:cbv:bizstep:unpacking
+     * 
+     * @param value String value of requested biz step
+     * @return Bizstep enum value for provided String
+     * @see valueOf(..)
+     */
+    public static Bizstep permissiveValueOf(final String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("biz step missing");
+        }
+        for (final Bizstep bizStep : values()) {
+            if (value.equalsIgnoreCase(bizStep.bizStep())) {
+                return bizStep;
+            }
+        }
+        throw new IllegalArgumentException("unknown biz step");
     }
 }
