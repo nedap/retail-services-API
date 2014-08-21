@@ -29,7 +29,7 @@ public enum Bizstep {
      * Associating an instance-level identifier (i.e. EPC) with a particular object. A tag may have been encoded and
      * applied in this step, or may have been previously encoded.
      */
-    COMMISIONING(5, "urn:epcglobal:cbv:bizstep:commissioning"),
+    COMMISSIONING(5, "urn:epcglobal:cbv:bizstep:commissioning"),
     /**
      * Similar to shipping but includes a change in possession and/or ownership at the outbound side.
      *
