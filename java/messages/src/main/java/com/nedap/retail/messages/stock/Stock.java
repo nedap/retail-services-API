@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -18,7 +19,7 @@ public class Stock extends StockSummary {
         this.quantityList = new ArrayList<>();
     }
 
-    public Stock(final String location, final String eventTime, final String externRef,
+    public Stock(final String location, final DateTime eventTime, final String externRef,
             final List<GtinQuantity> quantityList) {
         super(null, location, eventTime, externRef, null);
         this.quantityList = quantityList;

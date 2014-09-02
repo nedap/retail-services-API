@@ -1,6 +1,7 @@
-/java/messages/target/
-/java/client/target/
-/java/tool/target/
+**/.classpath
+**/.project
+**/.settings
+**/target
 .DS_Store
 dependency-reduced-pom.xml
 
