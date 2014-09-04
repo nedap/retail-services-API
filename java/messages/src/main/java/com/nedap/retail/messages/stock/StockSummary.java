@@ -3,6 +3,7 @@ package com.nedap.retail.messages.stock;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 // to prevent writing of null properties
@@ -16,7 +17,7 @@ public class StockSummary {
     private String id;
     private String location;
     @JsonProperty("event_time")
-    private String eventTime;
+    private DateTime eventTime;
     @JsonProperty("extern_ref")
     private String externRef;
     private Status status;
@@ -27,7 +28,7 @@ public class StockSummary {
     public StockSummary() {
     }
 
-    public StockSummary(final String id, final String location, final String eventTime, final String externRef,
+    public StockSummary(final String id, final String location, final DateTime eventTime, final String externRef,
             final String status) {
         this.id = id;
         this.location = location;
@@ -38,7 +39,7 @@ public class StockSummary {
         }
     }
 
-    public StockSummary(final String id, final String location, final String eventTime, final String externRef,
+    public StockSummary(final String id, final String location, final DateTime eventTime, final String externRef,
             final String status, final Integer quantity, final Integer gtinQuantity) {
         this(id, location, eventTime, externRef, status);
         this.quantity = quantity;
@@ -62,11 +63,11 @@ public class StockSummary {
     }
 
     @JsonIgnore
-    public String getEventTime() {
+    public DateTime getEventTime() {
         return eventTime;
     }
 
-    public void setEventTime(final String eventTime) {
+    public void setEventTime(final DateTime eventTime) {
         this.eventTime = eventTime;
     }
 
@@ -106,7 +107,7 @@ public class StockSummary {
 
     @Override
     public String toString() {
-        return "StockSummary{" + "id=" + id + ", location=" + location + ", eventTime=" + eventTime + ", externRef="
+        return "StockSummary{" + "id=" + id + ", location=" + location + ", eventTime=" + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef="
                 + externRef + ", status=" + status + ", quantity=" + quantity + ", gtinQuantity=" + gtinQuantity + '}';
     }
 }
