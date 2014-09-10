@@ -2,6 +2,8 @@ package com.nedap.retail.messages;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -171,7 +173,7 @@ public class Client {
      * @param locationId
      * @return Location
      */
-    public Location getLocation(final long organizationId, final String userId, final String locationId) 
+    public Location getLocation(final long organizationId, final String userId, final String locationId)
             throws UniformInterfaceException {
         if (locationId == null) {
             throw new IllegalArgumentException("location_id is required");
@@ -271,8 +273,20 @@ public class Client {
     }
 
     protected static List<Location> getLocations(final WebResource resource) {
-        return get(resource, new GenericType<List<Location>>() {
+        final List<Location> locations = get(resource, new GenericType<List<Location>>() {
         });
+
+        Collections.sort(locations, new Comparator<Location>() {
+            @Override
+            public int compare(final Location l1, final Location l2) {
+                if (l1 == null || l1.getName() == null) {
+                    return -1;
+                } else {
+                    return l1.getName().compareToIgnoreCase(l2.getName());
+                }
+            }
+        });
+        return locations;
     }
 
     protected static <T> T get(final WebResource resource, final Class<T> responseClass)
@@ -298,7 +312,7 @@ public class Client {
             throws UniformInterfaceException {
         resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
     }
-    
+
     protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
             throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
