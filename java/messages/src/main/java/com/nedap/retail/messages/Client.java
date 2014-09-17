@@ -5,7 +5,10 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.jaxrs.Annotations;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +24,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 /**
@@ -34,6 +36,7 @@ public class Client {
     private static final Logger logger = LoggerFactory.getLogger(Client.class);
     private final String url;
     private final com.sun.jersey.api.client.Client httpClient;
+    private static ObjectMapper mapper;
 
     public Client(final String url, final String clientId, final String secret) {
         this.url = url;
@@ -49,14 +52,22 @@ public class Client {
     }
 
     private static com.sun.jersey.api.client.Client initHttpClient() {
-        // http://stackoverflow.com/questions/9627170/cannot-unmarshal-a-json-array-of-objects-using-jersey-client
+        mapper = new ObjectMapper().configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
         // Jackson's MessageBodyReader implementation appears to be more well-behaved than the Jersey JSON one.
-        final ClientConfig cfg = new DefaultClientConfig();
-        cfg.getClasses().add(JacksonJsonProvider.class);
+        // And also this provider uses our own configured object-mapper.
+        final JacksonJsonProvider provider = new JacksonJsonProvider(Annotations.JACKSON);
+        provider.setMapper(mapper);
+
+        final DefaultClientConfig config = new DefaultClientConfig();
+        config.getSingletons().add(provider);
 
         // Creating an instance of a Client is an expensive operation, so try to avoid creating an unnecessary
         // number of client instances. A good approach is to reuse an existing instance, when possible.
-        return com.sun.jersey.api.client.Client.create(cfg);
+        final com.sun.jersey.api.client.Client client = com.sun.jersey.api.client.Client.create(config);
+        client.setFollowRedirects(false);
+        client.setConnectTimeout(5000);
+        client.setReadTimeout(20000);
+        return client;
     }
 
     public void destroy() {
