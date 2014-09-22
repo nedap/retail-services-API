@@ -65,8 +65,8 @@ public class Client {
         // number of client instances. A good approach is to reuse an existing instance, when possible.
         final com.sun.jersey.api.client.Client client = com.sun.jersey.api.client.Client.create(config);
         client.setFollowRedirects(false);
-        client.setConnectTimeout(5000);
-        client.setReadTimeout(20000);
+        client.setConnectTimeout(10000);
+        client.setReadTimeout(60000);
         return client;
     }
 
