@@ -20,6 +20,7 @@ import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
+import com.nedap.retail.messages.users.UserTO;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -173,16 +174,16 @@ public class Client {
 
     /**
      * Retrieves one location object for the given Organization ID, User ID, and locationId.
-     * 
+     *
      * If location object is of type "SITE", it will also include the "children" having all (direct) sub-locations for
      * that site.
-     * 
+     *
      * @param organizationId
      * @param userId
      * @param locationId
      * @return Location
      */
-    public Location getLocation(final long organizationId, final String userId, final String locationId) 
+    public Location getLocation(final long organizationId, final String userId, final String locationId)
             throws UniformInterfaceException {
         if (locationId == null) {
             throw new IllegalArgumentException("location_id is required");
@@ -275,6 +276,29 @@ public class Client {
         });
     }
 
+    /**
+     * Get user profile by user ID.
+     * Endpoint GET /users/1.0/get
+     *
+     * @param userId The ID of the user to get the profile for. The special value "me" can be used to indicate the authenticated user.
+     * @return User profile. Returns <tt>null</tt> when not found (status code 404).
+     */
+    public UserTO getUser(final String userId) {
+        try {
+            final WebResource resource = resource("/users/1.0/get").queryParam("user_id", userId);
+            return get(resource, new GenericType<UserTO>() {
+            });
+        } catch (final UniformInterfaceException ex) {
+            // Thrown when the status of the HTTP response is greater than or equal to 300.
+            final ClientResponse response = ex.getResponse();
+            if (response.getStatus() == 404) {
+                return null;
+            } else {
+                throw ex;
+            }
+        }
+    }
+
     protected WebResource resource(final String uri) {
 
         logger.debug("resource {}", uri);
@@ -309,7 +333,7 @@ public class Client {
             throws UniformInterfaceException {
         resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
     }
-    
+
     protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
             throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
