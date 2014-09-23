@@ -28,6 +28,7 @@
     <modules>
         <module>messages</module>
         <module>tool</module>
+        <module>examples</module>
     </modules>
 
     <dependencies>

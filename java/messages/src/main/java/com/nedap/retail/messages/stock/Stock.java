@@ -40,19 +40,19 @@ public class Stock extends StockSummary {
     public void setQuantityList(final List<GtinQuantity> quantityList) {
         this.quantityList = quantityList;
     }
+    
+    public void addQuantity(final String gtin14, final int quantity) {
+        quantityList.add(new GtinQuantity(gtin14, quantity));
+    }
 
     @Override
     public String toString() {
-        final String result = "[location=" + getLocation() + "; eventTime=" + getEventTime() + "; quantity(gtins)="
+        final String result = "Stock {location=" + getLocation() + "; eventTime=" + getEventTime() + "; quantity(gtins)="
                 + quantityList.size() + "; quantity(total)=";
         long total = 0;
         for (final GtinQuantity q : quantityList) {
             total += q.getQuantity();
         }
-        return result + total + "]";
-    }
-
-    public void addQuantity(final String gtin14, final int quantity) {
-        quantityList.add(new GtinQuantity(gtin14, quantity));
+        return result + total + "}";
     }
 }

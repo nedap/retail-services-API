@@ -13,6 +13,10 @@ public class GtinQuantity {
         this.quantity = quantity;
     }
 
+    public void setGtin(final String gtin) {
+        this.gtin = gtin;
+    }
+
     public String getGtin() {
         return gtin;
     }
