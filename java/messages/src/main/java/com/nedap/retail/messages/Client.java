@@ -17,6 +17,7 @@ import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
+import com.nedap.retail.messages.stock.StockSummary;
 import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
@@ -107,6 +108,54 @@ public class Client {
         return (String) response.get("id");
     }
 
+    /**
+     * ERP API: retrieve stock
+     *
+     * @param id ID of stock
+     * @return The requested stock
+     */
+    public Stock retrieveErpStock(final String id) {
+
+        final WebResource resource = resource("/erp/v2/stock.retrieve")
+            .queryParam("id", id);
+
+        System.out.println(resource.accept(APPLICATION_JSON_TYPE).get(String.class));
+
+        return get(resource, Stock.class);
+    }
+
+    /**
+     * ERP API: retrieve stock status and summary
+     *
+     * @param id ID of stock
+     * @return Summary of the requested stock
+     */
+    public StockSummary getErpStockStatus(final String id) {
+
+        final WebResource resource = resource("/erp/v2/stock.status")
+                .queryParam("id", id);
+        return get(resource, StockSummary.class);
+    }
+
+    /**
+     * ERP API: get a list of available stocks
+     *
+     * @param location Location identifier
+     * @return List of summaries per stock available for the specified location
+     */
+    public List<StockSummary> getErpStockList(final String location) {
+
+        final WebResource resource = resource("/erp/v2/stock.list")
+            .queryParam("location", location);
+        return get(resource, new GenericType<List<StockSummary>>() {
+        });
+    }
+
+    /**
+     * Article API: update article information
+     *
+     * @param articles Articles to update or add
+     */
     public void captureArticles(final List<Article> articles) {
 
         final WebResource resource = resource("/article/v2/create_or_replace");

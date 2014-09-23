@@ -107,7 +107,7 @@ public class StockSummary {
 
     @Override
     public String toString() {
-        return "StockSummary{" + "id=" + id + ", location=" + location + ", eventTime=" + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef="
+        return "StockSummary {" + "id=" + id + ", location=" + location + ", eventTime=" + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef="
                 + externRef + ", status=" + status + ", quantity=" + quantity + ", gtinQuantity=" + gtinQuantity + '}';
     }
 }
