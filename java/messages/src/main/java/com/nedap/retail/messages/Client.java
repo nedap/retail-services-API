@@ -20,7 +20,7 @@ import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
-import com.nedap.retail.messages.users.UserTO;
+import com.nedap.retail.messages.users.User;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -283,11 +283,10 @@ public class Client {
      * @param userId The ID of the user to get the profile for. The special value "me" can be used to indicate the authenticated user.
      * @return User profile. Returns <tt>null</tt> when not found (status code 404).
      */
-    public UserTO getUser(final String userId) {
+    public User getUser(final String userId) {
         try {
             final WebResource resource = resource("/users/1.0/get").queryParam("user_id", userId);
-            return get(resource, new GenericType<UserTO>() {
-            });
+            return get(resource, User.class);
         } catch (final UniformInterfaceException ex) {
             // Thrown when the status of the HTTP response is greater than or equal to 300.
             final ClientResponse response = ex.getResponse();

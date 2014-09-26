@@ -13,7 +13,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserTO implements Serializable {
+public class User implements Serializable {
 
     private String id;
     private String displayName;
@@ -23,7 +23,7 @@ public class UserTO implements Serializable {
     private Set<Authorisation> authorisations;
     private long sitegroupId;
 
-    public UserTO() {
+    public User() {
     }
 
     public String getId() {

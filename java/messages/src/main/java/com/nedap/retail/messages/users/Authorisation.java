@@ -3,12 +3,13 @@ package com.nedap.retail.messages.users;
 import java.io.Serializable;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Authorisation implements Serializable {
 
     private String role;
-    private String expiresAt;
+    private DateTime expiresAt;
 
     public Authorisation() {
     }
@@ -30,12 +31,12 @@ public class Authorisation implements Serializable {
     }
 
     @JsonProperty("expires_at")
-    public String getExpiresAt() {
+    public DateTime getExpiresAt() {
         return expiresAt;
     }
 
     @JsonProperty("expires_at")
-    public void setExpiresAt(String expiresAt) {
+    public void setExpiresAt(DateTime expiresAt) {
         this.expiresAt = expiresAt;
     }
 }
