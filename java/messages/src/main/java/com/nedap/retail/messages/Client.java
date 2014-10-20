@@ -9,11 +9,13 @@ import org.codehaus.jackson.jaxrs.Annotations;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
+import com.nedap.retail.messages.epc.v2.DifferenceListResponse;
 import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
@@ -118,11 +120,34 @@ public class Client {
     public Stock retrieveErpStock(final String id) {
 
         final WebResource resource = resource("/erp/v2/stock.retrieve")
-            .queryParam("id", id);
+                .queryParam("id", id);
 
         System.out.println(resource.accept(APPLICATION_JSON_TYPE).get(String.class));
 
         return get(resource, Stock.class);
+    }
+
+    /**
+     * @param erpStockId Id of stock imported from ERP
+     * @param rfidTime Time of RFID cycle count
+     * @param onlyDifferences Boolean to switch between showing only differences or whole list
+     * 
+     * @return list of differences without article information for performance reasons
+     */
+    public DifferenceListResponse differenceList(final String erpStockId, final DateTime rfidTime,
+            final boolean onlyDifferences) {
+
+        WebResource resource = resource("/epc/v2/difference_list").queryParam("erp_stock_id", erpStockId)
+                .queryParam("include_articles", "false");
+
+        if (rfidTime != null) {
+            resource = resource.queryParam("time", rfidTime.toString());
+        }
+        // Only differences is by default true
+        if (!onlyDifferences) {
+            resource = resource.queryParam("only_differences", "false");
+        }
+        return get(resource, DifferenceListResponse.class);
     }
 
     /**
@@ -147,7 +172,7 @@ public class Client {
     public List<StockSummary> getErpStockList(final String location) {
 
         final WebResource resource = resource("/erp/v2/stock.list")
-            .queryParam("location", location);
+                .queryParam("location", location);
         return get(resource, new GenericType<List<StockSummary>>() {
         });
     }
