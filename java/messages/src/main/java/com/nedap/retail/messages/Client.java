@@ -138,8 +138,8 @@ public class Client {
     public DifferenceListResponse differenceList(final long organizationId, final String erpStockId, final DateTime rfidTime,
             final boolean onlyDifferences) {
 
-        WebResource resource = resource("/epc/v2/difference_list").queryParam("erp_stock_id", erpStockId).queryParam(
-                "include_articles", "false");
+        WebResource resource = resource("/epc/v2/difference_list").queryParam("erp_stock_id", erpStockId)
+                .queryParam("include_articles", "false").queryParam(ORGANIZATION_ID, Long.toString(organizationId));
 
         if (rfidTime != null) {
             resource = resource.queryParam("time", rfidTime.toString());
@@ -149,7 +149,7 @@ public class Client {
             resource = resource.queryParam("only_differences", "false");
         }
 
-        return getForOrganization(organizationId, resource, DifferenceListResponse.class);
+        return get(resource, DifferenceListResponse.class);
     }
 
     /**
@@ -383,11 +383,6 @@ public class Client {
     protected static List<Location> getLocations(final WebResource resource) {
         return get(resource, new GenericType<List<Location>>() {
         });
-    }
-
-    protected static <T> T getForOrganization(final long organizationId, final WebResource resource,
-            final Class<T> responseClass) throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).header(ORGANIZATION_ID, organizationId).get(responseClass);
     }
 
     protected static <T> T get(final WebResource resource, final Class<T> responseClass)
