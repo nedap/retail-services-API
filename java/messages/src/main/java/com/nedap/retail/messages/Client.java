@@ -128,17 +128,18 @@ public class Client {
     }
 
     /**
+     * @param organizationId Id of organization for difference list
      * @param erpStockId Id of stock imported from ERP
      * @param rfidTime Time of RFID cycle count
      * @param onlyDifferences Boolean to switch between showing only differences or whole list
      * 
      * @return list of differences without article information for performance reasons
      */
-    public DifferenceListResponse differenceList(final String erpStockId, final DateTime rfidTime,
+    public DifferenceListResponse differenceList(final long organizationId, final String erpStockId, final DateTime rfidTime,
             final boolean onlyDifferences) {
 
         WebResource resource = resource("/epc/v2/difference_list").queryParam("erp_stock_id", erpStockId)
-                .queryParam("include_articles", "false");
+                .queryParam("include_articles", "false").queryParam(ORGANIZATION_ID, Long.toString(organizationId));
 
         if (rfidTime != null) {
             resource = resource.queryParam("time", rfidTime.toString());
@@ -147,6 +148,7 @@ public class Client {
         if (!onlyDifferences) {
             resource = resource.queryParam("only_differences", "false");
         }
+
         return get(resource, DifferenceListResponse.class);
     }
 
