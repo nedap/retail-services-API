@@ -180,6 +180,30 @@ public class Client {
     }
 
     /**
+     * @param organizationId Id of organization for rfid stock list
+     * @param locationId Location identifier
+     * @param fromRfidTime Lower boundary for rfid stock time
+     * @param untilRfidTime Upper boundary for rfid stock time
+     * @return List of summaries for rfid stock on requested location
+     */
+    public List<StockSummary> getRfidStockList(final long organizationId, final String locationId,
+            final DateTime fromRfidTime, final DateTime untilRfidTime) {
+
+        WebResource resource = resource("/epc/v2/stock.list").queryParam("location", locationId).queryParam(
+                ORGANIZATION_ID, Long.toString(organizationId));
+
+        if (fromRfidTime != null) {
+            resource = resource.queryParam("from_event_time", fromRfidTime.toString());
+        }
+        if (untilRfidTime != null) {
+            resource = resource.queryParam("until_event_time", untilRfidTime.toString());
+        }
+
+        return get(resource, new GenericType<List<StockSummary>>() {
+        });
+    }
+
+    /**
      * Article API: update article information
      *
      * @param articles Articles to update or add
