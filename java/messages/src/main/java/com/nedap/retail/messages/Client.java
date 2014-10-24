@@ -182,8 +182,8 @@ public class Client {
     /**
      * @param organizationId Id of organization for rfid stock list
      * @param locationId Location identifier
-     * @param fromRfidTime Lower boundary for rfid cycle count time
-     * @param untilRfidTime Upper boundary for rfid cycle count
+     * @param fromRfidTime Lower boundary for rfid stock time
+     * @param untilRfidTime Upper boundary for rfid stock time
      * @return List of summaries for rfid stock on requested location
      */
     public List<StockSummary> getRfidStockList(final long organizationId, final String locationId,
