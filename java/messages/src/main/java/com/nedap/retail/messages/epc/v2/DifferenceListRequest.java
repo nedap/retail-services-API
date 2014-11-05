@@ -9,6 +9,7 @@ public class DifferenceListRequest {
     @JsonProperty("erp_stock_id")
     private String erpStockId;
     private DateTime time;
+    private String location;
     @JsonProperty("only_differences")
     private boolean onlyDifferences = true;
     @JsonProperty("include_articles")
@@ -35,6 +36,14 @@ public class DifferenceListRequest {
 
     public void setTime(final DateTime time) {
         this.time = time;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(final String location) {
+        this.location = location;
     }
 
     public Boolean getOnlyDifferences() {
