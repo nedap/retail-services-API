@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
-import com.nedap.retail.messages.epc.v2.DifferenceListResponse;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
+import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
@@ -150,6 +151,25 @@ public class Client {
         }
 
         return get(resource, DifferenceListResponse.class);
+    }
+
+    /**
+     * @param organizationId Id of organization for approved difference list
+     * @param approvedDifferenceListId Id approved difference list
+     * 
+     * @return Approved difference list with provided id
+     */
+    public ApprovedDifferenceListResponse approvedDifferenceList(final long organizationId,
+            final String approvedDifferenceListId) {
+
+        if (approvedDifferenceListId == null) {
+            throw new IllegalArgumentException("Approved difference list id is required");
+        }
+
+        final WebResource resource = resource("/epc/v2/approved_difference_list.retrieve").queryParam("id",
+                approvedDifferenceListId).queryParam(ORGANIZATION_ID, Long.toString(organizationId));
+
+        return get(resource, ApprovedDifferenceListResponse.class);
     }
 
     /**

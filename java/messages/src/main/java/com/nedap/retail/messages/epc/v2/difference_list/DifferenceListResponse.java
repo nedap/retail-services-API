@@ -1,4 +1,4 @@
-package com.nedap.retail.messages.epc.v2;
+package com.nedap.retail.messages.epc.v2.difference_list;
 
 import java.util.List;
 
