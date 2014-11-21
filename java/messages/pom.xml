@@ -6,7 +6,7 @@
 
     <groupId>com.nedap.retail.services</groupId>
     <artifactId>messages</artifactId>
-    <version>${nedap-retail-messages-version}</version>
+    <version>1.20</version>
 
     <name>Nedap Retail Api Client</name>
     <packaging>jar</packaging>
