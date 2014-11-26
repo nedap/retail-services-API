@@ -4,6 +4,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.codehaus.jackson.jaxrs.Annotations;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
@@ -15,6 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.ExportStatus;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListExportStatusUpdateRequest;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.organization.Location;
@@ -170,6 +173,24 @@ public class Client {
                 approvedDifferenceListId).queryParam(ORGANIZATION_ID, Long.toString(organizationId));
 
         return get(resource, ApprovedDifferenceListResponse.class);
+    }
+
+    /**
+     * @param organizationId Id of organization for approved difference list
+     * @param approvedDifferenceListId Id approved difference list
+     * @param exportStatus Export status for approved difference list
+     */
+    public void updateExportStatus(final long organizationId, final String approvedDifferenceListId,
+            final ExportStatus exportStatus) {
+
+        final WebResource resource = resource("/epc/v2/approved_difference_list.export_status").queryParam(
+                ORGANIZATION_ID, Long.toString(organizationId));
+
+        final ApprovedDifferenceListExportStatusUpdateRequest request = new ApprovedDifferenceListExportStatusUpdateRequest();
+        request.exportStatus = exportStatus;
+        request.id = UUID.fromString(approvedDifferenceListId);
+        post(resource, request);
+
     }
 
     /**
