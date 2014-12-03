@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Price implements Serializable {
 
@@ -43,7 +47,7 @@ public class Price implements Serializable {
     public void setAmount(final Double amount) {
         this.amount = amount;
     }
-    
+
     @Override
     public String toString() {
         return "[" + region + "|" + currency + "|" + amount + "]";

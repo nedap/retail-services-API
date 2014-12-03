@@ -1,6 +1,6 @@
 package com.nedap.retail.messages.organization;
 
-import org.codehaus.jackson.annotate.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum LocationType {
 
@@ -12,11 +12,12 @@ public enum LocationType {
     LOCATION_EXTERNAL;
 
     @JsonCreator
-    public static LocationType create(String value) {
+    @org.codehaus.jackson.annotate.JsonCreator
+    public static LocationType create(final String value) {
         if (value == null) {
             throw new IllegalArgumentException();
         }
-        for (LocationType v : values()) {
+        for (final LocationType v : values()) {
             if (value.equals(v.name())) {
                 return v;
             }

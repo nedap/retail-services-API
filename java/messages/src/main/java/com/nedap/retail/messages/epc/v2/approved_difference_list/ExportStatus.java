@@ -1,6 +1,6 @@
 package com.nedap.retail.messages.epc.v2.approved_difference_list;
 
-import org.codehaus.jackson.annotate.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum ExportStatus {
 
@@ -14,6 +14,7 @@ public enum ExportStatus {
      * @see valueOf(..)
      */
     @JsonCreator
+    @org.codehaus.jackson.annotate.JsonCreator
     public static ExportStatus permissiveValueOf(final String value) {
         if (value == null) {
             throw new IllegalArgumentException("Export status missing");

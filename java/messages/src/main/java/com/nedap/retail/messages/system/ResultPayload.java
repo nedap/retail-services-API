@@ -1,8 +1,12 @@
 package com.nedap.retail.messages.system;
 
-import com.nedap.retail.messages.InvalidMessage;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.nedap.retail.messages.InvalidMessage;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ResultPayload {
 
@@ -29,7 +33,7 @@ public class ResultPayload {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(final String result) {
         this.result = result;
     }
 
@@ -37,7 +41,7 @@ public class ResultPayload {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public void setReason(final String reason) {
         this.reason = reason;
     }
 }

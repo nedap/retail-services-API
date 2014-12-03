@@ -1,17 +1,20 @@
 package com.nedap.retail.messages.epcis.v1_1.elements;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 public class BizTransactionElement {
 
-    @JsonProperty("type")
-    @SerializedName("type")
+    public static final String TYPE = "type";
+    @JsonProperty(TYPE)
+    @SerializedName(TYPE)
+    @org.codehaus.jackson.annotate.JsonProperty(TYPE)
     public String type;
 
-    @JsonProperty("biz_transaction")
-    @SerializedName("biz_transaction")
+    public static final String BIZ_TRANSACTION = "biz_transaction";
+    @JsonProperty(BIZ_TRANSACTION)
+    @SerializedName(BIZ_TRANSACTION)
+    @org.codehaus.jackson.annotate.JsonProperty(BIZ_TRANSACTION)
     public String bizTransaction;
 
     public BizTransactionElement() {

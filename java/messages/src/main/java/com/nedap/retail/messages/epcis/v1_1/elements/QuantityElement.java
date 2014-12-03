@@ -1,8 +1,9 @@
 package com.nedap.retail.messages.epcis.v1_1.elements;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
-import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 public class QuantityElement {
 
@@ -11,34 +12,40 @@ public class QuantityElement {
      * For SGTIN, use URI syntax: urn:epc:id:sgtin:CompanyPrefix.ItemRefAndIndicator.SerialNumber
      * For GTIN, use URI syntax: urn:epc:id:gtin:CompanyPrefix.ItemRefAndIndicator
      */
-    @JsonProperty("epc_class")
-    @SerializedName("epc_class")
+    public static final String EPC_CLASS = "epc_class";
+    @JsonProperty(EPC_CLASS)
+    @SerializedName(EPC_CLASS)
+    @org.codehaus.jackson.annotate.JsonProperty(EPC_CLASS)
     public String epcClass;
     /**
      * A number that specifies how many or how much of the specified EPCClass is denoted by this QuantityElement.
      * Negative values are not allowed
      */
-    @JsonProperty("quantity")
-    @SerializedName("quantity")
+    public static final String QUANTITY = "quantity";
+    @JsonProperty(QUANTITY)
+    @SerializedName(QUANTITY)
+    @org.codehaus.jackson.annotate.JsonProperty(QUANTITY)
     public float quantity;
 
     /**
      * Specifies a unit of measure by which the specified quantity is to be interpreted as a physical measure,
      * specifying how much of the specified EPCClass is denoted by this QuantityElement.
      */
-    @JsonProperty("uom")
-    @SerializedName("uom")
+    public static final String UOM = "uom";
+    @JsonProperty(UOM)
+    @SerializedName(UOM)
+    @org.codehaus.jackson.annotate.JsonProperty(UOM)
     public String uom;
 
     public QuantityElement() {
     }
 
-    public QuantityElement(String epcClass, float quantity) {
+    public QuantityElement(final String epcClass, final float quantity) {
         this.epcClass = epcClass;
         this.quantity = quantity;
     }
 
-    public QuantityElement(String epcClass, float quantity, String uom) {
+    public QuantityElement(final String epcClass, final float quantity, final String uom) {
         this.epcClass = epcClass;
         this.quantity = quantity;
         this.uom = uom;
@@ -50,7 +57,7 @@ public class QuantityElement {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

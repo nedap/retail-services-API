@@ -3,9 +3,9 @@ package com.nedap.retail.messages.epcis.v1_1;
 import java.util.List;
 import java.util.Objects;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
@@ -21,16 +21,19 @@ public class TransactionEvent extends EpcisEvent {
     public static final String PARENT_ID = "parent_id";
     @JsonProperty(PARENT_ID)
     @SerializedName(PARENT_ID)
+    @org.codehaus.jackson.annotate.JsonProperty(PARENT_ID)
     public String parentId;
 
     public static final String EPC_LIST = "epc_list";
     @JsonProperty(EPC_LIST)
     @SerializedName(EPC_LIST)
+    @org.codehaus.jackson.annotate.JsonProperty(EPC_LIST)
     public List<String> epcList;
 
     public static final String QUANTITY_LIST = "quantity_list";
     @JsonProperty(QUANTITY_LIST)
     @SerializedName(QUANTITY_LIST)
+    @org.codehaus.jackson.annotate.JsonProperty(QUANTITY_LIST)
     public List<QuantityElement> quantityList;
 
     public TransactionEvent() {

@@ -1,12 +1,15 @@
 package com.nedap.retail.messages.stock;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-// to prevent writing of null properties
 public class StockSummary {
 
     public enum Status {
@@ -17,12 +20,15 @@ public class StockSummary {
     private String id;
     private String location;
     @JsonProperty("event_time")
+    @org.codehaus.jackson.annotate.JsonProperty("event_time")
     private DateTime eventTime;
     @JsonProperty("extern_ref")
+    @org.codehaus.jackson.annotate.JsonProperty("extern_ref")
     private String externRef;
     private Status status;
     private Integer quantity;
     @JsonProperty("gtin_quantity")
+    @org.codehaus.jackson.annotate.JsonProperty("gtin_quantity")
     private Integer gtinQuantity;
 
     public StockSummary() {

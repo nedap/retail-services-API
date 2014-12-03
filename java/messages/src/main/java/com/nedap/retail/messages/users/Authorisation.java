@@ -1,10 +1,15 @@
 package com.nedap.retail.messages.users;
 
 import java.io.Serializable;
-import org.codehaus.jackson.annotate.JsonProperty;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Authorisation implements Serializable {
 
@@ -14,11 +19,11 @@ public class Authorisation implements Serializable {
     public Authorisation() {
     }
 
-    public Authorisation(String role) {
+    public Authorisation(final String role) {
         this.role = role;
     }
 
-    public Authorisation(Role role) {
+    public Authorisation(final Role role) {
         this.role = role.name();
     }
 
@@ -26,17 +31,21 @@ public class Authorisation implements Serializable {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(final String role) {
         this.role = role;
     }
 
-    @JsonProperty("expires_at")
+    public static final String EXPIRES_AT = "expires_at";
+
+    @JsonProperty(EXPIRES_AT)
+    @org.codehaus.jackson.annotate.JsonProperty(EXPIRES_AT)
     public DateTime getExpiresAt() {
         return expiresAt;
     }
 
-    @JsonProperty("expires_at")
-    public void setExpiresAt(DateTime expiresAt) {
+    @JsonProperty(EXPIRES_AT)
+    @org.codehaus.jackson.annotate.JsonProperty(EXPIRES_AT)
+    public void setExpiresAt(final DateTime expiresAt) {
         this.expiresAt = expiresAt;
     }
 }

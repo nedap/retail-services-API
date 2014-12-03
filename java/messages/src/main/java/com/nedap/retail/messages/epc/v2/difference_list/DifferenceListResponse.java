@@ -2,26 +2,32 @@ package com.nedap.retail.messages.epc.v2.difference_list;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.retail.messages.article.Article;
 
 public class DifferenceListResponse {
 
     private List<String> gtins;
     @JsonProperty("erp_stock")
+    @org.codehaus.jackson.annotate.JsonProperty("erp_stock")
     private List<Integer> erpStock;
     @JsonProperty("rfid_stock")
+    @org.codehaus.jackson.annotate.JsonProperty("rfid_stock")
     private List<Integer> rfidStock;
     private List<Article> articles;
     @JsonProperty("erp_stock_time")
+    @org.codehaus.jackson.annotate.JsonProperty("erp_stock_time")
     private DateTime erpStockTime;
     @JsonProperty("rfid_stock_time")
+    @org.codehaus.jackson.annotate.JsonProperty("rfid_stock_time")
     private DateTime rfidStockTime;
     @JsonProperty("erp_gtin_quantity")
+    @org.codehaus.jackson.annotate.JsonProperty("erp_gtin_quantity")
     private Integer erpGtinQuantity;
     @JsonProperty("rfid_gtin_quantity")
+    @org.codehaus.jackson.annotate.JsonProperty("rfid_gtin_quantity")
     private Integer rfidGtinQuantity;
 
     public DifferenceListResponse() {
@@ -76,7 +82,7 @@ public class DifferenceListResponse {
         return erpStockTime;
     }
 
-    public void setErpStockTime(DateTime erpStockTime) {
+    public void setErpStockTime(final DateTime erpStockTime) {
         this.erpStockTime = erpStockTime;
     }
 
@@ -92,7 +98,7 @@ public class DifferenceListResponse {
         return erpGtinQuantity;
     }
 
-    public void setErpGtinQuantity(Integer erpGtinQuantity) {
+    public void setErpGtinQuantity(final Integer erpGtinQuantity) {
         this.erpGtinQuantity = erpGtinQuantity;
     }
 
@@ -100,7 +106,7 @@ public class DifferenceListResponse {
         return rfidGtinQuantity;
     }
 
-    public void setRfidGtinQuantity(Integer rfidGtinQuantity) {
+    public void setRfidGtinQuantity(final Integer rfidGtinQuantity) {
         this.rfidGtinQuantity = rfidGtinQuantity;
     }
 }

@@ -3,16 +3,15 @@ package com.nedap.retail.messages.stock;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
-/**
- *
- */
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Stock extends StockSummary {
 
     @JsonProperty("quantity_list")
+    @org.codehaus.jackson.annotate.JsonProperty("quantity_list")
     private List<GtinQuantity> quantityList;
 
     public Stock() {
@@ -33,6 +32,7 @@ public class Stock extends StockSummary {
     }
 
     @JsonIgnore
+    @org.codehaus.jackson.annotate.JsonIgnore
     public List<GtinQuantity> getQuantityList() {
         return quantityList;
     }
@@ -40,7 +40,7 @@ public class Stock extends StockSummary {
     public void setQuantityList(final List<GtinQuantity> quantityList) {
         this.quantityList = quantityList;
     }
-    
+
     public void addQuantity(final String gtin14, final int quantity) {
         quantityList.add(new GtinQuantity(gtin14, quantity));
     }

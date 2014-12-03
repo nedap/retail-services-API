@@ -2,9 +2,9 @@ package com.nedap.retail.messages.epcis.v1_1;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
@@ -19,16 +19,19 @@ public class AggregationEvent extends EpcisEvent {
     public static final String PARENT_ID = "parent_id";
     @JsonProperty(PARENT_ID)
     @SerializedName(PARENT_ID)
+    @org.codehaus.jackson.annotate.JsonProperty(PARENT_ID)
     public String parentId;
 
     public static final String CHILD_EPCS = "child_epcs";
     @JsonProperty(CHILD_EPCS)
     @SerializedName(CHILD_EPCS)
+    @org.codehaus.jackson.annotate.JsonProperty(CHILD_EPCS)
     public List<String> epcList;
 
     public static final String CHILD_QUANTITY_LIST = "child_quantity_list";
     @JsonProperty(CHILD_QUANTITY_LIST)
     @SerializedName(CHILD_QUANTITY_LIST)
+    @org.codehaus.jackson.annotate.JsonProperty(CHILD_QUANTITY_LIST)
     public List<QuantityElement> quantityList;
 
     public AggregationEvent() {

@@ -1,9 +1,14 @@
 package com.nedap.retail.messages.system;
 
 import java.io.Serializable;
-import org.codehaus.jackson.annotate.JsonProperty;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class SystemListPayload implements Serializable {
 
@@ -15,32 +20,38 @@ public class SystemListPayload implements Serializable {
     }
 
     @JsonProperty("system_id")
+    @org.codehaus.jackson.annotate.JsonProperty("system_id")
     public String getSystemId() {
         return systemId;
     }
 
     @JsonProperty("system_id")
-    public void setSystemId(String systemId) {
+    @org.codehaus.jackson.annotate.JsonProperty("system_id")
+    public void setSystemId(final String systemId) {
         this.systemId = systemId;
     }
 
     @JsonProperty("name")
+    @org.codehaus.jackson.annotate.JsonProperty("name")
     public String getName() {
         return name;
     }
 
     @JsonProperty("name")
-    public void setName(String name) {
+    @org.codehaus.jackson.annotate.JsonProperty("name")
+    public void setName(final String name) {
         this.name = name;
     }
 
     @JsonProperty("location")
+    @org.codehaus.jackson.annotate.JsonProperty("location")
     public String getLocation() {
         return location;
     }
 
     @JsonProperty("location")
-    public void setLocation(String location) {
+    @org.codehaus.jackson.annotate.JsonProperty("location")
+    public void setLocation(final String location) {
         this.location = location;
     }
 }

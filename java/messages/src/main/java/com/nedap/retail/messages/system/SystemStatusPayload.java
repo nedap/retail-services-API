@@ -1,16 +1,18 @@
 package com.nedap.retail.messages.system;
 
-import com.nedap.retail.messages.metrics.DetailedStatus;
-import com.nedap.retail.messages.metrics.Status;
 import java.io.Serializable;
 import java.util.List;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nedap.retail.messages.metrics.DetailedStatus;
+import com.nedap.retail.messages.metrics.Status;
 
 /**
  * System status payload.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(Include.NON_NULL)
 public class SystemStatusPayload implements Serializable {
 
     private String systemId;
@@ -22,43 +24,59 @@ public class SystemStatusPayload implements Serializable {
     public SystemStatusPayload() {
     }
 
-    @JsonProperty("system_id")
+    public static final String SYSTEM_ID = "system_id";
+
+    @JsonProperty(SYSTEM_ID)
+    @org.codehaus.jackson.annotate.JsonProperty(SYSTEM_ID)
     public String getSystemId() {
         return systemId;
     }
 
-    @JsonProperty("system_id")
-    public void setSystemId(String systemId) {
+    @JsonProperty(SYSTEM_ID)
+    @org.codehaus.jackson.annotate.JsonProperty(SYSTEM_ID)
+    public void setSystemId(final String systemId) {
         this.systemId = systemId;
     }
 
-    @JsonProperty("firmware_version")
+    public static final String FIRMWARE_VERSION = "firmware_version";
+
+    @JsonProperty(FIRMWARE_VERSION)
+    @org.codehaus.jackson.annotate.JsonProperty(FIRMWARE_VERSION)
     public String getFirmwareVersion() {
         return firmwareVersion;
     }
 
-    @JsonProperty("firmware_version")
-    public void setFirmwareVersion(String firmwareVersion) {
+    @JsonProperty(FIRMWARE_VERSION)
+    @org.codehaus.jackson.annotate.JsonProperty(FIRMWARE_VERSION)
+    public void setFirmwareVersion(final String firmwareVersion) {
         this.firmwareVersion = firmwareVersion;
     }
 
-    @JsonProperty("status")
+    public static final String STATUS = "status";
+
+    @JsonProperty(STATUS)
+    @org.codehaus.jackson.annotate.JsonProperty(STATUS)
     public Status getStatus() {
         return status;
     }
 
-    @JsonProperty("status")
-    public void setStatus(Status status) {
+    @JsonProperty(STATUS)
+    @org.codehaus.jackson.annotate.JsonProperty(STATUS)
+    public void setStatus(final Status status) {
         this.status = status;
     }
 
-    @JsonProperty("detailed_status")
+    public static final String DETAILED_STATUS = "detailed_status";
+
+    @JsonProperty(DETAILED_STATUS)
+    @org.codehaus.jackson.annotate.JsonProperty(DETAILED_STATUS)
     public List<DetailedStatus> getDetailedStatus() {
         return detailedStatus;
     }
 
-    @JsonProperty("detailed_status")
-    public void setDetailedStatus(List<DetailedStatus> detailedStatus) {
+    @JsonProperty(DETAILED_STATUS)
+    @org.codehaus.jackson.annotate.JsonProperty(DETAILED_STATUS)
+    public void setDetailedStatus(final List<DetailedStatus> detailedStatus) {
         this.detailedStatus = detailedStatus;
     }
 
@@ -68,13 +86,17 @@ public class SystemStatusPayload implements Serializable {
      *
      * @return lexical representation of xsd:dateTime
      */
-    @JsonProperty("offline_since")
+    public static final String OFFLINE_SINCE = "offline_since";
+
+    @JsonProperty(OFFLINE_SINCE)
+    @org.codehaus.jackson.annotate.JsonProperty(OFFLINE_SINCE)
     public String getOfflineSince() {
         return offlineSince;
     }
 
-    @JsonProperty("offline_since")
-    public void setOfflineSince(String offlineSince) {
+    @JsonProperty(OFFLINE_SINCE)
+    @org.codehaus.jackson.annotate.JsonProperty(OFFLINE_SINCE)
+    public void setOfflineSince(final String offlineSince) {
         this.offlineSince = offlineSince;
     }
 }
