@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Barcode implements Serializable {
     private String type;
@@ -32,7 +36,8 @@ public class Barcode implements Serializable {
     public void setValue(final String value) {
         this.value = value;
     }
-    
+
+    @Override
     public String toString() {
         return "[" + type + "|" + value + "]";
     }

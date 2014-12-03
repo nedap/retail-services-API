@@ -3,16 +3,21 @@ package com.nedap.retail.messages.users;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * User Profile.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@org.codehaus.jackson.annotate.JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User implements Serializable {
 
     private String id;
@@ -34,12 +39,16 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    @JsonProperty("display_name")
+    public static final String DISPLAY_NAME = "display_name";
+
+    @JsonProperty(DISPLAY_NAME)
+    @org.codehaus.jackson.annotate.JsonProperty(DISPLAY_NAME)
     public String getDisplayName() {
         return displayName;
     }
 
-    @JsonProperty("display_name")
+    @JsonProperty(DISPLAY_NAME)
+    @org.codehaus.jackson.annotate.JsonProperty(DISPLAY_NAME)
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
@@ -76,22 +85,28 @@ public class User implements Serializable {
         this.authorisations = authorisations;
     }
 
-    @JsonProperty("sitegroup_id")
+    public static final String SITEGROUP_ID = "sitegroup_id";
+
+    @JsonProperty(SITEGROUP_ID)
+    @org.codehaus.jackson.annotate.JsonProperty(SITEGROUP_ID)
     public long getSitegroupId() {
         return sitegroupId;
     }
 
-    @JsonProperty("sitegroup_id")
+    @JsonProperty(SITEGROUP_ID)
+    @org.codehaus.jackson.annotate.JsonProperty(SITEGROUP_ID)
     public void setSitegroupId(final long sitegroupId) {
         this.sitegroupId = sitegroupId;
     }
 
     @JsonIgnore
+    @org.codehaus.jackson.annotate.JsonIgnore
     public boolean isAuthorized(final Role role) {
         return isAuthorized(role.name());
     }
 
     @JsonIgnore
+    @org.codehaus.jackson.annotate.JsonIgnore
     public boolean isAuthorized(final String roleName) {
         if (authorisations != null) {
             for (final Authorisation authorisation : authorisations) {

@@ -1,9 +1,13 @@
 package com.nedap.retail.messages.organization;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Address {
 
@@ -11,6 +15,7 @@ public class Address {
     private String zipcode;
     private String city;
     @JsonProperty("country_code")
+    @org.codehaus.jackson.annotate.JsonProperty("country_code")
     private String countryCode;
     private Double latitude;
     private Double longitude;

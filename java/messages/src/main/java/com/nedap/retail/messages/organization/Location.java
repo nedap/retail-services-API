@@ -3,20 +3,26 @@ package com.nedap.retail.messages.organization;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Location {
 
     private String id;
     @JsonProperty("parent_id")
+    @org.codehaus.jackson.annotate.JsonProperty("parent_id")
     private String parentId;
     private LocationType type;
     private LocationSubType subtype;
     private String name;
     @JsonProperty("store_code")
+    @org.codehaus.jackson.annotate.JsonProperty("store_code")
     private String storeCode;
     private Address address;
     private List<Location> children;

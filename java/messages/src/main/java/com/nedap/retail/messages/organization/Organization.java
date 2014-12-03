@@ -2,10 +2,14 @@ package com.nedap.retail.messages.organization;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Organization implements Serializable {
 
@@ -15,6 +19,7 @@ public class Organization implements Serializable {
     }
 
     @JsonProperty("organization_id")
+    @org.codehaus.jackson.annotate.JsonProperty("organization_id")
     private long id;
     private Type type;
     private String name;

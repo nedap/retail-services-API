@@ -3,12 +3,17 @@ package com.nedap.retail.messages.organization;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * Response from endpoint:
  * GET https://api.nedapretail.com/organization/v1/retrieve
  */
+@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Organizations implements Serializable {
 
@@ -18,11 +23,11 @@ public class Organizations implements Serializable {
     public Organizations() {
     }
 
-    public Organizations(Organization own) {
+    public Organizations(final Organization own) {
         this(own, new ArrayList<Organization>());
     }
 
-    public Organizations(Organization own, List<Organization> linked) {
+    public Organizations(final Organization own, final List<Organization> linked) {
         this.own = own;
         this.linked = linked;
     }
@@ -31,7 +36,7 @@ public class Organizations implements Serializable {
         return own;
     }
 
-    public void setOwn(Organization own) {
+    public void setOwn(final Organization own) {
         this.own = own;
     }
 
@@ -39,7 +44,7 @@ public class Organizations implements Serializable {
         return linked;
     }
 
-    public void setLinked(List<Organization> linked) {
+    public void setLinked(final List<Organization> linked) {
         this.linked = linked;
     }
 

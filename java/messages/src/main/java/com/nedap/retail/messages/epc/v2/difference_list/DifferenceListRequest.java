@@ -1,18 +1,22 @@
 package com.nedap.retail.messages.epc.v2.difference_list;
 
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DifferenceListRequest {
 
     @JsonProperty("erp_stock_id")
+    @org.codehaus.jackson.annotate.JsonProperty("erp_stock_id")
     private String erpStockId;
     private DateTime time;
     private String location;
     @JsonProperty("only_differences")
+    @org.codehaus.jackson.annotate.JsonProperty("only_differences")
     private boolean onlyDifferences = true;
     @JsonProperty("include_articles")
+    @org.codehaus.jackson.annotate.JsonProperty("include_articles")
     private boolean includeArticles = false;
 
     public DifferenceListRequest() {

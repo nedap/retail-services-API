@@ -1,17 +1,20 @@
 package com.nedap.retail.messages.epcis.v1_1.elements;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 public class DestinationElement {
 
-    @JsonProperty("type")
-    @SerializedName("type")
+    public static final String TYPE = "type";
+    @JsonProperty(TYPE)
+    @SerializedName(TYPE)
+    @org.codehaus.jackson.annotate.JsonProperty(TYPE)
     public String type;
 
-    @JsonProperty("destination")
-    @SerializedName("destination")
+    public static final String DESTINATION = "destination";
+    @JsonProperty(DESTINATION)
+    @SerializedName(DESTINATION)
+    @org.codehaus.jackson.annotate.JsonProperty(DESTINATION)
     public String destination;
 
     public DestinationElement() {

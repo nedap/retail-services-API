@@ -1,5 +1,7 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.AggregationEvent;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
@@ -7,8 +9,6 @@ import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
 import com.nedap.retail.messages.epcis.v1_1.QuantityEvent;
 import com.nedap.retail.messages.epcis.v1_1.TransactionEvent;
 import com.nedap.retail.messages.epcis.v1_1.TransformationEvent;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonValue;
 
 /**
  * Enumerates EPCIS EventType
@@ -53,7 +53,7 @@ public enum EventType {
     private final String eventType;
     private final Class<? extends EpcisEvent> clz;
 
-    private EventType(int aNumber, String anEventType, Class<? extends EpcisEvent> aClz) {
+    private EventType(final int aNumber, final String anEventType, final Class<? extends EpcisEvent> aClz) {
         number = aNumber;
         eventType = anEventType;
         clz = aClz;
@@ -70,6 +70,7 @@ public enum EventType {
      * @return EPCIS' event type
      */
     @JsonValue
+    @org.codehaus.jackson.annotate.JsonValue
     public final String eventType() {
         return eventType;
     }
@@ -89,11 +90,12 @@ public enum EventType {
      * @see valueOf(..)
      */
     @JsonCreator
-    public static EventType permissiveValueOf(String value) {
+    @org.codehaus.jackson.annotate.JsonCreator
+    public static EventType permissiveValueOf(final String value) {
         if (value == null) {
             throw new IllegalArgumentException("event type missing");
         }
-        for (EventType v : values()) {
+        for (final EventType v : values()) {
             if (value.equalsIgnoreCase(v.eventType())) {
                 return v;
             }
