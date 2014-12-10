@@ -3,7 +3,6 @@ package com.nedap.retail.messages.stock;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,25 +16,35 @@ public class StockSummary {
         ACCEPTED, VALIDATING
     }
 
-    private String id;
-    private String location;
+    public String id;
+
+    public String location;
+
     @JsonProperty("event_time")
     @org.codehaus.jackson.annotate.JsonProperty("event_time")
-    private DateTime eventTime;
+    public DateTime eventTime;
+
     @JsonProperty("extern_ref")
     @org.codehaus.jackson.annotate.JsonProperty("extern_ref")
-    private String externRef;
-    private Status status;
-    private Integer quantity;
+    public String externRef;
+
+    public Status status;
+
+    public Integer quantity;
+
     @JsonProperty("gtin_quantity")
     @org.codehaus.jackson.annotate.JsonProperty("gtin_quantity")
-    private Integer gtinQuantity;
+    public Integer gtinQuantity;
+
+    @JsonProperty("in_use")
+    @org.codehaus.jackson.annotate.JsonProperty("in_use")
+    public boolean inUse;
 
     public StockSummary() {
     }
 
     public StockSummary(final String id, final String location, final DateTime eventTime, final String externRef,
-            final String status) {
+            final String status, final boolean inUse) {
         this.id = id;
         this.location = location;
         this.eventTime = eventTime;
@@ -43,71 +52,13 @@ public class StockSummary {
         if (status != null) {
             this.status = Status.valueOf(status);
         }
+        this.inUse = inUse;
     }
 
     public StockSummary(final String id, final String location, final DateTime eventTime, final String externRef,
-            final String status, final Integer quantity, final Integer gtinQuantity) {
-        this(id, location, eventTime, externRef, status);
+            final String status, final Integer quantity, final Integer gtinQuantity, final boolean inUse) {
+        this(id, location, eventTime, externRef, status, inUse);
         this.quantity = quantity;
-        this.gtinQuantity = gtinQuantity;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(final String location) {
-        this.location = location;
-    }
-
-    @JsonIgnore
-    public DateTime getEventTime() {
-        return eventTime;
-    }
-
-    public void setEventTime(final DateTime eventTime) {
-        this.eventTime = eventTime;
-    }
-
-    @JsonIgnore
-    public String getExternRef() {
-        return externRef;
-    }
-
-    public void setExternRef(final String externRef) {
-        this.externRef = externRef;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(final Status status) {
-        this.status = status;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    @JsonIgnore
-    public Integer getGtinQuantity() {
-        return gtinQuantity;
-    }
-
-    public void setGtinQuantity(final Integer gtinQuantity) {
         this.gtinQuantity = gtinQuantity;
     }
 
