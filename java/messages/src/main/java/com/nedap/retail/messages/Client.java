@@ -439,6 +439,14 @@ public class Client {
         }
     }
 
+    /**
+     * Heartbeat
+     */
+    public void heartbeat() {
+        final WebResource resource = resource("/device/1.0/heartbeat");
+        post(resource);
+    }
+
     protected WebResource resource(final String uri) {
 
         logger.debug("resource {}", uri);
