@@ -24,7 +24,7 @@ public class ArticleExample {
         try {
             // send articles
             System.out.println("------------- Uploading articles");
-            client.captureArticles(exampleArticles, null);
+            client.captureArticles(exampleArticles);
 
         } catch (final UniformInterfaceException e) {
             System.out.println("Server responded with an error:");
