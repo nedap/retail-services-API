@@ -16,7 +16,7 @@
         <jsersey-version>1.6</jsersey-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <nedap-retail-messages-version>1.23</nedap-retail-messages-version>
+        <nedap-retail-messages-version>1.22</nedap-retail-messages-version>
     </properties>
 
     <scm>
