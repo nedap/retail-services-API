@@ -24,19 +24,19 @@ public class ArticleExample {
         try {
             // send articles
             System.out.println("------------- Uploading articles");
-            client.captureArticles(exampleArticles);
+            client.captureArticles(exampleArticles, null);
 
-        } catch (UniformInterfaceException e) {
+        } catch (final UniformInterfaceException e) {
             System.out.println("Server responded with an error:");
             System.out.println(e.getResponse().getEntity(String.class));
         }
 
         System.out.println("------------- Done");
     }
-    
+
     private static Article createExampleArticle() {
         final Article article = new Article();
-        
+
         // GTIN is the identifier of a product. Most barcodes can be translated to GTIN.
         article.setGtin("08701231234562");
         // at least one linear barcode is required
@@ -67,7 +67,7 @@ public class ArticleExample {
         prices.add(new Price("NOK", "NO", 160.0));
         prices.add(new Price("USD", "US", 19.95));
         article.setPrices(prices);
-        
+
         return article;
     }
 }

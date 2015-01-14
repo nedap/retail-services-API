@@ -249,9 +249,13 @@ public class Client {
      *
      * @param articles Articles to update or add
      */
-    public void captureArticles(final List<Article> articles) {
+    public void captureArticles(final List<Article> articles, final Long organizationId) {
 
-        final WebResource resource = resource("/article/v2/create_or_replace");
+        WebResource resource = resource("/article/v2/create_or_replace");
+
+        if (organizationId != null) {
+            resource = resource.queryParam(ORGANIZATION_ID, Long.toString(organizationId));
+        }
         post(resource, new Articles(articles));
     }
 
