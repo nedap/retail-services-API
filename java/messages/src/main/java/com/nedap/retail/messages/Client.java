@@ -110,7 +110,7 @@ public class Client {
      */
     public String captureErpStock(final Stock stock) {
 
-        final WebResource resource = resource("/erp/v2/stock.capture");
+        final WebResource resource = resource("/erp/v1/stock.capture");
         final Map response = post(resource, Map.class, stock);
         return (String) response.get("id");
     }
@@ -123,7 +123,7 @@ public class Client {
      */
     public Stock retrieveErpStock(final String id) {
 
-        final WebResource resource = resource("/erp/v2/stock.retrieve")
+        final WebResource resource = resource("/erp/v1/stock.retrieve")
                 .queryParam("id", id);
 
         System.out.println(resource.accept(APPLICATION_JSON_TYPE).get(String.class));
@@ -201,7 +201,7 @@ public class Client {
      */
     public StockSummary getErpStockStatus(final String id) {
 
-        final WebResource resource = resource("/erp/v2/stock.status")
+        final WebResource resource = resource("/erp/v1/stock.status")
                 .queryParam("id", id);
         return get(resource, StockSummary.class);
     }
@@ -214,7 +214,7 @@ public class Client {
      */
     public List<StockSummary> getErpStockList(final String location) {
 
-        final WebResource resource = resource("/erp/v2/stock.list")
+        final WebResource resource = resource("/erp/v1/stock.list")
                 .queryParam("location", location);
         return get(resource, new GenericType<List<StockSummary>>() {
         });
