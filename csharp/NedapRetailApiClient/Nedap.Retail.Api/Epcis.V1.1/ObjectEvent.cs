@@ -29,7 +29,7 @@ namespace Nedap.Retail.Api.Epcis.V1._1
         /// The business condition of the objects associated with the EPCs, presumed to hold true until contradicted by a subsequent event.
         /// </summary>
         [JsonProperty("disposition")]
-        public string DispositionId { get; set; }
+        public string Disposition { get; set; }
 
         /// <summary>
         /// The business location where the objects associated with the EPCs may be found, until contradicted by a subsequent event.

@@ -24,7 +24,7 @@ namespace Nedap.Retail.Api.Example
                 // capture
                 Console.WriteLine("------------- Capture workflow event");
                 string cap = client.WorkflowV2.Capture(workflow);
-                Console.WriteLine("result = " + cap);
+                Console.WriteLine("captured workflow events");
             }
             catch (WebException e)
             {

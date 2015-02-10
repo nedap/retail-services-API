@@ -23,7 +23,7 @@ namespace Nedap.Retail.Api.Article.V2
         /// <returns>Total number of articles</returns>
         public long Quantity()
         {
-            return apiCaller.Get<long>("/article/v2/quantity");
+            return apiCaller.Get<QuantityResponse>("/article/v2/quantity").Quantity;
         }
 
         /// <summary>

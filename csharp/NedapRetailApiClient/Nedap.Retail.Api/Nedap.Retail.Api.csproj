@@ -47,6 +47,7 @@
     <Compile Include="Article.V2\Barcode.cs" />
     <Compile Include="Article.V2\CreateOrReplaceRequest.cs" />
     <Compile Include="Article.V2\Price.cs" />
+    <Compile Include="Article.V2\QuantityResponse.cs" />
     <Compile Include="Article.V2\Size.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Epc.V2\DifferenceListResponse.cs" />

@@ -53,8 +53,7 @@ namespace Nedap.Retail.Api.Example
             article.Barcodes = new List<Barcode>()
             {
                 new Barcode() { Type = "ean_13", Value = "3327009483366" },
-                new Barcode() { Type = "ean_13", Value = "3327009483427" },
-                new Barcode() { Type = "ean_13", Value = "(01)95012345678903(3103)000123" }
+                new Barcode() { Type = "ean_13", Value = "3327009483427" }
             };
             article.Code = "74478-94565";
             article.Brand = "Nedap";
