@@ -26,21 +26,7 @@ namespace Nedap.Retail.Api.Example
             }
             catch (WebException e)
             {
-                Console.WriteLine("Exception occured:");
-                Console.WriteLine(e.Status);
-                HttpWebResponse r = (HttpWebResponse)e.Response;
-                Console.WriteLine(r.StatusCode);
-                Stream responseStream = r.GetResponseStream();
-
-                string responseText;
-                if (responseStream != null)
-                {
-                    using (StreamReader reader = new StreamReader(responseStream))
-                    {
-                        responseText = reader.ReadToEnd();
-                    }
-                    Console.WriteLine(responseText);
-                }
+                e.Print();
             }
 
             Console.ReadKey();
