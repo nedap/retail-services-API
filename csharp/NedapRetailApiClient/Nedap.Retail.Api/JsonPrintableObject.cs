@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System;
 
-namespace Nedap.Retail.Api.Erp.V1
+namespace Nedap.Retail.Api
 {
-    internal class CaptureResponse
+    /// <summary>
+    /// Abstract class that provides override of default ToString method with JsonCovert object serialization
+    /// </summary>
+    public abstract class JsonPrintableObject
     {
-        [JsonProperty("id")]
-        public String Id { get; set; }
-
         /// <summary>
         /// Returns string representation of the object
         /// </summary>

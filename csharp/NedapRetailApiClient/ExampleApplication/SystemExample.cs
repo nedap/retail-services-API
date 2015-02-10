@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Nedap.Retail.Api.Example
 {
-    class SystemExample
+    internal class SystemExample
     {
         public static void RunExample(Client client)
         {
             // get list of systems
-            List<Nedap.Retail.Api.System.V1.System> list = client.SystemV1List();
+            List<Nedap.Retail.Api.System.V1.System> list = client.SystemV1.List();
 
             // show list of systems and wait for key press
             Console.WriteLine("Get system list.");
@@ -22,7 +22,7 @@ namespace Nedap.Retail.Api.Example
             Console.ReadKey();
 
             // get systems status
-            List<Nedap.Retail.Api.System.V1.SystemStatus> status = client.SystemV1Status();
+            List<Nedap.Retail.Api.System.V1.SystemStatus> status = client.SystemV1.Status();
 
             // show systems status and wait for key press
             Console.WriteLine("Get system list.");
