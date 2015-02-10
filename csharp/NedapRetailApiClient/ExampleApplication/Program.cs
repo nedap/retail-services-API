@@ -29,9 +29,10 @@ namespace Nedap.Retail.Api.Example
             Console.WriteLine("Which example do you want to run?");
             Console.WriteLine("1. System API");
             Console.WriteLine("2. ERP API");
-            Console.WriteLine("3. Article API");
-            Console.WriteLine("4. Epcis API");
-            Console.WriteLine("5. Workflow API");
+            Console.WriteLine("3. EPC API");
+            Console.WriteLine("4. Article API");
+            Console.WriteLine("5. Epcis API");
+            Console.WriteLine("6. Workflow API");
             Console.Write("Your choice: ");
             ConsoleKeyInfo key = Console.ReadKey();
             Console.WriteLine();
@@ -45,12 +46,15 @@ namespace Nedap.Retail.Api.Example
                     ErpExample.RunExample(client);
                     break;
                 case ConsoleKey.D3:
-                    ArticleExample.RunExample(client);
+                    EpcExample.RunExample(client);
                     break;
                 case ConsoleKey.D4:
-                    EpcisExample.RunExample(client);
+                    ArticleExample.RunExample(client);
                     break;
                 case ConsoleKey.D5:
+                    EpcisExample.RunExample(client);
+                    break;
+                case ConsoleKey.D6:
                     WorkflowExample.RunExample(client);
                     break;
             }
