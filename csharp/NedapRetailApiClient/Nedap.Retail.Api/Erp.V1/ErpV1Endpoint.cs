@@ -25,8 +25,12 @@ namespace Nedap.Retail.Api.Erp.V1
         /// <param name="quantityList">Complete stock summary for this location at this eventTime</param>
         /// <param name="externRef">Optional, external reference that can be used to identify this ERP stock count</param>
         /// <returns>Stock ID of the saved ERP stock</returns>
-        public string StockCapture(string location, DateTime eventTime, List<GtinQuantity> quantityList, String externRef)
+        public string StockCapture(string location, DateTime eventTime, List<GtinQuantity> quantityList, string externRef)
         {
+            location.RequiredString(() => location);
+            eventTime.Required(() => eventTime);
+            quantityList.Required(() => quantityList);
+
             CaptureRequest request = new CaptureRequest();
             request.Location = location;
             request.EventTime = eventTime;
@@ -43,6 +47,8 @@ namespace Nedap.Retail.Api.Erp.V1
         /// <returns>ERP stock</returns>
         public Stock StockRetrieve(string stockId)
         {
+            stockId.RequiredString(() => stockId);
+
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("id", stockId);
             return apiCaller.Get<Stock>("/erp/v1/stock.retrieve", parameters);
@@ -55,6 +61,8 @@ namespace Nedap.Retail.Api.Erp.V1
         /// <returns>Stock summary</returns>
         public StockSummary StockStatus(string stockId)
         {
+            stockId.RequiredString(() => stockId);
+
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("id", stockId);
             return apiCaller.Get<StockSummary>("/erp/v1/stock.status", parameters);
@@ -69,17 +77,17 @@ namespace Nedap.Retail.Api.Erp.V1
         /// <returns>List of Stock summary</returns>
         public List<StockSummary> StockList(string location, DateTime? fromEventTime, DateTime? untilEventTime)
         {
+            location.RequiredString(() => location);
+
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("location", location);
             if (fromEventTime != null)
             {
-                DateTime from = (DateTime)fromEventTime;
-                parameters.Add("from_event_time", from.ToString("o"));
+                parameters.Add("from_event_time", fromEventTime.Value.ToString("o"));
             }
             if (untilEventTime != null)
             {
-                DateTime until = (DateTime)untilEventTime;
-                parameters.Add("until_event_time", until.ToString("o"));
+                parameters.Add("until_event_time", untilEventTime.Value.ToString("o"));
             }
             return apiCaller.Get<List<StockSummary>>("/erp/v1/stock.list", parameters);
         }

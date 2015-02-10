@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 
-namespace Nedap.Retail.Api.Epcis.V1._1
+namespace Nedap.Retail.Api.Epcis.V1_1
 {
     /// <summary>
     /// The event type AggregationEvent describes events that apply to objects that have been aggregated to one another. In such an event, there is a set of contained objects that have been aggregated within a containing entity that's meant to identify the aggregation itself.

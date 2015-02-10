@@ -1,4 +1,4 @@
-﻿using Nedap.Retail.Api.Epcis.V1._1;
+﻿using Nedap.Retail.Api.Epcis.V1_1;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +58,7 @@ namespace Nedap.Retail.Api.Example
                     "urn:epc:id:sgtin:1234567.000246.0003",
                     "urn:epc:id:sgtin:1234567.000246.0004"
                 },
-                Action = Epcis.V1._1.Action.OBSERVE,
+                Action = Epcis.V1_1.Action.OBSERVE,
                 BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
                 Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
                 ReadPoint = "urn:epc:id:sgln:012345.67890.001",
@@ -77,7 +77,7 @@ namespace Nedap.Retail.Api.Example
                     "urn:epc:id:sgtin:1234567.000246.0007",
                     "urn:epc:id:sgtin:1234567.000246.0008"
                 },
-                Action = Epcis.V1._1.Action.OBSERVE,
+                Action = Epcis.V1_1.Action.OBSERVE,
                 BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
                 Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
                 ReadPoint = "urn:epc:id:sgln:012345.67890.001",

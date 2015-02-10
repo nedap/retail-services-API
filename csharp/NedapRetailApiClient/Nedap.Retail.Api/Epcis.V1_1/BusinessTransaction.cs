@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Nedap.Retail.Api.Epcis.V1._1
+namespace Nedap.Retail.Api.Epcis.V1_1
 {
+    /// <summary>
+    /// Business transaction
+    /// </summary>
     public class BusinessTransaction : JsonPrintableObject
     {
         /// <summary>

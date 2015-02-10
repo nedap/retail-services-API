@@ -8,7 +8,7 @@ namespace Nedap.Retail.Api.System.V1
     /// <summary>
     /// Status of a system
     /// </summary>
-    public class SystemStatus
+    public class SystemStatus : JsonPrintableObject
     {
         /// <summary>
         /// System ID that uniquely identifies the system
@@ -40,16 +40,6 @@ namespace Nedap.Retail.Api.System.V1
         /// </summary>
         [JsonProperty("offline_since")]
         public DateTime? OfflineSince { get; private set; }
-
-        /// <summary>
-        /// Returns string representation of the object
-        /// </summary>
-        /// <returns>Formatted JSON string</returns>
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
-
     }
 
     /// <summary>

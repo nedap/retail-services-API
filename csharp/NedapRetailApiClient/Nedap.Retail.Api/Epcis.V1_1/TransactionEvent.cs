@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 
-namespace Nedap.Retail.Api.Epcis.V1._1
+namespace Nedap.Retail.Api.Epcis.V1_1
 {
     /// <summary>
     /// The event type TransactionEvent describes the association or disassociation of physical or digital objects to one or more business transactions.

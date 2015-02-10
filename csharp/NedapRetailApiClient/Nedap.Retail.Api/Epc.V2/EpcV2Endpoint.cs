@@ -28,7 +28,7 @@ namespace Nedap.Retail.Api.Epc.V2
         /// <param name="time">The date and time you would like to have the RFID stock information from. When omitted: the report will contain the stock information at the current server time.</param>
         /// <param name="onlyDifferences">Optional. When set to TRUE (default) this will return only differences. When set to FALSE, this will return all entries in ERP stock or RFID stock. When omitted: default value is TRUE, returning only differences.</param>
         /// <param name="includeArticles">Optional. When set to TRUE this will return an array of articles. When omitted: default value is FALSE.</param>
-        /// <returns></returns>
+        /// <returns>DifferenceList response object</returns>
         public DifferenceListResponse DifferenceList(string erpStockId, Nullable<DateTime> time, Nullable<bool> onlyDifferences, Nullable<bool> includeArticles)
         {
             erpStockId.RequiredString(() => erpStockId);
@@ -52,7 +52,7 @@ namespace Nedap.Retail.Api.Epc.V2
         /// <param name="dispositions">Optional. Contains a list of dispositions that we consider in stock. All GTINs that match any of the the given dispositions are returned. When omitted: the report will be based on the dispositions urn:epcglobal:cbv:disp:sellable_accessible, urn:epcglobal:cbv:disp:sellable_not_accessible, urn:epcglobal:cbv:disp:non_sellable_other, http://nedapretail.com/disp/maybe_stolen.</param>
         /// <param name="time">Optional. The date and time you would like to have the stock information from. When omitted: the report will contain the latest available stock information.</param>
         /// <param name="includeArticles">Optional. When set to TRUE this will return an array of articles. When omitted: default value is FALSE.</param>
-        /// <returns></returns>
+        /// <returns>StockGtin response object</returns>
         public StockGtinResponse StockGtin(string location, List<string> gtins, List<string> dispositions, Nullable<DateTime> time, Nullable<bool> includeArticles)
         {
             location.RequiredString(() => location);

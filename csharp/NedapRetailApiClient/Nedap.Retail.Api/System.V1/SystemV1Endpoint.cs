@@ -41,6 +41,8 @@ namespace Nedap.Retail.Api.System.V1
         /// <returns>The detailed system status of the specified system</returns>
         public SystemStatus Status(string systemId)
         {
+            systemId.RequiredString(() => systemId);
+
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("system_id", systemId);
             return apiCaller.Get<SystemStatus>("/system/1.0/status", parameters);

@@ -1,7 +1,7 @@
 ﻿using Nedap.Retail.Api.OAuth;
 using System.Collections.Generic;
 
-namespace Nedap.Retail.Api.Epcis.V1._1
+namespace Nedap.Retail.Api.Epcis.V1_1
 {
     /// <summary>
     /// EPCIS V1.1 API endpoint

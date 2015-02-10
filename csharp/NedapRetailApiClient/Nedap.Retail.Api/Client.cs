@@ -1,6 +1,6 @@
 ﻿using Nedap.Retail.Api.Article.V2;
 using Nedap.Retail.Api.Epc.V2;
-using Nedap.Retail.Api.Epcis.V1._1;
+using Nedap.Retail.Api.Epcis.V1_1;
 using Nedap.Retail.Api.Erp.V1;
 using Nedap.Retail.Api.OAuth;
 using Nedap.Retail.Api.System.V1;

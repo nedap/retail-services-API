@@ -1,4 +1,4 @@
-﻿namespace Nedap.Retail.Api.Epcis.V1._1
+﻿namespace Nedap.Retail.Api.Epcis.V1_1
 {
     /// <summary>
     /// Epcis event action
