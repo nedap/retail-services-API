@@ -32,6 +32,7 @@ public class Article implements Serializable {
     public static final String NAME = "name";
     public static final String BARCODES = "barcodes";
     public static final String LAST_UPDATED = "last_updated";
+    public static final String MARKDOWN = "markdown";
 
     private String gtin;
     private List<Barcode> barcodes;
@@ -45,10 +46,12 @@ public class Article implements Serializable {
     private List<Size> sizes;
     private String supplier;
     private List<Price> prices;
+    private boolean markdown;
     @JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
     @JsonIgnore
     public UUID lastUpdatedUUID;
+
 
     // Empty constructor used by Jackson
     public Article() {
@@ -176,6 +179,13 @@ public class Article implements Serializable {
         this.lastUpdated = lastUpdated;
     }
 
+    public boolean getMarkdown() {
+        return markdown;
+    }
+
+    public void setMarkdown(final boolean markdown) {
+        this.markdown = markdown;
+    }
 
     @Override
     public String toString() {
