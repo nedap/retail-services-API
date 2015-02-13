@@ -46,7 +46,7 @@ public class Article implements Serializable {
     private List<Size> sizes;
     private String supplier;
     private List<Price> prices;
-    private boolean markdown;
+    private Boolean markdown;
     @JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
     @JsonIgnore
@@ -179,11 +179,11 @@ public class Article implements Serializable {
         this.lastUpdated = lastUpdated;
     }
 
-    public boolean getMarkdown() {
+    public Boolean getMarkdown() {
         return markdown;
     }
 
-    public void setMarkdown(final boolean markdown) {
+    public void setMarkdown(final Boolean markdown) {
         this.markdown = markdown;
     }
 
