@@ -10,8 +10,10 @@ namespace Nedap.Retail.Api.OAuth
     /// <summary>
     /// Takes care of parameter encoding, sending the request and decoding the response
     /// </summary>
-    internal class ApiCaller
+    internal class ApiCaller : IDisposable
     {
+        private bool disposed;
+
         /// <summary>
         /// OAuth 2.0 client ID
         /// </summary>
@@ -95,6 +97,34 @@ namespace Nedap.Retail.Api.OAuth
             CheckOAuthToken();
             String result = webClient.UploadString(Url, ToJson(data));
             return FromJson<T>(result);
+        }
+
+        /// <summary>
+        /// Dispose api caller
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                if (webClient != null)
+                {
+                    webClient.Dispose();
+                    webClient = null;
+                }
+            }
+
+            disposed = true;
         }
 
         /// <summary>

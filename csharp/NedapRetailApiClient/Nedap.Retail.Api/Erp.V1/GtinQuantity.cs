@@ -23,12 +23,12 @@ namespace Nedap.Retail.Api.Erp.V1
         /// GTIN
         /// </summary>
         [JsonProperty("gtin")]
-        public string Gtin { get; set; }
+        public string Gtin { get; private set; }
 
         /// <summary>
         /// Quantity
         /// </summary>
         [JsonProperty("quantity")]
-        public long Quantity { get; set; }
+        public long Quantity { get; private set; }
     }
 }

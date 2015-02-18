@@ -1,7 +1,6 @@
 ﻿using Nedap.Retail.Api.Epcis.V1_1;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 
 namespace Nedap.Retail.Api.Example

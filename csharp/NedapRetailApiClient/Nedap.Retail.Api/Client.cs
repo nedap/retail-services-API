@@ -12,8 +12,9 @@ namespace Nedap.Retail.Api
     /// <summary>
     /// Nedap Retail API client
     /// </summary>
-    public class Client
+    public class Client : IDisposable
     {
+        private bool disposed;
         private ApiCaller apiCaller;
 
         /// <summary>
@@ -31,15 +32,6 @@ namespace Nedap.Retail.Api
             ErpV1 = new ErpV1Endpoint(apiCaller);
             SystemV1 = new SystemV1Endpoint(apiCaller);
             WorkflowV2 = new WorkflowV2Endpoint(apiCaller);
-        }
-
-        /// <summary>
-        /// Set base URL for the API calls (default: https://api.nedapretail.com/)
-        /// </summary>
-        /// <param name="ApiBaseUrl">The URL to use to resolve partial and relative URLs</param>
-        public void SetApiBaseUrl(Uri ApiBaseUrl)
-        {
-            apiCaller.ApiBaseUrl = ApiBaseUrl;
         }
 
         /// <summary>
@@ -71,5 +63,42 @@ namespace Nedap.Retail.Api
         /// Workflow V2 API endpoint
         /// </summary>
         public WorkflowV2Endpoint WorkflowV2 { get; private set; }
+
+        /// <summary>
+        /// Set base URL for the API calls (default: https://api.nedapretail.com/)
+        /// </summary>
+        /// <param name="ApiBaseUrl">The URL to use to resolve partial and relative URLs</param>
+        public void SetApiBaseUrl(Uri ApiBaseUrl)
+        {
+            apiCaller.ApiBaseUrl = ApiBaseUrl;
+        }
+
+        /// <summary>
+        /// Dispose client
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                if (apiCaller != null)
+                {
+                    apiCaller.Dispose();
+                    apiCaller = null;
+                }
+            }
+
+            disposed = true;
+        }
     }
 }

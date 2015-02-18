@@ -11,6 +11,6 @@ namespace Nedap.Retail.Api.Article.V2
         /// Article quantity
         /// </summary>
         [JsonProperty("quantity")]
-        public long Quantity { get; set; }
+        public long Quantity { get; private set; }
     }
 }
