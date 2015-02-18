@@ -26,6 +26,7 @@ public class Article implements Serializable {
     public static final String SIZES = "sizes";
     public static final String PRICES = "prices";
     public static final String SUPPLIER = "supplier";
+    public static final String CATEGORY = "category";
     public static final String CODE = "code";
     public static final String BRAND = "brand";
     public static final String SEASON = "season";
@@ -45,6 +46,7 @@ public class Article implements Serializable {
     private String color;
     private List<Size> sizes;
     private String supplier;
+    private String category;
     private List<Price> prices;
     private Boolean markdown;
     @JsonProperty(LAST_UPDATED)
@@ -59,7 +61,8 @@ public class Article implements Serializable {
 
     public Article(final String gtin, final List<Barcode> barcodes, final String code, final String brand,
             final String season, final String name, final String option, final String style, final String color,
-            final List<Size> sizes, final String supplier, final List<Price> prices, final DateTime lastUpdated) {
+            final List<Size> sizes, final String supplier, final String category, final List<Price> prices,
+            final DateTime lastUpdated) {
         this.gtin = gtin;
         this.barcodes = barcodes;
         this.code = code;
@@ -71,6 +74,7 @@ public class Article implements Serializable {
         this.color = color;
         this.sizes = sizes;
         this.supplier = supplier;
+        this.category = category;
         this.prices = prices;
         this.lastUpdated = lastUpdated;
     }
@@ -163,6 +167,14 @@ public class Article implements Serializable {
         this.supplier = supplier;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(final String category) {
+        this.category = category;
+    }
+
     public void setGtin(final String gtin) {
         this.gtin = gtin;
     }
@@ -192,7 +204,8 @@ public class Article implements Serializable {
         return "Article [gtin=" + gtin + ", barcodes=" + StringUtils.join(barcodes, ";") + ", code=" + code
                 + ", brand=" + brand + ", season=" + season + ", name=" + name + ", option=" + option + ", style="
                 + style + ", color=" + color + ", sizes=" + StringUtils.join(sizes, ";") + ", supplier=" + supplier
-                + ", prices=" + StringUtils.join(prices, ";") + ", last updated=" + lastUpdated + "]";
+                + ", category=" + category + ", prices=" + StringUtils.join(prices, ";") + ", last updated="
+                + lastUpdated + "]";
     }
 
     @Override
