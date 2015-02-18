@@ -1,16 +1,21 @@
-﻿using Nedap.Retail.Api.OAuth;
+﻿using Nedap.Retail.Api.Article.V2;
+using Nedap.Retail.Api.Epc.V2;
+using Nedap.Retail.Api.Epcis.V1_1;
+using Nedap.Retail.Api.Erp.V1;
+using Nedap.Retail.Api.OAuth;
+using Nedap.Retail.Api.System.V1;
+using Nedap.Retail.Api.Workflow.V2;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 
 namespace Nedap.Retail.Api
 {
     /// <summary>
     /// Nedap Retail API client
     /// </summary>
-    public class Client
+    public class Client : IDisposable
     {
-        private ApiCaller ApiCaller;
+        private bool disposed;
+        private ApiCaller apiCaller;
 
         /// <summary>
         /// Create a API client instance
@@ -19,8 +24,45 @@ namespace Nedap.Retail.Api
         /// <param name="secret">OAuth 2.0 secret</param>
         public Client(string clientId, string secret)
         {
-            ApiCaller = new ApiCaller(clientId, secret);
+            apiCaller = new ApiCaller(clientId, secret);
+
+            ArticleV2 = new ArticleV2Endpoint(apiCaller);
+            EpcV2 = new EpcV2Endpoint(apiCaller);
+            EpcisV1_1 = new EpcisV1_1Endpoint(apiCaller);
+            ErpV1 = new ErpV1Endpoint(apiCaller);
+            SystemV1 = new SystemV1Endpoint(apiCaller);
+            WorkflowV2 = new WorkflowV2Endpoint(apiCaller);
         }
+
+        /// <summary>
+        /// Article V2 API endpoint
+        /// </summary>
+        public ArticleV2Endpoint ArticleV2 { get; private set; }
+
+        /// <summary>
+        /// Epcis V1.1 API endpoint
+        /// </summary>
+        public EpcisV1_1Endpoint EpcisV1_1 { get; private set; }
+
+        /// <summary>
+        /// Epc V2 API endpoint
+        /// </summary>
+        public EpcV2Endpoint EpcV2 { get; private set; }
+
+        /// <summary>
+        /// Erp V1 API endpoint
+        /// </summary>
+        public ErpV1Endpoint ErpV1 { get; private set; }
+
+        /// <summary>
+        /// System V1 API endpoint
+        /// </summary>
+        public SystemV1Endpoint SystemV1 { get; private set; }
+
+        /// <summary>
+        /// Workflow V2 API endpoint
+        /// </summary>
+        public WorkflowV2Endpoint WorkflowV2 { get; private set; }
 
         /// <summary>
         /// Set base URL for the API calls (default: https://api.nedapretail.com/)
@@ -28,105 +70,35 @@ namespace Nedap.Retail.Api
         /// <param name="ApiBaseUrl">The URL to use to resolve partial and relative URLs</param>
         public void SetApiBaseUrl(Uri ApiBaseUrl)
         {
-            ApiCaller.ApiBaseUrl = ApiBaseUrl;
+            apiCaller.ApiBaseUrl = ApiBaseUrl;
         }
 
         /// <summary>
-        /// Capture the ERP stock for a specific location on a specific time. The ERP stock is described in GTIN + quantity.
+        /// Dispose client
         /// </summary>
-        /// <param name="location">The location for which the stock is defined</param>
-        /// <param name="eventTime">Time of export from ERP</param>
-        /// <param name="quantityList">Complete stock summary for this location at this eventTime</param>
-        /// <param name="externRef">Optional, external reference that can be used to identify this ERP stock count</param>
-        /// <returns>Stock ID of the saved ERP stock</returns>
-        public string ErpV1StockCapture(string location, DateTime eventTime, List<Erp.V1.GtinQuantity> quantityList, String externRef)
+        public void Dispose()
         {
-            Erp.V1.CaptureRequest request = new Erp.V1.CaptureRequest();
-            request.Location = location;
-            request.EventTime = eventTime;
-            request.QuantityList = quantityList;
-            request.ExternRef = externRef;
-            Erp.V1.CaptureResponse response = ApiCaller.Post<Erp.V1.CaptureResponse>("/erp/v1/stock.capture", request);
-            return response.Id;
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Retrieve ERP stock using stock ID. The stock is described in GTIN + quantity.
-        /// </summary>
-        /// <param name="stockId">ID of the ERP stock</param>
-        /// <returns>ERP stock</returns>
-        public Erp.V1.Stock ErpV1StockRetrieve(string stockId)
+        private void Dispose(bool disposing)
         {
-            NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("id", stockId);
-            return ApiCaller.Get<Erp.V1.Stock>("/erp/v1/stock.retrieve", parameters);
-        }
-
-        /// <summary>
-        /// Retrieves stock summary for given stock ID
-        /// </summary>
-        /// <param name="stockId">ID of the ERP stock</param>
-        /// <returns>Stock summary</returns>
-        public Erp.V1.StockSummary ErpV1StockStatus(string stockId)
-        {
-            NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("id", stockId);
-            return ApiCaller.Get<Erp.V1.StockSummary>("/erp/v1/stock.status", parameters);
-        }
-
-        /// <summary>
-        /// Retrieves ERP stock summary list for given location
-        /// </summary>
-        /// <param name="location">The location for which the stock is defined</param>
-        /// <param name="fromEventTime">Optional. Defines date+time since when the cycle counts are required. When null: returns summaries for all stocks for specified location since the epoch.</param>
-        /// <param name="untilEventTime">Optional. Defines date+time until when the cycle counts are required. When null: returns summaries for all stocks for specified location up until now.</param>
-        /// <returns>List of Stock summary</returns>
-        public List<Erp.V1.StockSummary> ErpV1StockList(string location, DateTime? fromEventTime, DateTime? untilEventTime)
-        {
-            NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("location", location);
-            if (fromEventTime != null)
+            if (disposed)
             {
-                DateTime from = (DateTime)fromEventTime;
-                parameters.Add("from_event_time", from.ToString("o"));
+                return;
             }
-            if (untilEventTime != null)
+
+            if (disposing)
             {
-                DateTime until = (DateTime)untilEventTime;
-                parameters.Add("until_event_time", until.ToString("o"));
+                if (apiCaller != null)
+                {
+                    apiCaller.Dispose();
+                    apiCaller = null;
+                }
             }
-            return ApiCaller.Get<List<Erp.V1.StockSummary>>("/erp/v1/stock.list", parameters);
-        }
 
-        /// <summary>
-        /// Retrieves a list of systems you have access to
-        /// </summary>
-        /// <returns>List of systems</returns>
-        public List<System.V1.System> SystemV1List()
-        {
-            return ApiCaller.Get<List<System.V1.System>>("/system/1.0/list");
+            disposed = true;
         }
-
-        /// <summary>
-        /// Retrieves detailed system status information about all systems you have access to
-        /// </summary>
-        /// <returns>A list of system statuses</returns>
-        public List<System.V1.SystemStatus> SystemV1Status()
-        {
-            return ApiCaller.Get<List<System.V1.SystemStatus>>("/system/1.0/status");
-        }
-
-        /// <summary>
-        /// Retrieves detailed system status information about a specific system
-        /// </summary>
-        /// <param name="systemId">The system ID of a system</param>
-        /// <returns>The detailed system status of the specified system</returns>
-        public System.V1.SystemStatus SystemV1Status(string systemId)
-        {
-            NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("system_id", systemId);
-            return ApiCaller.Get<System.V1.SystemStatus>("/system/1.0/status", parameters);
-        }
-
     }
 }

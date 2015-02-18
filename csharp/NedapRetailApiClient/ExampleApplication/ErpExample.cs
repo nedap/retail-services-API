@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 
 namespace Nedap.Retail.Api.Example
 {
-    class ErpExample
+    internal class ErpExample
     {
         public static void RunExample(Client client)
         {
@@ -21,22 +20,22 @@ namespace Nedap.Retail.Api.Example
             {
                 // send stock
                 Console.WriteLine("------------- Uploading stock");
-                string stockId = client.ErpV1StockCapture(location, DateTime.Now, qList, "testing");
+                string stockId = client.ErpV1.StockCapture(location, DateTime.Now, qList, "testing");
                 Console.Write("stock ID = " + stockId);
 
                 // request stock status
                 Console.WriteLine("------------- Getting stock status");
-                Erp.V1.StockSummary t = client.ErpV1StockStatus(stockId);
+                Erp.V1.StockSummary t = client.ErpV1.StockStatus(stockId);
                 Console.WriteLine(t.ToString());
 
                 // request stock
                 Console.WriteLine("------------- Retrieving stock");
-                Erp.V1.Stock s = client.ErpV1StockRetrieve(stockId);
+                Erp.V1.Stock s = client.ErpV1.StockRetrieve(stockId);
                 Console.WriteLine(s.ToString());
 
                 // request stock list
                 Console.WriteLine("------------- Retrieving list of available stocks");
-                List<Erp.V1.StockSummary> u = client.ErpV1StockList(location, null, null);
+                List<Erp.V1.StockSummary> u = client.ErpV1.StockList(location, null, null);
                 Console.WriteLine("Got " + u.Count + " stocks:");
                 foreach (Erp.V1.StockSummary z in u)
                 {
@@ -45,21 +44,7 @@ namespace Nedap.Retail.Api.Example
             }
             catch (WebException e)
             {
-                Console.WriteLine("Exception occured:");
-                Console.WriteLine(e.Status);
-                HttpWebResponse r = (HttpWebResponse) e.Response;
-                Console.WriteLine(r.StatusCode);
-                Stream responseStream = r.GetResponseStream();
-
-                string responseText;
-                if (responseStream != null)
-                {
-                    using (StreamReader reader = new StreamReader(responseStream))
-                    {
-                        responseText = reader.ReadToEnd();
-                    }
-                    Console.WriteLine(responseText);
-                }
+                e.Print();
             }
 
             Console.ReadKey();

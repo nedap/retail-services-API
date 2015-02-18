@@ -49,9 +49,6 @@ namespace Nedap.Retail.Api.OAuth
             {
                 return (ExpiresAt < DateTime.Now);
             }
-            private set
-            {
-            }
         }
 
         /// <summary>

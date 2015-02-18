@@ -10,37 +10,34 @@ namespace Nedap.Retail.Api.OAuth
     /// <summary>
     /// Takes care of parameter encoding, sending the request and decoding the response
     /// </summary>
-    internal class ApiCaller
+    internal class ApiCaller : IDisposable
     {
+        private bool disposed;
+
         /// <summary>
         /// OAuth 2.0 client ID
         /// </summary>
-        private string ClientId;
+        private string clientId;
 
         /// <summary>
         /// OAuth 2.0 secret
         /// </summary>
-        private string Secret;
+        private string secret;
 
         /// <summary>
         /// URL of OAuth 2.0 server
         /// </summary>
-        private string OauthTokenUrl = "/login/oauth/token";
+        private string oauthTokenUrl = "/login/oauth/token";
 
         /// <summary>
         /// OAuth 2.0 Access token info
         /// </summary>
-        private AccessTokenInfo AccessTokenInfo;
+        private AccessTokenInfo accessTokenInfo;
 
         /// <summary>
         /// Reusable WebClient instance
         /// </summary>
-        private WebClient WebClient = new WebClient();
-
-        /// <summary>
-        /// Base URL for relative API calls
-        /// </summary>
-        public Uri ApiBaseUrl { get; set; }
+        private WebClient webClient = new WebClient();
 
         /// <summary>
         /// Constructor
@@ -49,11 +46,85 @@ namespace Nedap.Retail.Api.OAuth
         /// <param name="secret">OAuth 2.0 secret</param>
         public ApiCaller(string clientId, string secret)
         {
-            ClientId = clientId;
-            Secret = secret;
+            this.clientId = clientId;
+            this.secret = secret;
             ApiBaseUrl = new Uri("https://api.nedapretail.com/");
             string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            WebClient.Headers.Add("user-agent", "Nedap.Retail.Api.Client/" + version);
+            webClient.Headers.Add("user-agent", "Nedap.Retail.Api.Client/" + version);
+        }
+
+        /// <summary>
+        /// Base URL for relative API calls
+        /// </summary>
+        public Uri ApiBaseUrl { get; set; }
+
+        /// <summary>
+        /// Sends HTTP GET request to API endpoint
+        /// </summary>
+        /// <typeparam name="T">Class name of expected response</typeparam>
+        /// <param name="url">Full (https://api.nedapretail.com/example/v1/url) or relative (/example/v1/url) URL</param>
+        /// <returns>The response of the API call</returns>
+        public T Get<T>(string url)
+        {
+            return Get<T>(url, null);
+        }
+
+        /// <summary>
+        /// Sends HTTP GET request to API endpoint
+        /// </summary>
+        /// <typeparam name="T">Class name of expected response</typeparam>
+        /// <param name="url">Full (https://api.nedapretail.com/example/v1/url) or relative (/example/v1/url) URL</param>
+        /// <param name="parameters">Extra parameters that need to be added</param>
+        /// <returns>The response of the API call</returns>
+        public T Get<T>(string url, NameValueCollection parameters)
+        {
+            Uri Url = NormalizeUrl(url, parameters);
+            CheckOAuthToken();
+            String result = webClient.DownloadString(Url);
+            return FromJson<T>(result);
+        }
+
+        /// <summary>
+        /// Sends HTTP POST request to API endpoint
+        /// </summary>
+        /// <typeparam name="T">Class name of expected response</typeparam>
+        /// <param name="url">Full (https://api.nedapretail.com/example/v1/url) or relative (/example/v1/url) URL</param>
+        /// <param name="data">JSON formatted data</param>
+        /// <returns>The response of the API call</returns>
+        public T Post<T>(string url, object data)
+        {
+            Uri Url = NormalizeUrl(url);
+            CheckOAuthToken();
+            String result = webClient.UploadString(Url, ToJson(data));
+            return FromJson<T>(result);
+        }
+
+        /// <summary>
+        /// Dispose api caller
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                if (webClient != null)
+                {
+                    webClient.Dispose();
+                    webClient = null;
+                }
+            }
+
+            disposed = true;
         }
 
         /// <summary>
@@ -61,11 +132,11 @@ namespace Nedap.Retail.Api.OAuth
         /// </summary>
         private void CheckOAuthToken()
         {
-            if ((AccessTokenInfo == null) || AccessTokenInfo.IsExpired)
+            if ((accessTokenInfo == null) || accessTokenInfo.IsExpired)
             {
-                AccessTokenInfo = AccessTokenInfo.RequestNewToken(NormalizeUrl(OauthTokenUrl), ClientId, Secret);
-                WebClient.Headers.Remove("Authorization");
-                WebClient.Headers.Add("Authorization", "Bearer " + AccessTokenInfo.AccessToken);
+                accessTokenInfo = AccessTokenInfo.RequestNewToken(NormalizeUrl(oauthTokenUrl), clientId, secret);
+                webClient.Headers.Remove("Authorization");
+                webClient.Headers.Add("Authorization", "Bearer " + accessTokenInfo.AccessToken);
             }
         }
 
@@ -131,47 +202,6 @@ namespace Nedap.Retail.Api.OAuth
         private string ToJson(object data)
         {
             return JsonConvert.SerializeObject(data);
-        }
-
-        /// <summary>
-        /// Sends HTTP GET request to API endpoint
-        /// </summary>
-        /// <typeparam name="T">Class name of expected response</typeparam>
-        /// <param name="url">Full (https://api.nedapretail.com/example/v1/url) or relative (/example/v1/url) URL</param>
-        /// <returns>The response of the API call</returns>
-        public T Get<T>(string url)
-        {
-            return Get<T>(url, null);
-        }
-
-        /// <summary>
-        /// Sends HTTP GET request to API endpoint
-        /// </summary>
-        /// <typeparam name="T">Class name of expected response</typeparam>
-        /// <param name="url">Full (https://api.nedapretail.com/example/v1/url) or relative (/example/v1/url) URL</param>
-        /// <param name="parameters">Extra parameters that need to be added</param>
-        /// <returns>The response of the API call</returns>
-        public T Get<T>(string url, NameValueCollection parameters)
-        {
-            Uri Url = NormalizeUrl(url, parameters);
-            CheckOAuthToken();
-            String result = WebClient.DownloadString(Url);
-            return FromJson<T>(result);
-        }
-
-        /// <summary>
-        /// Sends HTTP POST request to API endpoint
-        /// </summary>
-        /// <typeparam name="T">Class name of expected response</typeparam>
-        /// <param name="url">Full (https://api.nedapretail.com/example/v1/url) or relative (/example/v1/url) URL</param>
-        /// <param name="data">JSON formatted data</param>
-        /// <returns>The response of the API call</returns>
-        public T Post<T>(string url, object data)
-        {
-            Uri Url = NormalizeUrl(url);
-            CheckOAuthToken();
-            String result = WebClient.UploadString(Url, ToJson(data));
-            return FromJson<T>(result);
         }
     }
 }

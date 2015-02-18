@@ -4,27 +4,18 @@ using System.Collections.Generic;
 
 namespace Nedap.Retail.Api.Erp.V1
 {
-    internal class CaptureRequest
+    internal class CaptureRequest : JsonPrintableObject
     {
         [JsonProperty("location")]
-        public String Location { get; set; }
+        public string Location { get; set; }
 
         [JsonProperty("event_time")]
         public DateTime EventTime { get; set; }
 
         [JsonProperty("extern_ref")]
-        public String ExternRef { get; set; }
+        public string ExternRef { get; set; }
 
         [JsonProperty("quantity_list")]
         public List<GtinQuantity> QuantityList { get; set; }
-
-        /// <summary>
-        /// Returns string representation of the object
-        /// </summary>
-        /// <returns>Formatted JSON string</returns>
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
     }
 }

@@ -7,44 +7,36 @@ namespace Nedap.Retail.Api.Erp.V1
     /// <summary>
     /// Stock information from ERP
     /// </summary>
-    public class Stock
+    public class Stock : JsonPrintableObject
     {
         /// <summary>
         /// Identifier of this stock count
         /// </summary>
         [JsonProperty("id")]
-        public String Id { get; set; }
+        public string Id { get; private set; }
 
         /// <summary>
         /// Location the summary is about
         /// </summary>
         [JsonProperty("location")]
-        public String Location { get; set; }
+        public string Location { get; private set; }
 
         /// <summary>
         /// The date + time moment of export from the ERP
         /// </summary>
         [JsonProperty("event_time")]
-        public DateTime EventTime { get; set; }
+        public DateTime EventTime { get; private set; }
 
         /// <summary>
         /// Optional, external reference that can be used to identify this ERP stock count
         /// </summary>
         [JsonProperty("extern_ref")]
-        public String ExternRef { get; set; }
+        public string ExternRef { get; private set; }
 
         /// <summary>
         /// Complete stock summary for this Location at this EventTime
         /// </summary>
         [JsonProperty("quantity_list")]
-        public List<GtinQuantity> QuantityList { get; set; }
-
-        /// <summary>
-        /// Returns string representation of the object
-        /// </summary>
-        /// <returns>Formatted JSON string</returns>
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
+        public List<GtinQuantity> QuantityList { get; private set; }
     }
 }
