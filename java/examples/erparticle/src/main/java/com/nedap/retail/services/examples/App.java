@@ -1,4 +1,4 @@
-package com.nedap.retail.services.examples.erparticle;
+package com.nedap.retail.services.examples;
 
 import java.io.IOException;
 import java.util.Scanner;
