@@ -26,6 +26,11 @@ public class ArticleExample {
             System.out.println("------------- Uploading articles");
             client.captureArticles(exampleArticles);
 
+            // get quantity
+            System.out.println("------------- Retrieving article quantity");
+            final Long quantity = client.articleQuantity();
+            System.out.println("article quantity = " + quantity);
+
         } catch (final UniformInterfaceException e) {
             System.out.println("Server responded with an error:");
             System.out.println(e.getResponse().getEntity(String.class));
@@ -39,19 +44,24 @@ public class ArticleExample {
 
         // GTIN is the identifier of a product. Most barcodes can be translated to GTIN.
         article.setGtin("08701231234562");
+
         // at least one linear barcode is required
         final List<Barcode> barcodes = new ArrayList<>();
         barcodes.add(new Barcode("EAN13", "8701231234562"));
         article.setBarcodes(barcodes);
+
         // name is required
         article.setName("Test article");
+
         // color is required
         article.setColor("blue");
+
         // size is required
         final List<Size> sizes = new ArrayList<>();
         sizes.add(new Size("42", "EU"));
         sizes.add(new Size("40", "US"));
         article.setSizes(sizes);
+
         // the rest is optional
         article.setCode("some retailer specific article code");
         article.setBrand("example brand");
@@ -59,15 +69,24 @@ public class ArticleExample {
         article.setOption("Test article blue");
         article.setStyle("example style");
         article.setSupplier("example supplier");
+        article.setCategory("Sports");
+        article.setMarkdown(true);
+
+        article.setPrices(setArticlePrices());
+
+        return article;
+    }
+
+    private static List<Price> setArticlePrices() {
         final List<Price> prices = new ArrayList<>();
+
         prices.add(new Price("EUR", "NL", 19.95));
         prices.add(new Price("EUR", "BE", 18.95));
         prices.add(new Price("EUR", "DE", 19.95));
         prices.add(new Price("EUR", "FR", 20.95));
         prices.add(new Price("NOK", "NO", 160.0));
         prices.add(new Price("USD", "US", 19.95));
-        article.setPrices(prices);
 
-        return article;
+        return prices;
     }
 }

@@ -187,9 +187,84 @@ public class Client {
     }
 
     /**
-     * Article API: update article information
+     * Requests the total number of articles registered in !D Cloud.
      *
-     * @param articles Articles to update or add
+     * @return Total number of articles.
+     */
+    public Long articleQuantity() {
+
+        final WebResource resource = resource("/article/v2/quantity");
+        final Map response = get(resource, Map.class);
+        return (Long) response.get("quantity");
+    }
+
+    /**
+     * Retrieve one or more articles based on GTIN value(s) or barcodes. Optionally specify returned Article properties.
+     * When querying on barcode, the barcode type is ignored. All articles that have a barcode that match (case
+     * insensitive for alphanumeric barcodes) one of the given barcodes is returned.
+     *
+     * @param gtins The GTIN(s) of which article information should be returned. Repeat key-value for retrieving
+     *            multiple GTINs.Mutually exclusive with barcodes[].
+     * @param barcodes The barcode(s) of which article information should be returned. Repeat key-value for retrieving
+     *            multiple barcodes.Mutually exclusive with gtins[].
+     * @param fields Optional. Which fields should be included in the response. Can be any of the Article fields. When
+     *            omitted: all fields will be included in the response. Repeat key-value for retrieving multiple fields.
+     * @return List of articles retrieved.
+     */
+    public Articles articleDetails(final List<String> gtins, final List<String> barcodes, final List<String> fields) {
+        WebResource resource = resource("/article/v2/retrieve");
+
+        for (final String gtin : gtins) {
+            resource = resource.queryParam("gtins[]", gtin);
+        }
+
+        for (final String barcode : barcodes) {
+            resource = resource.queryParam("barcodes[]", barcode);
+        }
+
+        if (fields != null) {
+            for (final String field : fields) {
+                resource = resource.queryParam("fields[]", field);
+            }
+        }
+
+        return get(resource, Articles.class);
+    }
+
+    /**
+     * Retrieve articles. Optionally specify returned Article properties.
+     *
+     * @param updatedAfter Articles updated on or after this time. When omitted: return all Article objects since 1
+     *            january 1970.
+     * @param skip Skip this number of articles. When omitted: skip none.
+     * @param count Return this number of articles. When omitted: return 100 Article objects. The number of returned
+     *            Resources is limited at 50.000.
+     * @param fields Which fields should be included in the response. Can be one of the earlier defined fields. When
+     *            omitted: return all fields in Article resource. Repeat key-value for retrieving multiple fields.
+     * @return List of articles retrieved.
+     */
+    public Articles retrieveArticles(final DateTime updatedAfter, final int skip, final int count,
+            final List<String> fields) {
+        WebResource resource = resource("/article/v2/retrieve");
+
+        if (updatedAfter != null) {
+            resource = resource.queryParam("updated_after", updatedAfter.toString());
+        }
+
+        resource = resource.queryParam("skip", String.valueOf(skip));
+        resource = resource.queryParam("count", String.valueOf(count));
+
+        for (final String field : fields) {
+            resource = resource.queryParam("fields[]", field);
+        }
+
+        return get(resource, Articles.class);
+    }
+
+    /**
+     * Article API: update article information.
+     *
+     * @param articles Articles to update or add.
      */
     public void captureArticles(final List<Article> articles) {
 
@@ -197,6 +272,32 @@ public class Client {
         post(resource, new Articles(articles));
     }
 
+    /**
+     * Article entries are deleted for given organization. All articles will be physically deleted from database and
+     * this process is irreversible.
+     */
+    public void articleDelete() {
+
+        final WebResource resource = resource("/article/v2/delete");
+        post(resource);
+    }
+
+    /**
+     * Retrieve GTIN-based difference list for a single location. By default, only differences are returned and items
+     * where there is no difference are omitted. When a difference list for multiple locations are required, this call
+     * should be used repeatedly. How it works: Get ERP stock defined by erp_stock_id. Get RFID count at time.
+     *
+     * @param erpStockId ERP stock ID. A list of ERP stock ID's can be retrieved with the ERP API. Implicitly defines
+     *            LocationIdentifier for the location for which the difference list is generated.
+     * @param rfidTime The date and time you would like to have the RFID stock information from. When omitted: the
+     *            report will contain the stock information at the current server time.
+     * @param onlyDifferences Optional. When set to TRUE (default) this will return only differences. When set to FALSE,
+     *            this will return all entries in ERP stock or RFID stock. When omitted: default value is TRUE,
+     *            returning only differences.
+     * @param includeArticles Optional. When set to TRUE this will return an array of articles. When omitted: default
+     *            value is FALSE.
+     * @return DifferenceList response object
+     */
     public DifferenceListResponse differenceList(final String erpStockId, final DateTime rfidTime,
             final Boolean onlyDifferences, final Boolean includeArticles) {
 
@@ -217,8 +318,29 @@ public class Client {
         return get(resource, DifferenceListResponse.class);
     }
 
-    public StockResponse stockGtin(final String location, final List<String> gtins,
-            final List<String> dispositions, final DateTime time, final Boolean includeArticles) {
+    /**
+     * Requests the current stock status at a certain location at the GTIN level. This can be used to evaluate the total
+     * stock in a store along with stock summary information for that store, or calculate options for in-store
+     * replenishment by querying the stock in any of sublocations. If site stock is requested stock summary for store is
+     * included in response. On !D Cloud we apply logic that filters out EPCs based on their location as defined by the
+     * EPC's bizLocation and the status at that location as defined by the EPC's disposition.
+     *
+     * @param location Contains the location that we are interested in. Based on GLN + extension number; see also EPCIS
+     *            master data.
+     * @param gtins Optional. Filter by GTIN. When omitted: returns all available GTINs, so no filtering based on GTIN
+     *            is applied.
+     * @param dispositions Optional. Contains a list of dispositions that we consider in stock. All GTINs that match any
+     *            of the the given dispositions are returned. When omitted: the report will be based on the dispositions
+     *            urn:epcglobal:cbv:disp:sellable_accessible, urn:epcglobal:cbv:disp:sellable_not_accessible,
+     *            urn:epcglobal:cbv:disp:non_sellable_other, http://nedapretail.com/disp/maybe_stolen.
+     * @param time Optional. The date and time you would like to have the stock information from. When omitted: the
+     *            report will contain the latest available stock information.
+     * @param includeArticles Optional. When set to TRUE this will return an array of articles. When omitted: default
+     *            value is FALSE.
+     * @return StockGtin response object
+     */
+    public StockResponse stockGtin(final String location, final List<String> gtins, final List<String> dispositions,
+            final DateTime time, final Boolean includeArticles) {
 
         WebResource resource = resource("/epc/v3/stock.gtin14").queryParam("location", location);
 
