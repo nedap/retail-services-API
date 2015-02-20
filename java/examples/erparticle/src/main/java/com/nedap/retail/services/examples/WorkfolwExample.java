@@ -26,8 +26,8 @@ public class WorkfolwExample {
             System.out.println("Captured workflow events");
 
         } catch (final UniformInterfaceException e) {
-            System.out.println("Server responded with an error:");
-            System.out.println(e.getResponse().getEntity(String.class));
+            System.err.println("Server responded with an error:");
+            System.err.println(e.getResponse().getEntity(String.class));
         }
 
         System.out.println("------------- Done");
@@ -46,7 +46,7 @@ public class WorkfolwExample {
     }
 
     private static List<String> getMessageIds() {
-        final List<String> messageIds = new ArrayList<String>();
+        final List<String> messageIds = new ArrayList<>();
 
         messageIds.add("1");
         messageIds.add("2");
