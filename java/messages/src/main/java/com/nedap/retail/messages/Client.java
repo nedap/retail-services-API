@@ -17,6 +17,7 @@ import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
+import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
 import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
@@ -81,7 +82,6 @@ public class Client {
      * System API: list
      */
     public List<SystemListPayload> getSystemList() {
-
         final WebResource resource = resource("/system/1.0/list");
         return get(resource, new GenericType<List<SystemListPayload>>() {
         });
@@ -91,7 +91,6 @@ public class Client {
      * System API: status
      */
     public List<SystemStatusPayload> getSystemStatus() {
-
         final WebResource resource = resource("/system/1.0/status");
         return get(resource, new GenericType<List<SystemStatusPayload>>() {
         });
@@ -105,7 +104,6 @@ public class Client {
      * @return List of fimware versions available for upgrade.
      */
     public List<String> getFirmwareList(final String systemId) {
-
         final WebResource resource = resource("/system/1.0/firmware_versions").queryParam("system_id", systemId);
         return get(resource, new GenericType<List<String>>() {
         });
@@ -127,7 +125,6 @@ public class Client {
      * @param firmwareVersion Requested firmware version to upgrade to.
      */
     public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) {
-
         final WebResource resource = resource("/system/1.0/update").queryParam("system_id", systemId).queryParam(
                 "firmware_version", firmwareVersion);
         post(resource);
@@ -140,7 +137,6 @@ public class Client {
      * @return ID of processed stock
      */
     public String captureErpStock(final Stock stock) {
-
         final WebResource resource = resource("/erp/v1/stock.capture");
         final Map response = post(resource, Map.class, stock);
         return (String) response.get("id");
@@ -153,11 +149,8 @@ public class Client {
      * @return The requested stock
      */
     public Stock retrieveErpStock(final String id) {
-
         final WebResource resource = resource("/erp/v1/stock.retrieve").queryParam("id", id);
-
         System.out.println(resource.accept(APPLICATION_JSON_TYPE).get(String.class));
-
         return get(resource, Stock.class);
     }
 
@@ -168,7 +161,6 @@ public class Client {
      * @return Summary of the requested stock
      */
     public StockSummary getErpStockStatus(final String id) {
-
         final WebResource resource = resource("/erp/v1/stock.status").queryParam("id", id);
         return get(resource, StockSummary.class);
     }
@@ -180,7 +172,6 @@ public class Client {
      * @return List of summaries per stock available for the specified location
      */
     public List<StockSummary> getErpStockList(final String location) {
-
         final WebResource resource = resource("/erp/v1/stock.list").queryParam("location", location);
         return get(resource, new GenericType<List<StockSummary>>() {
         });
@@ -192,7 +183,6 @@ public class Client {
      * @return Total number of articles.
      */
     public Long articleQuantity() {
-
         final WebResource resource = resource("/article/v2/quantity");
         final Map response = get(resource, Map.class);
         return (Long) response.get("quantity");
@@ -286,7 +276,6 @@ public class Client {
      * @param articles Articles to update or add.
      */
     public void captureArticles(final List<Article> articles) {
-
         final WebResource resource = resource("/article/v2/create_or_replace");
         post(resource, new Articles(articles));
     }
@@ -296,7 +285,6 @@ public class Client {
      * this process is irreversible.
      */
     public void articleDelete() {
-
         final WebResource resource = resource("/article/v2/delete");
         post(resource);
     }
@@ -319,7 +307,6 @@ public class Client {
      */
     public DifferenceListResponse differenceList(final String erpStockId, final DateTime rfidTime,
             final Boolean onlyDifferences, final Boolean includeArticles) {
-
         WebResource resource = resource("/epc/v2/difference_list").queryParam("erp_stock_id", erpStockId);
 
         if (rfidTime != null) {
@@ -360,7 +347,6 @@ public class Client {
      */
     public StockResponse stockGtin(final String location, final List<String> gtins, final List<String> dispositions,
             final DateTime time, final Boolean includeArticles) {
-
         WebResource resource = resource("/epc/v3/stock.gtin14").queryParam("location", location);
 
         if (gtins != null) {
@@ -387,12 +373,23 @@ public class Client {
     }
 
     /**
+     * The Capture Service captures one or more EPCIS events at a time. This does not imply any relationship between
+     * these EPCIS events. Each element of the argument list is accepted if it is a valid EPCIS event or subtype that
+     * conforms to the above EPCIS event types.
+     *
+     * @param events EPCIS events to capture
+     */
+    public void captureEpcisEvents(final List<EpcisEvent> events) {
+        final WebResource resource = resource("/epcis/v2/capture");
+        post(resource, events);
+    }
+
+    /**
      * Retrieves organizations.
      *
      * @return organizations.
      */
     public Organizations getOrganizations() {
-
         final WebResource resource = resource("/organization/v1/retrieve");
         return get(resource, Organizations.class);
     }
@@ -403,7 +400,6 @@ public class Client {
      * @return List of sites.
      */
     public List<Location> getSites() {
-
         final WebResource resource = resource("/organization/v1/sites");
         return getLocations(resource);
     }
@@ -415,7 +411,6 @@ public class Client {
      * @return List of sites.
      */
     public List<Location> getSites(final String storeCode) {
-
         final WebResource resource = resource("/organization/v1/sites").queryParam("store_code", storeCode);
         return getLocations(resource);
     }
@@ -424,11 +419,9 @@ public class Client {
      * Push API: subscribe.
      */
     public void subscribe(final String topic, final String callback, final String secret, final int lease_seconds) {
-
         final WebResource resource = resource("/subscription/1.0/subscribe").queryParam("hub.topic", topic)
                 .queryParam("hub.callback", callback).queryParam("hub.secret", secret)
                 .queryParam("hub.lease_seconds", "" + lease_seconds);
-
         post(resource);
     }
 
@@ -436,7 +429,6 @@ public class Client {
      * Push API: unsubscribe
      */
     public void unsubscribe(final String topic) {
-
         final WebResource resource = resource("/subscription/1.0/unsubscribe").queryParam("hub.topic", topic);
         post(resource);
     }
@@ -445,7 +437,6 @@ public class Client {
      * Push API: list
      */
     public List<Subscription> getSubscriptionList() {
-
         final WebResource resource = resource("/subscription/1.0/list");
         return get(resource, new GenericType<List<Subscription>>() {
         });
@@ -482,7 +473,6 @@ public class Client {
     }
 
     protected WebResource resource(final String uri) {
-
         logger.debug("resource {}", uri);
         return httpClient.resource(url + uri);
     }

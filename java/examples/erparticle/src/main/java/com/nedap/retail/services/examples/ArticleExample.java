@@ -32,8 +32,8 @@ public class ArticleExample {
             System.out.println("article quantity = " + quantity);
 
         } catch (final UniformInterfaceException e) {
-            System.out.println("Server responded with an error:");
-            System.out.println(e.getResponse().getEntity(String.class));
+            System.err.println("Server responded with an error:");
+            System.err.println(e.getResponse().getEntity(String.class));
         }
 
         System.out.println("------------- Done");
