@@ -18,7 +18,7 @@ public class ErpExample {
         System.out.println("-------------");
 
         // this is our example data
-        String location = "http://nedapretail.com/loc/test";
+        final String location = "http://nedapretail.com/loc/test";
         final List<GtinQuantity> exampleStock = new ArrayList<>();
         exampleStock.add(new GtinQuantity("12345678901231", 23));
         exampleStock.add(new GtinQuantity("12345678901248", 3));
@@ -48,13 +48,13 @@ public class ErpExample {
             System.out.println("------------- Retrieving list of available stocks");
             final List<StockSummary> availableStocks = client.getErpStockList(location);
             System.out.println("Got " + availableStocks.size() + " stocks:");
-            for (StockSummary availableStock : availableStocks) {
+            for (final StockSummary availableStock : availableStocks) {
                 System.out.println(availableStock);
             }
-            
-        } catch (UniformInterfaceException e) {
-            System.out.println("Server responded with an error:");
-            System.out.println(e.getResponse().getEntity(String.class));
+
+        } catch (final UniformInterfaceException e) {
+            System.err.println("Server responded with an error:");
+            System.err.println(e.getResponse().getEntity(String.class));
         }
 
         System.out.println("------------- Done");

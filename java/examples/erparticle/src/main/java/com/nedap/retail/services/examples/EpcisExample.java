@@ -29,15 +29,15 @@ public class EpcisExample {
             System.out.println("captured epcis events");
 
         } catch (final UniformInterfaceException e) {
-            System.out.println("Server responded with an error:");
-            System.out.println(e.getResponse().getEntity(String.class));
+            System.err.println("Server responded with an error:");
+            System.err.println(e.getResponse().getEntity(String.class));
         }
 
         System.out.println("------------- Done");
     }
 
     private static List<EpcisEvent> createEvents() {
-        final List<EpcisEvent> events = new ArrayList<EpcisEvent>();
+        final List<EpcisEvent> events = new ArrayList<>();
 
         events.add(createEpcisEvent1());
         events.add(createEpcisEvent2());
@@ -55,13 +55,13 @@ public class EpcisExample {
         final String readPoint = "urn:epc:id:sgln:012345.67890.001";
         final Disposition disposition = Disposition.SELLABLE_ACCESSIBLE;
 
-        final List<String> epcList = new ArrayList<String>();
+        final List<String> epcList = new ArrayList<>();
         epcList.add("urn:epc:id:sgtin:1234567.000246.0001");
         epcList.add("urn:epc:id:sgtin:1234567.000246.0002");
         epcList.add("urn:epc:id:sgtin:1234567.000246.0003");
         epcList.add("urn:epc:id:sgtin:1234567.000246.0004");
 
-        final List<QuantityElement> quantityList = new ArrayList<QuantityElement>();
+        final List<QuantityElement> quantityList = new ArrayList<>();
         quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0001", 100));
         quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0002", 50));
         quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0003", 80));
@@ -83,13 +83,13 @@ public class EpcisExample {
         final String readPoint = "urn:epc:id:sgln:012345.67890.001";
         final Disposition disposition = Disposition.SELLABLE_ACCESSIBLE;
 
-        final List<String> epcList = new ArrayList<String>();
+        final List<String> epcList = new ArrayList<>();
         epcList.add("urn:epc:id:sgtin:1234567.000246.0005");
         epcList.add("urn:epc:id:sgtin:1234567.000246.0006");
         epcList.add("urn:epc:id:sgtin:1234567.000246.0007");
         epcList.add("urn:epc:id:sgtin:1234567.000246.0008");
 
-        final List<QuantityElement> quantityList = new ArrayList<QuantityElement>();
+        final List<QuantityElement> quantityList = new ArrayList<>();
         quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0005", 50));
         quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0006", 30));
         quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0007", 100));
