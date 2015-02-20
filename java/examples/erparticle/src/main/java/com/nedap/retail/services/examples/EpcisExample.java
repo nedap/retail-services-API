@@ -32,16 +32,13 @@ public class EpcisExample {
             System.err.println("Server responded with an error:");
             System.err.println(e.getResponse().getEntity(String.class));
         }
-
         System.out.println("------------- Done");
     }
 
     private static List<EpcisEvent> createEvents() {
         final List<EpcisEvent> events = new ArrayList<>();
-
         events.add(createEpcisEvent1());
         events.add(createEpcisEvent2());
-
         return events;
     }
 

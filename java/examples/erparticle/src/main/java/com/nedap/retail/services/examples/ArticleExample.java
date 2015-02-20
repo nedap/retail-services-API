@@ -35,7 +35,6 @@ public class ArticleExample {
             System.err.println("Server responded with an error:");
             System.err.println(e.getResponse().getEntity(String.class));
         }
-
         System.out.println("------------- Done");
     }
 
@@ -71,7 +70,6 @@ public class ArticleExample {
         article.setSupplier("example supplier");
         article.setCategory("Sports");
         article.setMarkdown(true);
-
         article.setPrices(setArticlePrices());
 
         return article;
@@ -79,14 +77,12 @@ public class ArticleExample {
 
     private static List<Price> setArticlePrices() {
         final List<Price> prices = new ArrayList<>();
-
         prices.add(new Price("EUR", "NL", 19.95));
         prices.add(new Price("EUR", "BE", 18.95));
         prices.add(new Price("EUR", "DE", 19.95));
         prices.add(new Price("EUR", "FR", 20.95));
         prices.add(new Price("NOK", "NO", 160.0));
         prices.add(new Price("USD", "US", 19.95));
-
         return prices;
     }
 }

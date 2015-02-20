@@ -7,12 +7,12 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class EpcExample {
 
+    private static final String LOCATION = "http://location-testing";
+
     public static void runExample(final Client client) {
         System.out.println("-------------");
         System.out.println("EPC API example");
         System.out.println("-------------");
-
-        final String location = "http://location-testing";
 
         try {
             // get difference list
@@ -22,14 +22,13 @@ public class EpcExample {
 
             // get stock gtin
             System.out.println("------------- Retrieving stock gtin");
-            final StockResponse sg = client.stockGtin(location, null, null, null, null);
+            final StockResponse sg = client.stockGtin(LOCATION, null, null, null, null);
             System.out.println(sg.toString());
 
         } catch (final UniformInterfaceException e) {
             System.err.println("Server responded with an error:");
             System.err.println(e.getResponse().getEntity(String.class));
         }
-
         System.out.println("------------- Done");
     }
 }

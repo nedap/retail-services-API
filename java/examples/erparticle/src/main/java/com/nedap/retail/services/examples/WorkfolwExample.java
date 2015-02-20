@@ -11,13 +11,14 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class WorkfolwExample {
 
+    private static final String LOCATION = "http://location-testing";
+
     public static void runExample(final Client client) {
         System.out.println("-------------");
         System.out.println("Workflow API example");
         System.out.println("-------------");
 
-        final String location = "http://location-testing";
-        final WorkflowEvent workflow = makeWorkflowEvent(location);
+        final WorkflowEvent workflow = makeWorkflowEvent();
 
         try {
             // capture
@@ -29,25 +30,21 @@ public class WorkfolwExample {
             System.err.println("Server responded with an error:");
             System.err.println(e.getResponse().getEntity(String.class));
         }
-
         System.out.println("------------- Done");
     }
 
-    private static WorkflowEvent makeWorkflowEvent(final String location) {
+    private static WorkflowEvent makeWorkflowEvent() {
         final WorkflowEvent workflow = new WorkflowEvent();
-
         workflow.setType("cycle_count_started");
         workflow.setEventTime(DateTime.now());
-        workflow.setLocation(location);
+        workflow.setLocation(LOCATION);
         workflow.setEpcCount((long) 10);
         workflow.setMessageIds(getMessageIds());
-
         return workflow;
     }
 
     private static List<String> getMessageIds() {
         final List<String> messageIds = new ArrayList<>();
-
         messageIds.add("1");
         messageIds.add("2");
         messageIds.add("3");
@@ -58,7 +55,6 @@ public class WorkfolwExample {
         messageIds.add("8");
         messageIds.add("9");
         messageIds.add("10");
-
         return messageIds;
     }
 }
