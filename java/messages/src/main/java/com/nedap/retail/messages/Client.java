@@ -17,6 +17,7 @@ import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
+import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
 import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
@@ -384,6 +385,19 @@ public class Client {
         }
 
         return get(resource, StockResponse.class);
+    }
+
+    /**
+     * The Capture Service captures one or more EPCIS events at a time. This does not imply any relationship between
+     * these EPCIS events. Each element of the argument list is accepted if it is a valid EPCIS event or subtype that
+     * conforms to the above EPCIS event types.
+     *
+     * @param events EPCIS events to capture
+     */
+    public void captureEpcisEvents(final List<EpcisEvent> events) {
+
+        final WebResource resource = resource("/epcis/v2/capture");
+        post(resource, events);
     }
 
     /**
