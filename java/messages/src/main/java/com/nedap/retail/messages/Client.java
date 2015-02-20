@@ -199,24 +199,43 @@ public class Client {
     }
 
     /**
-     * Retrieve one or more articles based on GTIN value(s) or barcodes. Optionally specify returned Article properties.
-     * When querying on barcode, the barcode type is ignored. All articles that have a barcode that match (case
-     * insensitive for alphanumeric barcodes) one of the given barcodes is returned.
+     * Retrieve one or more articles based on GTIN value(s). Optionally specify returned Article properties.
      *
      * @param gtins The GTIN(s) of which article information should be returned. Repeat key-value for retrieving
-     *            multiple GTINs.Mutually exclusive with barcodes[].
-     * @param barcodes The barcode(s) of which article information should be returned. Repeat key-value for retrieving
-     *            multiple barcodes.Mutually exclusive with gtins[].
+     *            multiple GTINs.
      * @param fields Optional. Which fields should be included in the response. Can be any of the Article fields. When
      *            omitted: all fields will be included in the response. Repeat key-value for retrieving multiple fields.
      * @return List of articles retrieved.
      */
-    public Articles articleDetails(final List<String> gtins, final List<String> barcodes, final List<String> fields) {
+    public Articles articleDetailsByGtins(final List<String> gtins, final List<String> fields) {
         WebResource resource = resource("/article/v2/retrieve");
 
         for (final String gtin : gtins) {
             resource = resource.queryParam("gtins[]", gtin);
         }
+
+        if (fields != null) {
+            for (final String field : fields) {
+                resource = resource.queryParam("fields[]", field);
+            }
+        }
+
+        return get(resource, Articles.class);
+    }
+
+    /**
+     * Retrieve one or more articles based on barcode(s). Optionally specify returned Article properties. Barcode type
+     * is ignored. All articles that have a barcode that match (case insensitive for alphanumeric barcodes) one of the
+     * given barcodes is returned.
+     *
+     * @param barcodes The barcode(s) of which article information should be returned. Repeat key-value for retrieving
+     *            multiple barcodes.
+     * @param fields Optional. Which fields should be included in the response. Can be any of the Article fields. When
+     *            omitted: all fields will be included in the response. Repeat key-value for retrieving multiple fields.
+     * @return List of articles retrieved.
+     */
+    public Articles articleDetailsByBarcodes(final List<String> barcodes, final List<String> fields) {
+        WebResource resource = resource("/article/v2/retrieve");
 
         for (final String barcode : barcodes) {
             resource = resource.queryParam("barcodes[]", barcode);
