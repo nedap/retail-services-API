@@ -16,23 +16,21 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 public class EpcisExample {
 
     public static void runExample(final Client client) {
-        System.out.println("-------------");
-        System.out.println("EPCIS API example");
-        System.out.println("-------------");
+        System.out.println("*** EPCIS API example ***");
 
         final List<EpcisEvent> events = createEvents();
 
         try {
             // capture
-            System.out.println("------------- Capture epcis events");
+            System.out.println("--- Capture epcis events");
             client.captureEpcisEvents(events);
-            System.out.println("captured epcis events");
+            System.out.println("--- Captured epcis events");
 
         } catch (final UniformInterfaceException e) {
             System.err.println("Server responded with an error:");
             System.err.println(e.getResponse().getEntity(String.class));
         }
-        System.out.println("------------- Done");
+        System.out.println("--- Done");
     }
 
     private static List<EpcisEvent> createEvents() {

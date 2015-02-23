@@ -10,18 +10,16 @@ public class EpcExample {
     private static final String LOCATION = "http://location-testing";
 
     public static void runExample(final Client client) {
-        System.out.println("-------------");
-        System.out.println("EPC API example");
-        System.out.println("-------------");
+        System.out.println("*** EPC API example ***");
 
         try {
             // get difference list
-            System.out.println("------------- Retrieving difference list");
+            System.out.println("--- Retrieving difference list");
             final DifferenceListResponse dl = client.differenceList("12345678901231", null, null, null);
             System.out.println(dl.toString());
 
             // get stock gtin
-            System.out.println("------------- Retrieving stock gtin");
+            System.out.println("--- Retrieving stock gtin");
             final StockResponse sg = client.stockGtin(LOCATION, null, null, null, null);
             System.out.println(sg.toString());
 
@@ -29,6 +27,6 @@ public class EpcExample {
             System.err.println("Server responded with an error:");
             System.err.println(e.getResponse().getEntity(String.class));
         }
-        System.out.println("------------- Done");
+        System.out.println("--- Done");
     }
 }

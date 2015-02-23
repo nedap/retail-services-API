@@ -12,9 +12,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class ArticleExample {
     public static void runExample(final Client client) {
-        System.out.println("-------------");
-        System.out.println("Article API example");
-        System.out.println("-------------");
+        System.out.println("*** Article API example ***");
 
         // this is our example data
         final List<Article> exampleArticles = new ArrayList<>();
@@ -23,11 +21,11 @@ public class ArticleExample {
 
         try {
             // send articles
-            System.out.println("------------- Uploading articles");
+            System.out.println("--- Uploading articles");
             client.captureArticles(exampleArticles);
 
             // get quantity
-            System.out.println("------------- Retrieving article quantity");
+            System.out.println("--- Retrieving article quantity");
             final Long quantity = client.articleQuantity();
             System.out.println("article quantity = " + quantity);
 
@@ -35,7 +33,7 @@ public class ArticleExample {
             System.err.println("Server responded with an error:");
             System.err.println(e.getResponse().getEntity(String.class));
         }
-        System.out.println("------------- Done");
+        System.out.println("--- Done");
     }
 
     private static Article createExampleArticle() {
