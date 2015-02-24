@@ -50,8 +50,10 @@ public class Article implements Serializable {
     private List<Price> prices;
     private Boolean markdown;
     @JsonProperty(LAST_UPDATED)
+    @org.codehaus.jackson.annotate.JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
     @JsonIgnore
+    @org.codehaus.jackson.annotate.JsonIgnore
     public UUID lastUpdatedUUID;
 
 
@@ -183,6 +185,8 @@ public class Article implements Serializable {
         return gtin;
     }
 
+    @JsonIgnore
+    @org.codehaus.jackson.annotate.JsonIgnore
     public DateTime getLastUpdated() {
         return lastUpdated;
     }

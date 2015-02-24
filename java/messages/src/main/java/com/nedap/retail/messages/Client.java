@@ -198,7 +198,7 @@ public class Client {
      *            omitted: all fields will be included in the response. Repeat key-value for retrieving multiple fields.
      * @return List of articles retrieved.
      */
-    public Articles articleDetailsByGtins(final List<String> gtins, final List<String> fields) {
+    public List<Article> articleDetailsByGtins(final List<String> gtins, final List<String> fields) {
         WebResource resource = resource("/article/v2/retrieve");
 
         for (final String gtin : gtins) {
@@ -211,7 +211,8 @@ public class Client {
             }
         }
 
-        return get(resource, Articles.class);
+        return get(resource, new GenericType<List<Article>>() {
+        });
     }
 
     /**
@@ -225,7 +226,7 @@ public class Client {
      *            omitted: all fields will be included in the response. Repeat key-value for retrieving multiple fields.
      * @return List of articles retrieved.
      */
-    public Articles articleDetailsByBarcodes(final List<String> barcodes, final List<String> fields) {
+    public List<Article> articleDetailsByBarcodes(final List<String> barcodes, final List<String> fields) {
         WebResource resource = resource("/article/v2/retrieve");
 
         for (final String barcode : barcodes) {
@@ -238,7 +239,8 @@ public class Client {
             }
         }
 
-        return get(resource, Articles.class);
+        return get(resource, new GenericType<List<Article>>() {
+        });
     }
 
     /**
