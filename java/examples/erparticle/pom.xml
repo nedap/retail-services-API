@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.nedap.retail.services</groupId>
         <artifactId>examples</artifactId>
-        <version>1.27-SNAPSHOT</version>
+        <version>1.27</version>
     </parent>
 
     <groupId>com.nedap.retail.services.examples</groupId>
     <artifactId>erparticle</artifactId>
-    <version>1.27-SNAPSHOT</version>
+    <version>1.27</version>
     <packaging>jar</packaging>
     <name>ERP and Article example</name>
     <description>This is example code for the ERP and Article API for !D Cloud.</description>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.nedap.retail.services</groupId>
             <artifactId>messages</artifactId>
-            <version>1.27-SNAPSHOT</version>
+            <version>1.27</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
