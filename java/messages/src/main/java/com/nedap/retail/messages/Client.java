@@ -56,7 +56,7 @@ public class Client {
         this.httpClient.addFilter(new AuthorizationClientFilter(accessTokenResolver));
     }
 
-    private static com.sun.jersey.api.client.Client initHttpClient() {
+    protected com.sun.jersey.api.client.Client initHttpClient() {
         mapper = new ObjectMapper().configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
         // Jackson's MessageBodyReader implementation appears to be more well-behaved than the Jersey JSON one.
         // And also this provider uses our own configured object-mapper.
@@ -198,7 +198,7 @@ public class Client {
      *            omitted: all fields will be included in the response. Repeat key-value for retrieving multiple fields.
      * @return List of articles retrieved.
      */
-    public Articles articleDetailsByGtins(final List<String> gtins, final List<String> fields) {
+    public List<Article> articleDetailsByGtins(final List<String> gtins, final List<String> fields) {
         WebResource resource = resource("/article/v2/retrieve");
 
         for (final String gtin : gtins) {
@@ -211,7 +211,8 @@ public class Client {
             }
         }
 
-        return get(resource, Articles.class);
+        return get(resource, new GenericType<List<Article>>() {
+        });
     }
 
     /**
@@ -225,7 +226,7 @@ public class Client {
      *            omitted: all fields will be included in the response. Repeat key-value for retrieving multiple fields.
      * @return List of articles retrieved.
      */
-    public Articles articleDetailsByBarcodes(final List<String> barcodes, final List<String> fields) {
+    public List<Article> articleDetailsByBarcodes(final List<String> barcodes, final List<String> fields) {
         WebResource resource = resource("/article/v2/retrieve");
 
         for (final String barcode : barcodes) {
@@ -238,7 +239,8 @@ public class Client {
             }
         }
 
-        return get(resource, Articles.class);
+        return get(resource, new GenericType<List<Article>>() {
+        });
     }
 
     /**
@@ -253,7 +255,7 @@ public class Client {
      *            omitted: return all fields in Article resource. Repeat key-value for retrieving multiple fields.
      * @return List of articles retrieved.
      */
-    public Articles retrieveArticles(final DateTime updatedAfter, final int skip, final int count,
+    public List<Article> retrieveArticles(final DateTime updatedAfter, final int skip, final int count,
             final List<String> fields) {
         WebResource resource = resource("/article/v2/retrieve");
 
@@ -264,11 +266,14 @@ public class Client {
         resource = resource.queryParam("skip", String.valueOf(skip));
         resource = resource.queryParam("count", String.valueOf(count));
 
-        for (final String field : fields) {
-            resource = resource.queryParam("fields[]", field);
+        if (fields != null) {
+            for (final String field : fields) {
+                resource = resource.queryParam("fields[]", field);
+            }
         }
 
-        return get(resource, Articles.class);
+        return get(resource, new GenericType<List<Article>>() {
+        });
     }
 
     /**

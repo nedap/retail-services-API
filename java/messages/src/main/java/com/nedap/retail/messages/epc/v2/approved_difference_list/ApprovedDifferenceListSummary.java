@@ -30,6 +30,7 @@ public class ApprovedDifferenceListSummary {
     public static final String MINUS_DIFFERENCE = "minus_difference";
     public static final String EXPORT_STATUS = "export_status";
     public static final String EXPORT_TIME = "export_time";
+    public static final String EXTERN_REF = "extern_ref";
 
     @JsonProperty(APPROVED_ON)
     @org.codehaus.jackson.annotate.JsonProperty(APPROVED_ON)
@@ -92,6 +93,10 @@ public class ApprovedDifferenceListSummary {
     @org.codehaus.jackson.annotate.JsonProperty(EXPORT_TIME)
     public DateTime exportTime;
 
+    @JsonProperty(EXTERN_REF)
+    @org.codehaus.jackson.annotate.JsonProperty(EXTERN_REF)
+    public String externRef;
+
     public UUID id;
 
     public ApprovedDifferenceListSummary() {
@@ -115,6 +120,7 @@ public class ApprovedDifferenceListSummary {
         minusDifference = approvedDifferenceListSummary.minusDifference;
         exportStatus = approvedDifferenceListSummary.exportStatus;
         exportTime = approvedDifferenceListSummary.exportTime;
+        externRef = approvedDifferenceListSummary.externRef;
         id = approvedDifferenceListSummary.id;
     }
 
