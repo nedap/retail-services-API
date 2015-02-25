@@ -38,6 +38,11 @@
             <version>${slf4j-version}</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
             <version>${jsersey-version}</version>
@@ -82,6 +87,12 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
