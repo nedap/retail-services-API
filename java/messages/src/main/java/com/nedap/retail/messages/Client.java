@@ -56,7 +56,7 @@ public class Client {
         this.httpClient.addFilter(new AuthorizationClientFilter(accessTokenResolver));
     }
 
-    private static com.sun.jersey.api.client.Client initHttpClient() {
+    protected com.sun.jersey.api.client.Client initHttpClient() {
         mapper = new ObjectMapper().configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
         // Jackson's MessageBodyReader implementation appears to be more well-behaved than the Jersey JSON one.
         // And also this provider uses our own configured object-mapper.
@@ -255,7 +255,7 @@ public class Client {
      *            omitted: return all fields in Article resource. Repeat key-value for retrieving multiple fields.
      * @return List of articles retrieved.
      */
-    public Articles retrieveArticles(final DateTime updatedAfter, final int skip, final int count,
+    public List<Article> retrieveArticles(final DateTime updatedAfter, final int skip, final int count,
             final List<String> fields) {
         WebResource resource = resource("/article/v2/retrieve");
 
@@ -266,11 +266,14 @@ public class Client {
         resource = resource.queryParam("skip", String.valueOf(skip));
         resource = resource.queryParam("count", String.valueOf(count));
 
-        for (final String field : fields) {
-            resource = resource.queryParam("fields[]", field);
+        if (fields != null) {
+            for (final String field : fields) {
+                resource = resource.queryParam("fields[]", field);
+            }
         }
 
-        return get(resource, Articles.class);
+        return get(resource, new GenericType<List<Article>>() {
+        });
     }
 
     /**
