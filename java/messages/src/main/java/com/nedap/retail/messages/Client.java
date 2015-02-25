@@ -26,6 +26,7 @@ import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
 import com.nedap.retail.messages.users.User;
+import com.nedap.retail.messages.workflow.WorkflowEvent;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -382,6 +383,16 @@ public class Client {
     public void captureEpcisEvents(final List<EpcisEvent> events) {
         final WebResource resource = resource("/epcis/v2/capture");
         post(resource, events);
+    }
+
+    /**
+     * Stores the workflow event.
+     *
+     * @param workflow Workflow event object.
+     */
+    public void captureWorkflow(final WorkflowEvent workflow) {
+        final WebResource resource = resource("/workflow/v2/capture");
+        post(resource, workflow);
     }
 
     /**
