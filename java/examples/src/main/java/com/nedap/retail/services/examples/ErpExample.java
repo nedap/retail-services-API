@@ -27,33 +27,32 @@ public class ErpExample {
 
         try {
             // send stock
-            System.out.println("--- Uploading stock");
+            System.out.println("Uploading stock...");
             final Stock stock = new Stock(location, timeOfStock, myReference, exampleStock);
             final String stockId = client.captureErpStock(stock);
-            System.out.println("stock ID = " + stockId);
+            System.out.println("Stock ID = " + stockId);
 
             // request stock status
-            System.out.println("--- Getting stock status");
+            System.out.println("Getting stock status...");
             final StockSummary summary = client.getErpStockStatus(stockId);
             System.out.println(summary);
 
             // request stock
-            System.out.println("--- Retrieving stock");
+            System.out.println("Retrieving stock...");
             final Stock retrievedStock = client.retrieveErpStock(stockId);
             System.out.println(retrievedStock);
 
             // request stock list
-            System.out.println("--- Retrieving list of available stocks");
+            System.out.println("Retrieving list of available stocks...");
             final List<StockSummary> availableStocks = client.getErpStockList(location);
             System.out.println("Got " + availableStocks.size() + " stocks:");
             for (final StockSummary availableStock : availableStocks) {
                 System.out.println(availableStock);
             }
+            System.out.println("--- Done ---");
 
         } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error:");
-            System.err.println(e.getResponse().getEntity(String.class));
+            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
         }
-        System.out.println("--- Done");
     }
 }

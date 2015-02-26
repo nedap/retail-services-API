@@ -33,7 +33,7 @@ public class App {
     private static final String URL = "https://api.nedapretail.com";
     private final Client apiClient;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
         final Options options = createCliOption();
         try {
@@ -84,34 +84,62 @@ public class App {
     private void loop() throws IOException {
         try {
             final Scanner scanner = new Scanner(System.in);
-
             boolean quit = false;
+
             while (!quit) {
-                System.out.println("Menu");
-                System.out.println("e       : run ERP API example");
-                System.out.println("a       : run Article API example");
-                System.out.println("q = quit");
-                System.out.print("> ");
+                printMenu();
                 final String cmd = scanner.next();
 
                 try {
                     switch (cmd) {
-                        case "e":
-                            ErpExample.runExample(apiClient);
-                            break;
-                        case "a":
+                        case "1":
                             ArticleExample.runExample(apiClient);
                             break;
-                        case "q":
+                        case "2":
+                            EpcExample.runExample(apiClient);
+                            break;
+                        case "3":
+                            EpcisExample.runExample(apiClient);
+                            break;
+                        case "4":
+                            ErpExample.runExample(apiClient);
+                            break;
+                        case "5":
+                            SystemExample.runExample(apiClient);
+                            break;
+                        case "6":
+                            WorkflowExample.runExample(apiClient);
+                            break;
+                        case "0":
                             quit = true;
                             break;
                     }
                 } catch (final UniformInterfaceException ex) {
-                    System.out.println(ex.getResponse().toString());
+                    System.err.println(ex.getResponse().toString());
                 }
             }
+            scanner.close();
+
         } finally {
             apiClient.destroy();
         }
+    }
+
+    private void printMenu() {
+        final StringBuilder sb = new StringBuilder();
+        final String newLine = System.getProperty("line.separator");
+
+        sb.append(newLine + "*** Nedap Retail API examples ***");
+        sb.append(newLine + "Choose example you want to run");
+        sb.append(newLine + "1 : Article API");
+        sb.append(newLine + "2 : EPC API");
+        sb.append(newLine + "3 : Epcis API");
+        sb.append(newLine + "4 : ERP API");
+        sb.append(newLine + "5 : System API");
+        sb.append(newLine + "6 : Workflow API");
+        sb.append(newLine + "0 : Quit");
+        sb.append(newLine + "> ");
+
+        System.out.println(sb);
     }
 }
