@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>com.nedap.retail.services</groupId>
         <artifactId>api</artifactId>
@@ -9,11 +9,113 @@
     </parent>
 
     <artifactId>examples</artifactId>
-    <packaging>pom</packaging>
-    <name>Examples</name>
 
-    <modules>
-        <module>erparticle</module>
-    </modules>
+    <name>API examples</name>
+    <packaging>jar</packaging>
+    <description>This is example code for the APIs for !D Cloud.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.nedap.retail.services</groupId>
+            <artifactId>messages</artifactId>
+            <version>1.28-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jsersey-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>apache-snapshots</id>
+            <name>Apache snapshots</name>
+            <url>http://repository.apache.org/snapshots</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+
+            <!--
+              Usage:
+              mvn package
+
+              This plugin provides the capability to package the artifact in an uber-jar, including its dependencies and
+              to shade - i.e. rename - the packages of some of the dependencies.
+          
+              - Produce a pom.xml file which doesn’t include dependencies for the libraries whose contents are
+                included in the fat JAR.
+              - Exclude all digital signatures from signed JARs. If you don’t, then Java considers the signature
+                invalid and won’t load or run your JAR file.
+              - Collate the various META-INF/services entries in the JARs instead of overwriting them. (Jersey doesn’t
+                work without those.)
+              - Set com.nedap.retail.services.tool.push.App as the JAR’s MainClass. This will allow you to run
+                the JAR using java -jar.
+  
+              See also http://dropwizard.codahale.com/getting-started/
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <transformers>
+                        <!--
+                          Collate the various META-INF/services entries in the JARs instead of overwriting them.
+                          (Jersey doesn’t work without those.)
+                        -->
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>com.nedap.retail.services.examples.erparticle.App</mainClass>
+                        </transformer>
+                    </transformers>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+              Usage:
+              mvn compile exec:java -Dexec.args="-clientid <CLIENTID> -secret <SECRET>"
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <executable>java</executable>
+                    <mainClass>com.nedap.retail.services.examples.erparticle.App</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

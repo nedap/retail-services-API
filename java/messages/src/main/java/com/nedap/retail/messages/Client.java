@@ -17,7 +17,7 @@ import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
-import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
+import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
 import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
@@ -83,7 +83,7 @@ public class Client {
      * System API: list
      */
     public List<SystemListPayload> getSystemList() {
-        final WebResource resource = resource("/system/1.0/list");
+        final WebResource resource = resource("/system/v1/list");
         return get(resource, new GenericType<List<SystemListPayload>>() {
         });
     }
@@ -92,7 +92,7 @@ public class Client {
      * System API: status
      */
     public List<SystemStatusPayload> getSystemStatus() {
-        final WebResource resource = resource("/system/1.0/status");
+        final WebResource resource = resource("/system/v1/status");
         return get(resource, new GenericType<List<SystemStatusPayload>>() {
         });
     }
@@ -105,7 +105,7 @@ public class Client {
      * @return List of fimware versions available for upgrade.
      */
     public List<String> getFirmwareList(final String systemId) {
-        final WebResource resource = resource("/system/1.0/firmware_versions").queryParam("system_id", systemId);
+        final WebResource resource = resource("/system/v1/firmware_versions").queryParam("system_id", systemId);
         return get(resource, new GenericType<List<String>>() {
         });
     }
@@ -126,7 +126,7 @@ public class Client {
      * @param firmwareVersion Requested firmware version to upgrade to.
      */
     public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) {
-        final WebResource resource = resource("/system/1.0/update").queryParam("system_id", systemId).queryParam(
+        final WebResource resource = resource("/system/v1/update").queryParam("system_id", systemId).queryParam(
                 "firmware_version", firmwareVersion);
         post(resource);
     }
@@ -185,8 +185,9 @@ public class Client {
      */
     public Long articleQuantity() {
         final WebResource resource = resource("/article/v2/quantity");
-        final Map response = get(resource, Map.class);
-        return (Long) response.get("quantity");
+        final Map<String, Long> response = get(resource, new GenericType<Map<String, Long>>() {
+        });
+        return response.get("quantity");
     }
 
     /**
@@ -385,7 +386,7 @@ public class Client {
      *
      * @param events EPCIS events to capture
      */
-    public void captureEpcisEvents(final List<EpcisEvent> events) {
+    public void captureEpcisEvents(final EpcisEventContainer events) {
         final WebResource resource = resource("/epcis/v2/capture");
         post(resource, events);
     }
