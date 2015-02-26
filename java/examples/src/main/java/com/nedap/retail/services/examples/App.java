@@ -127,17 +127,19 @@ public class App {
 
     private void printMenu() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("\n*** Nedap Retail API examples ***");
-        sb.append("\nChoose example you want to run");
-        sb.append("\n1 : Article API");
-        sb.append("\n2 : EPC API");
-        sb.append("\n3 : Epcis API");
-        sb.append("\n4 : ERP API");
-        sb.append("\n5 : System API");
-        sb.append("\n6 : Workflow API");
-        sb.append("\n0 : Quit");
-        sb.append("\n> ");
+        final String newLine = System.getProperty("line.separator");
 
-        System.out.println(sb.toString());
+        sb.append(newLine + "*** Nedap Retail API examples ***");
+        sb.append(newLine + "Choose example you want to run");
+        sb.append(newLine + "1 : Article API");
+        sb.append(newLine + "2 : EPC API");
+        sb.append(newLine + "3 : Epcis API");
+        sb.append(newLine + "4 : ERP API");
+        sb.append(newLine + "5 : System API");
+        sb.append(newLine + "6 : Workflow API");
+        sb.append(newLine + "0 : Quit");
+        sb.append(newLine + "> ");
+
+        System.out.println(sb);
     }
 }

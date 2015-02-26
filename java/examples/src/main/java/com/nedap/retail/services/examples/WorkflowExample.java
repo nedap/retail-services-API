@@ -1,6 +1,7 @@
 package com.nedap.retail.services.examples;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
@@ -11,6 +12,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 public class WorkflowExample {
 
     private static final String LOCATION = "Store:Sales floor";
+    private static final List<String> MESSAGE_IDS = Arrays.asList("abc-123", "def-456", "ghi-789");
 
     public static void runExample(final Client client) {
         System.out.println("*** Workflow API example ***");
@@ -34,7 +36,7 @@ public class WorkflowExample {
         workflow.setEventTime(DateTime.now());
         workflow.setLocation(LOCATION);
         workflow.setEpcCount((long) 10);
-        workflow.setMessageIds(Arrays.asList("abc-123", "def-456", "ghi-789"));
+        workflow.setMessageIds(MESSAGE_IDS);
         return workflow;
     }
 }
