@@ -21,19 +21,19 @@ public class ArticleExample {
 
         try {
             // send articles
-            System.out.println("--- Uploading articles");
+            System.out.println("Uploading article...");
             client.captureArticles(exampleArticles);
+            System.out.println("Example article uploaded");
 
             // get quantity
-            System.out.println("--- Retrieving article quantity");
+            System.out.println("Retrieving article quantity...");
             final Long quantity = client.articleQuantity();
-            System.out.println("article quantity = " + quantity);
+            System.out.println("Article quantity = " + quantity);
+            System.out.println("--- Done ---");
 
         } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error:");
-            System.err.println(e.getResponse().getEntity(String.class));
+            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
         }
-        System.out.println("--- Done");
     }
 
     private static Article createExampleArticle() {

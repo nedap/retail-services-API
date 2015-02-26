@@ -7,10 +7,10 @@ import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
+import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
 import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
-import com.nedap.retail.messages.epcis.v1_1.elements.QuantityElement;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class EpcisExample {
@@ -18,19 +18,18 @@ public class EpcisExample {
     public static void runExample(final Client client) {
         System.out.println("*** EPCIS API example ***");
 
-        final List<EpcisEvent> events = createEvents();
+        final EpcisEventContainer epcisEventsList = new EpcisEventContainer();
+        epcisEventsList.events = createEvents();
 
         try {
             // capture
-            System.out.println("--- Capture epcis events");
-            client.captureEpcisEvents(events);
-            System.out.println("--- Captured epcis events");
+            System.out.println("Capturing epcis events...");
+            client.captureEpcisEvents(epcisEventsList);
+            System.out.println("--- Done ---");
 
         } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error:");
-            System.err.println(e.getResponse().getEntity(String.class));
+            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
         }
-        System.out.println("--- Done");
     }
 
     private static List<EpcisEvent> createEvents() {
@@ -51,19 +50,13 @@ public class EpcisExample {
         final Disposition disposition = Disposition.SELLABLE_ACCESSIBLE;
 
         final List<String> epcList = new ArrayList<>();
-        epcList.add("urn:epc:id:sgtin:1234567.000246.0001");
-        epcList.add("urn:epc:id:sgtin:1234567.000246.0002");
-        epcList.add("urn:epc:id:sgtin:1234567.000246.0003");
-        epcList.add("urn:epc:id:sgtin:1234567.000246.0004");
-
-        final List<QuantityElement> quantityList = new ArrayList<>();
-        quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0001", 100));
-        quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0002", 50));
-        quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0003", 80));
-        quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0004", 30));
+        epcList.add("urn:epc:id:sgtin:061414.12346.0001");
+        epcList.add("urn:epc:id:sgtin:061414.12346.0002");
+        epcList.add("urn:epc:id:sgtin:061414.12346.0003");
+        epcList.add("urn:epc:id:sgtin:061414.12346.0004");
 
         final EpcisEvent event1 = new ObjectEvent(id, eventTime, recordTime, eventTimeZoneOffset, action, bizLocation,
-                readPoint, disposition, epcList, quantityList);
+                readPoint, disposition, epcList, null);
 
         return event1;
     }
@@ -79,19 +72,13 @@ public class EpcisExample {
         final Disposition disposition = Disposition.SELLABLE_ACCESSIBLE;
 
         final List<String> epcList = new ArrayList<>();
-        epcList.add("urn:epc:id:sgtin:1234567.000246.0005");
-        epcList.add("urn:epc:id:sgtin:1234567.000246.0006");
-        epcList.add("urn:epc:id:sgtin:1234567.000246.0007");
-        epcList.add("urn:epc:id:sgtin:1234567.000246.0008");
-
-        final List<QuantityElement> quantityList = new ArrayList<>();
-        quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0005", 50));
-        quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0006", 30));
-        quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0007", 100));
-        quantityList.add(new QuantityElement("urn:epc:idpat:sgtin:1234567.000246.0008", 20));
+        epcList.add("urn:epc:id:sgtin:061414.12346.0005");
+        epcList.add("urn:epc:id:sgtin:061414.12346.0006");
+        epcList.add("urn:epc:id:sgtin:061414.12346.0007");
+        epcList.add("urn:epc:id:sgtin:061414.12346.0008");
 
         final EpcisEvent event2 = new ObjectEvent(id, eventTime, recordTime, eventTimeZoneOffset, action, bizLocation,
-                readPoint, disposition, epcList, quantityList);
+                readPoint, disposition, epcList, null);
 
         return event2;
     }
