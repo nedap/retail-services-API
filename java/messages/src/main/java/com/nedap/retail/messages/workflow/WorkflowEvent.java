@@ -6,7 +6,6 @@ import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -49,8 +48,6 @@ public class WorkflowEvent implements Serializable {
         this.messageIds = messageIds;
     }
 
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
     public String getType() {
         return type;
     }
@@ -59,8 +56,6 @@ public class WorkflowEvent implements Serializable {
         this.type = type;
     }
 
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
     public DateTime getEventTime() {
         return eventTime;
     }
@@ -69,8 +64,6 @@ public class WorkflowEvent implements Serializable {
         this.eventTime = eventTime;
     }
 
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
     public String getLocation() {
         return location;
     }
@@ -78,8 +71,6 @@ public class WorkflowEvent implements Serializable {
         this.location = location;
     }
 
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
     public Long getEpcCount() {
         return epcCount;
     }
@@ -88,8 +79,6 @@ public class WorkflowEvent implements Serializable {
         this.epcCount = epcCount;
     }
 
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
     public List<String> getMessageIds() {
         return messageIds;
     }
