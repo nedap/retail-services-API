@@ -21,6 +21,10 @@ public class ApprovedDifferenceListExportResponse extends ApprovedDifferenceList
     @org.codehaus.jackson.annotate.JsonProperty("approved_quantity")
     public List<Integer> approvedQuantity;
 
+    public ApprovedDifferenceListExportResponse() {
+
+    }
+
     public ApprovedDifferenceListExportResponse(final ApprovedDifferenceList approvedDifferenceList) {
         super(approvedDifferenceList.approvedDifferenceListSummary);
 
