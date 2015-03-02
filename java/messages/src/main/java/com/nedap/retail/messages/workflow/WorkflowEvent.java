@@ -49,8 +49,6 @@ public class WorkflowEvent implements Serializable {
         this.messageIds = messageIds;
     }
 
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
     public String getType() {
         return type;
     }
@@ -69,8 +67,6 @@ public class WorkflowEvent implements Serializable {
         this.eventTime = eventTime;
     }
 
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
     public String getLocation() {
         return location;
     }
