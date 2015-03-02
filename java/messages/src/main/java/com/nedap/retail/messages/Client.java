@@ -151,7 +151,6 @@ public class Client {
      */
     public Stock retrieveErpStock(final String id) {
         final WebResource resource = resource("/erp/v1/stock.retrieve").queryParam("id", id);
-        System.out.println(resource.accept(APPLICATION_JSON_TYPE).get(String.class));
         return get(resource, Stock.class);
     }
 

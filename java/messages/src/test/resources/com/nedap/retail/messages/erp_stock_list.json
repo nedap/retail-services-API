@@ -1,0 +1,22 @@
+[
+    {
+        "id": "5111cca97c96485c0bdc7df3a7b966540fde9d18bbcb9bd6218a930d6f79115b",
+        "location": "http://nedapretail.com/loc/test",
+        "status": "ACCEPTED",
+        "quantity": 40,
+        "event_time": "2015-02-26T07:36:20.576Z",
+        "extern_ref": "testing",
+        "gtin_quantity": 4,
+        "in_use": false
+    },
+    {
+        "id": "6109c47ba1ff209124f8abf5e1d9a4b5f9d48780bd635e406a3ce0af514fb86d",
+        "location": "http://nedapretail.com/loc/test",
+        "status": "ACCEPTED",
+        "quantity": 40,
+        "event_time": "2015-02-25T14:34:28.572Z",
+        "extern_ref": "testing",
+        "gtin_quantity": 4,
+        "in_use": false
+    }
+]

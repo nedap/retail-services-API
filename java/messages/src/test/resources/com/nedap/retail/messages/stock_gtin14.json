@@ -1,0 +1,116 @@
+{
+    "gtins": 
+    [
+        "03327009483366", "03327251896302"
+    ],
+    "locations":
+    [
+        "Novi Sad:A", "Novi Sad:B"
+    ],
+    "quantities":
+    [
+        2, 23
+    ],
+    "time": "2011-03-02T12:13:00.000+01:00",
+    "articles":
+    [
+        {
+            "gtin": "03327009483366",
+            "barcodes": 
+            [
+                {
+                    "type": "ean_13",
+                    "value": "3327009483366"
+                },
+                {
+                    "type": "ean_13",
+                    "value": "3327009483427"
+                }
+            ],
+            "code": "74478-94565",
+            "brand": "Nedap",
+            "season": "Summer 2014",
+            "name": "T-shirt short sleeve, v-neck",
+            "option": "T-shirt short sleeve, v-neck, Black",
+            "style": "T-shirt short sleeve, v-neck",
+            "color": "Black",
+            "sizes": 
+            [
+                {
+                    "region": "NL",
+                    "description": "32/34"
+                },
+                {
+                    "region": "DE",
+                    "description": "33/32"
+                }
+            ],
+            "supplier": "Nedap Retail",
+            "prices": 
+            [
+                {
+                    "currency": "EUR",
+                    "region": "NL",
+                    "amount": 32.95
+                },
+                {
+                    "currency": "NOK",
+                    "region": "NO",
+                    "amount": 3000
+                }
+            ]
+        }, 
+
+        {
+            "gtin": "03327251896302",
+            "barcodes": 
+            [
+                {
+                    "type": "ean_13",
+                    "value": "3327251896302"
+                },
+                {
+                    "type": "ean_13",
+                    "value": "03327251896415"
+                }
+            ],
+            "code": "74478-94565",
+            "brand": "Nedap",
+            "season": "Summer 2014",
+            "name": "T-shirt short sleeve, v-neck",
+            "option": "T-shirt short sleeve, v-neck, Black",
+            "style": "T-shirt short sleeve, v-neck",
+            "color": "Green",
+            "sizes": 
+            [
+                {
+                    "region": "NL",
+                    "description": "32/34"
+                },
+                {
+                    "region": "DE",
+                    "description": "33/32"
+                }
+            ],
+            "supplier": "Nedap Retail",
+            "prices": 
+            [
+                {
+                    "currency": "EUR",
+                    "region": "NL",
+                    "amount": 32.95
+                },
+                {
+                    "currency": "NOK",
+                    "region": "NO",
+                    "amount": 3000
+                }
+            ]
+        }
+    ],
+    "rfid_stock_time" : "2014-06-25T17:46:00.000Z",
+    "stock_rooms_quantity": 6,
+    "sales_floors_quantity": 3,
+    "store_quantity": 9,
+    "stock_ratio": 66.6
+}
