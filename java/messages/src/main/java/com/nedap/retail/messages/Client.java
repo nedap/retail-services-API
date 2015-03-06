@@ -183,7 +183,7 @@ public class Client {
      * @param id ID of stock
      * @return 204 status if delete is successful, this process is irreversible
      */
-    public void deleteErpStockStatus(final String id) {
+    public void deleteErpStock(final String id) {
         final WebResource resource = resource("/erp/v1/stock.delete").queryParam("id", id);
         delete(resource);
     }
