@@ -178,6 +178,17 @@ public class Client {
     }
 
     /**
+     * ERP API: delete stock for provided stock id
+     * 
+     * @param id ID of stock
+     * @return 204 status if delete is successful, this process is irreversible
+     */
+    public void deleteErpStock(final String id) {
+        final WebResource resource = resource("/erp/v1/stock.delete").queryParam("id", id);
+        delete(resource);
+    }
+
+    /**
      * Requests the total number of articles registered in !D Cloud.
      *
      * @return Total number of articles.
@@ -292,7 +303,7 @@ public class Client {
      */
     public void articleDelete() {
         final WebResource resource = resource("/article/v2/delete");
-        post(resource);
+        delete(resource);
     }
 
     /**
@@ -524,6 +535,10 @@ public class Client {
     protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
             throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
+    }
+
+    protected static void delete(final WebResource resource) throws UniformInterfaceException {
+        resource.accept(APPLICATION_JSON_TYPE).delete();
     }
 
     public static String getErrorMessage(final ClientResponse response) {
