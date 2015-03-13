@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class ApprovedDifferenceListCaptured {
+public class ApprovedDifferenceListExportUpdate {
 
     public static final String ERP_STOCK_ID = "erp_stock_id";
     public static final String ERP_STOCK_TIME = "erp_stock_time";
@@ -33,11 +33,11 @@ public class ApprovedDifferenceListCaptured {
     @org.codehaus.jackson.annotate.JsonProperty(RFID_STOCK_TIME)
     public DateTime rfidStockTime;
 
-    public ApprovedDifferenceListCaptured() {
+    public ApprovedDifferenceListExportUpdate() {
 
     }
 
-    public ApprovedDifferenceListCaptured(final UUID id, final String location, final String erpStockId,
+    public ApprovedDifferenceListExportUpdate(final UUID id, final String location, final String erpStockId,
             final DateTime erpStockTime, final DateTime rfidStockTime) {
         this.id = id;
         this.location = location;
@@ -47,4 +47,3 @@ public class ApprovedDifferenceListCaptured {
     }
 
 }
-
