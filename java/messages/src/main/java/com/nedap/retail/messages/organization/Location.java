@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.organization;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -12,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Location {
+public class Location implements Serializable {
 
     private String id;
     @JsonProperty("parent_id")
