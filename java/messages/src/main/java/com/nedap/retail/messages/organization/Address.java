@@ -1,5 +1,7 @@
 package com.nedap.retail.messages.organization;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -7,11 +9,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-
 @JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Address implements Serializable {
+
+    private static final long serialVersionUID = -1023613965561621788L;
 
     private String address;
     private String zipcode;

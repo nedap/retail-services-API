@@ -15,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Location implements Serializable {
 
+    private static final long serialVersionUID = 1096488161535906856L;
+
     private String id;
     @JsonProperty("parent_id")
     @org.codehaus.jackson.annotate.JsonProperty("parent_id")
