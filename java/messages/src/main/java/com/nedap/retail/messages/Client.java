@@ -390,6 +390,30 @@ public class Client {
     }
 
     /**
+     * Returns RFID Stock for location.
+     * 
+     * @param locationId Location identifier
+     * @param fromRfidTime Lower boundary for rfid stock time
+     * @param untilRfidTime Upper boundary for rfid stock time
+     * @return List of summaries for rfid stock on requested location
+     */
+    public List<StockSummary> getRfidStockList(final String locationId, final DateTime fromRfidTime,
+            final DateTime untilRfidTime) {
+
+        WebResource resource = resource("/epc/v2/stock.list").queryParam("location", locationId);
+
+        if (fromRfidTime != null) {
+            resource = resource.queryParam("from_event_time", fromRfidTime.toString());
+        }
+        if (untilRfidTime != null) {
+            resource = resource.queryParam("until_event_time", untilRfidTime.toString());
+        }
+
+        return get(resource, new GenericType<List<StockSummary>>() {
+        });
+    }
+
+    /**
      * The Capture Service captures one or more EPCIS events at a time. This does not imply any relationship between
      * these EPCIS events. Each element of the argument list is accepted if it is a valid EPCIS event or subtype that
      * conforms to the above EPCIS event types.
