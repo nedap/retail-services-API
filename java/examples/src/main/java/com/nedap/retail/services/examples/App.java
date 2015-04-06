@@ -15,13 +15,11 @@ import com.nedap.retail.messages.Client;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 /**
- * This tool can be used to test the !D Cloud ERP and Article APIs.
+ * This tool can be used to test the !D Cloud APIs.
  *
- * usage: java -jar erparticle.jar -clientid <CLIENTID> -secret <SECRET> [-url <url>]
+ * usage: java -jar examples.jar -clientid <CLIENTID> -secret <SECRET> [-url <url>]
  *
- * Exit codes:
- * 0: successfull.
- * 1: not successfull.
+ * Exit codes: 0: successfull. 1: not successfull.
  */
 public class App {
 
@@ -65,15 +63,12 @@ public class App {
 
     private static Options createCliOption() throws IllegalArgumentException {
         final Options options = new Options();
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("id")
-                .withDescription("OAuth 2.0 client ID")
+        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("id").withDescription("OAuth 2.0 client ID")
                 .create(OPTION_CLIENTID));
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("secret")
-                .withDescription("OAuth 2.0 secret")
+        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("secret").withDescription("OAuth 2.0 secret")
                 .create(OPTION_SECRET));
         options.addOption(OptionBuilder.hasArg().withArgName("url")
-                .withDescription("(Optional) Default is https://api.nedapretail.com")
-                .create(OPTION_URL));
+                .withDescription("(Optional) Default is https://api.nedapretail.com").create(OPTION_URL));
         return options;
     }
 
@@ -127,7 +122,7 @@ public class App {
 
     private void printMenu() {
         final StringBuilder sb = new StringBuilder();
-        final String newLine = System.getProperty("line.separator");
+        final String newLine = System.lineSeparator();
 
         sb.append(newLine + "*** Nedap Retail API examples ***");
         sb.append(newLine + "Choose example you want to run");

@@ -1,4 +1,5 @@
 package com.nedap.retail.messages;
+
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import org.slf4j.Logger;
@@ -28,8 +29,7 @@ public class AccessTokenResolver implements IAccessTokenResolver {
         logger.debug("getting OAuth 2.0 access token: {}", clientId);
 
         final Builder builder = httpClient.resource(url + "/login/oauth/token")
-                .queryParam("grant_type", "client_credentials")
-                .queryParam("client_id", clientId)
+                .queryParam("grant_type", "client_credentials").queryParam("client_id", clientId)
                 .queryParam("client_secret", secret).accept(APPLICATION_JSON);
 
         final OAuthResponse result = builder.post(OAuthResponse.class);

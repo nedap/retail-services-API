@@ -15,7 +15,10 @@ import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
+import com.nedap.retail.messages.epc.v2.stock.NotOnShelfRequest;
+import com.nedap.retail.messages.epc.v2.stock.NotOnShelfResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
 import com.nedap.retail.messages.organization.Location;
@@ -179,7 +182,7 @@ public class Client {
 
     /**
      * ERP API: delete stock for provided stock id
-     * 
+     *
      * @param id ID of stock
      * @return 204 status if delete is successful, this process is irreversible
      */
@@ -307,6 +310,33 @@ public class Client {
     }
 
     /**
+     * Captures RFID stock.
+     *
+     * @param stock RFID stock to capture
+     * @return Id of captured stock
+     */
+    public String captureRfidStock(final Stock stock) {
+        final WebResource resource = resource("/epc/v2/stock.capture");
+        final Map response = post(resource, Map.class, stock);
+        return (String) response.get("id");
+    }
+
+    /**
+     * Captures approved difference list.
+     *
+     * @param approvedDifferenceListCaptureRequest
+     * @return Id of the captured approved difference list
+     */
+    public String captureApprovedDifferenceList(
+            final ApprovedDifferenceListCaptureRequest approvedDifferenceListCaptureRequest) {
+
+        final WebResource resource = resource("/epc/v2/approved_difference_list.capture");
+
+        final Map response = post(resource, Map.class, approvedDifferenceListCaptureRequest);
+        return (String) response.get("id");
+    }
+
+    /**
      * Retrieve GTIN-based difference list for a single location. By default, only differences are returned and items
      * where there is no difference are omitted. When a difference list for multiple locations are required, this call
      * should be used repeatedly. How it works: Get ERP stock defined by erp_stock_id. Get RFID count at time.
@@ -391,7 +421,7 @@ public class Client {
 
     /**
      * Returns RFID Stock for location.
-     * 
+     *
      * @param locationId Location identifier
      * @param fromRfidTime Lower boundary for rfid stock time
      * @param untilRfidTime Upper boundary for rfid stock time
@@ -411,6 +441,17 @@ public class Client {
 
         return get(resource, new GenericType<List<StockSummary>>() {
         });
+    }
+
+    /**
+     * Lists all the items that are not-on-shelf for a certain store.
+     *
+     * @param request NotOnShelfRequest
+     * @return NotOnShelfResponse
+     */
+    public NotOnShelfResponse notOnShelf(final NotOnShelfRequest request) {
+        final WebResource resource = resource("/epc/v2/not_on_shelf").queryParam("location", request.location);
+        return get(resource, NotOnShelfResponse.class);
     }
 
     /**
