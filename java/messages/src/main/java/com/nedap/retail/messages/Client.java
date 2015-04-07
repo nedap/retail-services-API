@@ -4,6 +4,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.codehaus.jackson.jaxrs.Annotations;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
@@ -15,7 +16,10 @@ import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfRequest;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfResponse;
@@ -337,6 +341,19 @@ public class Client {
     }
 
     /**
+     * Returns approved difference list with a given id.
+     *
+     * @param approvedDifferenceListId Id of wanted approved difference list
+     * @return Wanted approved difference list
+     */
+    public ApprovedDifferenceListResponse getApprovedDifferenceList(final String approvedDifferenceListId) {
+        final WebResource resource = resource("/epc/v2/approved_difference_list.retrieve").queryParam("id",
+                approvedDifferenceListId);
+
+        return get(resource, ApprovedDifferenceListResponse.class);
+    }
+
+    /**
      * Retrieve GTIN-based difference list for a single location. By default, only differences are returned and items
      * where there is no difference are omitted. When a difference list for multiple locations are required, this call
      * should be used repeatedly. How it works: Get ERP stock defined by erp_stock_id. Get RFID count at time.
@@ -369,6 +386,59 @@ public class Client {
         }
 
         return get(resource, DifferenceListResponse.class);
+    }
+
+    /**
+     * Retrieves approved difference list using difference list ID as it is going to be exported.
+     *
+     * @param approvedDifferenceListId Id approved difference list
+     * @return Approved difference list for exporting with provided id
+     */
+    public ApprovedDifferenceListExportResponse approvedDifferenceListExport(final String approvedDifferenceListId) {
+        if (approvedDifferenceListId == null) {
+            throw new IllegalArgumentException("Approved difference list id is required");
+        }
+
+        final WebResource resource = resource("/epc/v2/approved_difference_list.export").queryParam("id",
+                approvedDifferenceListId);
+
+        return get(resource, ApprovedDifferenceListExportResponse.class);
+    }
+
+    /**
+     * Returns approved difference list summaries for location optional between counting times.
+     *
+     * @param organizationId Id of organization for approved difference list
+     * @param locationId Location identifier
+     * @param fromRfidTime Lower boundary for approved difference list time
+     * @param untilRfidTime Upper boundary for approved difference list time
+     * @return List of approved difference list summaries requested location
+     */
+    public List<ApprovedDifferenceListSummary> getApprovedDifferenceListSummaries(final String locationId,
+            final DateTime fromRfidTime, final DateTime untilRfidTime) {
+
+        WebResource resource = resource("/epc/v2/approved_difference_list.list").queryParam("location", locationId);
+
+        if (fromRfidTime != null) {
+            resource = resource.queryParam("from_rfid_time", fromRfidTime.toString());
+        }
+        if (untilRfidTime != null) {
+            resource = resource.queryParam("until_rfid_time", untilRfidTime.toString());
+        }
+
+        return get(resource, new GenericType<List<ApprovedDifferenceListSummary>>() {
+        });
+    }
+
+    /**
+     * Deletes approved difference list with provided id
+     *
+     * @param id Id of approved difference list for deletion
+     */
+    public void deleteApprovedDifferenceList(final UUID id) {
+        final WebResource resource = resource("/epc/v2/approved_difference_list.delete")
+                .queryParam("id", id.toString());
+        delete(resource);
     }
 
     /**

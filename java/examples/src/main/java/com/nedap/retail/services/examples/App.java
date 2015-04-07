@@ -25,10 +25,11 @@ public class App {
 
     private static final int EXIT_CODE_OK = 0;
     private static final int EXIT_CODE_ERROR = 1;
+    private static final String NEW_LINE = System.lineSeparator();
     private static final String OPTION_CLIENTID = "clientid";
     private static final String OPTION_SECRET = "secret";
     private static final String OPTION_URL = "url";
-    private static final String URL = "https://api.nedapretail.com";
+    private static final String URL = "https://api-test.nedapretail.com"; // "https://api.nedapretail.com";
     private final Client apiClient;
 
     public static void main(final String[] args) throws Exception {
@@ -44,7 +45,7 @@ public class App {
             final String secret = cmd.getOptionValue(OPTION_SECRET);
             final String url = cmd.getOptionValue(OPTION_URL, URL);
 
-            System.out.println("OAuth 2.0 client ID: " + clientId);
+            System.out.println(NEW_LINE + "OAuth 2.0 client ID: " + clientId);
             System.out.println("url: " + url);
 
             // Start app.
@@ -122,18 +123,17 @@ public class App {
 
     private void printMenu() {
         final StringBuilder sb = new StringBuilder();
-        final String newLine = System.lineSeparator();
 
-        sb.append(newLine + "*** Nedap Retail API examples ***");
-        sb.append(newLine + "Choose example you want to run");
-        sb.append(newLine + "1 : Article API");
-        sb.append(newLine + "2 : EPC API");
-        sb.append(newLine + "3 : Epcis API");
-        sb.append(newLine + "4 : ERP API");
-        sb.append(newLine + "5 : System API");
-        sb.append(newLine + "6 : Workflow API");
-        sb.append(newLine + "0 : Quit");
-        sb.append(newLine + "> ");
+        sb.append(NEW_LINE + "*** Nedap Retail API examples ***");
+        sb.append(NEW_LINE + "Choose example you want to run");
+        sb.append(NEW_LINE + "1 : Article API");
+        sb.append(NEW_LINE + "2 : EPC API");
+        sb.append(NEW_LINE + "3 : Epcis API");
+        sb.append(NEW_LINE + "4 : ERP API");
+        sb.append(NEW_LINE + "5 : System API");
+        sb.append(NEW_LINE + "6 : Workflow API");
+        sb.append(NEW_LINE + "0 : Quit");
+        sb.append(NEW_LINE);
 
         System.out.println(sb);
     }
