@@ -1,9 +1,9 @@
 package com.nedap.retail.services.examples;
 
 import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class EpcExample {
 
@@ -25,8 +25,8 @@ public class EpcExample {
             System.out.println(sg.toString());
             System.out.println("--- Done ---");
 
-        } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
+        } catch (final ClientException ex) {
+            System.err.println("Server responded with an error: " + ex.getMessage());
         }
     }
 }

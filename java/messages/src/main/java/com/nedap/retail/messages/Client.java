@@ -27,7 +27,6 @@ import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
 import com.nedap.retail.messages.users.User;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -139,8 +138,9 @@ public class Client {
      */
     public String captureErpStock(final Stock stock) {
         final WebResource resource = resource("/erp/v1/stock.capture");
-        final Map response = post(resource, Map.class, stock);
-        return (String) response.get("id");
+        final Map<String, String> response = post(resource, new GenericType<Map<String, String>>() {
+        }, stock);
+        return response.get("id");
     }
 
     /**
@@ -504,10 +504,9 @@ public class Client {
         try {
             final WebResource resource = resource("/users/1.0/get").queryParam("user_id", userId);
             return get(resource, User.class);
-        } catch (final UniformInterfaceException ex) {
+        } catch (final ClientException ex) {
             // Thrown when the status of the HTTP response is greater than or equal to 300.
-            final ClientResponse response = ex.getResponse();
-            if (response.getStatus() == 404) {
+            if (ex.getStatusCode() == 404) {
                 return null;
             } else {
                 throw ex;
@@ -533,41 +532,70 @@ public class Client {
         });
     }
 
-    protected static <T> T get(final WebResource resource, final Class<T> responseClass)
-            throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
+    protected static <T> T get(final WebResource resource, final Class<T> responseClass) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static <T> T get(final WebResource resource, final GenericType<T> responseClass)
-            throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
+    protected static <T> T get(final WebResource resource, final GenericType<T> responseClass) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static void post(final WebResource resource) throws UniformInterfaceException {
-        resource.accept(APPLICATION_JSON_TYPE).post();
+    protected static void post(final WebResource resource) {
+        try {
+            resource.accept(APPLICATION_JSON_TYPE).post();
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static <T> T post(final WebResource resource, final Class<T> responseClass)
-            throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).post(responseClass);
+    protected static <T> T post(final WebResource resource, final Class<T> responseClass) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).post(responseClass);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static void post(final WebResource resource, final Object requestEntity) throws UniformInterfaceException {
-        resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
+    protected static void post(final WebResource resource, final Object requestEntity) {
+        try {
+            resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
-            throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
+    protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE)
+                    .post(responseClass, requestEntity);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static void delete(final WebResource resource) throws UniformInterfaceException {
-        resource.accept(APPLICATION_JSON_TYPE).delete();
+    protected static <T> T post(final WebResource resource, final GenericType<T> responseClass,
+            final Object requestEntity) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE)
+                    .post(responseClass, requestEntity);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    public static String getErrorMessage(final ClientResponse response) {
-        final Map payload = response.getEntity(Map.class);
-        final String reason = (String) payload.get("reason");
-        return reason;
+    protected static void delete(final WebResource resource) {
+        try {
+            resource.accept(APPLICATION_JSON_TYPE).delete();
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 }

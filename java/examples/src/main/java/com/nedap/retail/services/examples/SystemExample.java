@@ -3,10 +3,10 @@ package com.nedap.retail.services.examples;
 import java.util.List;
 
 import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.metrics.DetailedStatus;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class SystemExample {
     public static void runExample(final Client client) {
@@ -25,8 +25,8 @@ public class SystemExample {
             System.out.println("Got " + statuses.size() + " systems");
             printStatuses(statuses);
 
-        } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
+        } catch (final ClientException ex) {
+            System.err.println("Server responded with an error: " + ex.getMessage());
         }
     }
 

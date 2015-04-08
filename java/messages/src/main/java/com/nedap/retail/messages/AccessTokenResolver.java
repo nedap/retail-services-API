@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource.Builder;
 
 public class AccessTokenResolver implements IAccessTokenResolver {
@@ -32,8 +33,12 @@ public class AccessTokenResolver implements IAccessTokenResolver {
                 .queryParam("client_id", clientId)
                 .queryParam("client_secret", secret).accept(APPLICATION_JSON);
 
-        final OAuthResponse result = builder.post(OAuthResponse.class);
-        logger.debug("successful. access token: {}", result.getAccess_token());
-        return result.getAccess_token();
+        try {
+            final OAuthResponse result = builder.post(OAuthResponse.class);
+            logger.debug("successful. access token: {}", result.getAccess_token());
+            return result.getAccess_token();
+        } catch (final UniformInterfaceException uniformInterfaceException) {
+            throw new ClientException(uniformInterfaceException);
+        }
     }
 }
