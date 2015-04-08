@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Barcode;
 import com.nedap.retail.messages.article.Price;
 import com.nedap.retail.messages.article.Size;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class ArticleExample {
     public static void runExample(final Client client) {
@@ -31,8 +31,8 @@ public class ArticleExample {
             System.out.println("Article quantity = " + quantity);
             System.out.println("--- Done ---");
 
-        } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
+        } catch (final ClientException ex) {
+            System.err.println("Server responded with an error: " + ex.getMessage());
         }
     }
 

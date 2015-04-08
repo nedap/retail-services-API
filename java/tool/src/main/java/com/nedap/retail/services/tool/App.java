@@ -1,15 +1,23 @@
 package com.nedap.retail.services.tool;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Scanner;
+
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.metrics.Status;
 import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
-import org.apache.commons.cli.*;
 
 /**
  * This tool can be used to test the Nedap Retail API.
@@ -33,7 +41,7 @@ public class App {
     private final Client apiClient;
     private final WebServer webServer;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
         final Options options = createCliOption();
         try {
@@ -119,8 +127,8 @@ public class App {
                     } else if (cmd.equals("?")) {
                         printMenu();
                     }
-                } catch (final UniformInterfaceException ex) {
-                    System.out.println(ex.getResponse().toString());
+                } catch (final ClientException ex) {
+                    System.err.println(ex.getMessage());
                 }
             }
         } finally {
