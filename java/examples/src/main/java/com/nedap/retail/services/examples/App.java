@@ -128,7 +128,7 @@ public class App {
         sb.append(NEW_LINE + "Choose example you want to run");
         sb.append(NEW_LINE + "1 : Article API");
         sb.append(NEW_LINE + "2 : EPC API");
-        sb.append(NEW_LINE + "3 : Epcis API");
+        sb.append(NEW_LINE + "3 : EPCIS API");
         sb.append(NEW_LINE + "4 : ERP API");
         sb.append(NEW_LINE + "5 : System API");
         sb.append(NEW_LINE + "6 : Workflow API");

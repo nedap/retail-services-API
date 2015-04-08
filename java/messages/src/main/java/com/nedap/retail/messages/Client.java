@@ -18,13 +18,16 @@ import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListExportStatusUpdateRequest;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfRequest;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
+import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
+import com.nedap.retail.messages.epcis.v2.EpcisQueryParameters;
 import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
@@ -33,6 +36,7 @@ import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
 import com.nedap.retail.messages.users.User;
+import com.nedap.retail.messages.workflow.QueryRequest;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
@@ -222,7 +226,6 @@ public class Client {
         for (final String gtin : gtins) {
             resource = resource.queryParam("gtins[]", gtin);
         }
-
         if (fields != null) {
             for (final String field : fields) {
                 resource = resource.queryParam("fields[]", field);
@@ -250,7 +253,6 @@ public class Client {
         for (final String barcode : barcodes) {
             resource = resource.queryParam("barcodes[]", barcode);
         }
-
         if (fields != null) {
             for (final String field : fields) {
                 resource = resource.queryParam("fields[]", field);
@@ -376,11 +378,9 @@ public class Client {
         if (rfidTime != null) {
             resource = resource.queryParam("time", rfidTime.toString());
         }
-
         if (onlyDifferences != null) {
             resource = resource.queryParam("only_differences", onlyDifferences.toString());
         }
-
         if (includeArticles != null) {
             resource = resource.queryParam("include_articles", includeArticles.toString());
         }
@@ -431,6 +431,31 @@ public class Client {
     }
 
     /**
+     * Returns summary of approved difference list for location and RFID time.
+     *
+     * @param locationId The location for status of approved difference list
+     * @param rfidTime Rfid time of approved difference list for status information
+     * @return list of approved difference list summary resources
+     */
+    public ApprovedDifferenceListSummary getApprovedDifferenceListStatus(final String locationId, final String rfidTime) {
+
+        final WebResource resource = resource("/epc/v2/approved_difference_list.status").queryParam("location",
+                locationId).queryParam("rfid_time", rfidTime);
+
+        return get(resource, ApprovedDifferenceListSummary.class);
+    }
+
+    /**
+     * Updates status of approved difference list.
+     *
+     * @param request Approved difference list export status update request with list's id and new export status
+     */
+    public void approvedDifferenceListUpdateExportStatus(final ApprovedDifferenceListExportStatusUpdateRequest request) {
+        final WebResource resource = resource("/epc/v2/approved_difference_list.export_status");
+        post(resource, request);
+    }
+
+    /**
      * Deletes approved difference list with provided id
      *
      * @param id Id of approved difference list for deletion
@@ -471,17 +496,14 @@ public class Client {
                 resource = resource.queryParam("gtins[]", gtin);
             }
         }
-
         if (dispositions != null) {
             for (final String disposition : dispositions) {
                 resource = resource.queryParam("dispositions[]", disposition);
             }
         }
-
         if (time != null) {
             resource = resource.queryParam("time", time.toString());
         }
-
         if (includeArticles != null) {
             resource = resource.queryParam("include_articles", includeArticles.toString());
         }
@@ -537,6 +559,19 @@ public class Client {
     }
 
     /**
+     * Return a list of EPCIS events with given parameters.
+     *
+     * @param request Epcis query parameters
+     * @return List of EPCIS events which satisfies query parameters
+     */
+    public List<EpcisEvent> queryEpcisEvents(final EpcisQueryParameters request) {
+        final WebResource resource = resource("/epcis/v2/query");
+        final List<EpcisEvent> events = post(resource, new GenericType<List<EpcisEvent>>() {
+        }, request);
+        return events;
+    }
+
+    /**
      * Stores the workflow event.
      *
      * @param workflow Workflow event object.
@@ -544,6 +579,32 @@ public class Client {
     public void captureWorkflow(final WorkflowEvent workflow) {
         final WebResource resource = resource("/workflow/v2/capture");
         post(resource, workflow);
+    }
+
+    /**
+     * Returns a list od Workflow events with required parameters.
+     *
+     * @param request Query request with parameters
+     * @return List of Workflow events matching required parameters
+     */
+    public List<WorkflowEvent> queryWorkflow(final QueryRequest request) {
+        WebResource resource = resource("/workflow/v2/query");
+
+        if (request.getLocation() != null) {
+            resource = resource.queryParam("location", request.getLocation());
+        }
+        if (request.getType() != null) {
+            resource = resource.queryParam("type", request.getType());
+        }
+        if (request.getFrom() != null) {
+            resource = resource.queryParam("from_event_time", request.getFrom().toString());
+        }
+        if (request.getTo() != null) {
+            resource = resource.queryParam("until_event_time", request.getTo().toString());
+        }
+
+        return get(resource, new GenericType<List<WorkflowEvent>>() {
+        });
     }
 
     /**
@@ -669,6 +730,11 @@ public class Client {
 
     protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
             throws UniformInterfaceException {
+        return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
+    }
+
+    protected static <T> T post(final WebResource resource, final GenericType<T> responseClass,
+            final Object requestEntity) throws UniformInterfaceException {
         return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
     }
 
