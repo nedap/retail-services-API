@@ -31,7 +31,7 @@ public class ClientExceptionTest {
 
         assertEquals(404, clientException.getStatusCode());
         assertEquals(ERROR_REASON, clientException.getErrorReason());
-        assertEquals(ERROR_MESSAGE_WITH_CLASS + " with payload:" + ERROR_REASON, clientException.getMessage());
+        assertEquals(ERROR_MESSAGE_WITH_CLASS + " with payload: " + ERROR_REASON, clientException.getMessage());
     }
 
     @Test

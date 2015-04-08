@@ -46,7 +46,7 @@ public class ClientException extends RuntimeException {
     public String getMessage() {
         String errorMessage = super.getMessage();
         if (StringUtils.isNotBlank(this.getErrorReason())) {
-            errorMessage += " with payload:" + this.getErrorReason();
+            errorMessage += " with payload: " + this.getErrorReason();
         }
         return errorMessage;
     }
