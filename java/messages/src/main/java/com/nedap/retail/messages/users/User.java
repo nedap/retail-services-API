@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User implements Serializable {
 
+    private static final long serialVersionUID = -8964914993773388184L;
+
     private String id;
     private String displayName;
     private String gender;

@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Organization implements Serializable {
 
+    private static final long serialVersionUID = -646278093791631036L;
+
     public static enum Type {
 
         ORGANIZATION, BUSINESS_PARTNER
