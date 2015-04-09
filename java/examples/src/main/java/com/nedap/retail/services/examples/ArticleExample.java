@@ -25,13 +25,13 @@ public class ArticleExample {
         System.out.println(NEW_LINE + "*** Article API example ***");
 
         try {
-            // Send articles
+            // Create or replace articles
             System.out.println(NEW_LINE + "Uploading articles...");
             final List<Article> exampleArticles = Arrays.asList(createExampleArticle());
             client.captureArticles(exampleArticles);
             System.out.println(printCapturedArticles(exampleArticles));
 
-            // Get quantity
+            // Article quantity
             System.out.println(NEW_LINE + "Retrieving article quantity...");
             final Long quantity = client.articleQuantity();
             System.out.println("Article quantity = " + quantity);
@@ -50,7 +50,7 @@ public class ArticleExample {
             final List<Article> articlesWithBarcodes = client.articleDetailsByBarcodes(barcodes, fields);
             System.out.println(printRetrievedArticlesByBarcodes(articlesWithBarcodes, barcodes));
 
-            // Retrieve articles with name and prices fields
+            // Retrieve articles with gtin and name fields
             System.out.println(NEW_LINE + "Retrieving up to 50 articles with gtins and names...");
             fields.add("gtin");
             final List<Article> articles = client.retrieveArticles(null, 0, 50, fields);

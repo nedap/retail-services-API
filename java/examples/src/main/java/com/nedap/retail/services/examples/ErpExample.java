@@ -3,6 +3,7 @@ package com.nedap.retail.services.examples;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.Client;
@@ -28,8 +29,8 @@ public class ErpExample {
         try {
             // Capture ERP stock
             System.out.println(NEW_LINE + "Capturing ERP stock...");
-            final Stock stock = createErpStock(location);
-            final String stockId = client.captureErpStock(stock);
+            final Stock erpStock = createErpStock(location);
+            final String stockId = client.captureErpStock(erpStock);
             System.out.println("Captured ERP stock id: " + stockId);
 
             // Retrieve ERP stock
@@ -37,12 +38,13 @@ public class ErpExample {
             final Stock retrievedStock = client.retrieveErpStock(stockId);
             System.out.println(printStock(retrievedStock));
 
-            // Request stock status
-            System.out.println(NEW_LINE + "Getting stock status...");
+            // Get ERP stock summary status
+            System.out.println(NEW_LINE + "Getting ERP stock status...");
             final StockSummary summary = client.getErpStockStatus(stockId);
-            System.out.println(summary);
+            final Stock stock = castStockSummaryToStock(summary);
+            System.out.println(printStock(stock));
 
-            // Request stock list
+            // Get ERP stock summary list
             System.out.println("Retrieving list of available stocks...");
             final List<StockSummary> availableStocks = client.getErpStockList(location);
             System.out.println("Got " + availableStocks.size() + " stocks:");
@@ -73,11 +75,14 @@ public class ErpExample {
         sb.append(NEW_LINE + TAB + "Location: " + stock.location);
         sb.append(NEW_LINE + TAB + "Event time: " + stock.eventTime);
         sb.append(NEW_LINE + TAB + "External reference: " + stock.externRef);
+        sb.append(NEW_LINE + TAB + "Status: " + stock.status);
         sb.append(NEW_LINE + TAB + "Quantity: " + stock.quantity);
         sb.append(NEW_LINE + TAB + "Gtin quantity: " + stock.gtinQuantity);
         sb.append(NEW_LINE + TAB + "In use: " + stock.inUse);
         sb.append(NEW_LINE + TAB + "Quantity list:");
-        sb.append(printQuantityList(stock.quantityList));
+        if (!CollectionUtils.isEmpty(stock.quantityList)) {
+            sb.append(printQuantityList(stock.quantityList));
+        }
         return sb.toString();
     }
 
@@ -87,5 +92,14 @@ public class ErpExample {
             sb.append(NEW_LINE + DOUBLE_TAB + gtinQuantity.gtin + " " + gtinQuantity.quantity);
         }
         return sb.toString();
+    }
+
+    private static Stock castStockSummaryToStock(final StockSummary summary) {
+        final Stock stock = new Stock();
+        stock.id = summary.id;
+        stock.location = summary.location;
+        stock.eventTime = summary.eventTime;
+
+        return stock;
     }
 }

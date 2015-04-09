@@ -41,7 +41,7 @@ public class WorkflowExample {
             client.captureEpcisEvents(epcisEventsContainer);
             System.out.println(printCaptureEpcisEvents(epcisEventsContainer));
 
-            // Capture workflow
+            // Workflow capture
             System.out.println(NEW_LINE + "Capturing workflow event...");
             final WorkflowEvent workflow = makeWorkflowEvent(location, epcisEventsContainer);
             client.captureWorkflow(workflow);

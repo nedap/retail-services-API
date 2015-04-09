@@ -58,7 +58,7 @@ public class EpcExample {
             final String rfidStockId = client.captureRfidStock(createRfidStock(location));
             System.out.println("Created RFID stock with id: " + rfidStockId);
 
-            // Get stock gtin
+            // Stock (GTIN based)
             System.out.println(NEW_LINE + "Retrieving stock gtin...");
             final StockResponse stockResponse = client.stockGtin(location, null, null, null, null);
             System.out.println(printStockResponse(stockResponse));
@@ -68,7 +68,7 @@ public class EpcExample {
             // final NotOnShelfResponse notOnShelfResponse = client.notOnShelf(new NotOnShelfRequest(location, false));
             // System.out.println(printNotOnShelfResponse(notOnShelfResponse));
 
-            // Retrieve difference list
+            // Difference list
             System.out.println(NEW_LINE + "Retrieving difference list...");
             final DifferenceListResponse differenceList = client.differenceList(erpStockId, EVENT_TIME, null, null);
             System.out.println(printDifferenceList(differenceList));
@@ -97,7 +97,7 @@ public class EpcExample {
                     .getApprovedDifferenceListSummaries(location, null, null);
             System.out.println(printListOfApprovedDifferenceListSummaries(approvedDifferenceListSummaries, location));
 
-            // Status of approvef difference list
+            // Status of approved difference list
             System.out.println(NEW_LINE + "Retrieving status of approved difference list...");
             final ApprovedDifferenceListSummary approvedDifferenceListStatus = client.getApprovedDifferenceListStatus(
                     location, EVENT_TIME.toString());
