@@ -15,6 +15,8 @@ import com.nedap.retail.messages.metrics.Status;
 @JsonInclude(Include.NON_NULL)
 public class SystemStatusPayload implements Serializable {
 
+    private static final long serialVersionUID = -1153550835709974759L;
+
     private String systemId;
     private String firmwareVersion;
     private Status status;

@@ -13,6 +13,10 @@
     <name>Tool</name>
     <description>This tool is used to test the Nedap Retail System API and Push API.</description>
 
+    <properties>
+        <jsersey-version>1.6</jsersey-version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.nedap.retail.services</groupId>
@@ -27,6 +31,16 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
+            <version>${jsersey-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>${jsersey-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
             <version>${jsersey-version}</version>
         </dependency>
     </dependencies>

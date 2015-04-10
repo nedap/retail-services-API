@@ -1,9 +1,9 @@
 package com.nedap.retail.messages;
 
-import org.apache.commons.lang.StringUtils;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import org.apache.commons.lang.StringUtils;
 
 public class ClientException extends RuntimeException {
 
@@ -19,16 +19,16 @@ public class ClientException extends RuntimeException {
         this.errorReason = errorReason;
     }
 
-    public ClientException(final UniformInterfaceException uniformInterfaceException) {
-        super(uniformInterfaceException);
-        final ClientResponse response = uniformInterfaceException.getResponse();
+    public ClientException(final WebApplicationException webApplicationException) {
+        super(webApplicationException);
+        final Response response = webApplicationException.getResponse();
         statusCode = response.getStatus();
         errorReason = extractErrorReason(response);
     }
 
-    private String extractErrorReason(final ClientResponse response) {
+    private String extractErrorReason(final Response response) {
         try {
-            return response.getEntity(String.class);
+            return response.readEntity(String.class);
         } catch (final Exception ex) {
             return null;
         }

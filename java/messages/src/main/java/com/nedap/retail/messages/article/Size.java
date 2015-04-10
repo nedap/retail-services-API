@@ -10,6 +10,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Size implements Serializable {
+
+    private static final long serialVersionUID = -1475858032925556829L;
+
     private String description;
     private String region;
 
