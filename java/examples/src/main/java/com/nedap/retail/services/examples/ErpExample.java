@@ -25,12 +25,12 @@ public class ErpExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** ERP API example ***");
 
-        final String location = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).getId();
 
         try {
             // Capture ERP stock
             System.out.println(NEW_LINE + "Capturing ERP stock...");
-            final Stock erpStock = createErpStock(location);
+            final Stock erpStock = createErpStock(locationId);
             final String stockId = client.captureErpStock(erpStock);
             System.out.println("Captured ERP stock id: " + stockId);
 
@@ -47,7 +47,7 @@ public class ErpExample {
 
             // Get ERP stock summary list
             System.out.println(NEW_LINE + "Retrieving ERP stock summary list...");
-            final List<StockSummary> stocks = client.getErpStockList(makeStockSummaryListRequest(location));
+            final List<StockSummary> stocks = client.getErpStockList(makeStockSummaryListRequest(locationId));
             System.out.println(printStockSummaryList(stocks));
 
             System.out.println(NEW_LINE + "--- ERP API example finished ---");

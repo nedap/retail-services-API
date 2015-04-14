@@ -1,15 +1,20 @@
 package com.nedap.retail.messages;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.codehaus.jackson.jaxrs.Annotations;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,63 +43,54 @@ import com.nedap.retail.messages.system.SystemStatusPayload;
 import com.nedap.retail.messages.users.User;
 import com.nedap.retail.messages.workflow.QueryRequest;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 /**
  * Nedap Retail Services Client.
  */
 public class Client {
 
-    private static final Logger logger = LoggerFactory.getLogger(Client.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
     private final String url;
-    private final com.sun.jersey.api.client.Client httpClient;
-    private static ObjectMapper mapper;
+    private final javax.ws.rs.client.Client httpClient;
 
     public Client(final String url, final String clientId, final String secret) {
         this.url = url;
         this.httpClient = initHttpClient();
         final AccessTokenResolver accessTokenResolver = new AccessTokenResolver(url, clientId, secret, httpClient);
-        this.httpClient.addFilter(new AuthorizationClientFilter(accessTokenResolver));
+        this.httpClient.register(new AuthorizationClientFilter(accessTokenResolver));
     }
 
     public Client(final String url, final IAccessTokenResolver accessTokenResolver) {
         this.url = url;
         this.httpClient = initHttpClient();
-        this.httpClient.addFilter(new AuthorizationClientFilter(accessTokenResolver));
+        this.httpClient.register(new AuthorizationClientFilter(accessTokenResolver));
     }
 
-    protected com.sun.jersey.api.client.Client initHttpClient() {
-        mapper = new ObjectMapper().configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
-        // Jackson's MessageBodyReader implementation appears to be more well-behaved than the Jersey JSON one.
-        // And also this provider uses our own configured object-mapper.
-        final JacksonJsonProvider provider = new JacksonJsonProvider(Annotations.JACKSON);
-        provider.setMapper(mapper);
-
-        final DefaultClientConfig config = new DefaultClientConfig();
-        config.getSingletons().add(provider);
+    protected javax.ws.rs.client.Client initHttpClient() {
+        final ClientConfig clientConfig = new ClientConfig();
+        clientConfig.register(new IdcloudObjectMapperProvider());
+        clientConfig.register(new JacksonFeature());
 
         // Creating an instance of a Client is an expensive operation, so try to avoid creating an unnecessary
         // number of client instances. A good approach is to reuse an existing instance, when possible.
-        final com.sun.jersey.api.client.Client client = com.sun.jersey.api.client.Client.create(config);
-        client.setFollowRedirects(false);
-        client.setConnectTimeout(10000);
-        client.setReadTimeout(60000);
+        final javax.ws.rs.client.Client client = ClientBuilder.newClient(clientConfig);
+        client.property(ClientProperties.CONNECT_TIMEOUT, 10000);
+        client.property(ClientProperties.READ_TIMEOUT, 60000);
+        client.property(ClientProperties.FOLLOW_REDIRECTS, false);
+
         return client;
     }
 
     public void destroy() {
-        httpClient.destroy();
+        httpClient.close();
     }
 
     /**
      * System API: list
      */
     public List<SystemListPayload> getSystemList() {
-        final WebResource resource = resource("/system/v1/list");
-        return get(resource, new GenericType<List<SystemListPayload>>() {
+        final WebTarget target = target("/system/v1/list");
+        return get(target, new GenericType<List<SystemListPayload>>() {
         });
     }
 
@@ -102,8 +98,8 @@ public class Client {
      * System API: status
      */
     public List<SystemStatusPayload> getSystemStatus() {
-        final WebResource resource = resource("/system/v1/status");
-        return get(resource, new GenericType<List<SystemStatusPayload>>() {
+        final WebTarget target = target("/system/v1/status");
+        return get(target, new GenericType<List<SystemStatusPayload>>() {
         });
     }
 
@@ -115,8 +111,8 @@ public class Client {
      * @return List of fimware versions available for upgrade.
      */
     public List<String> getFirmwareList(final String systemId) {
-        final WebResource resource = resource("/system/v1/firmware_versions").queryParam("system_id", systemId);
-        return get(resource, new GenericType<List<String>>() {
+        final WebTarget target = target("/system/v1/firmware_versions").queryParam("system_id", systemId);
+        return get(target, new GenericType<List<String>>() {
         });
     }
 
@@ -136,9 +132,9 @@ public class Client {
      * @param firmwareVersion Requested firmware version to upgrade to.
      */
     public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) {
-        final WebResource resource = resource("/system/v1/update").queryParam("system_id", systemId).queryParam(
+        final WebTarget target = target("/system/v1/update").queryParam("system_id", systemId).queryParam(
                 "firmware_version", firmwareVersion);
-        post(resource);
+        post(target);
     }
 
     /**
@@ -148,8 +144,8 @@ public class Client {
      * @return ID of processed stock
      */
     public String captureErpStock(final Stock stock) {
-        final WebResource resource = resource("/erp/v1/stock.capture");
-        final Map<String, String> response = post(resource, new GenericType<Map<String, String>>() {
+        final WebTarget target = target("/erp/v1/stock.capture");
+        final Map<String, String> response = post(target, new GenericType<Map<String, String>>() {
         }, stock);
         return response.get("id");
     }
@@ -161,8 +157,8 @@ public class Client {
      * @return The requested stock
      */
     public Stock retrieveErpStock(final String id) {
-        final WebResource resource = resource("/erp/v1/stock.retrieve").queryParam("id", id);
-        return get(resource, Stock.class);
+        final WebTarget target = target("/erp/v1/stock.retrieve").queryParam("id", id);
+        return get(target, Stock.class);
     }
 
     /**
@@ -172,8 +168,8 @@ public class Client {
      * @return Summary of the requested stock
      */
     public StockSummary getErpStockStatus(final String id) {
-        final WebResource resource = resource("/erp/v1/stock.status").queryParam("id", id);
-        return get(resource, StockSummary.class);
+        final WebTarget target = target("/erp/v1/stock.status").queryParam("id", id);
+        return get(target, StockSummary.class);
     }
 
     /**
@@ -183,16 +179,16 @@ public class Client {
      * @return List of summaries per stock available for the specified location
      */
     public List<StockSummary> getErpStockList(final StockSummaryListRequest request) {
-        WebResource resource = resource("/erp/v1/stock.list").queryParam("location", request.location);
+        WebTarget target = target("/erp/v1/stock.list").queryParam("location", request.location);
 
         if (request.fromEventTime != null) {
-            resource = resource.queryParam("from_event_time", request.fromEventTime.toString());
+            target = target.queryParam("from_event_time", request.fromEventTime.toString());
         }
         if (request.untilEventTime != null) {
-            resource = resource.queryParam("until_event_time", request.untilEventTime.toString());
+            target = target.queryParam("until_event_time", request.untilEventTime.toString());
         }
 
-        return get(resource, new GenericType<List<StockSummary>>() {
+        return get(target, new GenericType<List<StockSummary>>() {
         });
     }
 
@@ -203,8 +199,8 @@ public class Client {
      * @return 204 status if delete is successful, this process is irreversible
      */
     public void deleteErpStock(final String id) {
-        final WebResource resource = resource("/erp/v1/stock.delete").queryParam("id", id);
-        delete(resource);
+        final WebTarget target = target("/erp/v1/stock.delete").queryParam("id", id);
+        delete(target);
     }
 
     /**
@@ -213,8 +209,8 @@ public class Client {
      * @return Total number of articles.
      */
     public Long articleQuantity() {
-        final WebResource resource = resource("/article/v2/quantity");
-        final Map<String, Long> response = get(resource, new GenericType<Map<String, Long>>() {
+        final WebTarget target = target("/article/v2/quantity");
+        final Map<String, Long> response = get(target, new GenericType<Map<String, Long>>() {
         });
         return response.get("quantity");
     }
@@ -229,18 +225,18 @@ public class Client {
      * @return List of articles retrieved.
      */
     public List<Article> articleDetailsByGtins(final List<String> gtins, final List<String> fields) {
-        WebResource resource = resource("/article/v2/retrieve");
+        WebTarget target = target("/article/v2/retrieve");
 
         for (final String gtin : gtins) {
-            resource = resource.queryParam("gtins[]", gtin);
+            target = target.queryParam("gtins[]", gtin);
         }
         if (fields != null) {
             for (final String field : fields) {
-                resource = resource.queryParam("fields[]", field);
+                target = target.queryParam("fields[]", field);
             }
         }
 
-        return get(resource, new GenericType<List<Article>>() {
+        return get(target, new GenericType<List<Article>>() {
         });
     }
 
@@ -256,18 +252,18 @@ public class Client {
      * @return List of articles retrieved.
      */
     public List<Article> articleDetailsByBarcodes(final List<String> barcodes, final List<String> fields) {
-        WebResource resource = resource("/article/v2/retrieve");
+        WebTarget target = target("/article/v2/retrieve");
 
         for (final String barcode : barcodes) {
-            resource = resource.queryParam("barcodes[]", barcode);
+            target = target.queryParam("barcodes[]", barcode);
         }
         if (fields != null) {
             for (final String field : fields) {
-                resource = resource.queryParam("fields[]", field);
+                target = target.queryParam("fields[]", field);
             }
         }
 
-        return get(resource, new GenericType<List<Article>>() {
+        return get(target, new GenericType<List<Article>>() {
         });
     }
 
@@ -285,22 +281,22 @@ public class Client {
      */
     public List<Article> retrieveArticles(final DateTime updatedAfter, final int skip, final int count,
             final List<String> fields) {
-        WebResource resource = resource("/article/v2/retrieve");
+        WebTarget target = target("/article/v2/retrieve");
 
         if (updatedAfter != null) {
-            resource = resource.queryParam("updated_after", updatedAfter.toString());
+            target = target.queryParam("updated_after", updatedAfter.toString());
         }
 
-        resource = resource.queryParam("skip", String.valueOf(skip));
-        resource = resource.queryParam("count", String.valueOf(count));
+        target = target.queryParam("skip", String.valueOf(skip));
+        target = target.queryParam("count", String.valueOf(count));
 
         if (fields != null) {
             for (final String field : fields) {
-                resource = resource.queryParam("fields[]", field);
+                target = target.queryParam("fields[]", field);
             }
         }
 
-        return get(resource, new GenericType<List<Article>>() {
+        return get(target, new GenericType<List<Article>>() {
         });
     }
 
@@ -310,8 +306,8 @@ public class Client {
      * @param articles Articles to update or add.
      */
     public void captureArticles(final List<Article> articles) {
-        final WebResource resource = resource("/article/v2/create_or_replace");
-        post(resource, new Articles(articles));
+        final WebTarget target = target("/article/v2/create_or_replace");
+        post(target, new Articles(articles));
     }
 
     /**
@@ -319,8 +315,8 @@ public class Client {
      * this process is irreversible.
      */
     public void articleDelete() {
-        final WebResource resource = resource("/article/v2/delete");
-        delete(resource);
+        final WebTarget target = target("/article/v2/delete");
+        delete(target);
     }
 
     /**
@@ -330,8 +326,8 @@ public class Client {
      * @return Id of captured stock
      */
     public String captureRfidStock(final Stock stock) {
-        final WebResource resource = resource("/epc/v2/stock.capture");
-        final Map<String, String> response = post(resource, new GenericType<Map<String, String>>() {
+        final WebTarget target = target("/epc/v2/stock.capture");
+        final Map<String, String> response = post(target, new GenericType<Map<String, String>>() {
         }, stock);
         return response.get("id");
     }
@@ -345,9 +341,9 @@ public class Client {
     public String captureApprovedDifferenceList(
             final ApprovedDifferenceListCaptureRequest approvedDifferenceListCaptureRequest) {
 
-        final WebResource resource = resource("/epc/v2/approved_difference_list.capture");
+        final WebTarget target = target("/epc/v2/approved_difference_list.capture");
 
-        final Map<String, String> response = post(resource, new GenericType<Map<String, String>>() {
+        final Map<String, String> response = post(target, new GenericType<Map<String, String>>() {
         }, approvedDifferenceListCaptureRequest);
         return response.get("id");
     }
@@ -359,10 +355,10 @@ public class Client {
      * @return Wanted approved difference list
      */
     public ApprovedDifferenceListResponse getApprovedDifferenceList(final String approvedDifferenceListId) {
-        final WebResource resource = resource("/epc/v2/approved_difference_list.retrieve").queryParam("id",
+        final WebTarget target = target("/epc/v2/approved_difference_list.retrieve").queryParam("id",
                 approvedDifferenceListId);
 
-        return get(resource, ApprovedDifferenceListResponse.class);
+        return get(target, ApprovedDifferenceListResponse.class);
     }
 
     /**
@@ -383,19 +379,19 @@ public class Client {
      */
     public DifferenceListResponse differenceList(final String erpStockId, final DateTime rfidTime,
             final Boolean onlyDifferences, final Boolean includeArticles) {
-        WebResource resource = resource("/epc/v2/difference_list").queryParam("erp_stock_id", erpStockId);
+        WebTarget target = target("/epc/v2/difference_list").queryParam("erp_stock_id", erpStockId);
 
         if (rfidTime != null) {
-            resource = resource.queryParam("time", rfidTime.toString());
+            target = target.queryParam("time", rfidTime.toString());
         }
         if (onlyDifferences != null) {
-            resource = resource.queryParam("only_differences", onlyDifferences.toString());
+            target = target.queryParam("only_differences", onlyDifferences.toString());
         }
         if (includeArticles != null) {
-            resource = resource.queryParam("include_articles", includeArticles.toString());
+            target = target.queryParam("include_articles", includeArticles.toString());
         }
 
-        return get(resource, DifferenceListResponse.class);
+        return get(target, DifferenceListResponse.class);
     }
 
     /**
@@ -409,10 +405,10 @@ public class Client {
             throw new IllegalArgumentException("Approved difference list id is required");
         }
 
-        final WebResource resource = resource("/epc/v2/approved_difference_list.export").queryParam("id",
+        final WebTarget target = target("/epc/v2/approved_difference_list.export").queryParam("id",
                 approvedDifferenceListId);
 
-        return get(resource, ApprovedDifferenceListExportResponse.class);
+        return get(target, ApprovedDifferenceListExportResponse.class);
     }
 
     /**
@@ -427,16 +423,16 @@ public class Client {
     public List<ApprovedDifferenceListSummary> getApprovedDifferenceListSummaries(final String locationId,
             final DateTime fromRfidTime, final DateTime untilRfidTime) {
 
-        WebResource resource = resource("/epc/v2/approved_difference_list.list").queryParam("location", locationId);
+        WebTarget target = target("/epc/v2/approved_difference_list.list").queryParam("location", locationId);
 
         if (fromRfidTime != null) {
-            resource = resource.queryParam("from_rfid_time", fromRfidTime.toString());
+            target = target.queryParam("from_rfid_time", fromRfidTime.toString());
         }
         if (untilRfidTime != null) {
-            resource = resource.queryParam("until_rfid_time", untilRfidTime.toString());
+            target = target.queryParam("until_rfid_time", untilRfidTime.toString());
         }
 
-        return get(resource, new GenericType<List<ApprovedDifferenceListSummary>>() {
+        return get(target, new GenericType<List<ApprovedDifferenceListSummary>>() {
         });
     }
 
@@ -449,10 +445,10 @@ public class Client {
      */
     public ApprovedDifferenceListSummary getApprovedDifferenceListStatus(final String locationId, final String rfidTime) {
 
-        final WebResource resource = resource("/epc/v2/approved_difference_list.status").queryParam("location",
-                locationId).queryParam("rfid_time", rfidTime);
+        final WebTarget target = target("/epc/v2/approved_difference_list.status").queryParam("location", locationId)
+                .queryParam("rfid_time", rfidTime);
 
-        return get(resource, ApprovedDifferenceListSummary.class);
+        return get(target, ApprovedDifferenceListSummary.class);
     }
 
     /**
@@ -461,9 +457,8 @@ public class Client {
      * @param id Id of approved difference list for deletion
      */
     public void deleteApprovedDifferenceList(final UUID id) {
-        final WebResource resource = resource("/epc/v2/approved_difference_list.delete")
-                .queryParam("id", id.toString());
-        delete(resource);
+        final WebTarget target = target("/epc/v2/approved_difference_list.delete").queryParam("id", id.toString());
+        delete(target);
     }
 
     /**
@@ -489,26 +484,26 @@ public class Client {
      */
     public StockResponse stockGtin(final String location, final List<String> gtins, final List<String> dispositions,
             final DateTime time, final Boolean includeArticles) {
-        WebResource resource = resource("/epc/v3/stock.gtin14").queryParam("location", location);
+        WebTarget target = target("/epc/v3/stock.gtin14").queryParam("location", location);
 
         if (gtins != null) {
             for (final String gtin : gtins) {
-                resource = resource.queryParam("gtins[]", gtin);
+                target = target.queryParam("gtins[]", gtin);
             }
         }
         if (dispositions != null) {
             for (final String disposition : dispositions) {
-                resource = resource.queryParam("dispositions[]", disposition);
+                target = target.queryParam("dispositions[]", disposition);
             }
         }
         if (time != null) {
-            resource = resource.queryParam("time", time.toString());
+            target = target.queryParam("time", time.toString());
         }
         if (includeArticles != null) {
-            resource = resource.queryParam("include_articles", includeArticles.toString());
+            target = target.queryParam("include_articles", includeArticles.toString());
         }
 
-        return get(resource, StockResponse.class);
+        return get(target, StockResponse.class);
     }
 
     /**
@@ -522,16 +517,16 @@ public class Client {
     public List<StockSummary> getRfidStockList(final String locationId, final DateTime fromRfidTime,
             final DateTime untilRfidTime) {
 
-        WebResource resource = resource("/epc/v2/stock.list").queryParam("location", locationId);
+        WebTarget target = target("/epc/v2/stock.list").queryParam("location", locationId);
 
         if (fromRfidTime != null) {
-            resource = resource.queryParam("from_event_time", fromRfidTime.toString());
+            target = target.queryParam("from_event_time", fromRfidTime.toString());
         }
         if (untilRfidTime != null) {
-            resource = resource.queryParam("until_event_time", untilRfidTime.toString());
+            target = target.queryParam("until_event_time", untilRfidTime.toString());
         }
 
-        return get(resource, new GenericType<List<StockSummary>>() {
+        return get(target, new GenericType<List<StockSummary>>() {
         });
     }
 
@@ -542,8 +537,8 @@ public class Client {
      * @return NotOnShelfResponse
      */
     public NotOnShelfResponse notOnShelf(final NotOnShelfRequest request) {
-        final WebResource resource = resource("/epc/v2/not_on_shelf").queryParam("location", request.location);
-        return get(resource, NotOnShelfResponse.class);
+        final WebTarget target = target("/epc/v2/not_on_shelf").queryParam("location", request.location);
+        return get(target, NotOnShelfResponse.class);
     }
 
     /**
@@ -554,8 +549,8 @@ public class Client {
      * @param events EPCIS events to capture
      */
     public void captureEpcisEvents(final EpcisEventContainer events) {
-        final WebResource resource = resource("/epcis/v2/capture");
-        post(resource, events);
+        final WebTarget target = target("/epcis/v2/capture");
+        post(target, events);
     }
 
     /**
@@ -565,8 +560,8 @@ public class Client {
      * @return List of EPCIS events which satisfies query parameters
      */
     public List<EpcisEvent> queryEpcisEvents(final EpcisQueryParameters request) {
-        final WebResource resource = resource("/epcis/v2/query");
-        final List<EpcisEvent> events = post(resource, new GenericType<List<EpcisEvent>>() {
+        final WebTarget target = target("/epcis/v2/query");
+        final List<EpcisEvent> events = post(target, new GenericType<List<EpcisEvent>>() {
         }, request);
         return events;
     }
@@ -577,8 +572,8 @@ public class Client {
      * @param workflow Workflow event object.
      */
     public void captureWorkflow(final WorkflowEvent workflow) {
-        final WebResource resource = resource("/workflow/v2/capture");
-        post(resource, workflow);
+        final WebTarget target = target("/workflow/v2/capture");
+        post(target, workflow);
     }
 
     /**
@@ -588,22 +583,22 @@ public class Client {
      * @return List of Workflow events matching required parameters
      */
     public List<WorkflowEvent> queryWorkflow(final QueryRequest request) {
-        WebResource resource = resource("/workflow/v2/query");
+        WebTarget target = target("/workflow/v2/query");
 
         if (request.getLocation() != null) {
-            resource = resource.queryParam("location", request.getLocation());
+            target = target.queryParam("location", request.getLocation());
         }
         if (request.getType() != null) {
-            resource = resource.queryParam("type", request.getType());
+            target = target.queryParam("type", request.getType());
         }
         if (request.getFrom() != null) {
-            resource = resource.queryParam("from_event_time", request.getFrom().toString());
+            target = target.queryParam("from_event_time", request.getFrom().toString());
         }
         if (request.getTo() != null) {
-            resource = resource.queryParam("until_event_time", request.getTo().toString());
+            target = target.queryParam("until_event_time", request.getTo().toString());
         }
 
-        return get(resource, new GenericType<List<WorkflowEvent>>() {
+        return get(target, new GenericType<List<WorkflowEvent>>() {
         });
     }
 
@@ -613,8 +608,19 @@ public class Client {
      * @return organizations.
      */
     public Organizations getOrganizations() {
-        final WebResource resource = resource("/organization/v1/retrieve");
-        return get(resource, Organizations.class);
+        final WebTarget target = target("/organization/v1/retrieve");
+        return get(target, Organizations.class);
+    }
+
+    /**
+     * Retrieves location by id.
+     *
+     * @param locationId Location identifier
+     * @return Location
+     */
+    public Location getLocation(final String locationId) {
+        final WebTarget target = target("/organization/v1/location").queryParam("id", locationId);
+        return get(target, Location.class);
     }
 
     /**
@@ -623,8 +629,8 @@ public class Client {
      * @return List of sites.
      */
     public List<Location> getSites() {
-        final WebResource resource = resource("/organization/v1/sites");
-        return getLocations(resource);
+        final WebTarget target = target("/organization/v1/sites");
+        return getLocations(target);
     }
 
     /**
@@ -634,34 +640,34 @@ public class Client {
      * @return List of sites.
      */
     public List<Location> getSites(final String storeCode) {
-        final WebResource resource = resource("/organization/v1/sites").queryParam("store_code", storeCode);
-        return getLocations(resource);
+        final WebTarget target = target("/organization/v1/sites").queryParam("store_code", storeCode);
+        return getLocations(target);
     }
 
     /**
      * Push API: subscribe.
      */
     public void subscribe(final String topic, final String callback, final String secret, final int lease_seconds) {
-        final WebResource resource = resource("/subscription/1.0/subscribe").queryParam("hub.topic", topic)
+        final WebTarget target = target("/subscription/1.0/subscribe").queryParam("hub.topic", topic)
                 .queryParam("hub.callback", callback).queryParam("hub.secret", secret)
                 .queryParam("hub.lease_seconds", "" + lease_seconds);
-        post(resource);
+        post(target);
     }
 
     /**
      * Push API: unsubscribe
      */
     public void unsubscribe(final String topic) {
-        final WebResource resource = resource("/subscription/1.0/unsubscribe").queryParam("hub.topic", topic);
-        post(resource);
+        final WebTarget target = target("/subscription/1.0/unsubscribe").queryParam("hub.topic", topic);
+        post(target);
     }
 
     /**
      * Push API: list
      */
     public List<Subscription> getSubscriptionList() {
-        final WebResource resource = resource("/subscription/1.0/list");
-        return get(resource, new GenericType<List<Subscription>>() {
+        final WebTarget target = target("/subscription/1.0/list");
+        return get(target, new GenericType<List<Subscription>>() {
         });
     }
 
@@ -674,8 +680,8 @@ public class Client {
      */
     public User getUser(final String userId) {
         try {
-            final WebResource resource = resource("/users/1.0/get").queryParam("user_id", userId);
-            return get(resource, User.class);
+            final WebTarget target = target("/users/1.0/get").queryParam("user_id", userId);
+            return get(target, User.class);
         } catch (final ClientException ex) {
             // Thrown when the status of the HTTP response is greater than or equal to 300.
             if (ex.getStatusCode() == 404) {
@@ -690,79 +696,89 @@ public class Client {
      * Heartbeat
      */
     public void heartbeat() {
-        final WebResource resource = resource("/device/1.0/heartbeat");
-        post(resource);
+        final WebTarget target = target("/device/1.0/heartbeat");
+        post(target);
     }
 
-    protected WebResource resource(final String uri) {
-        logger.debug("resource {}", uri);
-        return httpClient.resource(url + uri);
+    protected WebTarget target(final String uri) {
+        LOGGER.debug("target {}", uri);
+        return httpClient.target(url).path(uri);
     }
 
-    protected static List<Location> getLocations(final WebResource resource) {
-        return get(resource, new GenericType<List<Location>>() {
+    protected static List<Location> getLocations(final WebTarget target) {
+        return get(target, new GenericType<List<Location>>() {
         });
     }
 
-    protected static <T> T get(final WebResource resource, final Class<T> responseClass) {
+    protected static <T> T get(final WebTarget target, final Class<T> responseClass) {
         try {
-            return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
-        } catch (final UniformInterfaceException ex) {
-            throw new ClientException(ex);
+            return target.request(APPLICATION_JSON).get(responseClass);
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
         }
     }
 
-    protected static <T> T get(final WebResource resource, final GenericType<T> responseClass) {
+    protected static <T> T get(final WebTarget target, final GenericType<T> responseClass) {
         try {
-            return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
-        } catch (final UniformInterfaceException ex) {
-            throw new ClientException(ex);
+            return target.request(APPLICATION_JSON).get(responseClass);
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
         }
     }
 
-    protected static void post(final WebResource resource) {
+    protected static void post(final WebTarget target) {
         try {
-            resource.accept(APPLICATION_JSON_TYPE).post();
-        } catch (final UniformInterfaceException ex) {
-            throw new ClientException(ex);
+            target.request(APPLICATION_JSON).post(Entity.json(null));
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
         }
     }
 
-    protected static <T> T post(final WebResource resource, final Class<T> responseClass) {
+    protected static <T> T post(final WebTarget target, final GenericType<T> responseClass) {
         try {
-            return resource.accept(APPLICATION_JSON_TYPE).post(responseClass);
-        } catch (final UniformInterfaceException ex) {
-            throw new ClientException(ex);
+            return target.request(APPLICATION_JSON).post(Entity.json(null), responseClass);
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
         }
     }
 
-    protected static void post(final WebResource resource, final Object requestEntity) {
+    protected static <T> T post(final WebTarget target, final Class<T> responseClass) {
         try {
-            resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
-        } catch (final UniformInterfaceException ex) {
-            throw new ClientException(ex);
+            return target.request(APPLICATION_JSON).post(Entity.json(null), responseClass);
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
         }
     }
 
-    protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity) {
+    protected static void post(final WebTarget target, final Object requestEntity) {
         try {
-            return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE)
-                    .post(responseClass, requestEntity);
-        } catch (final UniformInterfaceException ex) {
-            throw new ClientException(ex);
+            target.request(APPLICATION_JSON).post(Entity.json(requestEntity));
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
         }
     }
 
-    protected static <T> T post(final WebResource resource, final GenericType<T> responseClass,
-            final Object requestEntity) {
-        return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
+    protected static <T> T post(final WebTarget target, final Class<T> responseClass, final Object requestEntity) {
+        try {
+            return target.request(APPLICATION_JSON).post(Entity.json(requestEntity), responseClass);
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
+        }
     }
 
-    protected static void delete(final WebResource resource) {
+    protected static <T> T post(final WebTarget target, final GenericType<T> responseClass, final Object requestEntity) {
         try {
-            resource.accept(APPLICATION_JSON_TYPE).delete();
-        } catch (final UniformInterfaceException ex) {
-            throw new ClientException(ex);
+            return target.request(APPLICATION_JSON).post(Entity.json(requestEntity), responseClass);
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
+        }
+    }
+
+    protected static void delete(final WebTarget target) {
+        try {
+            target.request(APPLICATION_JSON).delete();
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
         }
     }
 }

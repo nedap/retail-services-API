@@ -30,13 +30,13 @@ public class EpcisExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** EPCIS API example ***");
 
-        final String location = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).getId();
 
         try {
             // Capture EPCIS events
             System.out.println(NEW_LINE + "Capturing EPCIS events...");
             final EpcisEventContainer epcisEventsList = new EpcisEventContainer();
-            epcisEventsList.events = createEvents(location);
+            epcisEventsList.events = createEvents(locationId);
             client.captureEpcisEvents(epcisEventsList);
             System.out.println(printCaptureEpcisEvents(epcisEventsList));
 

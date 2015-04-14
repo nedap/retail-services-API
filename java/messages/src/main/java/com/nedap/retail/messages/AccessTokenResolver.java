@@ -2,12 +2,13 @@ package com.nedap.retail.messages;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource.Builder;
 
 public class AccessTokenResolver implements IAccessTokenResolver {
 
@@ -29,16 +30,18 @@ public class AccessTokenResolver implements IAccessTokenResolver {
     public String resolve() {
         logger.debug("getting OAuth 2.0 access token: {}", clientId);
 
-        final Builder builder = httpClient.resource(url + "/login/oauth/token")
+        final WebTarget target = httpClient.target(url).path("/login/oauth/token")
                 .queryParam("grant_type", "client_credentials").queryParam("client_id", clientId)
-                .queryParam("client_secret", secret).accept(APPLICATION_JSON);
+                .queryParam("client_secret", secret);
 
         try {
-            final OAuthResponse result = builder.post(OAuthResponse.class);
-            logger.debug("successful. access token: {}", result.getAccess_token());
-            return result.getAccess_token();
-        } catch (final UniformInterfaceException uniformInterfaceException) {
-            throw new ClientException(uniformInterfaceException);
+            // post is done with query parameters and empty body
+            final OAuthResponse response = target.request(APPLICATION_JSON).post(Entity.json(""), OAuthResponse.class);
+
+            logger.debug("successful. access token: {}", response.getAccess_token());
+            return response.getAccess_token();
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
         }
     }
 }

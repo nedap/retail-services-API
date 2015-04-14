@@ -17,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Organizations implements Serializable {
 
+    private static final long serialVersionUID = 2904138281032930023L;
+
     private Organization own;
     private List<Organization> linked;
 

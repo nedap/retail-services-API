@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class SystemListPayload implements Serializable {
 
+    private static final long serialVersionUID = 93067602970433955L;
+
     private String systemId;
     private String name;
     private String location;

@@ -31,19 +31,19 @@ public class WorkflowExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** Workflow API example ***");
 
-        final String location = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).getId();
 
         try {
             // Make some EPCIS events first
             System.out.println(NEW_LINE + "Capturing some EPCIS events first...");
             final EpcisEventContainer epcisEventsContainer = new EpcisEventContainer();
-            epcisEventsContainer.events = createEvents(location);
+            epcisEventsContainer.events = createEvents(locationId);
             client.captureEpcisEvents(epcisEventsContainer);
             System.out.println(printCaptureEpcisEvents(epcisEventsContainer));
 
             // Workflow capture
             System.out.println(NEW_LINE + "Capturing workflow event...");
-            final WorkflowEvent workflow = makeWorkflowEvent(location, epcisEventsContainer);
+            final WorkflowEvent workflow = makeWorkflowEvent(locationId, epcisEventsContainer);
             client.captureWorkflow(workflow);
             System.out.println("Captured workflow event with:" + printWorkflow(workflow));
 

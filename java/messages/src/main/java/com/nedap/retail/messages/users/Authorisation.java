@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Authorisation implements Serializable {
 
+    private static final long serialVersionUID = -961930253964396609L;
+
     private String role;
     private DateTime expiresAt;
 

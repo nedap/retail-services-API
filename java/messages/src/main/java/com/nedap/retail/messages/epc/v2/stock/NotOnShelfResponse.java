@@ -13,12 +13,15 @@ import com.nedap.retail.messages.article.Article;
 public class NotOnShelfResponse extends NotOnShelfSummary {
     public List<String> gtins;
     @JsonProperty("sales_floor_stock")
-    public final List<Integer> salesFloorStock;
+    public List<Integer> salesFloorStock;
     @JsonProperty("stock_room_locations")
-    public final List<String> stockRoomLocations;
+    public List<String> stockRoomLocations;
     @JsonProperty("stock_room_stock")
-    public final List<Integer> stockRoomStock;
+    public List<Integer> stockRoomStock;
     public List<Article> articles;
+
+    public NotOnShelfResponse() {
+    }
 
     public NotOnShelfResponse(final DateTime rfidStockTime, final Integer notOnShelfGtinQuantity,
             final Integer rfidGtinQuantity, final Double notOnShelfPercentage, final List<String> gtins,

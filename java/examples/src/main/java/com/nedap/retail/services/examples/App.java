@@ -29,7 +29,7 @@ public class App {
     private static final String OPTION_CLIENTID = "clientid";
     private static final String OPTION_SECRET = "secret";
     private static final String OPTION_URL = "url";
-    private static final String URL = "https://api-test.nedapretail.com"; // "https://api.nedapretail.com";
+    private static final String URL = "https://api.nedapretail.com";
     private final Client apiClient;
 
     public static void main(final String[] args) throws Exception {
