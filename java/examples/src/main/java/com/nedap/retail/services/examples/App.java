@@ -12,7 +12,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.nedap.retail.messages.Client;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import com.nedap.retail.messages.ClientException;
 
 /**
  * This tool can be used to test the !D Cloud APIs.
@@ -110,8 +110,8 @@ public class App {
                             quit = true;
                             break;
                     }
-                } catch (final UniformInterfaceException ex) {
-                    System.err.println(ex.getResponse().toString());
+                } catch (final ClientException ex) {
+                    System.err.println(ex.getMessage());
                 }
             }
             scanner.close();

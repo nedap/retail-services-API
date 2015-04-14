@@ -34,6 +34,10 @@ import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.article.Barcode;
 import com.nedap.retail.messages.article.Price;
 import com.nedap.retail.messages.article.Size;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
@@ -44,6 +48,7 @@ import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.stock.GtinQuantity;
 import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.stock.StockSummary;
+import com.nedap.retail.messages.stock.StockSummaryListRequest;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
@@ -55,6 +60,14 @@ import com.sun.jersey.spi.MessageBodyWorkers;
 public class ClientTest {
 
     private static final String URL = "http://api.url.com";
+    private static final String ID = "123";
+    private static final String LOCATION = "http://nedapretail.com/loc/test";
+    private static final String GTIN_1 = "02011200000019";
+    private static final String GTIN_2 = "02011200000064";
+    private static final String GTIN_3 = "02011200000163";
+    private static final String GET = "GET";
+    private static final String POST = "POST";
+    private static final DateTime TIME = DateTime.now();
 
     private static com.sun.jersey.api.client.Client mockHttpClient;
     private static Client client;
@@ -113,7 +126,7 @@ public class ClientTest {
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
+            assertEquals(GET, clientRequest.getMethod());
             assertEquals(URI.create(url), clientRequest.getURI());
 
             // RESPONSE TEST
@@ -139,7 +152,7 @@ public class ClientTest {
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
+            assertEquals(GET, clientRequest.getMethod());
             assertEquals(URI.create(url + "?gtins%5B%5D=03327009483366&fields%5B%5D=code&fields%5B%5D=name"),
                     clientRequest.getURI());
 
@@ -175,7 +188,7 @@ public class ClientTest {
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
+            assertEquals(GET, clientRequest.getMethod());
             assertEquals(URI.create(url + "?barcodes%5B%5D=3327009483366&fields%5B%5D=code&fields%5B%5D=name"),
                     clientRequest.getURI());
 
@@ -202,9 +215,8 @@ public class ClientTest {
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
-            assertEquals(URI.create(url + "?skip=0&count=5"),
-                    clientRequest.getURI());
+            assertEquals(GET, clientRequest.getMethod());
+            assertEquals(URI.create(url + "?skip=0&count=5"), clientRequest.getURI());
 
             // RESPONSE TEST
             assertEquals(1, articles.size());
@@ -234,29 +246,23 @@ public class ClientTest {
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
             final Articles requestPackage = (Articles) clientRequest.getEntity();
             assertEquals(articles.getArticles().get(0).getGtin(), requestPackage.getArticles().get(0).getGtin());
-            assertEquals("POST", clientRequest.getMethod());
+            assertEquals(POST, clientRequest.getMethod());
             assertEquals(URI.create(url), clientRequest.getURI());
         }
     }
 
-    private static Article createExampleArticle() {
+    private Article createExampleArticle() {
         final Article article = new Article();
 
-        // GTIN is the identifier of a product. Most barcodes can be translated to GTIN.
-        article.setGtin("08701231234562");
+        article.setGtin(GTIN_1);
+        article.setName("Test article");
+        article.setColor("blue");
 
         // at least one linear barcode is required
         final List<Barcode> barcodes = new ArrayList<>();
         barcodes.add(new Barcode("EAN13", "8701231234562"));
         article.setBarcodes(barcodes);
 
-        // name is required
-        article.setName("Test article");
-
-        // color is required
-        article.setColor("blue");
-
-        // size is required
         final List<Size> sizes = new ArrayList<>();
         sizes.add(new Size("42", "EU"));
         sizes.add(new Size("40", "US"));
@@ -276,7 +282,7 @@ public class ClientTest {
         return article;
     }
 
-    private static List<Price> setArticlePrices() {
+    private List<Price> setArticlePrices() {
         final List<Price> prices = new ArrayList<>();
         prices.add(new Price("EUR", "NL", 19.95));
         prices.add(new Price("EUR", "BE", 18.95));
@@ -285,6 +291,185 @@ public class ClientTest {
         prices.add(new Price("NOK", "NO", 160.0));
         prices.add(new Price("USD", "US", 19.95));
         return prices;
+    }
+
+    @Test
+    public void test_capture_rfid_stock() throws IOException {
+        final String url = URL + "/epc/v2/stock.capture";
+
+        try (final InputStream is = ClientTest.class.getResourceAsStream("capture_response_id.json")) {
+            final ClientResponse clientResponse = createClientResponse(200, is);
+            final ArgumentCaptor<ClientRequest> clientRequestCaptor = ArgumentCaptor.forClass(ClientRequest.class);
+
+            when(mockHttpClient.handle(clientRequestCaptor.capture())).thenReturn(clientResponse);
+            when(mockHttpClient.resource(url)).thenCallRealMethod();
+            when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
+
+            final Stock stock = makeStock();
+            final String rfidStockId = client.captureRfidStock(stock);
+
+            // REQUEST TEST
+            final ClientRequest clientRequest = clientRequestCaptor.getValue();
+            final Stock requestPackage = (Stock) clientRequest.getEntity();
+            assertEquals(stock.location, requestPackage.location);
+            assertEquals(POST, clientRequest.getMethod());
+            assertEquals(URI.create(url), clientRequest.getURI());
+
+            // RESPONSE TEST
+            assertEquals(ID, rfidStockId);
+        }
+    }
+
+    @Test
+    public void test_capture_approved_difference_list() throws IOException {
+        final String url = URL + "/epc/v2/approved_difference_list.capture";
+
+        try (final InputStream is = ClientTest.class.getResourceAsStream("capture_response_id.json")) {
+            final ClientResponse clientResponse = createClientResponse(200, is);
+            final ArgumentCaptor<ClientRequest> clientRequestCaptor = ArgumentCaptor.forClass(ClientRequest.class);
+
+            when(mockHttpClient.handle(clientRequestCaptor.capture())).thenReturn(clientResponse);
+            when(mockHttpClient.resource(url)).thenCallRealMethod();
+            when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
+
+            final ApprovedDifferenceListCaptureRequest request = makeApprovedDifferenceListCaptureRequest();
+            final String approvedDifferenceListId = client.captureApprovedDifferenceList(request);
+
+            // REQUEST TEST
+            final ClientRequest clientRequest = clientRequestCaptor.getValue();
+            final ApprovedDifferenceListCaptureRequest requestPackage = (ApprovedDifferenceListCaptureRequest) clientRequest
+                    .getEntity();
+            assertEquals(request.location, requestPackage.location);
+            assertEquals(POST, clientRequest.getMethod());
+            assertEquals(URI.create(url), clientRequest.getURI());
+
+            // RESPONSE TEST
+            assertEquals(ID, approvedDifferenceListId);
+        }
+    }
+
+    private ApprovedDifferenceListCaptureRequest makeApprovedDifferenceListCaptureRequest() {
+        final ApprovedDifferenceListCaptureRequest request = new ApprovedDifferenceListCaptureRequest();
+        request.rfidTime = TIME;
+        request.erpStockId = ID;
+        request.location = LOCATION;
+        request.approvedGtins = Arrays.asList(GTIN_1, GTIN_2, GTIN_3);
+        return request;
+    }
+
+    @Test
+    public void test_get_approved_difference_list() throws IOException {
+        final String url = URL + "/epc/v2/approved_difference_list.retrieve";
+
+        try (final InputStream is = ClientTest.class.getResourceAsStream("approved_difference_list.json")) {
+            final ClientResponse clientResponse = createClientResponse(200, is);
+            final ArgumentCaptor<ClientRequest> clientRequestCaptor = ArgumentCaptor.forClass(ClientRequest.class);
+
+            when(mockHttpClient.handle(clientRequestCaptor.capture())).thenReturn(clientResponse);
+            when(mockHttpClient.resource(url)).thenCallRealMethod();
+            when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
+
+            final String request = ID;
+            final ApprovedDifferenceListResponse response = client.getApprovedDifferenceList(request);
+
+            // REQUEST TEST
+            final ClientRequest clientRequest = clientRequestCaptor.getValue();
+            assertEquals(GET, clientRequest.getMethod());
+            assertEquals(URI.create(url + "?id=" + ID), clientRequest.getURI());
+
+            // RESPONSE TEST
+            assertEquals("2015-04-09T12:00:00.000Z", response.approvedOn.toString());
+            assertEquals(LOCATION, response.location);
+            assertEquals(2, response.absoluteDifference);
+            assertEquals("EXPORTED", response.exportStatus.toString());
+        }
+    }
+
+    @Test
+    public void test_approved_difference_list_export() throws IOException {
+        final String url = URL + "/epc/v2/approved_difference_list.export";
+
+        try (final InputStream is = ClientTest.class.getResourceAsStream("approved_difference_list_export.json")) {
+            final ClientResponse clientResponse = createClientResponse(200, is);
+            final ArgumentCaptor<ClientRequest> clientRequestCaptor = ArgumentCaptor.forClass(ClientRequest.class);
+
+            when(mockHttpClient.handle(clientRequestCaptor.capture())).thenReturn(clientResponse);
+            when(mockHttpClient.resource(url)).thenCallRealMethod();
+            when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
+
+            final String request = ID;
+            final ApprovedDifferenceListExportResponse response = client.approvedDifferenceListExport(request);
+
+            // REQUEST TEST
+            final ClientRequest clientRequest = clientRequestCaptor.getValue();
+            assertEquals(GET, clientRequest.getMethod());
+            assertEquals(URI.create(url + "?id=" + ID), clientRequest.getURI());
+
+            // RESPONSE TEST
+            assertEquals("2015-04-09T12:00:00.000Z", response.approvedOn.toString());
+            assertEquals(LOCATION, response.location);
+            assertEquals(2, response.absoluteDifference);
+            assertEquals(4, response.approvedQuantity.get(0).intValue());
+        }
+    }
+
+    @Test
+    public void test_get_approved_difference_list_summaries() throws IOException {
+        final String url = URL + "/epc/v2/approved_difference_list.list";
+
+        try (final InputStream is = ClientTest.class.getResourceAsStream("approved_difference_list_summaries.json")) {
+            final ClientResponse clientResponse = createClientResponse(200, is);
+            final ArgumentCaptor<ClientRequest> clientRequestCaptor = ArgumentCaptor.forClass(ClientRequest.class);
+
+            when(mockHttpClient.handle(clientRequestCaptor.capture())).thenReturn(clientResponse);
+            when(mockHttpClient.resource(url)).thenCallRealMethod();
+            when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
+
+            final String locationId = LOCATION;
+            final List<ApprovedDifferenceListSummary> response = client.getApprovedDifferenceListSummaries(locationId,
+                    null, null);
+
+            // REQUEST TEST
+            final ClientRequest clientRequest = clientRequestCaptor.getValue();
+            assertEquals(GET, clientRequest.getMethod());
+            assertEquals(URI.create(url + "?location=" + LOCATION), clientRequest.getURI());
+
+            // RESPONSE TEST
+            assertEquals("2015-04-08T12:00:00.000Z", response.get(1).approvedOn.toString());
+            assertEquals(LOCATION, response.get(0).location);
+            assertEquals(2, response.get(0).absoluteDifference);
+            assertEquals(3, response.get(1).absoluteDifference);
+        }
+    }
+
+    @Test
+    public void test_get_approved_difference_list_status() throws IOException {
+        final String url = URL + "/epc/v2/approved_difference_list.status";
+
+        try (final InputStream is = ClientTest.class.getResourceAsStream("approved_difference_list_summary.json")) {
+            final ClientResponse clientResponse = createClientResponse(200, is);
+            final ArgumentCaptor<ClientRequest> clientRequestCaptor = ArgumentCaptor.forClass(ClientRequest.class);
+
+            when(mockHttpClient.handle(clientRequestCaptor.capture())).thenReturn(clientResponse);
+            when(mockHttpClient.resource(url)).thenCallRealMethod();
+            when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
+
+            final String locationId = LOCATION;
+            final ApprovedDifferenceListSummary response = client.getApprovedDifferenceListStatus(locationId,
+                    TIME.toString());
+
+            // REQUEST TEST
+            final ClientRequest clientRequest = clientRequestCaptor.getValue();
+            assertEquals(GET, clientRequest.getMethod());
+            assertEquals(URI.create(url + "?location=" + LOCATION + "&rfid_time=" + TIME.toString()),
+                    clientRequest.getURI());
+
+            // RESPONSE TEST
+            assertEquals("2015-04-09T12:00:00.000Z", response.approvedOn.toString());
+            assertEquals(LOCATION, response.location);
+            assertEquals(2, response.absoluteDifference);
+            assertEquals(ID, response.erpStockId);
+        }
     }
 
     @Test
@@ -299,11 +484,11 @@ public class ClientTest {
             when(mockHttpClient.resource(url)).thenCallRealMethod();
             when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
 
-            final DifferenceListResponse differenceList = client.differenceList("123", null, null, null);
+            final DifferenceListResponse differenceList = client.differenceList(ID, null, null, null);
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
+            assertEquals(GET, clientRequest.getMethod());
             assertEquals(URI.create(url + "?erp_stock_id=123"), clientRequest.getURI());
 
             // RESPONSE TEST
@@ -326,12 +511,12 @@ public class ClientTest {
             when(mockHttpClient.resource(url)).thenCallRealMethod();
             when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
 
-            final StockResponse stockResponse = client.stockGtin("http://retailer.com/loc/123", null, null, null, null);
+            final StockResponse stockResponse = client.stockGtin(LOCATION, null, null, null, null);
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
-            assertEquals(URI.create(url + "?location=http://retailer.com/loc/123"), clientRequest.getURI());
+            assertEquals(GET, clientRequest.getMethod());
+            assertEquals(URI.create(url + "?location=" + LOCATION), clientRequest.getURI());
 
             // RESPONSE TEST
             assertEquals("03327009483366", stockResponse.gtins.get(0));
@@ -361,18 +546,18 @@ public class ClientTest {
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
             final EpcisEventContainer requestPackage = (EpcisEventContainer) clientRequest.getEntity();
             assertEquals(epcisEventsList.events.get(0).id, requestPackage.events.get(0).id);
-            assertEquals("POST", clientRequest.getMethod());
+            assertEquals(POST, clientRequest.getMethod());
             assertEquals(URI.create(url), clientRequest.getURI());
         }
     }
 
-    private static List<EpcisEvent> createEvents() {
+    private List<EpcisEvent> createEvents() {
         final List<EpcisEvent> events = new ArrayList<>();
         events.add(createEpcisEvent1());
         return events;
     }
 
-    private static EpcisEvent createEpcisEvent1() {
+    private EpcisEvent createEpcisEvent1() {
         final String id = "12f03260-c56f-11e3-9c1a-0800200c9a66";
         final DateTime eventTime = DateTime.parse("2014-02-01T12:00:00.000+01:00");
         final DateTime recordTime = DateTime.now();
@@ -398,7 +583,7 @@ public class ClientTest {
     public void test_capture_erp_stock() throws IOException {
         final String url = URL + "/erp/v1/stock.capture";
 
-        try (final InputStream is = ClientTest.class.getResourceAsStream("erp_stock.json")) {
+        try (final InputStream is = ClientTest.class.getResourceAsStream("capture_response_id.json")) {
             final ClientResponse clientResponse = createClientResponse(200, is);
             final ArgumentCaptor<ClientRequest> clientRequestCaptor = ArgumentCaptor.forClass(ClientRequest.class);
 
@@ -406,28 +591,27 @@ public class ClientTest {
             when(mockHttpClient.resource(url)).thenCallRealMethod();
             when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
 
-            final Stock stock = makeErpStock();
+            final Stock stock = makeStock();
             final String erpStockId = client.captureErpStock(stock);
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
             final Stock requestPackage = (Stock) clientRequest.getEntity();
             assertEquals(stock.location, requestPackage.location);
-            assertEquals("POST", clientRequest.getMethod());
+            assertEquals(POST, clientRequest.getMethod());
             assertEquals(URI.create(url), clientRequest.getURI());
 
             // RESPONSE TEST
-            assertEquals("123", erpStockId);
+            assertEquals(ID, erpStockId);
         }
     }
 
-    private Stock makeErpStock() {
-        final String location = "http://nedapretail.com/loc/test";
+    private Stock makeStock() {
+        final String location = LOCATION;
         final List<GtinQuantity> exampleStock = new ArrayList<>();
-        exampleStock.add(new GtinQuantity("12345678901231", 23));
-        exampleStock.add(new GtinQuantity("12345678901248", 3));
-        exampleStock.add(new GtinQuantity("12345678901255", -3));
-        exampleStock.add(new GtinQuantity("12345678901262", 17));
+        exampleStock.add(new GtinQuantity(GTIN_1, 23));
+        exampleStock.add(new GtinQuantity(GTIN_2, 3));
+        exampleStock.add(new GtinQuantity(GTIN_3, -3));
         final String myReference = "testing";
         final DateTime timeOfStock = new DateTime();
 
@@ -446,12 +630,12 @@ public class ClientTest {
             when(mockHttpClient.resource(url)).thenCallRealMethod();
             when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
 
-            final String erpStockId = "123";
+            final String erpStockId = ID;
             final StockSummary stockSummary = client.getErpStockStatus(erpStockId);
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
+            assertEquals(GET, clientRequest.getMethod());
             assertEquals(URI.create(url + "?id=123"), clientRequest.getURI());
 
             // RESPONSE TEST
@@ -474,17 +658,17 @@ public class ClientTest {
             when(mockHttpClient.resource(url)).thenCallRealMethod();
             when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
 
-            final String erpStockId = "123";
+            final String erpStockId = ID;
             final Stock stock = client.retrieveErpStock(erpStockId);
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
+            assertEquals(GET, clientRequest.getMethod());
             assertEquals(URI.create(url + "?id=123"), clientRequest.getURI());
 
             // RESPONSE TEST
             assertEquals("2015-02-25T07:50:44.295Z", stock.eventTime.toString());
-            assertEquals("http://nedapretail.com/loc/test", stock.location);
+            assertEquals(LOCATION, stock.location);
             assertEquals(false, stock.inUse);
             assertEquals("12345678901231", stock.quantityList.get(0).gtin);
         }
@@ -502,17 +686,18 @@ public class ClientTest {
             when(mockHttpClient.resource(url)).thenCallRealMethod();
             when(mockHttpClient.resource(URI.create(url))).thenCallRealMethod();
 
-            final String location = "http://nedapretail.com/loc/test";
-            final List<StockSummary> erpList = client.getErpStockList(location);
+            final StockSummaryListRequest request = new StockSummaryListRequest();
+            request.location = LOCATION;
+            final List<StockSummary> erpList = client.getErpStockList(request);
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
-            assertEquals(URI.create(url + "?location=http://nedapretail.com/loc/test"), clientRequest.getURI());
+            assertEquals(GET, clientRequest.getMethod());
+            assertEquals(URI.create(url + "?location=" + LOCATION), clientRequest.getURI());
 
             // RESPONSE TEST
             assertEquals("2015-02-26T07:36:20.576Z", erpList.get(0).eventTime.toString());
-            assertEquals("http://nedapretail.com/loc/test", erpList.get(0).location);
+            assertEquals(LOCATION, erpList.get(0).location);
             assertEquals(false, erpList.get(0).inUse);
             assertEquals("ACCEPTED", erpList.get(0).status.toString());
         }
@@ -534,7 +719,7 @@ public class ClientTest {
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
+            assertEquals(GET, clientRequest.getMethod());
             assertEquals(URI.create(url), clientRequest.getURI());
 
             // RESPONSE TEST
@@ -560,7 +745,7 @@ public class ClientTest {
 
             // REQUEST TEST
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
-            assertEquals("GET", clientRequest.getMethod());
+            assertEquals(GET, clientRequest.getMethod());
             assertEquals(URI.create(url), clientRequest.getURI());
 
             // RESPONSE TEST
@@ -590,7 +775,7 @@ public class ClientTest {
             final ClientRequest clientRequest = clientRequestCaptor.getValue();
             final WorkflowEvent requestPackage = (WorkflowEvent) clientRequest.getEntity();
             assertEquals(workflowEvent.getLocation(), requestPackage.getLocation());
-            assertEquals("POST", clientRequest.getMethod());
+            assertEquals(POST, clientRequest.getMethod());
             assertEquals(URI.create(url), clientRequest.getURI());
         }
     }

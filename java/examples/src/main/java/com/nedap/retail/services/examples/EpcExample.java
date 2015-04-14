@@ -8,13 +8,12 @@ import java.util.UUID;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Barcode;
 import com.nedap.retail.messages.article.Size;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
-import com.nedap.retail.messages.epc.v2.approved_difference_list.ExportStatus;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
-import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListExportStatusUpdateRequest;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
@@ -22,7 +21,6 @@ import com.nedap.retail.messages.epc.v2.stock.NotOnShelfResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
 import com.nedap.retail.messages.stock.GtinQuantity;
 import com.nedap.retail.messages.stock.Stock;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class EpcExample {
 
@@ -103,15 +101,6 @@ public class EpcExample {
                     location, EVENT_TIME.toString());
             System.out.println(printApprovedDifferenceListStatus(approvedDifferenceListStatus));
 
-            // Update export status of approved difference list
-            System.out.println(NEW_LINE + "Updating export status of approved difference list...");
-            client.approvedDifferenceListUpdateExportStatus(makeApprovedDifferenceListExportStatusUpdateRequest(
-                    approvedDifferenceListId, ExportStatus.EXPORTED));
-            final ApprovedDifferenceListSummary newApprovedDifferenceListStatus = client
-                    .getApprovedDifferenceListStatus(location, EVENT_TIME.toString());
-            System.out.println(printApprovedDifferenceListNewExportStatus(newApprovedDifferenceListStatus,
-                    approvedDifferenceListId));
-
             // Delete approved difference list
             System.out.println(NEW_LINE + "Deleting approved difference list...");
             client.deleteApprovedDifferenceList(UUID.fromString(approvedDifferenceListId));
@@ -119,8 +108,8 @@ public class EpcExample {
 
             System.out.println(NEW_LINE + "--- EPC API example finished ---");
 
-        } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
+        } catch (final ClientException ex) {
+            System.err.println("Server responded with an error: " + ex.getMessage());
         }
     }
 
@@ -292,24 +281,6 @@ public class EpcExample {
         sb.append(NEW_LINE + TAB + "Approved on: " + approvedDifferenceListStatus.approvedOn);
         sb.append(NEW_LINE + TAB + "Location: " + approvedDifferenceListStatus.location);
         sb.append(NEW_LINE + TAB + "Export status: " + approvedDifferenceListStatus.exportStatus);
-        return sb.toString();
-    }
-
-    private static ApprovedDifferenceListExportStatusUpdateRequest makeApprovedDifferenceListExportStatusUpdateRequest(
-            final String approvedDifferenceListId, final ExportStatus status) {
-
-        final ApprovedDifferenceListExportStatusUpdateRequest request = new ApprovedDifferenceListExportStatusUpdateRequest();
-        request.id = UUID.fromString(approvedDifferenceListId);
-        request.exportStatus = status;
-        return request;
-    }
-
-    private static String printApprovedDifferenceListNewExportStatus(
-            final ApprovedDifferenceListSummary newApprovedDifferenceListStatus, final String approvedDifferenceListId) {
-
-        final StringBuilder sb = new StringBuilder("New status of approved difference list with id: ");
-        sb.append(approvedDifferenceListId);
-        sb.append(" is: " + newApprovedDifferenceListStatus.exportStatus);
         return sb.toString();
     }
 }

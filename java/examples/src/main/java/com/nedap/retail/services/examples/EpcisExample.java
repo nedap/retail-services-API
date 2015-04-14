@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
 import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
@@ -18,7 +19,6 @@ import com.nedap.retail.messages.epcis.v1_1.cbv.Bizstep;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.epcis.v2.EpcisQueryParameters;
 import com.nedap.retail.messages.epcis.v2.ParameterObject;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class EpcisExample {
 
@@ -47,8 +47,8 @@ public class EpcisExample {
 
             System.out.println("--- EPCIS API example finished ---");
 
-        } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
+        } catch (final ClientException ex) {
+            System.err.println("Server responded with an error: " + ex.getMessage());
         }
     }
 

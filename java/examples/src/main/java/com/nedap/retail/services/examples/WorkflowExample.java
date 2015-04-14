@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
 import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
@@ -17,7 +18,6 @@ import com.nedap.retail.messages.epcis.v1_1.cbv.Bizstep;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.workflow.QueryRequest;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class WorkflowExample {
 
@@ -54,8 +54,8 @@ public class WorkflowExample {
 
             System.out.println("--- Workflow API example finished ---");
 
-        } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
+        } catch (final ClientException ex) {
+            System.err.println("Server responded with an error: " + ex.getMessage());
         }
     }
 

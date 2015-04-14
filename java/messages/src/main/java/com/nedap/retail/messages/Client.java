@@ -18,7 +18,6 @@ import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
-import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListExportStatusUpdateRequest;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
@@ -32,13 +31,13 @@ import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.Organizations;
 import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.stock.StockSummary;
+import com.nedap.retail.messages.stock.StockSummaryListRequest;
 import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
 import com.nedap.retail.messages.users.User;
 import com.nedap.retail.messages.workflow.QueryRequest;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -150,8 +149,9 @@ public class Client {
      */
     public String captureErpStock(final Stock stock) {
         final WebResource resource = resource("/erp/v1/stock.capture");
-        final Map response = post(resource, Map.class, stock);
-        return (String) response.get("id");
+        final Map<String, String> response = post(resource, new GenericType<Map<String, String>>() {
+        }, stock);
+        return response.get("id");
     }
 
     /**
@@ -179,11 +179,19 @@ public class Client {
     /**
      * ERP API: get a list of available stocks
      *
-     * @param location Location identifier
+     * @param request Stock summary list request with location and start/stop search dates
      * @return List of summaries per stock available for the specified location
      */
-    public List<StockSummary> getErpStockList(final String location) {
-        final WebResource resource = resource("/erp/v1/stock.list").queryParam("location", location);
+    public List<StockSummary> getErpStockList(final StockSummaryListRequest request) {
+        WebResource resource = resource("/erp/v1/stock.list").queryParam("location", request.location);
+
+        if (request.fromEventTime != null) {
+            resource = resource.queryParam("from_event_time", request.fromEventTime.toString());
+        }
+        if (request.untilEventTime != null) {
+            resource = resource.queryParam("until_event_time", request.untilEventTime.toString());
+        }
+
         return get(resource, new GenericType<List<StockSummary>>() {
         });
     }
@@ -323,8 +331,9 @@ public class Client {
      */
     public String captureRfidStock(final Stock stock) {
         final WebResource resource = resource("/epc/v2/stock.capture");
-        final Map response = post(resource, Map.class, stock);
-        return (String) response.get("id");
+        final Map<String, String> response = post(resource, new GenericType<Map<String, String>>() {
+        }, stock);
+        return response.get("id");
     }
 
     /**
@@ -338,8 +347,9 @@ public class Client {
 
         final WebResource resource = resource("/epc/v2/approved_difference_list.capture");
 
-        final Map response = post(resource, Map.class, approvedDifferenceListCaptureRequest);
-        return (String) response.get("id");
+        final Map<String, String> response = post(resource, new GenericType<Map<String, String>>() {
+        }, approvedDifferenceListCaptureRequest);
+        return response.get("id");
     }
 
     /**
@@ -443,16 +453,6 @@ public class Client {
                 locationId).queryParam("rfid_time", rfidTime);
 
         return get(resource, ApprovedDifferenceListSummary.class);
-    }
-
-    /**
-     * Updates status of approved difference list.
-     *
-     * @param request Approved difference list export status update request with list's id and new export status
-     */
-    public void approvedDifferenceListUpdateExportStatus(final ApprovedDifferenceListExportStatusUpdateRequest request) {
-        final WebResource resource = resource("/epc/v2/approved_difference_list.export_status");
-        post(resource, request);
     }
 
     /**
@@ -676,10 +676,9 @@ public class Client {
         try {
             final WebResource resource = resource("/users/1.0/get").queryParam("user_id", userId);
             return get(resource, User.class);
-        } catch (final UniformInterfaceException ex) {
+        } catch (final ClientException ex) {
             // Thrown when the status of the HTTP response is greater than or equal to 300.
-            final ClientResponse response = ex.getResponse();
-            if (response.getStatus() == 404) {
+            if (ex.getStatusCode() == 404) {
                 return null;
             } else {
                 throw ex;
@@ -705,46 +704,65 @@ public class Client {
         });
     }
 
-    protected static <T> T get(final WebResource resource, final Class<T> responseClass)
-            throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
+    protected static <T> T get(final WebResource resource, final Class<T> responseClass) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static <T> T get(final WebResource resource, final GenericType<T> responseClass)
-            throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
+    protected static <T> T get(final WebResource resource, final GenericType<T> responseClass) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).get(responseClass);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static void post(final WebResource resource) throws UniformInterfaceException {
-        resource.accept(APPLICATION_JSON_TYPE).post();
+    protected static void post(final WebResource resource) {
+        try {
+            resource.accept(APPLICATION_JSON_TYPE).post();
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static <T> T post(final WebResource resource, final Class<T> responseClass)
-            throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).post(responseClass);
+    protected static <T> T post(final WebResource resource, final Class<T> responseClass) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).post(responseClass);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static void post(final WebResource resource, final Object requestEntity) throws UniformInterfaceException {
-        resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
+    protected static void post(final WebResource resource, final Object requestEntity) {
+        try {
+            resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(requestEntity);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
-    protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity)
-            throws UniformInterfaceException {
-        return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
+    protected static <T> T post(final WebResource resource, final Class<T> responseClass, final Object requestEntity) {
+        try {
+            return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE)
+                    .post(responseClass, requestEntity);
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 
     protected static <T> T post(final WebResource resource, final GenericType<T> responseClass,
-            final Object requestEntity) throws UniformInterfaceException {
+            final Object requestEntity) {
         return resource.accept(APPLICATION_JSON_TYPE).type(APPLICATION_JSON_TYPE).post(responseClass, requestEntity);
     }
 
-    protected static void delete(final WebResource resource) throws UniformInterfaceException {
-        resource.accept(APPLICATION_JSON_TYPE).delete();
-    }
-
-    public static String getErrorMessage(final ClientResponse response) {
-        final Map payload = response.getEntity(Map.class);
-        final String reason = (String) payload.get("reason");
-        return reason;
+    protected static void delete(final WebResource resource) {
+        try {
+            resource.accept(APPLICATION_JSON_TYPE).delete();
+        } catch (final UniformInterfaceException ex) {
+            throw new ClientException(ex);
+        }
     }
 }

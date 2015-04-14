@@ -7,10 +7,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.stock.GtinQuantity;
 import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.stock.StockSummary;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import com.nedap.retail.messages.stock.StockSummaryListRequest;
 
 public class ErpExample {
 
@@ -36,26 +37,23 @@ public class ErpExample {
             // Retrieve ERP stock
             System.out.println(NEW_LINE + "Retrieving ERP stock...");
             final Stock retrievedStock = client.retrieveErpStock(stockId);
-            System.out.println(printStock(retrievedStock));
+            System.out.println("Retrieved ERP stock with:" + printStock(retrievedStock));
 
             // Get ERP stock summary status
-            System.out.println(NEW_LINE + "Getting ERP stock status...");
+            System.out.println(NEW_LINE + "Retrieving ERP stock status...");
             final StockSummary summary = client.getErpStockStatus(stockId);
             final Stock stock = castStockSummaryToStock(summary);
-            System.out.println(printStock(stock));
+            System.out.println("Retrieved ERP stock summary with:" + printStock(stock));
 
             // Get ERP stock summary list
-            System.out.println("Retrieving list of available stocks...");
-            final List<StockSummary> availableStocks = client.getErpStockList(location);
-            System.out.println("Got " + availableStocks.size() + " stocks:");
-            for (final StockSummary availableStock : availableStocks) {
-                System.out.println(availableStock);
-            }
+            System.out.println(NEW_LINE + "Retrieving ERP stock summary list...");
+            final List<StockSummary> stocks = client.getErpStockList(makeStockSummaryListRequest(location));
+            System.out.println(printStockSummaryList(stocks));
 
             System.out.println(NEW_LINE + "--- ERP API example finished ---");
 
-        } catch (final UniformInterfaceException e) {
-            System.err.println("Server responded with an error: " + e.getResponse().getEntity(String.class));
+        } catch (final ClientException ex) {
+            System.err.println("Server responded with an error: " + ex.getMessage());
         }
     }
 
@@ -70,7 +68,7 @@ public class ErpExample {
     }
 
     private static String printStock(final Stock stock) {
-        final StringBuilder sb = new StringBuilder("Retrieved ERP stock with:");
+        final StringBuilder sb = new StringBuilder();
         sb.append(NEW_LINE + TAB + "Id: " + stock.id);
         sb.append(NEW_LINE + TAB + "Location: " + stock.location);
         sb.append(NEW_LINE + TAB + "Event time: " + stock.eventTime);
@@ -79,8 +77,8 @@ public class ErpExample {
         sb.append(NEW_LINE + TAB + "Quantity: " + stock.quantity);
         sb.append(NEW_LINE + TAB + "Gtin quantity: " + stock.gtinQuantity);
         sb.append(NEW_LINE + TAB + "In use: " + stock.inUse);
-        sb.append(NEW_LINE + TAB + "Quantity list:");
         if (!CollectionUtils.isEmpty(stock.quantityList)) {
+            sb.append(NEW_LINE + TAB + "Quantity list:");
             sb.append(printQuantityList(stock.quantityList));
         }
         return sb.toString();
@@ -99,7 +97,28 @@ public class ErpExample {
         stock.id = summary.id;
         stock.location = summary.location;
         stock.eventTime = summary.eventTime;
-
+        stock.externRef = summary.externRef;
+        stock.status = summary.status;
+        stock.quantity = summary.quantity;
+        stock.gtinQuantity = summary.gtinQuantity;
+        stock.inUse = summary.inUse;
         return stock;
+    }
+
+    private static StockSummaryListRequest makeStockSummaryListRequest(final String location) {
+        final StockSummaryListRequest request = new StockSummaryListRequest();
+        request.location = location;
+        request.fromEventTime = DateTime.now().minusMinutes(10);
+        return request;
+    }
+
+    private static String printStockSummaryList(final List<StockSummary> stocks) {
+        final StringBuilder sb = new StringBuilder("Retrieved " + stocks.size() + " ERP stock summaries");
+        for (int i = 0; i < stocks.size(); i++) {
+            sb.append(NEW_LINE + NEW_LINE + "Stock summary " + (i + 1) + ": ");
+            final Stock stock = castStockSummaryToStock(stocks.get(i));
+            sb.append(printStock(stock));
+        }
+        return sb.toString();
     }
 }
