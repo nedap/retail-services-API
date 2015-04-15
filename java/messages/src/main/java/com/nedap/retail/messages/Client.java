@@ -6,14 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,30 +40,15 @@ public class Client {
 
     public Client(final String url, final String clientId, final String secret) {
         this.url = url;
-        this.httpClient = initHttpClient();
+        this.httpClient = ClientFactory.createDefault();
         final AccessTokenResolver accessTokenResolver = new AccessTokenResolver(url, clientId, secret, httpClient);
         this.httpClient.register(new AuthorizationClientFilter(accessTokenResolver));
     }
 
     public Client(final String url, final IAccessTokenResolver accessTokenResolver) {
         this.url = url;
-        this.httpClient = initHttpClient();
+        this.httpClient = ClientFactory.createDefault();
         this.httpClient.register(new AuthorizationClientFilter(accessTokenResolver));
-    }
-
-    protected javax.ws.rs.client.Client initHttpClient() {
-        final ClientConfig clientConfig = new ClientConfig();
-        clientConfig.register(new IdcloudObjectMapperProvider());
-        clientConfig.register(new JacksonFeature());
-
-        // Creating an instance of a Client is an expensive operation, so try to avoid creating an unnecessary
-        // number of client instances. A good approach is to reuse an existing instance, when possible.
-        final javax.ws.rs.client.Client client = ClientBuilder.newClient(clientConfig);
-        client.property(ClientProperties.CONNECT_TIMEOUT, 10000);
-        client.property(ClientProperties.READ_TIMEOUT, 60000);
-        client.property(ClientProperties.FOLLOW_REDIRECTS, false);
-
-        return client;
     }
 
     public void destroy() {
