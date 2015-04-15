@@ -284,12 +284,22 @@ public class Client {
     }
 
     /**
-     * Article API: update article information.
+     * Article API: create or replace article information.
      * 
-     * @param articles Articles to update or add.
+     * @param articles Articles to create or replace.
      */
     public void captureArticles(final List<Article> articles) {
         final WebTarget target = target("/article/v2/create_or_replace");
+        post(target, new Articles(articles));
+    }
+
+    /**
+     * Article API: update article information.
+     * 
+     * @param articles Articles to update or add (only non blank information will be updated).
+     */
+    public void updateArticles(final List<Article> articles) {
+        final WebTarget target = target("/article/v2/create_or_update");
         post(target, new Articles(articles));
     }
 
