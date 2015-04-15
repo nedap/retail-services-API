@@ -1,5 +1,15 @@
 package com.nedap.retail.services.examples;
 
+import static com.nedap.retail.services.examples.PrintHelper.COLON;
+import static com.nedap.retail.services.examples.PrintHelper.COMMA;
+import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
+import static com.nedap.retail.services.examples.PrintHelper.GTIN_1;
+import static com.nedap.retail.services.examples.PrintHelper.GTIN_2;
+import static com.nedap.retail.services.examples.PrintHelper.GTIN_3;
+import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
+import static com.nedap.retail.services.examples.PrintHelper.TAB;
+import static com.nedap.retail.services.examples.PrintHelper.WHITESPACE;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,23 +42,23 @@ public class EpcExample {
     private static final String EXTERNAL_REFERENCE = "generated_import";
 
     public static void runExample(final Client client) {
-        System.out.println(PrintHelper.NEW_LINE + "*** EPC API example ***");
+        System.out.println(NEW_LINE + "*** EPC API example ***");
 
         final String locationId = client.getSites().get(0).getId();
 
         try {
             // Create some articles
-            System.out.println(PrintHelper.NEW_LINE + "Creating some articles...");
+            System.out.println(NEW_LINE + "Creating some articles...");
             client.captureArticles(Arrays.asList(createArticle1(), createArticle2(), createArticle3()));
             System.out.println(printCreatedArticlesGtins());
 
             // Create some erp stock
-            System.out.println(PrintHelper.NEW_LINE + "Creating some ERP stock...");
+            System.out.println(NEW_LINE + "Creating some ERP stock...");
             final String erpStockId = client.captureErpStock(createErpStock(locationId));
             System.out.println("Created ERP stock with id: " + erpStockId);
 
             // Create some rfid stock
-            System.out.println(PrintHelper.NEW_LINE + "Creating some RFID stock...");
+            System.out.println(NEW_LINE + "Creating some RFID stock...");
             final String rfidStockId = client.captureRfidStock(createRfidStock(locationId));
             System.out.println("Created RFID stock with id: " + rfidStockId);
 
@@ -57,7 +67,7 @@ public class EpcExample {
             if (sublocationIds.size() > 1) {
 
                 // Create some stock differences between the two
-                System.out.println(PrintHelper.NEW_LINE + "Creating some RFID stock for sublocations...");
+                System.out.println(NEW_LINE + "Creating some RFID stock for sublocations...");
                 final String salesFloorRfidStockHistoryId = client
                         .captureRfidStock(createSalesFloorRfidStockHistory(sublocationIds.get(0)));
                 final String stockRoomRfidStockId = client.captureRfidStock(createStockRoomRfidStock(sublocationIds
@@ -69,58 +79,58 @@ public class EpcExample {
                 System.out.println(printSublocationStocks(sublocationIds, generatedStockIds));
 
                 // Not on shelf
-                System.out.println(PrintHelper.NEW_LINE + "Retrieving not on shelf items list...");
+                System.out.println(NEW_LINE + "Retrieving not on shelf items list...");
                 final NotOnShelfResponse notOnShelfResponse = client
                         .notOnShelf(new NotOnShelfRequest(locationId, false));
                 System.out.println(printNotOnShelfResponse(notOnShelfResponse));
             }
 
             // Stock (GTIN based)
-            System.out.println(PrintHelper.NEW_LINE + "Retrieving stock gtin...");
+            System.out.println(NEW_LINE + "Retrieving stock gtin...");
             final StockResponse stockResponse = client.stockGtin(locationId, null, null, null, null);
             System.out.println(printStockResponse(stockResponse));
 
             // Difference list
-            System.out.println(PrintHelper.NEW_LINE + "Retrieving difference list...");
+            System.out.println(NEW_LINE + "Retrieving difference list...");
             final DifferenceListResponse differenceList = client.differenceList(erpStockId, EVENT_TIME, null, null);
             System.out.println(printDifferenceList(differenceList));
 
             // Capture approved difference list
-            System.out.println(PrintHelper.NEW_LINE + "Capturing difference list...");
+            System.out.println(NEW_LINE + "Capturing difference list...");
             final String approvedDifferenceListId = client
                     .captureApprovedDifferenceList(makeApprovedDifferenceListCaptureRequest(erpStockId, locationId));
             System.out.println("Captured approved difference list with id: " + approvedDifferenceListId);
 
             // Retrieve approved difference list
-            System.out.println(PrintHelper.NEW_LINE + "Retrieving approved difference list...");
+            System.out.println(NEW_LINE + "Retrieving approved difference list...");
             final ApprovedDifferenceListResponse approvedDifferenceList = client
                     .getApprovedDifferenceList(approvedDifferenceListId);
             System.out.println(printApprovedDifferenceList(approvedDifferenceList));
 
             // Export approved difference list
-            System.out.println(PrintHelper.NEW_LINE + "Exporting approved difference list...");
+            System.out.println(NEW_LINE + "Exporting approved difference list...");
             final ApprovedDifferenceListExportResponse approvedDifferenceListExportResponse = client
                     .approvedDifferenceListExport(approvedDifferenceListId);
             System.out.println(printApprovedDifferenceListExportResponse(approvedDifferenceListExportResponse));
 
             // List of approved difference list summaries
-            System.out.println(PrintHelper.NEW_LINE + "Getting list of approved difference list summaries...");
+            System.out.println(NEW_LINE + "Getting list of approved difference list summaries...");
             final List<ApprovedDifferenceListSummary> approvedDifferenceListSummaries = client
                     .getApprovedDifferenceListSummaries(locationId, null, null);
             System.out.println(printListOfApprovedDifferenceListSummaries(approvedDifferenceListSummaries, locationId));
 
             // Status of approved difference list
-            System.out.println(PrintHelper.NEW_LINE + "Retrieving status of approved difference list...");
+            System.out.println(NEW_LINE + "Retrieving status of approved difference list...");
             final ApprovedDifferenceListSummary approvedDifferenceListStatus = client.getApprovedDifferenceListStatus(
                     locationId, EVENT_TIME.toString());
             System.out.println(printApprovedDifferenceListStatus(approvedDifferenceListStatus));
 
             // Delete approved difference list
-            System.out.println(PrintHelper.NEW_LINE + "Deleting approved difference list...");
+            System.out.println(NEW_LINE + "Deleting approved difference list...");
             client.deleteApprovedDifferenceList(UUID.fromString(approvedDifferenceListId));
             System.out.println("Approved difference list with id: " + approvedDifferenceListId + " has been deleted");
 
-            System.out.println(PrintHelper.NEW_LINE + "--- EPC API example finished ---");
+            System.out.println(NEW_LINE + "--- EPC API example finished ---");
 
         } catch (final ClientException ex) {
             System.err.println("Server responded with an error: " + ex.getMessage());
@@ -134,7 +144,7 @@ public class EpcExample {
         barcodes.add(new Barcode("EAN13", "2011200000019"));
         article.setBarcodes(barcodes);
 
-        article.setGtin(PrintHelper.GTIN_1);
+        article.setGtin(GTIN_1);
         article.setName("T-shirt with V-neck and short sleeves");
         article.setColor("Black");
         article.setSizes(setArticleSizes1());
@@ -157,7 +167,7 @@ public class EpcExample {
         barcodes.add(new Barcode("EAN13", "2011200000064"));
         article.setBarcodes(barcodes);
 
-        article.setGtin(PrintHelper.GTIN_2);
+        article.setGtin(GTIN_2);
         article.setName("Straight regular jeans");
         article.setColor("Black");
         article.setSizes(setArticleSizes2());
@@ -180,7 +190,7 @@ public class EpcExample {
         barcodes.add(new Barcode("EAN13", "2011200000163"));
         article.setBarcodes(barcodes);
 
-        article.setGtin(PrintHelper.GTIN_3);
+        article.setGtin(GTIN_3);
         article.setName("Washed leather in a classic maritime style shoes");
         article.setColor("Black");
         article.setSizes(setArticleSizes3());
@@ -198,9 +208,9 @@ public class EpcExample {
 
     private static String printCreatedArticlesGtins() {
         final StringBuilder sb = new StringBuilder("Created test articles with gtins: ");
-        sb.append(PrintHelper.GTIN_1 + PrintHelper.COMMA);
-        sb.append(PrintHelper.GTIN_2 + PrintHelper.COMMA);
-        sb.append(PrintHelper.GTIN_3);
+        sb.append(GTIN_1 + COMMA);
+        sb.append(GTIN_2 + COMMA);
+        sb.append(GTIN_3);
         return sb.toString();
     }
 
@@ -209,8 +219,8 @@ public class EpcExample {
         erpStock.location = location;
         erpStock.eventTime = EVENT_TIME;
         erpStock.externRef = EXTERNAL_REFERENCE;
-        erpStock.quantityList = Arrays.asList(new GtinQuantity(PrintHelper.GTIN_1, 5), new GtinQuantity(
-                PrintHelper.GTIN_2, 10), new GtinQuantity(PrintHelper.GTIN_3, 20));
+        erpStock.quantityList = Arrays.asList(new GtinQuantity(GTIN_1, 5), new GtinQuantity(GTIN_2, 10),
+                new GtinQuantity(GTIN_3, 20));
         return erpStock;
     }
 
@@ -219,8 +229,8 @@ public class EpcExample {
         rfidStock.location = location;
         rfidStock.eventTime = EVENT_TIME;
         rfidStock.externRef = EXTERNAL_REFERENCE;
-        rfidStock.quantityList = Arrays.asList(new GtinQuantity(PrintHelper.GTIN_1, 7), new GtinQuantity(
-                PrintHelper.GTIN_2, 15), new GtinQuantity(PrintHelper.GTIN_3, 17));
+        rfidStock.quantityList = Arrays.asList(new GtinQuantity(GTIN_1, 7), new GtinQuantity(GTIN_2, 15),
+                new GtinQuantity(GTIN_3, 17));
         return rfidStock;
     }
 
@@ -257,8 +267,8 @@ public class EpcExample {
         rfidStock.location = locationId;
         rfidStock.eventTime = EVENT_TIME.minusDays(3);
         rfidStock.externRef = EXTERNAL_REFERENCE;
-        rfidStock.quantityList = Arrays.asList(new GtinQuantity(PrintHelper.GTIN_1, 10), new GtinQuantity(
-                PrintHelper.GTIN_2, 10), new GtinQuantity(PrintHelper.GTIN_3, 10));
+        rfidStock.quantityList = Arrays.asList(new GtinQuantity(GTIN_1, 10), new GtinQuantity(GTIN_2, 10),
+                new GtinQuantity(GTIN_3, 10));
         return rfidStock;
     }
 
@@ -267,8 +277,8 @@ public class EpcExample {
         rfidStock.location = locationId;
         rfidStock.eventTime = EVENT_TIME.minusDays(3);
         rfidStock.externRef = EXTERNAL_REFERENCE;
-        rfidStock.quantityList = Arrays.asList(new GtinQuantity(PrintHelper.GTIN_1, 20), new GtinQuantity(
-                PrintHelper.GTIN_2, 15), new GtinQuantity(PrintHelper.GTIN_3, 10));
+        rfidStock.quantityList = Arrays.asList(new GtinQuantity(GTIN_1, 20), new GtinQuantity(GTIN_2, 15),
+                new GtinQuantity(GTIN_3, 10));
         return rfidStock;
     }
 
@@ -277,51 +287,47 @@ public class EpcExample {
         rfidStock.location = locationId;
         rfidStock.eventTime = EVENT_TIME;
         rfidStock.externRef = EXTERNAL_REFERENCE;
-        rfidStock.quantityList = Arrays.asList(new GtinQuantity(PrintHelper.GTIN_1, 1), new GtinQuantity(
-                PrintHelper.GTIN_2, 0), new GtinQuantity(PrintHelper.GTIN_3, 0));
+        rfidStock.quantityList = Arrays.asList(new GtinQuantity(GTIN_1, 1), new GtinQuantity(GTIN_2, 0),
+                new GtinQuantity(GTIN_3, 0));
         return rfidStock;
     }
 
     private static String printSublocationStocks(final List<String> sublocationIds, final List<String> generatedStocks) {
         final StringBuilder sb = new StringBuilder();
         sb.append("For location: " + sublocationIds.get(0) + " created stocks with ids:");
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + generatedStocks.get(0));
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + generatedStocks.get(2));
-        sb.append(PrintHelper.NEW_LINE + "And for location: " + sublocationIds.get(1) + PrintHelper.COLON);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + generatedStocks.get(1));
+        sb.append(NEW_LINE + TAB + generatedStocks.get(0));
+        sb.append(NEW_LINE + TAB + generatedStocks.get(2));
+        sb.append(NEW_LINE + "And for location: " + sublocationIds.get(1) + COLON);
+        sb.append(NEW_LINE + TAB + generatedStocks.get(1));
         return sb.toString();
     }
 
     private static String printStockResponse(final StockResponse stockResponse) {
         final StringBuilder sb = new StringBuilder("Quantities for a given gtins:");
         for (int i = 0; i < stockResponse.gtins.size(); i++) {
-            sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB);
-            sb.append(stockResponse.gtins.get(i) + PrintHelper.WHITESPACE + stockResponse.quantities.get(i));
+            sb.append(NEW_LINE + TAB);
+            sb.append(stockResponse.gtins.get(i) + WHITESPACE + stockResponse.quantities.get(i));
         }
         return sb.toString();
     }
 
     private static String printNotOnShelfResponse(final NotOnShelfResponse notOnShelfResponse) {
-        final StringBuilder sb = new StringBuilder("Not on shelf response:" + PrintHelper.NEW_LINE);
+        final StringBuilder sb = new StringBuilder("Not on shelf response:" + NEW_LINE);
         for (int i = 0; i < notOnShelfResponse.gtins.size(); i++) {
-            sb.append(PrintHelper.TAB + "For gtin " + notOnShelfResponse.gtins.get(i) + PrintHelper.COLON
-                    + PrintHelper.NEW_LINE);
-            sb.append(PrintHelper.DOUBLE_TAB + "Stock room quantuty: " + notOnShelfResponse.stockRoomStock.get(i)
-                    + PrintHelper.NEW_LINE);
-            sb.append(PrintHelper.DOUBLE_TAB + "Sales floor quantity: " + notOnShelfResponse.salesFloorStock.get(i)
-                    + PrintHelper.NEW_LINE);
+            sb.append(TAB + "For gtin " + notOnShelfResponse.gtins.get(i) + COLON + NEW_LINE);
+            sb.append(DOUBLE_TAB + "Stock room quantuty: " + notOnShelfResponse.stockRoomStock.get(i) + NEW_LINE);
+            sb.append(DOUBLE_TAB + "Sales floor quantity: " + notOnShelfResponse.salesFloorStock.get(i) + NEW_LINE);
         }
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Total difference: "
-                + notOnShelfResponse.notOnShelfPercentage);
+        sb.append(NEW_LINE + TAB + "Total difference: " + notOnShelfResponse.notOnShelfPercentage);
         return sb.toString();
     }
 
     private static String printDifferenceList(final DifferenceListResponse differenceList) {
         final StringBuilder sb = new StringBuilder("Differences for a given gtins are:");
         for (int i = 0; i < differenceList.getGtins().size(); i++) {
-            sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB);
-            sb.append("For gtin: " + differenceList.getGtins().get(i) + PrintHelper.WHITESPACE);
-            sb.append("ERP stock quantity is: " + differenceList.getErpStock().get(i) + PrintHelper.COMMA);
+            sb.append(NEW_LINE + TAB);
+            sb.append("For gtin: " + differenceList.getGtins().get(i) + WHITESPACE);
+            sb.append("ERP stock quantity is: " + differenceList.getErpStock().get(i) + COMMA);
             sb.append("RFID stock quantity is: " + differenceList.getRfidStock().get(i));
         }
         return sb.toString();
@@ -334,25 +340,22 @@ public class EpcExample {
         approvedDifferenceListCaptureRequest.rfidTime = EVENT_TIME;
         approvedDifferenceListCaptureRequest.erpStockId = erpStockId;
         approvedDifferenceListCaptureRequest.location = location;
-        approvedDifferenceListCaptureRequest.approvedGtins = Arrays.asList(PrintHelper.GTIN_1, PrintHelper.GTIN_2,
-                PrintHelper.GTIN_3);
+        approvedDifferenceListCaptureRequest.approvedGtins = Arrays.asList(GTIN_1, GTIN_2, GTIN_3);
         return approvedDifferenceListCaptureRequest;
     }
 
     private static String printApprovedDifferenceList(final ApprovedDifferenceListResponse approvedDifferenceList) {
         final StringBuilder sb = new StringBuilder("Retrieved approved difference list with:");
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Absolute difference: "
-                + approvedDifferenceList.absoluteDifference);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Plus difference: " + approvedDifferenceList.plusDifference);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Minus difference: "
-                + approvedDifferenceList.minusDifference);
+        sb.append(NEW_LINE + TAB + "Absolute difference: " + approvedDifferenceList.absoluteDifference);
+        sb.append(NEW_LINE + TAB + "Plus difference: " + approvedDifferenceList.plusDifference);
+        sb.append(NEW_LINE + TAB + "Minus difference: " + approvedDifferenceList.minusDifference);
         return sb.toString();
     }
 
     private static String printApprovedDifferenceListExportResponse(final ApprovedDifferenceListExportResponse response) {
         final StringBuilder sb = new StringBuilder("Approved difference list export status:");
         for (int i = 0; i < response.gtins.size(); i++) {
-            sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB);
+            sb.append(NEW_LINE + TAB);
             sb.append("for gtin: " + response.gtins.get(i));
             sb.append(" approved quantity is: " + response.approvedQuantity.get(i));
         }
@@ -364,8 +367,8 @@ public class EpcExample {
 
         final StringBuilder sb = new StringBuilder("Approved difference lists ids for location: " + location + " are:");
         for (final ApprovedDifferenceListSummary list : response) {
-            sb.append(PrintHelper.NEW_LINE);
-            sb.append(PrintHelper.TAB + list.id);
+            sb.append(NEW_LINE);
+            sb.append(TAB + list.id);
         }
         return sb.toString();
     }
@@ -374,11 +377,10 @@ public class EpcExample {
             final ApprovedDifferenceListSummary approvedDifferenceListStatus) {
 
         final StringBuilder sb = new StringBuilder("Approved difference list status:");
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Id: " + approvedDifferenceListStatus.id);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Approved on: " + approvedDifferenceListStatus.approvedOn);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Location: " + approvedDifferenceListStatus.location);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Export status: "
-                + approvedDifferenceListStatus.exportStatus);
+        sb.append(NEW_LINE + TAB + "Id: " + approvedDifferenceListStatus.id);
+        sb.append(NEW_LINE + TAB + "Approved on: " + approvedDifferenceListStatus.approvedOn);
+        sb.append(NEW_LINE + TAB + "Location: " + approvedDifferenceListStatus.location);
+        sb.append(NEW_LINE + TAB + "Export status: " + approvedDifferenceListStatus.exportStatus);
         return sb.toString();
     }
 }

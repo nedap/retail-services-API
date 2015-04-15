@@ -1,5 +1,14 @@
 package com.nedap.retail.services.examples;
 
+import static com.nedap.retail.services.examples.PrintHelper.COLON;
+import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
+import static com.nedap.retail.services.examples.PrintHelper.GTIN_1;
+import static com.nedap.retail.services.examples.PrintHelper.GTIN_2;
+import static com.nedap.retail.services.examples.PrintHelper.GTIN_3;
+import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
+import static com.nedap.retail.services.examples.PrintHelper.TAB;
+import static com.nedap.retail.services.examples.PrintHelper.WHITESPACE;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,34 +25,34 @@ import com.nedap.retail.messages.stock.StockSummaryListRequest;
 public class ErpExample {
 
     public static void runExample(final Client client) {
-        System.out.println(PrintHelper.NEW_LINE + "*** ERP API example ***");
+        System.out.println(NEW_LINE + "*** ERP API example ***");
 
         final String locationId = client.getSites().get(0).getId();
 
         try {
             // Capture ERP stock
-            System.out.println(PrintHelper.NEW_LINE + "Capturing ERP stock...");
+            System.out.println(NEW_LINE + "Capturing ERP stock...");
             final Stock erpStock = createErpStock(locationId);
             final String stockId = client.captureErpStock(erpStock);
             System.out.println("Captured ERP stock id: " + stockId);
 
             // Retrieve ERP stock
-            System.out.println(PrintHelper.NEW_LINE + "Retrieving ERP stock...");
+            System.out.println(NEW_LINE + "Retrieving ERP stock...");
             final Stock retrievedStock = client.retrieveErpStock(stockId);
             System.out.println("Retrieved ERP stock with:" + printStock(retrievedStock));
 
             // Get ERP stock summary status
-            System.out.println(PrintHelper.NEW_LINE + "Retrieving ERP stock status...");
+            System.out.println(NEW_LINE + "Retrieving ERP stock status...");
             final StockSummary summary = client.getErpStockStatus(stockId);
             final Stock stock = castStockSummaryToStock(summary);
             System.out.println("Retrieved ERP stock summary with:" + printStock(stock));
 
             // Get ERP stock summary list
-            System.out.println(PrintHelper.NEW_LINE + "Retrieving ERP stock summary list...");
+            System.out.println(NEW_LINE + "Retrieving ERP stock summary list...");
             final List<StockSummary> stocks = client.getErpStockList(makeStockSummaryListRequest(locationId));
             System.out.println(printStockSummaryList(stocks));
 
-            System.out.println(PrintHelper.NEW_LINE + "--- ERP API example finished ---");
+            System.out.println(NEW_LINE + "--- ERP API example finished ---");
 
         } catch (final ClientException ex) {
             System.err.println("Server responded with an error: " + ex.getMessage());
@@ -55,23 +64,23 @@ public class ErpExample {
         stock.location = locationId;
         stock.eventTime = DateTime.now();
         stock.externRef = "generated_import";
-        stock.quantityList = Arrays.asList(new GtinQuantity(PrintHelper.GTIN_1, 5), new GtinQuantity(
-                PrintHelper.GTIN_2, 10), new GtinQuantity(PrintHelper.GTIN_3, 20));
+        stock.quantityList = Arrays.asList(new GtinQuantity(GTIN_1, 5), new GtinQuantity(GTIN_2, 10), new GtinQuantity(
+                GTIN_3, 20));
         return stock;
     }
 
     private static String printStock(final Stock stock) {
         final StringBuilder sb = new StringBuilder();
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Id: " + stock.id);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Location: " + stock.location);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Event time: " + stock.eventTime);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "External reference: " + stock.externRef);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Status: " + stock.status);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Quantity: " + stock.quantity);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Gtin quantity: " + stock.gtinQuantity);
-        sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "In use: " + stock.inUse);
+        sb.append(NEW_LINE + TAB + "Id: " + stock.id);
+        sb.append(NEW_LINE + TAB + "Location: " + stock.location);
+        sb.append(NEW_LINE + TAB + "Event time: " + stock.eventTime);
+        sb.append(NEW_LINE + TAB + "External reference: " + stock.externRef);
+        sb.append(NEW_LINE + TAB + "Status: " + stock.status);
+        sb.append(NEW_LINE + TAB + "Quantity: " + stock.quantity);
+        sb.append(NEW_LINE + TAB + "Gtin quantity: " + stock.gtinQuantity);
+        sb.append(NEW_LINE + TAB + "In use: " + stock.inUse);
         if (!CollectionUtils.isEmpty(stock.quantityList)) {
-            sb.append(PrintHelper.NEW_LINE + PrintHelper.TAB + "Quantity list:");
+            sb.append(NEW_LINE + TAB + "Quantity list:");
             sb.append(printQuantityList(stock.quantityList));
         }
         return sb.toString();
@@ -80,8 +89,8 @@ public class ErpExample {
     private static String printQuantityList(final List<GtinQuantity> quantityList) {
         final StringBuilder sb = new StringBuilder();
         for (final GtinQuantity gtinQuantity : quantityList) {
-            sb.append(PrintHelper.NEW_LINE + PrintHelper.DOUBLE_TAB);
-            sb.append(gtinQuantity.gtin + PrintHelper.WHITESPACE + gtinQuantity.quantity);
+            sb.append(NEW_LINE + DOUBLE_TAB);
+            sb.append(gtinQuantity.gtin + WHITESPACE + gtinQuantity.quantity);
         }
         return sb.toString();
     }
@@ -109,8 +118,8 @@ public class ErpExample {
     private static String printStockSummaryList(final List<StockSummary> stocks) {
         final StringBuilder sb = new StringBuilder("Retrieved " + stocks.size() + " ERP stock summaries");
         for (int i = 0; i < stocks.size(); i++) {
-            sb.append(PrintHelper.NEW_LINE + PrintHelper.NEW_LINE + PrintHelper.TAB);
-            sb.append("Stock summary " + (i + 1) + PrintHelper.COLON);
+            sb.append(NEW_LINE + NEW_LINE + TAB);
+            sb.append("Stock summary " + (i + 1) + COLON);
             final Stock stock = castStockSummaryToStock(stocks.get(i));
             sb.append(printStock(stock));
         }

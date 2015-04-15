@@ -1,5 +1,7 @@
 package com.nedap.retail.services.examples;
 
+import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -44,7 +46,7 @@ public class App {
             final String secret = cmd.getOptionValue(OPTION_SECRET);
             final String url = cmd.getOptionValue(OPTION_URL, URL);
 
-            System.out.println(PrintHelper.NEW_LINE + "OAuth 2.0 client ID: " + clientId);
+            System.out.println(NEW_LINE + "OAuth 2.0 client ID: " + clientId);
             System.out.println("url: " + url);
 
             // Start app.
@@ -123,16 +125,16 @@ public class App {
     private void printMenu() {
         final StringBuilder sb = new StringBuilder();
 
-        sb.append(PrintHelper.NEW_LINE + "*** Nedap Retail API examples ***");
-        sb.append(PrintHelper.NEW_LINE + "Choose example you want to run");
-        sb.append(PrintHelper.NEW_LINE + "1 : Article API");
-        sb.append(PrintHelper.NEW_LINE + "2 : EPC API");
-        sb.append(PrintHelper.NEW_LINE + "3 : EPCIS API");
-        sb.append(PrintHelper.NEW_LINE + "4 : ERP API");
-        sb.append(PrintHelper.NEW_LINE + "5 : System API");
-        sb.append(PrintHelper.NEW_LINE + "6 : Workflow API");
-        sb.append(PrintHelper.NEW_LINE + "0 : Quit");
-        sb.append(PrintHelper.NEW_LINE);
+        sb.append(NEW_LINE + "*** Nedap Retail API examples ***");
+        sb.append(NEW_LINE + "Choose example you want to run");
+        sb.append(NEW_LINE + "1 : Article API");
+        sb.append(NEW_LINE + "2 : EPC API");
+        sb.append(NEW_LINE + "3 : EPCIS API");
+        sb.append(NEW_LINE + "4 : ERP API");
+        sb.append(NEW_LINE + "5 : System API");
+        sb.append(NEW_LINE + "6 : Workflow API");
+        sb.append(NEW_LINE + "0 : Quit");
+        sb.append(NEW_LINE);
 
         System.out.println(sb);
     }
