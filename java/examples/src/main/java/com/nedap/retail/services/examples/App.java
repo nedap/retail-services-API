@@ -1,5 +1,7 @@
 package com.nedap.retail.services.examples;
 
+import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -15,13 +17,11 @@ import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
 
 /**
- * This tool can be used to test the !D Cloud ERP and Article APIs.
+ * This tool can be used to test the !D Cloud APIs.
  *
- * usage: java -jar erparticle.jar -clientid <CLIENTID> -secret <SECRET> [-url <url>]
+ * usage: java -jar examples.jar -clientid <CLIENTID> -secret <SECRET> [-url <url>]
  *
- * Exit codes:
- * 0: successfull.
- * 1: not successfull.
+ * Exit codes: 0: successfull. 1: not successfull.
  */
 public class App {
 
@@ -46,7 +46,7 @@ public class App {
             final String secret = cmd.getOptionValue(OPTION_SECRET);
             final String url = cmd.getOptionValue(OPTION_URL, URL);
 
-            System.out.println("OAuth 2.0 client ID: " + clientId);
+            System.out.println(NEW_LINE + "OAuth 2.0 client ID: " + clientId);
             System.out.println("url: " + url);
 
             // Start app.
@@ -65,15 +65,12 @@ public class App {
 
     private static Options createCliOption() throws IllegalArgumentException {
         final Options options = new Options();
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("id")
-                .withDescription("OAuth 2.0 client ID")
+        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("id").withDescription("OAuth 2.0 client ID")
                 .create(OPTION_CLIENTID));
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("secret")
-                .withDescription("OAuth 2.0 secret")
+        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("secret").withDescription("OAuth 2.0 secret")
                 .create(OPTION_SECRET));
         options.addOption(OptionBuilder.hasArg().withArgName("url")
-                .withDescription("(Optional) Default is https://api.nedapretail.com")
-                .create(OPTION_URL));
+                .withDescription("(Optional) Default is https://api.nedapretail.com").create(OPTION_URL));
         return options;
     }
 
@@ -127,18 +124,17 @@ public class App {
 
     private void printMenu() {
         final StringBuilder sb = new StringBuilder();
-        final String newLine = System.getProperty("line.separator");
 
-        sb.append(newLine + "*** Nedap Retail API examples ***");
-        sb.append(newLine + "Choose example you want to run");
-        sb.append(newLine + "1 : Article API");
-        sb.append(newLine + "2 : EPC API");
-        sb.append(newLine + "3 : Epcis API");
-        sb.append(newLine + "4 : ERP API");
-        sb.append(newLine + "5 : System API");
-        sb.append(newLine + "6 : Workflow API");
-        sb.append(newLine + "0 : Quit");
-        sb.append(newLine + "> ");
+        sb.append(NEW_LINE + "*** Nedap Retail API examples ***");
+        sb.append(NEW_LINE + "Choose example you want to run");
+        sb.append(NEW_LINE + "1 : Article API");
+        sb.append(NEW_LINE + "2 : EPC API");
+        sb.append(NEW_LINE + "3 : EPCIS API");
+        sb.append(NEW_LINE + "4 : ERP API");
+        sb.append(NEW_LINE + "5 : System API");
+        sb.append(NEW_LINE + "6 : Workflow API");
+        sb.append(NEW_LINE + "0 : Quit");
+        sb.append(NEW_LINE);
 
         System.out.println(sb);
     }

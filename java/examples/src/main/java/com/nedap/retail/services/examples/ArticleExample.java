@@ -1,7 +1,20 @@
 package com.nedap.retail.services.examples;
 
+import static com.nedap.retail.services.examples.PrintHelper.COLON;
+import static com.nedap.retail.services.examples.PrintHelper.COMMA;
+import static com.nedap.retail.services.examples.PrintHelper.DOT;
+import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
+import static com.nedap.retail.services.examples.PrintHelper.GTIN_1;
+import static com.nedap.retail.services.examples.PrintHelper.GTIN_2;
+import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
+import static com.nedap.retail.services.examples.PrintHelper.TAB;
+import static com.nedap.retail.services.examples.PrintHelper.WHITESPACE;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
@@ -11,25 +24,43 @@ import com.nedap.retail.messages.article.Price;
 import com.nedap.retail.messages.article.Size;
 
 public class ArticleExample {
-    public static void runExample(final Client client) {
-        System.out.println("*** Article API example ***");
 
-        // this is our example data
-        final List<Article> exampleArticles = new ArrayList<>();
-        exampleArticles.add(createExampleArticle());
-        // we could add more articles here
+    public static void runExample(final Client client) {
+        System.out.println(NEW_LINE + "*** Article API example ***");
 
         try {
-            // send articles
-            System.out.println("Uploading article...");
+            // Create or replace articles
+            System.out.println(NEW_LINE + "Uploading articles...");
+            final List<Article> exampleArticles = Arrays.asList(createExampleArticle());
             client.captureArticles(exampleArticles);
-            System.out.println("Example article uploaded");
+            System.out.println(printCapturedArticles(exampleArticles));
 
-            // get quantity
-            System.out.println("Retrieving article quantity...");
+            // Article quantity
+            System.out.println(NEW_LINE + "Retrieving article quantity...");
             final Long quantity = client.articleQuantity();
             System.out.println("Article quantity = " + quantity);
-            System.out.println("--- Done ---");
+
+            // Article details by gtins
+            System.out.println(NEW_LINE + "Retrieving article details by gtins...");
+            final List<String> gtins = Arrays.asList(GTIN_1, GTIN_2);
+            final List<Article> articlesWithGtins = client.articleDetailsByGtins(gtins, null);
+            System.out.println(printRetrievedArticlesByGtins(articlesWithGtins, gtins));
+
+            // Article datails by barcodes with name field
+            System.out.println(NEW_LINE + "Retrieving article names by barcodes...");
+            final List<String> barcodes = Arrays.asList("2011200000019", "2011200000057");
+            final List<String> fields = new ArrayList<>();
+            fields.add("name");
+            final List<Article> articlesWithBarcodes = client.articleDetailsByBarcodes(barcodes, fields);
+            System.out.println(printRetrievedArticlesByBarcodes(articlesWithBarcodes, barcodes));
+
+            // Retrieve articles with gtin and name fields
+            System.out.println(NEW_LINE + "Retrieving up to 50 articles with gtins and names...");
+            fields.add("gtin");
+            final List<Article> articles = client.retrieveArticles(null, 0, 50, fields);
+            System.out.println(printRetrievedArticles(articles));
+
+            System.out.println(NEW_LINE + "--- Article API example finished ---");
 
         } catch (final ClientException ex) {
             System.err.println("Server responded with an error: " + ex.getMessage());
@@ -39,48 +70,142 @@ public class ArticleExample {
     private static Article createExampleArticle() {
         final Article article = new Article();
 
-        // GTIN is the identifier of a product. Most barcodes can be translated to GTIN.
-        article.setGtin("08701231234562");
+        // required fields
+        article.setGtin(GTIN_1);
+        article.setName("T-shirt with V-neck and short sleeves");
+        article.setColor("Black");
+        article.setSizes(setArticleSizes());
 
-        // at least one linear barcode is required
         final List<Barcode> barcodes = new ArrayList<>();
-        barcodes.add(new Barcode("EAN13", "8701231234562"));
+        barcodes.add(new Barcode("EAN13", "2011200000019"));
         article.setBarcodes(barcodes);
 
-        // name is required
-        article.setName("Test article");
-
-        // color is required
-        article.setColor("blue");
-
-        // size is required
-        final List<Size> sizes = new ArrayList<>();
-        sizes.add(new Size("42", "EU"));
-        sizes.add(new Size("40", "US"));
-        article.setSizes(sizes);
-
-        // the rest is optional
-        article.setCode("some retailer specific article code");
-        article.setBrand("example brand");
-        article.setSeason("Summer 2014");
-        article.setOption("Test article blue");
-        article.setStyle("example style");
-        article.setSupplier("example supplier");
-        article.setCategory("Sports");
-        article.setMarkdown(true);
+        // optional fields
+        article.setCode(GTIN_1);
+        article.setBrand("River Island");
+        article.setSeason("Summer 2015");
+        article.setOption("T-shirt with V-neck and short sleeves, Black");
+        article.setStyle("T-shirt with V-neck and short sleeves");
+        article.setSupplier("River Island");
+        article.setCategory("T-shirt");
+        article.setMarkdown(false);
         article.setPrices(setArticlePrices());
 
         return article;
     }
 
+    private static List<Size> setArticleSizes() {
+        final List<Size> sizes = new ArrayList<>();
+        sizes.add(new Size("32/35", "NL"));
+        sizes.add(new Size("32/33", "DE"));
+        sizes.add(new Size("31/35", "GB"));
+        return sizes;
+    }
+
     private static List<Price> setArticlePrices() {
         final List<Price> prices = new ArrayList<>();
-        prices.add(new Price("EUR", "NL", 19.95));
-        prices.add(new Price("EUR", "BE", 18.95));
-        prices.add(new Price("EUR", "DE", 19.95));
-        prices.add(new Price("EUR", "FR", 20.95));
-        prices.add(new Price("NOK", "NO", 160.0));
-        prices.add(new Price("USD", "US", 19.95));
+        prices.add(new Price("EUR", "NL", 29.99));
+        prices.add(new Price("EUR", "DE", 33.99));
+        prices.add(new Price("GBP", "GB", 24.99));
         return prices;
+    }
+
+    private static String printCapturedArticles(final List<Article> articles) {
+        final StringBuilder sb = new StringBuilder("Uploaded articles: ");
+        sb.append(printArticles(articles));
+        return sb.toString();
+    }
+
+    private static String printRetrievedArticlesByGtins(final List<Article> articles, final List<String> gtins) {
+        final StringBuilder sb = new StringBuilder("For gtins: ");
+        for (final String gtin : gtins) {
+            sb.append(gtin + COMMA);
+        }
+        sb.append("founded articles: ");
+        sb.append(printArticles(articles));
+        return sb.toString();
+    }
+
+    private static String printArticles(final List<Article> articles) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < articles.size(); i++) {
+            sb.append(NEW_LINE + NEW_LINE);
+            sb.append(TAB + "Article " + (i + 1) + COLON + NEW_LINE);
+            sb.append(TAB + "Gtin: " + articles.get(i).getGtin() + NEW_LINE);
+            sb.append(TAB + "Barcodes: " + printBarcodes(articles.get(i).getBarcodes()) + NEW_LINE);
+            sb.append(TAB + "Code: " + articles.get(i).getCode() + NEW_LINE);
+            sb.append(TAB + "Brand: " + articles.get(i).getBrand() + NEW_LINE);
+            sb.append(TAB + "Season: " + articles.get(i).getSeason() + NEW_LINE);
+            sb.append(TAB + "Name: " + articles.get(i).getName() + NEW_LINE);
+            sb.append(TAB + "Option: " + articles.get(i).getOption() + NEW_LINE);
+            sb.append(TAB + "Style: " + articles.get(i).getStyle() + NEW_LINE);
+            sb.append(TAB + "Color: " + articles.get(i).getColor() + NEW_LINE);
+            sb.append(TAB + "Sizes: " + printSizes(articles.get(i).getSizes()) + NEW_LINE);
+            sb.append(TAB + "Supplier: " + articles.get(i).getSupplier() + NEW_LINE);
+            sb.append(TAB + "Category: " + articles.get(i).getCategory() + NEW_LINE);
+            sb.append(TAB + "Prices: " + printPrices(articles.get(i).getPrices()) + NEW_LINE);
+            sb.append(TAB + "Markdown: " + articles.get(i).getMarkdown());
+        }
+        return sb.toString();
+    }
+
+    private static String printBarcodes(final List<Barcode> barcodes) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < barcodes.size(); i++) {
+            sb.append(NEW_LINE);
+            sb.append(DOUBLE_TAB + "Barcode " + i + COLON);
+            sb.append(barcodes.get(i).getType() + WHITESPACE);
+            sb.append(barcodes.get(i).getValue());
+        }
+        return sb.toString();
+    }
+
+    private static String printSizes(final List<Size> sizes) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < sizes.size(); i++) {
+            sb.append(NEW_LINE);
+            sb.append(DOUBLE_TAB + "Size " + i + COLON);
+            sb.append(sizes.get(i).getDescription() + WHITESPACE);
+            sb.append(sizes.get(i).getRegion());
+        }
+        return sb.toString();
+    }
+
+    private static String printPrices(final List<Price> prices) {
+        if (CollectionUtils.isEmpty(prices)) {
+            return null;
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < prices.size(); i++) {
+            sb.append(NEW_LINE);
+            sb.append(DOUBLE_TAB + "Price " + i + COLON);
+            sb.append(prices.get(i).getCurrency() + WHITESPACE);
+            sb.append(prices.get(i).getRegion() + WHITESPACE);
+            sb.append(prices.get(i).getAmount());
+        }
+        return sb.toString();
+    }
+
+    private static String printRetrievedArticlesByBarcodes(final List<Article> articles, final List<String> barcodes) {
+        final StringBuilder sb = new StringBuilder("For barcodes: ");
+        for (final String barcode : barcodes) {
+            sb.append(barcode + COMMA);
+        }
+        sb.append(" founded articles with names: ");
+        for (int i = 0; i < articles.size(); i++) {
+            sb.append(NEW_LINE + TAB + (i + 1) + DOT + articles.get(i).getName());
+        }
+        return sb.toString();
+    }
+
+    private static String printRetrievedArticles(final List<Article> articles) {
+        final StringBuilder sb = new StringBuilder("Retrieved articles with gtins and names: ");
+        for (int i = 0; i < articles.size(); i++) {
+            sb.append(NEW_LINE + TAB + (i + 1) + DOT);
+            sb.append(articles.get(i).getGtin() + WHITESPACE);
+            sb.append(articles.get(i).getName());
+        }
+        return sb.toString();
     }
 }
