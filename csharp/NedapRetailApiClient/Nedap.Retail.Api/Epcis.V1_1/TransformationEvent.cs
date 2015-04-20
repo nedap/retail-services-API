@@ -38,7 +38,7 @@ namespace Nedap.Retail.Api.Epcis.V1_1
         /// <summary>
         /// Optional (see below). An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained.
         /// </summary>
-        [JsonProperty("ioutput_quantity_listlmd")]
+        [JsonProperty("output_quantity_list")]
         public List<QuantityElement> OutputQuantityList { get; set; }
 
         /// <summary>

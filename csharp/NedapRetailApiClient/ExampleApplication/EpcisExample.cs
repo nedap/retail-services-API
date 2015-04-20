@@ -15,8 +15,37 @@ namespace Nedap.Retail.Api.Example
             {
                 // capture
                 Console.WriteLine("------------- Capture epcis events");
-                string cap = client.EpcisV1_1.Capture(events);
+                string captureResult = client.EpcisV1_1.Capture(events);
                 Console.WriteLine("captured epcis events");
+
+                // query
+                Console.WriteLine("------------- Query epcis events");
+                List<ParameterObject> parameters = new List<ParameterObject>();
+                parameters.Add(new ParameterObject("EQ_read_point", new List<string>(new string[] {"urn:epc:id:sgln:012345.67890.001"})));
+                List<EpcisEvent> queryResult = client.EpcisV1_1.Query(parameters);
+                Console.WriteLine("Got " + queryResult.Count + " epcis events:");
+                foreach (EpcisEvent epcisEvent in queryResult)
+                {
+                    switch (epcisEvent.Type)
+                    {
+                        case "object_event":
+                            ObjectEvent objectEvent = (ObjectEvent)epcisEvent;
+                            Console.WriteLine("Object event with " + objectEvent.EpcList.Count + " EPCs");
+                            break;
+                        case "aggregation_event":
+                            AggregationEvent aggregationEvent = (AggregationEvent)epcisEvent;
+                            Console.WriteLine("Aggregation event with " + aggregationEvent.ChildEpcs.Count + " EPCs");
+                            break;
+                        case "transaction_event":
+                            TransactionEvent transactionEvent = (TransactionEvent)epcisEvent;
+                            Console.WriteLine("Transaction event with " + transactionEvent.EpcList.Count + " EPCs");
+                            break;
+                        case "transformation_event":
+                            TransformationEvent transformationEvent = (TransformationEvent)epcisEvent;
+                            Console.WriteLine("Transformation event with " + transformationEvent.InputEpcList.Count + " EPCs as input");
+                            break;
+                    }
+                }
             }
             catch (WebException e)
             {
@@ -33,7 +62,7 @@ namespace Nedap.Retail.Api.Example
             events.Add(new ObjectEvent()
             {
                 Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a66"),
-                EventTime = DateTime.Parse("2014-02-01T12:00:00.000+01:00"),
+                EventTime = DateTime.Now,
                 EventTimeZoneOffset = "+01:00",
                 RecordTime = DateTime.Now,
                 EpcList = new List<string>()
@@ -52,7 +81,7 @@ namespace Nedap.Retail.Api.Example
             events.Add(new ObjectEvent()
             {
                 Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a67"),
-                EventTime = DateTime.Parse("2014-02-01T12:01:00.000+01:00"),
+                EventTime = DateTime.Now,
                 EventTimeZoneOffset = "+01:00",
                 RecordTime = DateTime.Now,
                 EpcList = new List<string>()

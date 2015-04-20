@@ -95,7 +95,8 @@ namespace Nedap.Retail.Api.OAuth
         {
             Uri Url = NormalizeUrl(url);
             CheckOAuthToken();
-            String result = webClient.UploadString(Url, ToJson(data));
+            String json = ToJson(data);
+            String result = webClient.UploadString(Url, json);
             return FromJson<T>(result);
         }
 
