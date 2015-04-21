@@ -20,7 +20,7 @@ namespace Nedap.Retail.Api.Example
 
             using (Client client = new Client(oauthClientId, oauthSecret))
             {
-                //client.SetApiBaseUrl(new Uri("https://api-test.nedapretail.com/")); // use test server, remove this line to use production server
+                client.SetApiBaseUrl(new Uri("https://api-test.nedapretail.com/")); // use test server, remove this line to use production server
 
                 Console.WriteLine("Nedap Retail API examples");
                 Console.WriteLine("-------------------------");

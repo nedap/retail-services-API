@@ -28,7 +28,7 @@ namespace Nedap.Retail.Api.Epcis.V1_1
         /// An unordered list of one or more EPCs naming specific objects to which the event pertained.
         /// </summary>
         [JsonProperty("child_epcs")]
-        public string ChildEpcs { get; set; }
+        public List<string> ChildEpcs { get; set; }
 
         /// <summary>
         /// An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained.
