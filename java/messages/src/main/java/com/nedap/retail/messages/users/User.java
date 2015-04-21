@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * User Profile.
@@ -22,83 +21,15 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = -8964914993773388184L;
 
-    private String id;
-    private String displayName;
-    private String gender;
-    private String username;
-    private String language;
-    private Set<Authorisation> authorisations;
-    private long sitegroupId;
+    public String id;
+    public String displayName;
+    public String gender;
+    public String username;
+    public String language;
+    public Set<Authorisation> authorisations;
+    public long sitegroupId;
 
     public User() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    public static final String DISPLAY_NAME = "display_name";
-
-    @JsonProperty(DISPLAY_NAME)
-    @org.codehaus.jackson.annotate.JsonProperty(DISPLAY_NAME)
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    @JsonProperty(DISPLAY_NAME)
-    @org.codehaus.jackson.annotate.JsonProperty(DISPLAY_NAME)
-    public void setDisplayName(final String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(final String gender) {
-        this.gender = gender;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(final String username) {
-        this.username = username;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(final String language) {
-        this.language = language;
-    }
-
-    public Set<Authorisation> getAuthorisations() {
-        return authorisations;
-    }
-
-    public void setAuthorisations(final Set<Authorisation> authorisations) {
-        this.authorisations = authorisations;
-    }
-
-    public static final String SITEGROUP_ID = "sitegroup_id";
-
-    @JsonProperty(SITEGROUP_ID)
-    @org.codehaus.jackson.annotate.JsonProperty(SITEGROUP_ID)
-    public long getSitegroupId() {
-        return sitegroupId;
-    }
-
-    @JsonProperty(SITEGROUP_ID)
-    @org.codehaus.jackson.annotate.JsonProperty(SITEGROUP_ID)
-    public void setSitegroupId(final long sitegroupId) {
-        this.sitegroupId = sitegroupId;
     }
 
     @JsonIgnore
@@ -112,7 +43,7 @@ public class User implements Serializable {
     public boolean isAuthorized(final String roleName) {
         if (authorisations != null) {
             for (final Authorisation authorisation : authorisations) {
-                if (authorisation.getRole().equalsIgnoreCase(roleName)) {
+                if (authorisation.role.equalsIgnoreCase(roleName)) {
                     return true;
                 }
             }

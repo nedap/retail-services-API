@@ -71,25 +71,25 @@ public class ArticleExample {
         final Article article = new Article();
 
         // required fields
-        article.setGtin(GTIN_1);
-        article.setName("T-shirt with V-neck and short sleeves");
-        article.setColor("Black");
-        article.setSizes(setArticleSizes());
+        article.gtin = GTIN_1;
+        article.name = "T-shirt with V-neck and short sleeves";
+        article.color = "Black";
+        article.sizes = setArticleSizes();
 
         final List<Barcode> barcodes = new ArrayList<>();
         barcodes.add(new Barcode("EAN13", "2011200000019"));
-        article.setBarcodes(barcodes);
+        article.barcodes = barcodes;
 
         // optional fields
-        article.setCode(GTIN_1);
-        article.setBrand("River Island");
-        article.setSeason("Summer 2015");
-        article.setOption("T-shirt with V-neck and short sleeves, Black");
-        article.setStyle("T-shirt with V-neck and short sleeves");
-        article.setSupplier("River Island");
-        article.setCategory("T-shirt");
-        article.setMarkdown(false);
-        article.setPrices(setArticlePrices());
+        article.code = GTIN_1;
+        article.brand = "River Island";
+        article.season = "Summer 2015";
+        article.option = "T-shirt with V-neck and short sleeves, Black";
+        article.style = "T-shirt with V-neck and short sleeves";
+        article.supplier = "River Island";
+        article.category = "T-shirt";
+        article.markdown = false;
+        article.prices = setArticlePrices();
 
         return article;
     }
@@ -131,20 +131,20 @@ public class ArticleExample {
         for (int i = 0; i < articles.size(); i++) {
             sb.append(NEW_LINE + NEW_LINE);
             sb.append(TAB + "Article " + (i + 1) + COLON + NEW_LINE);
-            sb.append(TAB + "Gtin: " + articles.get(i).getGtin() + NEW_LINE);
-            sb.append(TAB + "Barcodes: " + printBarcodes(articles.get(i).getBarcodes()) + NEW_LINE);
-            sb.append(TAB + "Code: " + articles.get(i).getCode() + NEW_LINE);
-            sb.append(TAB + "Brand: " + articles.get(i).getBrand() + NEW_LINE);
-            sb.append(TAB + "Season: " + articles.get(i).getSeason() + NEW_LINE);
-            sb.append(TAB + "Name: " + articles.get(i).getName() + NEW_LINE);
-            sb.append(TAB + "Option: " + articles.get(i).getOption() + NEW_LINE);
-            sb.append(TAB + "Style: " + articles.get(i).getStyle() + NEW_LINE);
-            sb.append(TAB + "Color: " + articles.get(i).getColor() + NEW_LINE);
-            sb.append(TAB + "Sizes: " + printSizes(articles.get(i).getSizes()) + NEW_LINE);
-            sb.append(TAB + "Supplier: " + articles.get(i).getSupplier() + NEW_LINE);
-            sb.append(TAB + "Category: " + articles.get(i).getCategory() + NEW_LINE);
-            sb.append(TAB + "Prices: " + printPrices(articles.get(i).getPrices()) + NEW_LINE);
-            sb.append(TAB + "Markdown: " + articles.get(i).getMarkdown());
+            sb.append(TAB + "Gtin: " + articles.get(i).gtin + NEW_LINE);
+            sb.append(TAB + "Barcodes: " + printBarcodes(articles.get(i).barcodes) + NEW_LINE);
+            sb.append(TAB + "Code: " + articles.get(i).code + NEW_LINE);
+            sb.append(TAB + "Brand: " + articles.get(i).brand + NEW_LINE);
+            sb.append(TAB + "Season: " + articles.get(i).season + NEW_LINE);
+            sb.append(TAB + "Name: " + articles.get(i).name + NEW_LINE);
+            sb.append(TAB + "Option: " + articles.get(i).option + NEW_LINE);
+            sb.append(TAB + "Style: " + articles.get(i).style + NEW_LINE);
+            sb.append(TAB + "Color: " + articles.get(i).color + NEW_LINE);
+            sb.append(TAB + "Sizes: " + printSizes(articles.get(i).sizes) + NEW_LINE);
+            sb.append(TAB + "Supplier: " + articles.get(i).supplier + NEW_LINE);
+            sb.append(TAB + "Category: " + articles.get(i).category + NEW_LINE);
+            sb.append(TAB + "Prices: " + printPrices(articles.get(i).prices) + NEW_LINE);
+            sb.append(TAB + "Markdown: " + articles.get(i).markdown);
         }
         return sb.toString();
     }
@@ -154,8 +154,8 @@ public class ArticleExample {
         for (int i = 0; i < barcodes.size(); i++) {
             sb.append(NEW_LINE);
             sb.append(DOUBLE_TAB + "Barcode " + i + COLON);
-            sb.append(barcodes.get(i).getType() + WHITESPACE);
-            sb.append(barcodes.get(i).getValue());
+            sb.append(barcodes.get(i).type + WHITESPACE);
+            sb.append(barcodes.get(i).value);
         }
         return sb.toString();
     }
@@ -165,8 +165,8 @@ public class ArticleExample {
         for (int i = 0; i < sizes.size(); i++) {
             sb.append(NEW_LINE);
             sb.append(DOUBLE_TAB + "Size " + i + COLON);
-            sb.append(sizes.get(i).getDescription() + WHITESPACE);
-            sb.append(sizes.get(i).getRegion());
+            sb.append(sizes.get(i).description + WHITESPACE);
+            sb.append(sizes.get(i).region);
         }
         return sb.toString();
     }
@@ -180,9 +180,9 @@ public class ArticleExample {
         for (int i = 0; i < prices.size(); i++) {
             sb.append(NEW_LINE);
             sb.append(DOUBLE_TAB + "Price " + i + COLON);
-            sb.append(prices.get(i).getCurrency() + WHITESPACE);
-            sb.append(prices.get(i).getRegion() + WHITESPACE);
-            sb.append(prices.get(i).getAmount());
+            sb.append(prices.get(i).currency + WHITESPACE);
+            sb.append(prices.get(i).region + WHITESPACE);
+            sb.append(prices.get(i).amount);
         }
         return sb.toString();
     }
@@ -194,7 +194,7 @@ public class ArticleExample {
         }
         sb.append(" founded articles with names: ");
         for (int i = 0; i < articles.size(); i++) {
-            sb.append(NEW_LINE + TAB + (i + 1) + DOT + articles.get(i).getName());
+            sb.append(NEW_LINE + TAB + (i + 1) + DOT + articles.get(i).name);
         }
         return sb.toString();
     }
@@ -203,8 +203,8 @@ public class ArticleExample {
         final StringBuilder sb = new StringBuilder("Retrieved articles with gtins and names: ");
         for (int i = 0; i < articles.size(); i++) {
             sb.append(NEW_LINE + TAB + (i + 1) + DOT);
-            sb.append(articles.get(i).getGtin() + WHITESPACE);
-            sb.append(articles.get(i).getName());
+            sb.append(articles.get(i).gtin + WHITESPACE);
+            sb.append(articles.get(i).name);
         }
         return sb.toString();
     }

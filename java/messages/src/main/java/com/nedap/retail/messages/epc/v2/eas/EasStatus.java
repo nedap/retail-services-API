@@ -22,12 +22,10 @@ public class EasStatus {
     public String epcUri;
 
     public EasStatus() {
-
     }
 
     public EasStatus(final String epcHex, final String epcUri) {
         this.epcHex = epcHex;
         this.epcUri = epcUri;
     }
-
 }

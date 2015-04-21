@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ApprovedDifferenceListListRequest {
+
     @JsonProperty("from_rfid_time")
     @org.codehaus.jackson.annotate.JsonProperty("from_rfid_time")
     public DateTime fromRfidTime;

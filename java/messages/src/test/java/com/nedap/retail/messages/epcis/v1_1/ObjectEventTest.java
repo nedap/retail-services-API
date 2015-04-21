@@ -1,14 +1,17 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.joda.time.DateTime;
+import org.junit.Test;
+
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Bizstep;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
-import java.util.Arrays;
-import java.util.List;
-import org.joda.time.DateTime;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import org.junit.Test;
 
 public class ObjectEventTest {
 
@@ -48,11 +51,11 @@ public class ObjectEventTest {
         event.eventTime = new DateTime(2014, 07, 21, 8, 30, 0, 0);
         event.recordTime = new DateTime();
         event.eventTimeZoneOffset = "+00:00";
-        event.action = Action.OBSERVE.action();
+        event.action = Action.OBSERVE.action;
         event.bizLocation = "loc:groenlo";
         event.readPoint = "readpoint:X";
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
-        event.bizStep = Bizstep.STOCK_TAKING.bizStep();
+        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition;
+        event.bizStep = Bizstep.STOCK_TAKING.bizStep;
         event.epcList = epcSet;
         return event;
     }

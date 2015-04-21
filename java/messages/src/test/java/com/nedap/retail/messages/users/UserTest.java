@@ -40,11 +40,11 @@ public class UserTest {
         final User user = mapper.readValue(json.toString(), User.class);
 
         // Test user object.
-        assertEquals("1", user.getId());
-        assertEquals("Bob", user.getDisplayName());
+        assertEquals("1", user.id);
+        assertEquals("Bob", user.displayName);
 
         // Number of authorisations should be 3, including role "foo"!
-        final Set<Authorisation> authorisations = user.getAuthorisations();
+        final Set<Authorisation> authorisations = user.authorisations;
         assertEquals(3, authorisations.size());
 
         assertTrue(containsRole(authorisations, "cube_nedap_admin"));
@@ -77,25 +77,25 @@ public class UserTest {
 
         // Parse JSON into user object.
         final User user = mapper.readValue(json.toString(), User.class);
-        assertEquals("1", user.getId());
-        assertEquals("emil kappert", user.getDisplayName());
-        assertEquals("m", user.getGender());
-        assertEquals("en", user.getLanguage());
-        assertEquals("emil.kappert", user.getUsername());
+        assertEquals("1", user.id);
+        assertEquals("emil kappert", user.displayName);
+        assertEquals("m", user.gender);
+        assertEquals("en", user.language);
+        assertEquals("emil.kappert", user.username);
 
         // Number of authorisations should be 3, including role "foo"!
-        final Set<Authorisation> authorisations = user.getAuthorisations();
+        final Set<Authorisation> authorisations = user.authorisations;
         assertEquals(3, authorisations.size());
 
         final Authorisation authorisation1 = getAuthorisation(authorisations, "cube_back_office");
-        assertEquals(new DateTime("2014-01-02T00:00:00Z").getMillis(), authorisation1.getExpiresAt().getMillis());
-        assertEquals("cube_back_office", authorisation1.getRole());
+        assertEquals(new DateTime("2014-01-02T00:00:00Z").getMillis(), authorisation1.expiresAt.getMillis());
+        assertEquals("cube_back_office", authorisation1.role);
         final Authorisation authorisation2 = getAuthorisation(authorisations, "foo");
-        assertEquals(new DateTime("2015-02-03T00:00:00+01:00").getMillis(), authorisation2.getExpiresAt().getMillis());
-        assertEquals("foo", authorisation2.getRole());
+        assertEquals(new DateTime("2015-02-03T00:00:00+01:00").getMillis(), authorisation2.expiresAt.getMillis());
+        assertEquals("foo", authorisation2.role);
         final Authorisation authorisation3 = getAuthorisation(authorisations, "cube_nedap_admin");
-        assertEquals("cube_nedap_admin", authorisation3.getRole());
-        assertNull(authorisation3.getExpiresAt());
+        assertEquals("cube_nedap_admin", authorisation3.role);
+        assertNull(authorisation3.expiresAt);
 
         // Test isAuthorized using role enum.
         assertTrue(user.isAuthorized(Role.cube_nedap_admin));
@@ -111,7 +111,7 @@ public class UserTest {
 
     private Authorisation getAuthorisation(final Set<Authorisation> authorisations, final String role) {
         for (final Authorisation authorisation : authorisations) {
-            if (authorisation.getRole().equals(role)) {
+            if (authorisation.role.equals(role)) {
                 return authorisation;
             }
         }
@@ -120,7 +120,7 @@ public class UserTest {
 
     private static boolean containsRole(final Set<Authorisation> authorisations, final String role) {
         for (final Authorisation authorisation : authorisations) {
-            if (authorisation.getRole().equals(role)) {
+            if (authorisation.role.equals(role)) {
                 return true;
             }
         }

@@ -12,5 +12,4 @@ public class ApprovedDifferenceListExportStatusUpdateRequest {
     @JsonProperty("export_status")
     @org.codehaus.jackson.annotate.JsonProperty("export_status")
     public ExportStatus exportStatus;
-
 }

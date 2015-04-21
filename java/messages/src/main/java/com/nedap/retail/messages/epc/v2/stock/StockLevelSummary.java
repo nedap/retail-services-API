@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class StockLevelSummary {
+
     public DateTime generated;
     @JsonProperty("rfid_stock_time")
     @org.codehaus.jackson.annotate.JsonProperty("rfid_stock_time")

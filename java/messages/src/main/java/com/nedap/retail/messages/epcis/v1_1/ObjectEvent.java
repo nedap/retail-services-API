@@ -13,9 +13,7 @@ import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
 import com.nedap.retail.messages.epcis.v1_1.elements.QuantityElement;
 
 /**
- * Required parameters to construct an object_event are:
- * - epcList
- * - *or* quantityList
+ * Required parameters to construct an object_event are: - epcList - *or* quantityList
  *
  * @see http://nvs0272/confluence/display/storeid/EPCIS+1.1+Event#EPCIS1.1Event-ObjectEvent
  */
@@ -53,27 +51,30 @@ public class ObjectEvent extends EpcisEvent {
      * @param id The ID that identifies this message uniquely to an organization
      * @param eventTime The date and time at which the EPCIS Capturing Applications asserts the event occurred
      * @param recordTime The date and time at which this event was recorded by the EPCIS Repository.
-     * @param eventTimeZoneOffset The time zone offset in effect at the time and place the event occurred, expressed as an offset from UTC
+     * @param eventTimeZoneOffset The time zone offset in effect at the time and place the event occurred, expressed as
+     *            an offset from UTC
      * @param action How this event relates to the lifecycle of the EPCs named in this event.
-     * @param bizLocation The business location where the objects associated with the EPCs may be found, until contradicted by a subsequent event.
+     * @param bizLocation The business location where the objects associated with the EPCs may be found, until
+     *            contradicted by a subsequent event.
      * @param readPoint The read point at which the event took place.
-     * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until contradicted by a subsequent event.
+     * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until
+     *            contradicted by a subsequent event.
      * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained.
-     * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained.
+     * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to
+     *            which the event pertained.
      */
     public ObjectEvent(final String id, final DateTime eventTime, final DateTime recordTime,
             final String eventTimeZoneOffset, final Action action, final String bizLocation, final String readPoint,
-            final Disposition disposition, final List<String> epcList,
-            final List<QuantityElement> quantityList) {
+            final Disposition disposition, final List<String> epcList, final List<QuantityElement> quantityList) {
         this.id = id;
         this.eventTime = eventTime;
         this.recordTime = recordTime;
         this.eventTimeZoneOffset = eventTimeZoneOffset;
         this.type = EventType.ObjectEvent;
-        this.action = action != null ? action.action() : null;
+        this.action = action != null ? action.action : null;
         this.bizLocation = bizLocation;
         this.readPoint = readPoint;
-        this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
+        this.disposition = disposition != null ? disposition.disposition : Disposition.UNKNOWN.disposition;
         this.epcList = epcList;
         this.quantityList = quantityList;
     }
@@ -83,7 +84,8 @@ public class ObjectEvent extends EpcisEvent {
         final String epcListSize = epcList == null ? "null" : Integer.toString(epcList.size());
         final String quantityListSize = quantityList == null ? "null" : Integer.toString(quantityList.size());
 
-        return "ObjectEvent" + super.toString() + "[epcList(" + epcListSize + "),quantityList(" + quantityListSize + ")]";
+        return "ObjectEvent" + super.toString() + "[epcList(" + epcListSize + "),quantityList(" + quantityListSize
+                + ")]";
     }
 
     @Override

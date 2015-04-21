@@ -11,6 +11,7 @@ import com.nedap.retail.messages.article.Article;
 
 @JsonInclude(Include.NON_NULL)
 public class NotOnShelfResponse extends NotOnShelfSummary {
+
     public List<String> gtins;
     @JsonProperty("sales_floor_stock")
     public List<Integer> salesFloorStock;

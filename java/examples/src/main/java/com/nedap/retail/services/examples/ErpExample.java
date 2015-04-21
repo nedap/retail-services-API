@@ -27,7 +27,7 @@ public class ErpExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** ERP API example ***");
 
-        final String locationId = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).id;
 
         try {
             // Capture ERP stock

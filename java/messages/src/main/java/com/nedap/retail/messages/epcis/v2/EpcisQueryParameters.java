@@ -10,16 +10,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class EpcisQueryParameters {
 
     @JsonProperty("parameters")
-    private List<ParameterObject> parameters;
+    public List<ParameterObject> parameters;
 
     public EpcisQueryParameters() {
-    }
-
-    public List<ParameterObject> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(final List<ParameterObject> parameters) {
-        this.parameters = parameters;
     }
 }

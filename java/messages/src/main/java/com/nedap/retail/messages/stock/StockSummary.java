@@ -12,12 +12,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class StockSummary {
 
     public enum Status {
-
         ACCEPTED, VALIDATING
     }
 
     public String id;
-
     public String location;
 
     @JsonProperty("event_time")
@@ -29,7 +27,6 @@ public class StockSummary {
     public String externRef;
 
     public Status status;
-
     public Integer quantity;
 
     @JsonProperty("gtin_quantity")
@@ -64,7 +61,8 @@ public class StockSummary {
 
     @Override
     public String toString() {
-        return "StockSummary {" + "id=" + id + ", location=" + location + ", eventTime=" + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef="
-                + externRef + ", status=" + status + ", quantity=" + quantity + ", gtinQuantity=" + gtinQuantity + '}';
+        return "StockSummary {" + "id=" + id + ", location=" + location + ", eventTime="
+                + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef=" + externRef + ", status=" + status
+                + ", quantity=" + quantity + ", gtinQuantity=" + gtinQuantity + '}';
     }
 }

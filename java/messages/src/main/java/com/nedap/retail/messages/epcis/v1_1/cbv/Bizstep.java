@@ -1,8 +1,7 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 /**
- * Enumerates Business Steps
- * Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
+ * Enumerates Business Steps Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
  *
  * @see http://nvs0272/confluence/pages/viewpage.action?pageId=9733350
  */
@@ -17,8 +16,8 @@ public enum Bizstep {
      */
     ARRIVING(2, "urn:epcglobal:cbv:bizstep:arriving"),
     /**
-     * One or more objects are combined to create a new finished product. This process is reversible (unlike transforming).
-     * The composite object is created during this step, unlike installing.
+     * One or more objects are combined to create a new finished product. This process is reversible (unlike
+     * transforming). The composite object is created during this step, unlike installing.
      */
     ASSEMBLING(3, "urn:epcglobal:cbv:bizstep:assembling"),
     /**
@@ -43,7 +42,8 @@ public enum Bizstep {
      */
     CREATING_CLASS_INSTANCE(34, "urn:epcglobal:cbv:bizstep:creating_class_instance"),
     /**
-     * Counting objects within a location in order to obtain an accurate inventory for business needs other than accounting.
+     * Counting objects within a location in order to obtain an accurate inventory for business needs other than
+     * accounting.
      *
      * @since v2
      */
@@ -58,9 +58,9 @@ public enum Bizstep {
      */
     DEPARTING(7, "urn:epcglobal:cbv:bizstep:departing"),
     /**
-     * Terminating an object.
-     * - Instance-level identifiers should not be part of subsequent events. When read, this are likely errors such as stray-tag reads.
-     * - Class-level identifiers may still be used: their quantities will be reduced (referring to instances that were not destroyed).
+     * Terminating an object. - Instance-level identifiers should not be part of subsequent events. When read, this are
+     * likely errors such as stray-tag reads. - Class-level identifiers may still be used: their quantities will be
+     * reduced (referring to instances that were not destroyed).
      */
     DESTROYING(8, "urn:epcglobal:cbv:bizstep:destroying"),
     /**
@@ -138,26 +138,26 @@ public enum Bizstep {
      */
     RESERVING(25, "urn:epcglobal:cbv:bizstep:reserving"),
     /**
-     * An item being bought in the past is returned to the store by a customer.
-     * Nedap-specific addition
+     * An item being bought in the past is returned to the store by a customer. Nedap-specific addition
      *
      * @since v2
      */
     RETAIL_RETURNING(36, "http://nedapretail.com/bizstep/retail_returning"),
     /**
-     * At the point-of-sale. Transferring ownership to a customer in exchange for something of value (currency, credit, etc).
+     * At the point-of-sale. Transferring ownership to a customer in exchange for something of value (currency, credit,
+     * etc).
      */
     RETAIL_SELLING(27, "urn:epcglobal:cbv:bizstep:retail_selling"),
     /**
-     * A potential customer tries a specific item in a fitting room.
-     * Nedap-specific addition
+     * A potential customer tries a specific item in a fitting room. Nedap-specific addition
      *
      * @since v2
      */
     RETAIL_TRYING(37, "http://nedapretail.com/bizstep/retail_trying"),
-    /** Indicates the overall process of staging_outbound, loading and departing.
-     * - Used when more granular process step information is unknown or inaccessible.
-     * - The use of shipping is mutually exclusive from the use of staging_outbound, loading and departing.
+    /**
+     * Indicates the overall process of staging_outbound, loading and departing. - Used when more granular process step
+     * information is unknown or inaccessible. - The use of shipping is mutually exclusive from the use of
+     * staging_outbound, loading and departing.
      */
     SHIPPING(28, "urn:epcglobal:cbv:bizstep:shipping"),
     /**
@@ -165,8 +165,8 @@ public enum Bizstep {
      */
     STAGING_OUTBOUND(29, "urn:epcglobal:cbv:bizstep:staging_outbound"),
     /**
-     * Counting objects within a location following established rules and/or standard to serve as a basis for
-     * accounting purposes.
+     * Counting objects within a location following established rules and/or standard to serve as a basis for accounting
+     * purposes.
      *
      * @since v2
      */
@@ -208,20 +208,12 @@ public enum Bizstep {
      */
     UNPACKING(41, "urn:epcglobal:cbv:bizstep:unpacking");
 
-    private final int number;
-    private final String bizStep;
+    public final int number;
+    public final String bizStep;
 
     private Bizstep(final int aNumber, final String aBizStep) {
         number = aNumber;
         bizStep = aBizStep;
-    }
-
-    public final int number() {
-        return number;
-    }
-
-    public final String bizStep() {
-        return bizStep;
     }
 
     @Override
@@ -232,9 +224,9 @@ public enum Bizstep {
     /**
      * Provides similar functionality to valueOf(..). However, valueOf does not know how to access values() to lookup
      * the biz step. Instead, it will access name() which does not match its serialized counterpart.
-     * 
+     *
      * Example: Enum value: UNPACKING Serialized value (which is looked for): urn:epcglobal:cbv:bizstep:unpacking
-     * 
+     *
      * @param value String value of requested biz step
      * @return Bizstep enum value for provided String
      * @see valueOf(..)
@@ -244,7 +236,7 @@ public enum Bizstep {
             throw new IllegalArgumentException("biz step missing");
         }
         for (final Bizstep bizStep : values()) {
-            if (value.equalsIgnoreCase(bizStep.bizStep())) {
+            if (value.equalsIgnoreCase(bizStep.bizStep)) {
                 return bizStep;
             }
         }

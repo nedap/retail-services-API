@@ -5,7 +5,6 @@ import java.io.Serializable;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,11 +13,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class QrCode implements Serializable {
 
-    private String qrcode;
-    private DateTime expires;
+    private static final long serialVersionUID = -8306009109121831979L;
+
+    public String qrcode;
+    public DateTime expires;
     @JsonProperty("organization_id")
     @org.codehaus.jackson.annotate.JsonProperty("organization_id")
-    private Long organizationId;
+    public Long organizationId;
 
     public QrCode() {
     }
@@ -29,35 +30,8 @@ public class QrCode implements Serializable {
         this.organizationId = organizationId;
     }
 
-    public String getQrcode() {
-        return qrcode;
-    }
-
-    public void setQrcode(final String qrcode) {
-        this.qrcode = qrcode;
-    }
-
-    public DateTime getExpires() {
-        return expires;
-    }
-
-    public void setExpires(final DateTime expires) {
-        this.expires = expires;
-    }
-
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
-    public Long getOrganizationId() {
-        return organizationId;
-    }
-
-    public void setOrganizationId(final Long organizationId) {
-        this.organizationId = organizationId;
-    }
-
     @Override
     public String toString() {
         return "[" + qrcode + "|" + expires + "|" + organizationId + "]";
     }
-
 }

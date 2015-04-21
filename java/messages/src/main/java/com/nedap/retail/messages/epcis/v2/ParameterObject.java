@@ -11,45 +11,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class ParameterObject {
 
-    private String name;
-    private String type;
-    private String value;
-    private List<String> values;
+    public String name;
+    public String type;
+    public String value;
+    public List<String> values;
 
     public ParameterObject() {
-
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(final String value) {
-        this.value = value;
-    }
-
-    public List<String> getValues() {
-        return values;
-    }
-
-    public void setValues(final List<String> values) {
-        this.values = values;
     }
 
     public boolean hasValue() {

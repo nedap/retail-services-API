@@ -16,6 +16,7 @@ import com.nedap.retail.messages.epc.v2.approved_difference_list.GtinDifference;
 @JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApprovedDifferenceListResponse extends ApprovedDifferenceListSummary {
+
     public List<String> gtins;
     @JsonProperty("erp_stock")
     @org.codehaus.jackson.annotate.JsonProperty("erp_stock")

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NotOnShelfSummary {
+
     @JsonProperty("rfid_stock_time")
     public DateTime rfidStockTime;
     @JsonProperty("not_on_shelf_gtin_quantity")

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApprovedDifferenceListSummary {
+
     public static final String ORGANIZATION_ID = "organization_id";
     public static final String APPROVED_ON = "approved_on";
     public static final String APPROVED_BY = "approved_by";
@@ -100,7 +101,6 @@ public class ApprovedDifferenceListSummary {
     public UUID id;
 
     public ApprovedDifferenceListSummary() {
-
     }
 
     public ApprovedDifferenceListSummary(final ApprovedDifferenceListSummary approvedDifferenceListSummary) {
@@ -123,5 +123,4 @@ public class ApprovedDifferenceListSummary {
         externRef = approvedDifferenceListSummary.externRef;
         id = approvedDifferenceListSummary.id;
     }
-
 }

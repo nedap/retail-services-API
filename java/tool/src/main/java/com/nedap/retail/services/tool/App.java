@@ -24,9 +24,7 @@ import com.nedap.retail.messages.system.SystemStatusPayload;
  *
  * usage: java -jar tool.jar -clientid <CLIENTID> -secret <SECRET> [-url <url>]
  *
- * Exit codes:
- * 0: successfull.
- * 1: not successfull.
+ * Exit codes: 0: successfull. 1: not successfull.
  */
 public class App {
 
@@ -73,15 +71,12 @@ public class App {
 
     private static Options createCliOption() throws IllegalArgumentException {
         final Options options = new Options();
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("id")
-                .withDescription("OAuth 2.0 client ID")
+        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("id").withDescription("OAuth 2.0 client ID")
                 .create(OPTION_CLIENTID));
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("secret")
-                .withDescription("OAuth 2.0 secret")
+        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("secret").withDescription("OAuth 2.0 secret")
                 .create(OPTION_SECRET));
         options.addOption(OptionBuilder.hasArg().withArgName("url")
-                .withDescription("(Optional) Default is https://api.nedapretail.com")
-                .create(OPTION_URL));
+                .withDescription("(Optional) Default is https://api.nedapretail.com").create(OPTION_URL));
         options.addOption(OPTION_HELP, "help", false, "URI_LOGIN");
         return options;
     }
@@ -142,11 +137,13 @@ public class App {
         final List<SystemListPayload> list = apiClient.getSystemList();
         if (list.size() > 0) {
             System.out.printf("%-40s %-20s %s\n", "system ID", "name", "location");
-            System.out.printf("---------------------------------------------------------------------------------------\n");
+            System.out
+                    .printf("---------------------------------------------------------------------------------------\n");
             for (final SystemListPayload system : list) {
-                System.out.printf("%-40s %-20s %s\n", system.getSystemId(), system.getName(), system.getLocation());
+                System.out.printf("%-40s %-20s %s\n", system.systemId, system.name, system.location);
             }
-            System.out.printf("---------------------------------------------------------------------------------------\n");
+            System.out
+                    .printf("---------------------------------------------------------------------------------------\n");
         }
         System.out.println("number of systems: " + list.size());
         System.out.println();
@@ -156,23 +153,25 @@ public class App {
         final List<SystemStatusPayload> list = apiClient.getSystemStatus();
         if (list.size() > 0) {
             System.out.printf("%-40s %-20s %s\n", "system ID", "firmware version", "status");
-            System.out.printf("---------------------------------------------------------------------------------------\n");
+            System.out
+                    .printf("---------------------------------------------------------------------------------------\n");
             for (final SystemStatusPayload system : list) {
                 final String status;
                 final String detailed;
-                if (system.getStatus() == null) {
+                if (system.status == null) {
                     status = "";
                     detailed = "";
-                } else if (system.getStatus() == Status.OFFLINE) {
-                    status = "OFFLINE since " + system.getOfflineSince();
+                } else if (system.status == Status.OFFLINE) {
+                    status = "OFFLINE since " + system.offlineSince;
                     detailed = "";
                 } else {
-                    status = system.getStatus().toString();
-                    detailed = system.getDetailedStatus().toString();
+                    status = system.status.toString();
+                    detailed = system.detailedStatus.toString();
                 }
-                System.out.printf("%-40s %-20s %-20s %s\n", system.getSystemId(), system.getFirmwareVersion(), status, detailed);
+                System.out.printf("%-40s %-20s %-20s %s\n", system.systemId, system.firmwareVersion, status, detailed);
             }
-            System.out.printf("---------------------------------------------------------------------------------------\n");
+            System.out
+                    .printf("---------------------------------------------------------------------------------------\n");
         }
         System.out.println("number of systems: " + list.size());
         System.out.println();
@@ -182,11 +181,13 @@ public class App {
         final List<Subscription> list = apiClient.getSubscriptionList();
         if (list.size() > 0) {
             System.out.printf("%-20s %s\n", "topic", "callback");
-            System.out.printf("---------------------------------------------------------------------------------------\n");
+            System.out
+                    .printf("---------------------------------------------------------------------------------------\n");
             for (final Subscription subscription : list) {
-                System.out.printf("%-20s %s\n", subscription.getTopic(), subscription.getCallback());
+                System.out.printf("%-20s %s\n", subscription.topic, subscription.callback);
             }
-            System.out.printf("---------------------------------------------------------------------------------------\n");
+            System.out
+                    .printf("---------------------------------------------------------------------------------------\n");
         }
         System.out.println("number of subscriptions: " + list.size());
         System.out.println();

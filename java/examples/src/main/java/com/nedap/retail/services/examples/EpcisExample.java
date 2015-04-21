@@ -32,7 +32,7 @@ public class EpcisExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** EPCIS API example ***");
 
-        final String locationId = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).id;
 
         try {
             // Capture EPCIS events
@@ -65,10 +65,10 @@ public class EpcisExample {
         final ObjectEvent event = new ObjectEvent();
         event.id = generateEpcisEventID(ORGANIZATION_PREFIX, 1).toString();
         event.eventTime = DateTime.now();
-        event.action = Action.OBSERVE.action();
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
+        event.action = Action.OBSERVE.action;
+        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition;
         event.bizLocation = locationId;
-        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep();
+        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep;
         event.readPoint = locationId;
         event.epcList = makeEpcList1();
         return event;
@@ -101,10 +101,10 @@ public class EpcisExample {
         final ObjectEvent event = new ObjectEvent();
         event.id = generateEpcisEventID(ORGANIZATION_PREFIX, 2).toString();
         event.eventTime = DateTime.now();
-        event.action = Action.OBSERVE.action();
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
+        event.action = Action.OBSERVE.action;
+        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition;
         event.bizLocation = locationId;
-        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep();
+        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep;
         event.readPoint = locationId;
         event.epcList = makeEpcList2();
         return event;
@@ -132,14 +132,14 @@ public class EpcisExample {
 
     private static EpcisQueryParameters makeEpcisQueryParameters() {
         final EpcisQueryParameters queryParameters = new EpcisQueryParameters();
-        queryParameters.setParameters(Arrays.asList(makeParameterObject1()));
+        queryParameters.parameters = Arrays.asList(makeParameterObject1());
         return queryParameters;
     }
 
     private static ParameterObject makeParameterObject1() {
         final ParameterObject parameter = new ParameterObject();
-        parameter.setName("GE_event_time");
-        parameter.setValue(DateTime.now().minusMinutes(1).toString());
+        parameter.name = "GE_event_time";
+        parameter.value = DateTime.now().minusMinutes(1).toString();
         return parameter;
     }
 

@@ -25,7 +25,6 @@ public class StockSummaryListRequest {
     public DateTime untilEventTime;
 
     public StockSummaryListRequest() {
-
     }
 
     public StockSummaryListRequest(final String location, final DateTime fromEventTime, final DateTime untilEventTime) {
@@ -33,5 +32,4 @@ public class StockSummaryListRequest {
         this.fromEventTime = fromEventTime;
         this.untilEventTime = untilEventTime;
     }
-
 }

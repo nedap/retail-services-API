@@ -32,7 +32,7 @@ public class WorkflowExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** Workflow API example ***");
 
-        final String locationId = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).id;
 
         try {
             // Make some EPCIS events first
@@ -71,10 +71,10 @@ public class WorkflowExample {
         final ObjectEvent event = new ObjectEvent();
         event.id = generateEpcisEventID(ORGANIZATION_PREFIX, 1).toString();
         event.eventTime = DateTime.now();
-        event.action = Action.OBSERVE.action();
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
+        event.action = Action.OBSERVE.action;
+        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition;
         event.bizLocation = locationId;
-        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep();
+        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep;
         event.readPoint = locationId;
         event.epcList = makeEpcList1();
         MESSAGE_IDS.add(event.id);
@@ -108,10 +108,10 @@ public class WorkflowExample {
         final ObjectEvent event = new ObjectEvent();
         event.id = generateEpcisEventID(ORGANIZATION_PREFIX, 2).toString();
         event.eventTime = DateTime.now();
-        event.action = Action.OBSERVE.action();
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
+        event.action = Action.OBSERVE.action;
+        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition;
         event.bizLocation = locationId;
-        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep();
+        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep;
         event.readPoint = locationId;
         event.epcList = makeEpcList2();
         MESSAGE_IDS.add(event.id);
@@ -142,11 +142,11 @@ public class WorkflowExample {
             final EpcisEventContainer epcisEventsContainer) {
 
         final WorkflowEvent workflow = new WorkflowEvent();
-        workflow.setType("cycle_count_finished");
-        workflow.setEventTime(DateTime.now());
-        workflow.setLocation(locationId);
-        workflow.setEpcCount(countEpcs(epcisEventsContainer));
-        workflow.setMessageIds(MESSAGE_IDS);
+        workflow.type = "cycle_count_finished";
+        workflow.eventTime = DateTime.now();
+        workflow.location = locationId;
+        workflow.epcCount = countEpcs(epcisEventsContainer);
+        workflow.messageIds = MESSAGE_IDS;
         return workflow;
     }
 
@@ -162,10 +162,10 @@ public class WorkflowExample {
 
     private static String printWorkflow(final WorkflowEvent workflow) {
         final StringBuilder sb = new StringBuilder();
-        sb.append(NEW_LINE + TAB + "Type: " + workflow.getType());
-        sb.append(NEW_LINE + TAB + "Event time: " + workflow.getEventTime());
-        sb.append(NEW_LINE + TAB + "Location: " + workflow.getLocation());
-        sb.append(NEW_LINE + TAB + "Epc count: " + workflow.getEpcCount());
+        sb.append(NEW_LINE + TAB + "Type: " + workflow.type);
+        sb.append(NEW_LINE + TAB + "Event time: " + workflow.eventTime);
+        sb.append(NEW_LINE + TAB + "Location: " + workflow.location);
+        sb.append(NEW_LINE + TAB + "Epc count: " + workflow.epcCount);
         sb.append(NEW_LINE + TAB + "Message ids: ");
         sb.append(printMessageIds(workflow));
         return sb.toString();
@@ -173,17 +173,17 @@ public class WorkflowExample {
 
     private static String printMessageIds(final WorkflowEvent workflow) {
         final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < workflow.getMessageIds().size(); i++) {
+        for (int i = 0; i < workflow.messageIds.size(); i++) {
             sb.append(NEW_LINE + DOUBLE_TAB);
             sb.append((i + 1) + DOT);
-            sb.append(workflow.getMessageIds().get(i));
+            sb.append(workflow.messageIds.get(i));
         }
         return sb.toString();
     }
 
     private static QueryRequest makeWorkflowQueryRequest() {
         final QueryRequest request = new QueryRequest();
-        request.setFrom(DateTime.now().minusMinutes(10));
+        request.from = DateTime.now().minusMinutes(10);
         return request;
     }
 

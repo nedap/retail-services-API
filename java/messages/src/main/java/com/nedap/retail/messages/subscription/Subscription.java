@@ -4,30 +4,16 @@ import java.io.Serializable;
 
 public class Subscription implements Serializable {
 
-    private String topic;
-    private String callback;
+    private static final long serialVersionUID = -1754895195431644892L;
+
+    public String topic;
+    public String callback;
 
     public Subscription() {
     }
 
-    public Subscription(String topic, String callback) {
+    public Subscription(final String topic, final String callback) {
         this.topic = topic;
-        this.callback = callback;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
-
-    public String getCallback() {
-        return callback;
-    }
-
-    public void setCallback(String callback) {
         this.callback = callback;
     }
 }

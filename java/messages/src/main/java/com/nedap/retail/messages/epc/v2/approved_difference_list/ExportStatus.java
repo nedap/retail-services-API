@@ -8,7 +8,7 @@ public enum ExportStatus {
 
     /**
      * Provides similar functionality to valueOf(..).
-     * 
+     *
      * @param value String value of requested export status
      * @return ExportStatus enum value for provided String
      * @see valueOf(..)
@@ -31,5 +31,4 @@ public enum ExportStatus {
     public final String toString() {
         return this.name();
     }
-
 }

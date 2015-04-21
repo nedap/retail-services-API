@@ -10,8 +10,8 @@ import com.nedap.retail.messages.InvalidMessage;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ResultPayload {
 
-    private String result;
-    private String reason;
+    public String result;
+    public String reason;
 
     public ResultPayload() {
     }
@@ -26,22 +26,6 @@ public class ResultPayload {
 
     public ResultPayload(final String result, final String reason) {
         this.result = result;
-        this.reason = reason;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(final String result) {
-        this.result = result;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(final String reason) {
         this.reason = reason;
     }
 }

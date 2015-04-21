@@ -10,30 +10,17 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Barcode implements Serializable {
-    private String type;
-    private String value;
+
+    private static final long serialVersionUID = 1915457722258771573L;
+
+    public String type;
+    public String value;
 
     public Barcode() {
     }
 
     public Barcode(final String type, final String value) {
         this.type = type;
-        this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(final String value) {
         this.value = value;
     }
 

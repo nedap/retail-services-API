@@ -50,14 +50,19 @@ public class TransactionEvent extends EpcisEvent {
      * @param id The ID that identifies this message uniquely to an organization
      * @param eventTime The date and time at which the EPCIS Capturing Applications asserts the event occurred
      * @param recordTime The date and time at which this event was recorded by the EPCIS Repository.
-     * @param eventTimeZoneOffset The time zone offset in effect at the time and place the event occurred, expressed as an offset from UTC
+     * @param eventTimeZoneOffset The time zone offset in effect at the time and place the event occurred, expressed as
+     *            an offset from UTC
      * @param action How this event relates to the lifecycle of the EPCs named in this event.
-     * @param bizLocation The business location where the objects associated with the EPCs may be found, until contradicted by a subsequent event.
+     * @param bizLocation The business location where the objects associated with the EPCs may be found, until
+     *            contradicted by a subsequent event.
      * @param readPoint The read point at which the event took place.
-     * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until contradicted by a subsequent event.
+     * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until
+     *            contradicted by a subsequent event.
      * @param parentId
-     * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained. A TransactionEvent must contain either an epc_list or a quantity_list.
-     * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained. A TransactionEvent must contain either an epc_list or a quantity_list.
+     * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained. A
+     *            TransactionEvent must contain either an epc_list or a quantity_list.
+     * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to
+     *            which the event pertained. A TransactionEvent must contain either an epc_list or a quantity_list.
      * @param bizTransactionList An unordered list of business transactions that define the context of this event.
      */
     public TransactionEvent(final String id, final DateTime eventTime, final DateTime recordTime,
@@ -69,10 +74,10 @@ public class TransactionEvent extends EpcisEvent {
         this.recordTime = recordTime;
         this.eventTimeZoneOffset = eventTimeZoneOffset;
         this.type = EventType.TransactionEvent;
-        this.action = action != null ? action.action() : null;
+        this.action = action != null ? action.action : null;
         this.bizLocation = bizLocation;
         this.readPoint = readPoint;
-        this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
+        this.disposition = disposition != null ? disposition.disposition : Disposition.UNKNOWN.disposition;
         this.parentId = parentId;
         this.epcList = epcList;
         this.quantityList = quantityList;

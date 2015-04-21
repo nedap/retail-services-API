@@ -1,7 +1,6 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.AggregationEvent;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
@@ -11,16 +10,15 @@ import com.nedap.retail.messages.epcis.v1_1.TransactionEvent;
 import com.nedap.retail.messages.epcis.v1_1.TransformationEvent;
 
 /**
- * Enumerates EPCIS EventType
- * Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
+ * Enumerates EPCIS EventType Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
  *
  * @see http://nvs0272/confluence/display/storeid/EPCIS+1.1+Event
  */
 public enum EventType {
 
     /**
-     * Captures information about an event pertaining to one or more physical or digital objects
-     * identified by instance-level (EPC) or class-level (EPC Class) identifiers.
+     * Captures information about an event pertaining to one or more physical or digital objects identified by
+     * instance-level (EPC) or class-level (EPC Class) identifiers.
      */
     @SerializedName("object_event")
     ObjectEvent(1, "object_event", ObjectEvent.class),
@@ -30,8 +28,7 @@ public enum EventType {
     @SerializedName("aggregation_event")
     AggregationEvent(2, "aggregation_event", AggregationEvent.class),
     /**
-     * Describes the association or disassociation of physical or digital objects to one or more
-     * business transactions.
+     * Describes the association or disassociation of physical or digital objects to one or more business transactions.
      */
     @SerializedName("transaction_event")
     TransactionEvent(3, "transaction_event", TransactionEvent.class),
@@ -41,45 +38,21 @@ public enum EventType {
     @SerializedName("quantity_event")
     QuantityEvent(4, "quantity_event", QuantityEvent.class),
     /**
-     * Captures information about an event in which one or more physical or digital objects
-     * identified by instance-level (EPC) or class-level (EPC Class) identifiers are consumed as
-     * inputs and one or more objects identified by instance-level (EPC) or class-level (EPC Class)
-     * identifiers are produced as outputs.
+     * Captures information about an event in which one or more physical or digital objects identified by instance-level
+     * (EPC) or class-level (EPC Class) identifiers are consumed as inputs and one or more objects identified by
+     * instance-level (EPC) or class-level (EPC Class) identifiers are produced as outputs.
      */
     @SerializedName("transformation_event")
     TransformationEvent(5, "transformation_event", TransformationEvent.class);
 
-    private final int number;
-    private final String eventType;
-    private final Class<? extends EpcisEvent> clz;
+    public final int number;
+    public final String eventType;
+    public final Class<? extends EpcisEvent> clz;
 
     private EventType(final int aNumber, final String anEventType, final Class<? extends EpcisEvent> aClz) {
         number = aNumber;
         eventType = anEventType;
         clz = aClz;
-    }
-
-    /**
-     * @return EPCIS' event type Nedap identifier
-     */
-    public final int number() {
-        return number;
-    }
-
-    /**
-     * @return EPCIS' event type
-     */
-    @JsonValue
-    @org.codehaus.jackson.annotate.JsonValue
-    public final String eventType() {
-        return eventType;
-    }
-
-    /**
-     * @return Class type
-     */
-    public final Class<? extends EpcisEvent> type() {
-        return clz;
     }
 
     /**
@@ -96,7 +69,7 @@ public enum EventType {
             throw new IllegalArgumentException("event type missing");
         }
         for (final EventType v : values()) {
-            if (value.equalsIgnoreCase(v.eventType())) {
+            if (value.equalsIgnoreCase(v.eventType)) {
                 return v;
             }
         }

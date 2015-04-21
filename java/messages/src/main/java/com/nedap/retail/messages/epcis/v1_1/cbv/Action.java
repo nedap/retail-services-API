@@ -1,8 +1,7 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 /**
- * Enumerates EPCIS Actions
- * Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
+ * Enumerates EPCIS Actions Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
  *
  * @see http://nvs0272/confluence/pages/viewpage.action?pageId=9733350
  */
@@ -21,20 +20,12 @@ public enum Action {
      */
     DELETE(3, "DELETE");
 
-    private final int number;
-    private final String action;
+    public final int number;
+    public final String action;
 
-    private Action(int aNumber, String anAction) {
+    private Action(final int aNumber, final String anAction) {
         number = aNumber;
         action = anAction;
-    }
-
-    public final int getNumber() {
-        return number;
-    }
-
-    public final String action() {
-        return action;
     }
 
     @Override

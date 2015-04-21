@@ -44,7 +44,7 @@ public class EpcExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** EPC API example ***");
 
-        final String locationId = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).id;
 
         try {
             // Create some articles
@@ -142,12 +142,12 @@ public class EpcExample {
 
         final List<Barcode> barcodes = new ArrayList<>();
         barcodes.add(new Barcode("EAN13", "2011200000019"));
-        article.setBarcodes(barcodes);
+        article.barcodes = barcodes;
 
-        article.setGtin(GTIN_1);
-        article.setName("T-shirt with V-neck and short sleeves");
-        article.setColor("Black");
-        article.setSizes(setArticleSizes1());
+        article.gtin = GTIN_1;
+        article.name = "T-shirt with V-neck and short sleeves";
+        article.color = "Black";
+        article.sizes = setArticleSizes1();
 
         return article;
     }
@@ -165,12 +165,12 @@ public class EpcExample {
 
         final List<Barcode> barcodes = new ArrayList<>();
         barcodes.add(new Barcode("EAN13", "2011200000064"));
-        article.setBarcodes(barcodes);
+        article.barcodes = barcodes;
 
-        article.setGtin(GTIN_2);
-        article.setName("Straight regular jeans");
-        article.setColor("Black");
-        article.setSizes(setArticleSizes2());
+        article.gtin = GTIN_2;
+        article.name = "Straight regular jeans";
+        article.color = "Black";
+        article.sizes = setArticleSizes2();
 
         return article;
     }
@@ -188,12 +188,12 @@ public class EpcExample {
 
         final List<Barcode> barcodes = new ArrayList<>();
         barcodes.add(new Barcode("EAN13", "2011200000163"));
-        article.setBarcodes(barcodes);
+        article.barcodes = barcodes;
 
-        article.setGtin(GTIN_3);
-        article.setName("Washed leather in a classic maritime style shoes");
-        article.setColor("Black");
-        article.setSizes(setArticleSizes3());
+        article.gtin = GTIN_3;
+        article.name = "Washed leather in a classic maritime style shoes";
+        article.color = "Black";
+        article.sizes = setArticleSizes3();
 
         return article;
     }
@@ -237,17 +237,17 @@ public class EpcExample {
     private static List<String> getSublocations(final String locationId, final Client client) {
         final List<String> sublocationIds = new ArrayList<>();
         final Location location = client.getLocation(locationId);
-        if (!CollectionUtils.isEmpty(location.getChildren())) {
-            sublocationIds.add(getSalesFloorSublocationId(location.getChildren()));
-            sublocationIds.add(getStockRoomSublocationId(location.getChildren()));
+        if (!CollectionUtils.isEmpty(location.children)) {
+            sublocationIds.add(getSalesFloorSublocationId(location.children));
+            sublocationIds.add(getStockRoomSublocationId(location.children));
         }
         return sublocationIds;
     }
 
     private static String getSalesFloorSublocationId(final List<Location> sublocations) {
         for (final Location sublocation : sublocations) {
-            if (sublocation.getSubtype().equals(LocationSubType.SALES_FLOOR)) {
-                return sublocation.getId();
+            if (sublocation.subtype.equals(LocationSubType.SALES_FLOOR)) {
+                return sublocation.id;
             }
         }
         return null;
@@ -255,8 +255,8 @@ public class EpcExample {
 
     private static String getStockRoomSublocationId(final List<Location> sublocations) {
         for (final Location sublocation : sublocations) {
-            if (sublocation.getSubtype().equals(LocationSubType.STOCK_ROOM)) {
-                return sublocation.getId();
+            if (sublocation.subtype.equals(LocationSubType.STOCK_ROOM)) {
+                return sublocation.id;
             }
         }
         return null;
@@ -324,11 +324,11 @@ public class EpcExample {
 
     private static String printDifferenceList(final DifferenceListResponse differenceList) {
         final StringBuilder sb = new StringBuilder("Differences for a given gtins are:");
-        for (int i = 0; i < differenceList.getGtins().size(); i++) {
+        for (int i = 0; i < differenceList.gtins.size(); i++) {
             sb.append(NEW_LINE + TAB);
-            sb.append("For gtin: " + differenceList.getGtins().get(i) + WHITESPACE);
-            sb.append("ERP stock quantity is: " + differenceList.getErpStock().get(i) + COMMA);
-            sb.append("RFID stock quantity is: " + differenceList.getRfidStock().get(i));
+            sb.append("For gtin: " + differenceList.gtins.get(i) + WHITESPACE);
+            sb.append("ERP stock quantity is: " + differenceList.erpStock.get(i) + COMMA);
+            sb.append("RFID stock quantity is: " + differenceList.rfidStock.get(i));
         }
         return sb.toString();
     }
