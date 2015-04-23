@@ -71,10 +71,10 @@ public class ObjectEvent extends EpcisEvent {
         this.recordTime = recordTime;
         this.eventTimeZoneOffset = eventTimeZoneOffset;
         this.type = EventType.ObjectEvent;
-        this.action = action != null ? action.action : null;
+        this.action = action != null ? action.action() : null;
         this.bizLocation = bizLocation;
         this.readPoint = readPoint;
-        this.disposition = disposition != null ? disposition.disposition : Disposition.UNKNOWN.disposition;
+        this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
         this.epcList = epcList;
         this.quantityList = quantityList;
     }

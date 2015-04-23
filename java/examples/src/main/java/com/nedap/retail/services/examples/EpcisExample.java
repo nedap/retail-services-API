@@ -65,10 +65,10 @@ public class EpcisExample {
         final ObjectEvent event = new ObjectEvent();
         event.id = generateEpcisEventID(ORGANIZATION_PREFIX, 1).toString();
         event.eventTime = DateTime.now();
-        event.action = Action.OBSERVE.action;
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition;
+        event.action = Action.OBSERVE.action();
+        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
         event.bizLocation = locationId;
-        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep;
+        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep();
         event.readPoint = locationId;
         event.epcList = makeEpcList1();
         return event;
@@ -101,10 +101,10 @@ public class EpcisExample {
         final ObjectEvent event = new ObjectEvent();
         event.id = generateEpcisEventID(ORGANIZATION_PREFIX, 2).toString();
         event.eventTime = DateTime.now();
-        event.action = Action.OBSERVE.action;
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition;
+        event.action = Action.OBSERVE.action();
+        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
         event.bizLocation = locationId;
-        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep;
+        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep();
         event.readPoint = locationId;
         event.epcList = makeEpcList2();
         return event;

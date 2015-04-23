@@ -23,7 +23,6 @@ public class ApprovedDifferenceListExportResponse extends ApprovedDifferenceList
     public List<Integer> approvedQuantity;
 
     public ApprovedDifferenceListExportResponse() {
-
     }
 
     public ApprovedDifferenceListExportResponse(final ApprovedDifferenceList approvedDifferenceList) {

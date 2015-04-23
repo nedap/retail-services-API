@@ -18,7 +18,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Article implements Serializable {
 
     private static final long serialVersionUID = 3681466505727698821L;
+
+    public static final String GTIN = "gtin";
+    public static final String STYLE = "style";
+    public static final String OPTION = "option";
+    public static final String COLOR = "color";
+    public static final String SIZES = "sizes";
+    public static final String PRICES = "prices";
+    public static final String SUPPLIER = "supplier";
+    public static final String CATEGORY = "category";
+    public static final String CODE = "code";
+    public static final String BRAND = "brand";
+    public static final String SEASON = "season";
+    public static final String NAME = "name";
+    public static final String BARCODES = "barcodes";
     public static final String LAST_UPDATED = "last_updated";
+    public static final String MARKDOWN = "markdown";
 
     public String gtin;
     public List<Barcode> barcodes;

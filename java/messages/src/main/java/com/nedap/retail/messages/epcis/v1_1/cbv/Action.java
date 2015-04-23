@@ -20,12 +20,20 @@ public enum Action {
      */
     DELETE(3, "DELETE");
 
-    public final int number;
-    public final String action;
+    private final int number;
+    private final String action;
 
     private Action(final int aNumber, final String anAction) {
         number = aNumber;
         action = anAction;
+    }
+
+    public final int getNumber() {
+        return number;
+    }
+
+    public final String action() {
+        return action;
     }
 
     @Override

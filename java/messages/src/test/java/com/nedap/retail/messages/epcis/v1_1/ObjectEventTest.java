@@ -51,11 +51,11 @@ public class ObjectEventTest {
         event.eventTime = new DateTime(2014, 07, 21, 8, 30, 0, 0);
         event.recordTime = new DateTime();
         event.eventTimeZoneOffset = "+00:00";
-        event.action = Action.OBSERVE.action;
+        event.action = Action.OBSERVE.action();
         event.bizLocation = "loc:groenlo";
         event.readPoint = "readpoint:X";
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition;
-        event.bizStep = Bizstep.STOCK_TAKING.bizStep;
+        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
+        event.bizStep = Bizstep.STOCK_TAKING.bizStep();
         event.epcList = epcSet;
         return event;
     }

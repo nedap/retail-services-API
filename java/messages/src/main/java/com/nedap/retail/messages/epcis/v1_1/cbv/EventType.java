@@ -1,6 +1,7 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.AggregationEvent;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
@@ -45,14 +46,37 @@ public enum EventType {
     @SerializedName("transformation_event")
     TransformationEvent(5, "transformation_event", TransformationEvent.class);
 
-    public final int number;
-    public final String eventType;
-    public final Class<? extends EpcisEvent> clz;
+    private final int number;
+    private final String eventType;
+    private final Class<? extends EpcisEvent> clz;
 
     private EventType(final int aNumber, final String anEventType, final Class<? extends EpcisEvent> aClz) {
         number = aNumber;
         eventType = anEventType;
         clz = aClz;
+    }
+
+    /**
+     * @return EPCIS' event type Nedap identifier
+     */
+    public final int number() {
+        return number;
+    }
+
+    /**
+     * @return EPCIS' event type
+     */
+    @JsonValue
+    @org.codehaus.jackson.annotate.JsonValue
+    public final String eventType() {
+        return eventType;
+    }
+
+    /**
+     * @return Class type
+     */
+    public final Class<? extends EpcisEvent> type() {
+        return clz;
     }
 
     /**

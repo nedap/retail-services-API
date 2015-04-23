@@ -208,12 +208,20 @@ public enum Bizstep {
      */
     UNPACKING(41, "urn:epcglobal:cbv:bizstep:unpacking");
 
-    public final int number;
-    public final String bizStep;
+    private final int number;
+    private final String bizStep;
 
     private Bizstep(final int aNumber, final String aBizStep) {
         number = aNumber;
         bizStep = aBizStep;
+    }
+
+    public final int number() {
+        return number;
+    }
+
+    public final String bizStep() {
+        return bizStep;
     }
 
     @Override

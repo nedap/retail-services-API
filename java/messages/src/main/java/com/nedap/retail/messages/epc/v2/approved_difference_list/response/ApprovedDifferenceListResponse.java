@@ -27,7 +27,6 @@ public class ApprovedDifferenceListResponse extends ApprovedDifferenceListSummar
     public List<Boolean> approved;
 
     public ApprovedDifferenceListResponse() {
-
     }
 
     public ApprovedDifferenceListResponse(final ApprovedDifferenceList approvedDifferenceList) {

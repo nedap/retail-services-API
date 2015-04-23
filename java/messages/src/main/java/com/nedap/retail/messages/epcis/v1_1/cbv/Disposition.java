@@ -141,12 +141,20 @@ public enum Disposition {
      */
     UNKNOWN(18, "urn:epcglobal:cbv:disp:unknown");
 
-    public final int number;
-    public final String disposition;
+    private final int number;
+    private final String disposition;
 
     private Disposition(final int aNumber, final String aDisposition) {
         number = aNumber;
         disposition = aDisposition;
+    }
+
+    public final int number() {
+        return number;
+    }
+
+    public final String disposition() {
+        return disposition;
     }
 
     /**

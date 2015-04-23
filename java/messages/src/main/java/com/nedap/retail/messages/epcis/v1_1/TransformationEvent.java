@@ -75,7 +75,7 @@ public class TransformationEvent extends EpcisEvent {
         this.type = EventType.TransformationEvent;
         this.bizLocation = bizLocation;
         this.readPoint = readPoint;
-        this.disposition = disposition != null ? disposition.disposition : Disposition.UNKNOWN.disposition;
+        this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
     }
 
     @Override
