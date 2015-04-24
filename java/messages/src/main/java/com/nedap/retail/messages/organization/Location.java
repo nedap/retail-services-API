@@ -17,15 +17,19 @@ public class Location implements Serializable {
     private static final long serialVersionUID = 1096488161535906856L;
 
     public String id;
+
     @JsonProperty("parent_id")
     @org.codehaus.jackson.annotate.JsonProperty("parent_id")
     public String parentId;
+
     public LocationType type;
     public LocationSubType subtype;
     public String name;
+
     @JsonProperty("store_code")
     @org.codehaus.jackson.annotate.JsonProperty("store_code")
     public String storeCode;
+
     public Address address;
     public List<Location> children;
 

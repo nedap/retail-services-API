@@ -23,13 +23,17 @@ public class WorkflowEvent implements Serializable {
     public static final String MESSAGE_IDS = "message_ids";
 
     public String type;
+
     @JsonProperty(EVENT_TIME)
     @org.codehaus.jackson.annotate.JsonProperty(EVENT_TIME)
     public DateTime eventTime;
+
     public String location;
+
     @JsonProperty(EPC_COUNT)
     @org.codehaus.jackson.annotate.JsonProperty(EPC_COUNT)
     public Long epcCount;
+
     @JsonProperty(MESSAGE_IDS)
     @org.codehaus.jackson.annotate.JsonProperty(MESSAGE_IDS)
     public List<String> messageIds;

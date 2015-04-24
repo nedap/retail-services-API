@@ -49,9 +49,11 @@ public class Article implements Serializable {
     public String category;
     public List<Price> prices;
     public Boolean markdown;
+
     @JsonProperty(LAST_UPDATED)
     @org.codehaus.jackson.annotate.JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
+
     @JsonIgnore
     @org.codehaus.jackson.annotate.JsonIgnore
     public UUID lastUpdatedUUID;

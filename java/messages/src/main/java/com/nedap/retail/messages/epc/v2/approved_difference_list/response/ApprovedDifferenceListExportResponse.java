@@ -18,6 +18,7 @@ import com.nedap.retail.messages.epc.v2.approved_difference_list.GtinDifference;
 public class ApprovedDifferenceListExportResponse extends ApprovedDifferenceListSummary {
 
     public List<String> gtins;
+
     @JsonProperty("approved_quantity")
     @org.codehaus.jackson.annotate.JsonProperty("approved_quantity")
     public List<Integer> approvedQuantity;

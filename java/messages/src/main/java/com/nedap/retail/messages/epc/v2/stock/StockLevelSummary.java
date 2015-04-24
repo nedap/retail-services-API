@@ -12,18 +12,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class StockLevelSummary {
 
     public DateTime generated;
+
     @JsonProperty("rfid_stock_time")
     @org.codehaus.jackson.annotate.JsonProperty("rfid_stock_time")
     public DateTime rfidStockTime;
+
     @JsonProperty("stock_rooms_quantity")
     @org.codehaus.jackson.annotate.JsonProperty("stock_rooms_quantity")
     public Integer stockRoomsQuantity;
+
     @JsonProperty("sales_floors_quantity")
     @org.codehaus.jackson.annotate.JsonProperty("sales_floors_quantity")
     public Integer salesFloorsQuantity;
+
     @JsonProperty("store_quantity")
     @org.codehaus.jackson.annotate.JsonProperty("store_quantity")
     public Integer storeQuantity;
+
     @JsonProperty("stock_ratio")
     @org.codehaus.jackson.annotate.JsonProperty("stock_ratio")
     public Double stockRatio;

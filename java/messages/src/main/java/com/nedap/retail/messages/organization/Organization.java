@@ -22,6 +22,7 @@ public class Organization implements Serializable {
     @JsonProperty("organization_id")
     @org.codehaus.jackson.annotate.JsonProperty("organization_id")
     public long id;
+
     public Type type;
     public String name;
 

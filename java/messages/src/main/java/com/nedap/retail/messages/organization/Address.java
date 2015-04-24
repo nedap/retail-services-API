@@ -17,9 +17,11 @@ public class Address implements Serializable {
     public String address;
     public String zipcode;
     public String city;
+
     @JsonProperty("country_code")
     @org.codehaus.jackson.annotate.JsonProperty("country_code")
     public String countryCode;
+
     public Double latitude;
     public Double longitude;
 

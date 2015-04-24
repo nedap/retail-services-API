@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class NotOnShelfRequest {
 
     public String location;
+
     @JsonProperty("include_articles")
     public boolean includeArticles;
 

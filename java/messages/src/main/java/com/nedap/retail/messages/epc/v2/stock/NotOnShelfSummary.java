@@ -9,10 +9,13 @@ public class NotOnShelfSummary {
 
     @JsonProperty("rfid_stock_time")
     public DateTime rfidStockTime;
+
     @JsonProperty("not_on_shelf_gtin_quantity")
     public Integer notOnShelfGtinQuantity;
+
     @JsonProperty("rfid_gtin_quantity")
     public Integer rfidGtinQuantity;
+
     @JsonProperty("not_on_shelf_percentage")
     public Double notOnShelfPercentage;
 

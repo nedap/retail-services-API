@@ -13,10 +13,13 @@ public class QueryRequest {
 
     public String location;
     public String type;
+
     @JsonProperty("from_event_time")
     public DateTime from;
+
     @JsonProperty("until_event_time")
     public DateTime to;
+
     @JsonProperty(MESSAGE_ID)
     public String messageId;
 

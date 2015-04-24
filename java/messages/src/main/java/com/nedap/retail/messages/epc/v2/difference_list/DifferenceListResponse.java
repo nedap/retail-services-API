@@ -10,22 +10,29 @@ import com.nedap.retail.messages.article.Article;
 public class DifferenceListResponse {
 
     public List<String> gtins;
+
     @JsonProperty("erp_stock")
     @org.codehaus.jackson.annotate.JsonProperty("erp_stock")
     public List<Integer> erpStock;
+
     @JsonProperty("rfid_stock")
     @org.codehaus.jackson.annotate.JsonProperty("rfid_stock")
     public List<Integer> rfidStock;
+
     public List<Article> articles;
+
     @JsonProperty("erp_stock_time")
     @org.codehaus.jackson.annotate.JsonProperty("erp_stock_time")
     public DateTime erpStockTime;
+
     @JsonProperty("rfid_stock_time")
     @org.codehaus.jackson.annotate.JsonProperty("rfid_stock_time")
     public DateTime rfidStockTime;
+
     @JsonProperty("erp_gtin_quantity")
     @org.codehaus.jackson.annotate.JsonProperty("erp_gtin_quantity")
     public Integer erpGtinQuantity;
+
     @JsonProperty("rfid_gtin_quantity")
     @org.codehaus.jackson.annotate.JsonProperty("rfid_gtin_quantity")
     public Integer rfidGtinQuantity;

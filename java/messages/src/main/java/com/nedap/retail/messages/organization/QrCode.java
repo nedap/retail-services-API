@@ -17,6 +17,7 @@ public class QrCode implements Serializable {
 
     public String qrcode;
     public DateTime expires;
+
     @JsonProperty("organization_id")
     @org.codehaus.jackson.annotate.JsonProperty("organization_id")
     public Long organizationId;

@@ -18,12 +18,15 @@ import com.nedap.retail.messages.epc.v2.approved_difference_list.GtinDifference;
 public class ApprovedDifferenceListResponse extends ApprovedDifferenceListSummary {
 
     public List<String> gtins;
+
     @JsonProperty("erp_stock")
     @org.codehaus.jackson.annotate.JsonProperty("erp_stock")
     public List<Integer> erpStock;
+
     @JsonProperty("rfid_stock")
     @org.codehaus.jackson.annotate.JsonProperty("rfid_stock")
     public List<Integer> rfidStock;
+
     public List<Boolean> approved;
 
     public ApprovedDifferenceListResponse() {
