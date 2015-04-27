@@ -7,15 +7,12 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * User Profile.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @org.codehaus.jackson.annotate.JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User implements Serializable {
 

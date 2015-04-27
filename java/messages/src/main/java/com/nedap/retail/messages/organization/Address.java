@@ -4,11 +4,6 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Address implements Serializable {
 
@@ -18,7 +13,6 @@ public class Address implements Serializable {
     public String zipcode;
     public String city;
 
-    @JsonProperty("country_code")
     @org.codehaus.jackson.annotate.JsonProperty("country_code")
     public String countryCode;
 

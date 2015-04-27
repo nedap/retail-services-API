@@ -2,7 +2,6 @@ package com.nedap.retail.messages.epcis.v1_1.elements;
 
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 public class QuantityElement {
@@ -13,7 +12,6 @@ public class QuantityElement {
      * For GTIN, use URI syntax: urn:epc:id:gtin:CompanyPrefix.ItemRefAndIndicator
      */
     public static final String EPC_CLASS = "epc_class";
-    @JsonProperty(EPC_CLASS)
     @SerializedName(EPC_CLASS)
     @org.codehaus.jackson.annotate.JsonProperty(EPC_CLASS)
     public String epcClass;
@@ -22,7 +20,6 @@ public class QuantityElement {
      * Negative values are not allowed
      */
     public static final String QUANTITY = "quantity";
-    @JsonProperty(QUANTITY)
     @SerializedName(QUANTITY)
     @org.codehaus.jackson.annotate.JsonProperty(QUANTITY)
     public float quantity;
@@ -32,7 +29,6 @@ public class QuantityElement {
      * specifying how much of the specified EPCClass is denoted by this QuantityElement.
      */
     public static final String UOM = "uom";
-    @JsonProperty(UOM)
     @SerializedName(UOM)
     @org.codehaus.jackson.annotate.JsonProperty(UOM)
     public String uom;

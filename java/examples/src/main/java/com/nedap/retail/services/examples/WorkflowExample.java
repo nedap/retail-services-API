@@ -183,7 +183,7 @@ public class WorkflowExample {
 
     private static QueryRequest makeWorkflowQueryRequest() {
         final QueryRequest request = new QueryRequest();
-        request.from = DateTime.now().minusMinutes(10);
+        request.fromEventTime = DateTime.now().minusMinutes(10);
         return request;
     }
 

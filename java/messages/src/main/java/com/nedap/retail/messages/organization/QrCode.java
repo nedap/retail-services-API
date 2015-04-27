@@ -5,11 +5,6 @@ import java.io.Serializable;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class QrCode implements Serializable {
 
@@ -18,7 +13,6 @@ public class QrCode implements Serializable {
     public String qrcode;
     public DateTime expires;
 
-    @JsonProperty("organization_id")
     @org.codehaus.jackson.annotate.JsonProperty("organization_id")
     public Long organizationId;
 

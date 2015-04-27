@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
@@ -13,26 +12,25 @@ import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
 import com.nedap.retail.messages.epcis.v1_1.elements.QuantityElement;
 
 /**
- * Required parameters to construct an object_event are: - epcList - *or* quantityList
+ * Required parameters to construct an object_event are:
+ * - epcList
+ * - *or* quantityList
  *
  * @see http://nvs0272/confluence/display/storeid/EPCIS+1.1+Event#EPCIS1.1Event-ObjectEvent
  */
 public class ObjectEvent extends EpcisEvent {
 
     public static final String EPC_LIST = "epc_list";
-    @JsonProperty(EPC_LIST)
     @SerializedName(EPC_LIST)
     @org.codehaus.jackson.annotate.JsonProperty(EPC_LIST)
     public List<String> epcList;
 
     public static final String QUANTITY_LIST = "quantity_list";
-    @JsonProperty(QUANTITY_LIST)
     @SerializedName(QUANTITY_LIST)
     @org.codehaus.jackson.annotate.JsonProperty(QUANTITY_LIST)
     public List<QuantityElement> quantityList;
 
     public static final String ILMD = "ilmd";
-    @JsonProperty(ILMD)
     @SerializedName(ILMD)
     @org.codehaus.jackson.annotate.JsonProperty(ILMD)
     public String ilmd;

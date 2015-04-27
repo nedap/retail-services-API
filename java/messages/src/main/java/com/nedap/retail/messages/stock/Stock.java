@@ -5,11 +5,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Stock extends StockSummary {
 
-    @JsonProperty("quantity_list")
     @org.codehaus.jackson.annotate.JsonProperty("quantity_list")
     public List<GtinQuantity> quantityList;
 

@@ -5,10 +5,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-@JsonInclude(Include.NON_NULL)
 public class ParameterObject {
 
     public String name;

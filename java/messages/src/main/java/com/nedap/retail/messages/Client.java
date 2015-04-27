@@ -582,11 +582,11 @@ public class Client {
         if (request.type != null) {
             target = target.queryParam("type", request.type);
         }
-        if (request.from != null) {
-            target = target.queryParam("from_event_time", request.from.toString());
+        if (request.fromEventTime != null) {
+            target = target.queryParam("from_event_time", request.fromEventTime.toString());
         }
-        if (request.to != null) {
-            target = target.queryParam("until_event_time", request.to.toString());
+        if (request.untilEventTime != null) {
+            target = target.queryParam("until_event_time", request.untilEventTime.toString());
         }
 
         return get(target, new GenericType<List<WorkflowEvent>>() {

@@ -6,11 +6,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Location implements Serializable {
 
@@ -18,7 +13,6 @@ public class Location implements Serializable {
 
     public String id;
 
-    @JsonProperty("parent_id")
     @org.codehaus.jackson.annotate.JsonProperty("parent_id")
     public String parentId;
 
@@ -26,7 +20,6 @@ public class Location implements Serializable {
     public LocationSubType subtype;
     public String name;
 
-    @JsonProperty("store_code")
     @org.codehaus.jackson.annotate.JsonProperty("store_code")
     public String storeCode;
 

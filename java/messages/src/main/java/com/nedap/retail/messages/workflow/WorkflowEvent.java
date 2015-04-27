@@ -6,12 +6,7 @@ import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonInclude(Include.NON_NULL)
 public class WorkflowEvent implements Serializable {
 
     private static final long serialVersionUID = -2412276734501447304L;
@@ -24,17 +19,14 @@ public class WorkflowEvent implements Serializable {
 
     public String type;
 
-    @JsonProperty(EVENT_TIME)
     @org.codehaus.jackson.annotate.JsonProperty(EVENT_TIME)
     public DateTime eventTime;
 
     public String location;
 
-    @JsonProperty(EPC_COUNT)
     @org.codehaus.jackson.annotate.JsonProperty(EPC_COUNT)
     public Long epcCount;
 
-    @JsonProperty(MESSAGE_IDS)
     @org.codehaus.jackson.annotate.JsonProperty(MESSAGE_IDS)
     public List<String> messageIds;
 

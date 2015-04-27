@@ -3,20 +3,12 @@ package com.nedap.retail.messages.epc.v2.stock;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NotOnShelfSummary {
 
-    @JsonProperty("rfid_stock_time")
     public DateTime rfidStockTime;
-
-    @JsonProperty("not_on_shelf_gtin_quantity")
     public Integer notOnShelfGtinQuantity;
-
-    @JsonProperty("rfid_gtin_quantity")
     public Integer rfidGtinQuantity;
-
-    @JsonProperty("not_on_shelf_percentage")
     public Double notOnShelfPercentage;
 
     public NotOnShelfSummary() {

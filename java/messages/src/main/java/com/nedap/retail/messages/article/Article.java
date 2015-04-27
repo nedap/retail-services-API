@@ -9,11 +9,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Article implements Serializable {
 
@@ -50,7 +46,6 @@ public class Article implements Serializable {
     public List<Price> prices;
     public Boolean markdown;
 
-    @JsonProperty(LAST_UPDATED)
     @org.codehaus.jackson.annotate.JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
 
