@@ -208,8 +208,8 @@ public class EpcExample {
 
     private static String printCreatedArticlesGtins() {
         final StringBuilder sb = new StringBuilder("Created test articles with gtins: ");
-        sb.append(GTIN_1 + COMMA);
-        sb.append(GTIN_2 + COMMA);
+        sb.append(GTIN_1).append(COMMA);
+        sb.append(GTIN_2).append(COMMA);
         sb.append(GTIN_3);
         return sb.toString();
     }
@@ -294,41 +294,43 @@ public class EpcExample {
 
     private static String printSublocationStocks(final List<String> sublocationIds, final List<String> generatedStocks) {
         final StringBuilder sb = new StringBuilder();
-        sb.append("For location: " + sublocationIds.get(0) + " created stocks with ids:");
-        sb.append(NEW_LINE + TAB + generatedStocks.get(0));
-        sb.append(NEW_LINE + TAB + generatedStocks.get(2));
-        sb.append(NEW_LINE + "And for location: " + sublocationIds.get(1) + COLON);
-        sb.append(NEW_LINE + TAB + generatedStocks.get(1));
+        sb.append("For location: ").append(sublocationIds.get(0)).append(" created stocks with ids:");
+        sb.append(NEW_LINE).append(TAB).append(generatedStocks.get(0));
+        sb.append(NEW_LINE).append(TAB).append(generatedStocks.get(2));
+        sb.append(NEW_LINE).append("And for location: ").append(sublocationIds.get(1)).append(COLON);
+        sb.append(NEW_LINE).append(TAB).append(generatedStocks.get(1));
         return sb.toString();
     }
 
     private static String printStockResponse(final StockResponse stockResponse) {
         final StringBuilder sb = new StringBuilder("Quantities for a given gtins:");
         for (int i = 0; i < stockResponse.gtins.size(); i++) {
-            sb.append(NEW_LINE + TAB);
-            sb.append(stockResponse.gtins.get(i) + WHITESPACE + stockResponse.quantities.get(i));
+            sb.append(NEW_LINE).append(TAB);
+            sb.append(stockResponse.gtins.get(i)).append(WHITESPACE).append(stockResponse.quantities.get(i));
         }
         return sb.toString();
     }
 
     private static String printNotOnShelfResponse(final NotOnShelfResponse notOnShelfResponse) {
-        final StringBuilder sb = new StringBuilder("Not on shelf response:" + NEW_LINE);
+        final StringBuilder sb = new StringBuilder("Not on shelf response:").append(NEW_LINE);
         for (int i = 0; i < notOnShelfResponse.gtins.size(); i++) {
-            sb.append(TAB + "For gtin " + notOnShelfResponse.gtins.get(i) + COLON + NEW_LINE);
-            sb.append(DOUBLE_TAB + "Stock room quantuty: " + notOnShelfResponse.stockRoomStock.get(i) + NEW_LINE);
-            sb.append(DOUBLE_TAB + "Sales floor quantity: " + notOnShelfResponse.salesFloorStock.get(i) + NEW_LINE);
+            sb.append(TAB).append("For gtin ").append(notOnShelfResponse.gtins.get(i)).append(COLON).append(NEW_LINE);
+            sb.append(DOUBLE_TAB).append("Stock room quantuty: ").append(notOnShelfResponse.stockRoomStock.get(i))
+                    .append(NEW_LINE);
+            sb.append(DOUBLE_TAB).append("Sales floor quantity: ").append(notOnShelfResponse.salesFloorStock.get(i))
+                    .append(NEW_LINE);
         }
-        sb.append(NEW_LINE + TAB + "Total difference: " + notOnShelfResponse.notOnShelfPercentage);
+        sb.append(NEW_LINE).append(TAB).append("Total difference: ").append(notOnShelfResponse.notOnShelfPercentage);
         return sb.toString();
     }
 
     private static String printDifferenceList(final DifferenceListResponse differenceList) {
         final StringBuilder sb = new StringBuilder("Differences for a given gtins are:");
         for (int i = 0; i < differenceList.gtins.size(); i++) {
-            sb.append(NEW_LINE + TAB);
-            sb.append("For gtin: " + differenceList.gtins.get(i) + WHITESPACE);
-            sb.append("ERP stock quantity is: " + differenceList.erpStock.get(i) + COMMA);
-            sb.append("RFID stock quantity is: " + differenceList.rfidStock.get(i));
+            sb.append(NEW_LINE).append(TAB);
+            sb.append("For gtin: ").append(differenceList.gtins.get(i)).append(WHITESPACE);
+            sb.append("ERP stock quantity is: ").append(differenceList.erpStock.get(i)).append(COMMA);
+            sb.append("RFID stock quantity is: ").append(differenceList.rfidStock.get(i));
         }
         return sb.toString();
     }
@@ -346,18 +348,19 @@ public class EpcExample {
 
     private static String printApprovedDifferenceList(final ApprovedDifferenceListResponse approvedDifferenceList) {
         final StringBuilder sb = new StringBuilder("Retrieved approved difference list with:");
-        sb.append(NEW_LINE + TAB + "Absolute difference: " + approvedDifferenceList.absoluteDifference);
-        sb.append(NEW_LINE + TAB + "Plus difference: " + approvedDifferenceList.plusDifference);
-        sb.append(NEW_LINE + TAB + "Minus difference: " + approvedDifferenceList.minusDifference);
+        sb.append(NEW_LINE).append(TAB).append("Absolute difference: ")
+                .append(approvedDifferenceList.absoluteDifference);
+        sb.append(NEW_LINE).append(TAB).append("Plus difference: ").append(approvedDifferenceList.plusDifference);
+        sb.append(NEW_LINE).append(TAB).append("Minus difference: ").append(approvedDifferenceList.minusDifference);
         return sb.toString();
     }
 
     private static String printApprovedDifferenceListExportResponse(final ApprovedDifferenceListExportResponse response) {
         final StringBuilder sb = new StringBuilder("Approved difference list export status:");
         for (int i = 0; i < response.gtins.size(); i++) {
-            sb.append(NEW_LINE + TAB);
-            sb.append("for gtin: " + response.gtins.get(i));
-            sb.append(" approved quantity is: " + response.approvedQuantity.get(i));
+            sb.append(NEW_LINE).append(TAB);
+            sb.append("for gtin: ").append(response.gtins.get(i));
+            sb.append(" approved quantity is: ").append(response.approvedQuantity.get(i));
         }
         return sb.toString();
     }
@@ -365,10 +368,11 @@ public class EpcExample {
     private static String printListOfApprovedDifferenceListSummaries(
             final List<ApprovedDifferenceListSummary> response, final String location) {
 
-        final StringBuilder sb = new StringBuilder("Approved difference lists ids for location: " + location + " are:");
+        final StringBuilder sb = new StringBuilder("Approved difference lists ids for location: ").append(location)
+                .append(" are:");
         for (final ApprovedDifferenceListSummary list : response) {
             sb.append(NEW_LINE);
-            sb.append(TAB + list.id);
+            sb.append(TAB).append(list.id);
         }
         return sb.toString();
     }
@@ -377,10 +381,10 @@ public class EpcExample {
             final ApprovedDifferenceListSummary approvedDifferenceListStatus) {
 
         final StringBuilder sb = new StringBuilder("Approved difference list status:");
-        sb.append(NEW_LINE + TAB + "Id: " + approvedDifferenceListStatus.id);
-        sb.append(NEW_LINE + TAB + "Approved on: " + approvedDifferenceListStatus.approvedOn);
-        sb.append(NEW_LINE + TAB + "Location: " + approvedDifferenceListStatus.location);
-        sb.append(NEW_LINE + TAB + "Export status: " + approvedDifferenceListStatus.exportStatus);
+        sb.append(NEW_LINE).append(TAB).append("Id: ").append(approvedDifferenceListStatus.id);
+        sb.append(NEW_LINE).append(TAB).append("Approved on: ").append(approvedDifferenceListStatus.approvedOn);
+        sb.append(NEW_LINE).append(TAB).append("Location: ").append(approvedDifferenceListStatus.location);
+        sb.append(NEW_LINE).append(TAB).append("Export status: ").append(approvedDifferenceListStatus.exportStatus);
         return sb.toString();
     }
 }

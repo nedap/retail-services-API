@@ -2,6 +2,7 @@ package com.nedap.retail.messages.epc.v2.approved_difference_list;
 
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
@@ -29,10 +30,10 @@ public class ApprovedDifferenceListSummary {
     public static final String EXPORT_TIME = "export_time";
     public static final String EXTERN_REF = "extern_ref";
 
-    @org.codehaus.jackson.annotate.JsonProperty(APPROVED_ON)
+    @JsonProperty(APPROVED_ON)
     public DateTime approvedOn;
 
-    @org.codehaus.jackson.annotate.JsonProperty(APPROVED_BY)
+    @JsonProperty(APPROVED_BY)
     public String approvedBy;
 
     @JsonIgnore
@@ -40,43 +41,43 @@ public class ApprovedDifferenceListSummary {
 
     public String location;
 
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_STOCK_ID)
+    @JsonProperty(ERP_STOCK_ID)
     public String erpStockId;
 
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_STOCK_TIME)
+    @JsonProperty(ERP_STOCK_TIME)
     public DateTime erpStockTime;
 
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_QUANTITY)
+    @JsonProperty(ERP_QUANTITY)
     public int erpQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_GTIN_QUANTITY)
+    @JsonProperty(ERP_GTIN_QUANTITY)
     public int erpGtinQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty(RFID_STOCK_TIME)
+    @JsonProperty(RFID_STOCK_TIME)
     public DateTime rfidStockTime;
 
-    @org.codehaus.jackson.annotate.JsonProperty(RFID_QUANTITY)
+    @JsonProperty(RFID_QUANTITY)
     public int rfidQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty(RFID_GTIN_QUANTITY)
+    @JsonProperty(RFID_GTIN_QUANTITY)
     public int rfidGtinQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty(ABSOLUTE_DIFFERENCE)
+    @JsonProperty(ABSOLUTE_DIFFERENCE)
     public int absoluteDifference;
 
-    @org.codehaus.jackson.annotate.JsonProperty(PLUS_DIFFERENCE)
+    @JsonProperty(PLUS_DIFFERENCE)
     public int plusDifference;
 
-    @org.codehaus.jackson.annotate.JsonProperty(MINUS_DIFFERENCE)
+    @JsonProperty(MINUS_DIFFERENCE)
     public int minusDifference;
 
-    @org.codehaus.jackson.annotate.JsonProperty(EXPORT_STATUS)
+    @JsonProperty(EXPORT_STATUS)
     public ExportStatus exportStatus;
 
-    @org.codehaus.jackson.annotate.JsonProperty(EXPORT_TIME)
+    @JsonProperty(EXPORT_TIME)
     public DateTime exportTime;
 
-    @org.codehaus.jackson.annotate.JsonProperty(EXTERN_REF)
+    @JsonProperty(EXTERN_REF)
     public String externRef;
 
     public UUID id;

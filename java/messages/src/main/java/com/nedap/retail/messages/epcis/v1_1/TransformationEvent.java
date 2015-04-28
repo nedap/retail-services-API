@@ -3,6 +3,7 @@ package com.nedap.retail.messages.epcis.v1_1;
 import java.util.List;
 import java.util.Objects;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
 import com.google.gson.annotations.SerializedName;
@@ -14,27 +15,27 @@ public class TransformationEvent extends EpcisEvent {
 
     public static final String INPUT_EPC_LIST = "input_epc_list";
     @SerializedName(INPUT_EPC_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(INPUT_EPC_LIST)
+    @JsonProperty(INPUT_EPC_LIST)
     public List<String> inputEpcList;
 
     public static final String OUTPUT_EPC_LIST = "output_epc_list";
     @SerializedName(OUTPUT_EPC_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(OUTPUT_EPC_LIST)
+    @JsonProperty(OUTPUT_EPC_LIST)
     public List<String> outputEpcList;
 
     public static final String INPUT_QUANTITY_LIST = "input_quantity_list";
     @SerializedName(INPUT_QUANTITY_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(INPUT_QUANTITY_LIST)
+    @JsonProperty(INPUT_QUANTITY_LIST)
     public List<QuantityElement> inputQuantityList;
 
     public static final String OUTPUT_QUANTITY_LIST = "output_quantity_list";
     @SerializedName(OUTPUT_QUANTITY_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(OUTPUT_QUANTITY_LIST)
+    @JsonProperty(OUTPUT_QUANTITY_LIST)
     public List<QuantityElement> outputQuantityList;
 
     public static final String TRANSFORMATION_ID = "transformation_id";
     @SerializedName(TRANSFORMATION_ID)
-    @org.codehaus.jackson.annotate.JsonProperty(TRANSFORMATION_ID)
+    @JsonProperty(TRANSFORMATION_ID)
     public String transformationId;
 
     public TransformationEvent() {

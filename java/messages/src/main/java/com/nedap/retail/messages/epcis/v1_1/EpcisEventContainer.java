@@ -3,13 +3,15 @@ package com.nedap.retail.messages.epcis.v1_1;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.google.gson.annotations.SerializedName;
 
 public class EpcisEventContainer {
 
     public static final String EVENTS = "events";
     @SerializedName(EVENTS)
-    @org.codehaus.jackson.annotate.JsonProperty(EVENTS)
+    @JsonProperty(EVENTS)
     public List<EpcisEvent> events;
 
     public EpcisEventContainer() {

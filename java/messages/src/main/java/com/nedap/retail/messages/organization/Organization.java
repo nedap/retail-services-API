@@ -2,6 +2,7 @@ package com.nedap.retail.messages.organization;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -14,7 +15,7 @@ public class Organization implements Serializable {
         ORGANIZATION, BUSINESS_PARTNER
     }
 
-    @org.codehaus.jackson.annotate.JsonProperty("organization_id")
+    @JsonProperty("organization_id")
     public long organizationId;
 
     public Type type;

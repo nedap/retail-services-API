@@ -2,6 +2,8 @@ package com.nedap.retail.messages.epcis.v1_1.elements;
 
 import java.util.Objects;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.google.gson.annotations.SerializedName;
 
 public class QuantityElement {
@@ -13,7 +15,7 @@ public class QuantityElement {
      */
     public static final String EPC_CLASS = "epc_class";
     @SerializedName(EPC_CLASS)
-    @org.codehaus.jackson.annotate.JsonProperty(EPC_CLASS)
+    @JsonProperty(EPC_CLASS)
     public String epcClass;
     /**
      * A number that specifies how many or how much of the specified EPCClass is denoted by this QuantityElement.
@@ -21,7 +23,7 @@ public class QuantityElement {
      */
     public static final String QUANTITY = "quantity";
     @SerializedName(QUANTITY)
-    @org.codehaus.jackson.annotate.JsonProperty(QUANTITY)
+    @JsonProperty(QUANTITY)
     public float quantity;
 
     /**
@@ -30,7 +32,7 @@ public class QuantityElement {
      */
     public static final String UOM = "uom";
     @SerializedName(UOM)
-    @org.codehaus.jackson.annotate.JsonProperty(UOM)
+    @JsonProperty(UOM)
     public String uom;
 
     public QuantityElement() {

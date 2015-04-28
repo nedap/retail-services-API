@@ -2,6 +2,7 @@ package com.nedap.retail.messages.organization;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -13,7 +14,7 @@ public class Address implements Serializable {
     public String zipcode;
     public String city;
 
-    @org.codehaus.jackson.annotate.JsonProperty("country_code")
+    @JsonProperty("country_code")
     public String countryCode;
 
     public Double latitude;

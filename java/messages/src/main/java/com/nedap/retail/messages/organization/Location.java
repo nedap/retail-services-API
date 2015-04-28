@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -13,14 +14,14 @@ public class Location implements Serializable {
 
     public String id;
 
-    @org.codehaus.jackson.annotate.JsonProperty("parent_id")
+    @JsonProperty("parent_id")
     public String parentId;
 
     public LocationType type;
     public LocationSubType subtype;
     public String name;
 
-    @org.codehaus.jackson.annotate.JsonProperty("store_code")
+    @JsonProperty("store_code")
     public String storeCode;
 
     public Address address;

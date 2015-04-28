@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceList;
@@ -15,10 +16,10 @@ public class ApprovedDifferenceListResponse extends ApprovedDifferenceListSummar
 
     public List<String> gtins;
 
-    @org.codehaus.jackson.annotate.JsonProperty("erp_stock")
+    @JsonProperty("erp_stock")
     public List<Integer> erpStock;
 
-    @org.codehaus.jackson.annotate.JsonProperty("rfid_stock")
+    @JsonProperty("rfid_stock")
     public List<Integer> rfidStock;
 
     public List<Boolean> approved;

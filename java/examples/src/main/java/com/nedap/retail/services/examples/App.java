@@ -110,6 +110,9 @@ public class App {
                         case "0":
                             quit = true;
                             break;
+                        default:
+                            quit = true;
+                            break;
                     }
                 } catch (final ClientException ex) {
                     System.err.println(ex.getMessage());
@@ -125,15 +128,15 @@ public class App {
     private void printMenu() {
         final StringBuilder sb = new StringBuilder();
 
-        sb.append(NEW_LINE + "*** Nedap Retail API examples ***");
-        sb.append(NEW_LINE + "Choose example you want to run");
-        sb.append(NEW_LINE + "1 : Article API");
-        sb.append(NEW_LINE + "2 : EPC API");
-        sb.append(NEW_LINE + "3 : EPCIS API");
-        sb.append(NEW_LINE + "4 : ERP API");
-        sb.append(NEW_LINE + "5 : System API");
-        sb.append(NEW_LINE + "6 : Workflow API");
-        sb.append(NEW_LINE + "0 : Quit");
+        sb.append(NEW_LINE).append("*** Nedap Retail API examples ***");
+        sb.append(NEW_LINE).append("Choose example you want to run");
+        sb.append(NEW_LINE).append("1 : Article API");
+        sb.append(NEW_LINE).append("2 : EPC API");
+        sb.append(NEW_LINE).append("3 : EPCIS API");
+        sb.append(NEW_LINE).append("4 : ERP API");
+        sb.append(NEW_LINE).append("5 : System API");
+        sb.append(NEW_LINE).append("6 : Workflow API");
+        sb.append(NEW_LINE).append("0 : Quit");
         sb.append(NEW_LINE);
 
         System.out.println(sb);

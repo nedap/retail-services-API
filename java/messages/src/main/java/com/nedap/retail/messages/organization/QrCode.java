@@ -2,6 +2,7 @@ package com.nedap.retail.messages.organization;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
@@ -13,7 +14,7 @@ public class QrCode implements Serializable {
     public String qrcode;
     public DateTime expires;
 
-    @org.codehaus.jackson.annotate.JsonProperty("organization_id")
+    @JsonProperty("organization_id")
     public Long organizationId;
 
     public QrCode() {

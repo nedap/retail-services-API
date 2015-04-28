@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
@@ -46,7 +47,7 @@ public class Article implements Serializable {
     public List<Price> prices;
     public Boolean markdown;
 
-    @org.codehaus.jackson.annotate.JsonProperty(LAST_UPDATED)
+    @JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
 
     @JsonIgnore

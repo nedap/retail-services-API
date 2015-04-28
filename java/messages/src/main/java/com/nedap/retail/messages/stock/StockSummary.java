@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.stock;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
@@ -13,19 +14,19 @@ public class StockSummary {
     public String id;
     public String location;
 
-    @org.codehaus.jackson.annotate.JsonProperty("event_time")
+    @JsonProperty("event_time")
     public DateTime eventTime;
 
-    @org.codehaus.jackson.annotate.JsonProperty("extern_ref")
+    @JsonProperty("extern_ref")
     public String externRef;
 
     public Status status;
     public Integer quantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty("gtin_quantity")
+    @JsonProperty("gtin_quantity")
     public Integer gtinQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty("in_use")
+    @JsonProperty("in_use")
     public boolean inUse;
 
     public StockSummary() {

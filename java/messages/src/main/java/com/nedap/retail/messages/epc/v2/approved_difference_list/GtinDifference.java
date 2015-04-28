@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.epc.v2.approved_difference_list;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 
 public class GtinDifference {
 
@@ -10,10 +11,10 @@ public class GtinDifference {
 
     public String gtin;
 
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_QUANTITY)
+    @JsonProperty(ERP_QUANTITY)
     public int erpQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty(RFID_QUANTITY)
+    @JsonProperty(RFID_QUANTITY)
     public int rfidQuantity;
 
     public boolean approved;

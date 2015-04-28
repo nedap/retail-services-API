@@ -2,6 +2,7 @@ package com.nedap.retail.messages.epc.v2.difference_list;
 
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.article.Article;
@@ -10,24 +11,24 @@ public class DifferenceListResponse {
 
     public List<String> gtins;
 
-    @org.codehaus.jackson.annotate.JsonProperty("erp_stock")
+    @JsonProperty("erp_stock")
     public List<Integer> erpStock;
 
-    @org.codehaus.jackson.annotate.JsonProperty("rfid_stock")
+    @JsonProperty("rfid_stock")
     public List<Integer> rfidStock;
 
     public List<Article> articles;
 
-    @org.codehaus.jackson.annotate.JsonProperty("erp_stock_time")
+    @JsonProperty("erp_stock_time")
     public DateTime erpStockTime;
 
-    @org.codehaus.jackson.annotate.JsonProperty("rfid_stock_time")
+    @JsonProperty("rfid_stock_time")
     public DateTime rfidStockTime;
 
-    @org.codehaus.jackson.annotate.JsonProperty("erp_gtin_quantity")
+    @JsonProperty("erp_gtin_quantity")
     public Integer erpGtinQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty("rfid_gtin_quantity")
+    @JsonProperty("rfid_gtin_quantity")
     public Integer rfidGtinQuantity;
 
     public DifferenceListResponse() {

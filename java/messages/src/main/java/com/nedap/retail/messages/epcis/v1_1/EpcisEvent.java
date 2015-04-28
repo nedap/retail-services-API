@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
@@ -42,67 +43,67 @@ abstract public class EpcisEvent {
 
     public static final String ID = "id";
     @SerializedName(ID)
-    @org.codehaus.jackson.annotate.JsonProperty(ID)
+    @JsonProperty(ID)
     public String id;
 
     public static final String EVENT_TIME = "event_time";
     @SerializedName(EVENT_TIME)
-    @org.codehaus.jackson.annotate.JsonProperty(EVENT_TIME)
+    @JsonProperty(EVENT_TIME)
     public DateTime eventTime;
 
     public static final String RECORD_TIME = "record_time";
     @SerializedName(RECORD_TIME)
-    @org.codehaus.jackson.annotate.JsonProperty(RECORD_TIME)
+    @JsonProperty(RECORD_TIME)
     public DateTime recordTime;
 
     public static final String EVENT_TIME_ZONE_OFFSET = "event_time_zone_offset";
     @SerializedName(EVENT_TIME_ZONE_OFFSET)
-    @org.codehaus.jackson.annotate.JsonProperty(EVENT_TIME_ZONE_OFFSET)
+    @JsonProperty(EVENT_TIME_ZONE_OFFSET)
     public String eventTimeZoneOffset = "+00:00";
 
     public static final String TYPE = "type";
     @SerializedName(TYPE)
-    @org.codehaus.jackson.annotate.JsonProperty(TYPE)
+    @JsonProperty(TYPE)
     public EventType type;
 
     public static final String ACTION = "action";
     @SerializedName(ACTION)
-    @org.codehaus.jackson.annotate.JsonProperty(ACTION)
+    @JsonProperty(ACTION)
     public String action;
 
     public static final String BIZ_STEP = "biz_step";
     @SerializedName(BIZ_STEP)
-    @org.codehaus.jackson.annotate.JsonProperty(BIZ_STEP)
+    @JsonProperty(BIZ_STEP)
     public String bizStep;
 
     public static final String DISPOSITION = "disposition";
     @SerializedName(DISPOSITION)
-    @org.codehaus.jackson.annotate.JsonProperty(DISPOSITION)
+    @JsonProperty(DISPOSITION)
     public String disposition;
 
     public static final String BIZ_LOCATION = "biz_location";
     @SerializedName(BIZ_LOCATION)
-    @org.codehaus.jackson.annotate.JsonProperty(BIZ_LOCATION)
+    @JsonProperty(BIZ_LOCATION)
     public String bizLocation;
 
     public static final String READ_POINT = "read_point";
     @SerializedName(READ_POINT)
-    @org.codehaus.jackson.annotate.JsonProperty(READ_POINT)
+    @JsonProperty(READ_POINT)
     public String readPoint;
 
     public static final String SOURCE_LIST = "source_list";
     @SerializedName(SOURCE_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(SOURCE_LIST)
+    @JsonProperty(SOURCE_LIST)
     public List<SourceElement> sourceList;
 
     public static final String DESTINATION_LIST = "destination_list";
     @SerializedName(DESTINATION_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(DESTINATION_LIST)
+    @JsonProperty(DESTINATION_LIST)
     public List<DestinationElement> destinationList;
 
     public static final String BIZ_TRANSACTION_LIST = "biz_transaction_list";
     @SerializedName(BIZ_TRANSACTION_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(BIZ_TRANSACTION_LIST)
+    @JsonProperty(BIZ_TRANSACTION_LIST)
     public List<BizTransactionElement> bizTransactionList;
 
     @Override

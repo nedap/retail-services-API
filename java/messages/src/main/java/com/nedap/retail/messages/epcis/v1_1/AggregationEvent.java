@@ -2,6 +2,7 @@ package com.nedap.retail.messages.epcis.v1_1;
 
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
 import com.google.gson.annotations.SerializedName;
@@ -17,17 +18,17 @@ public class AggregationEvent extends EpcisEvent {
      */
     public static final String PARENT_ID = "parent_id";
     @SerializedName(PARENT_ID)
-    @org.codehaus.jackson.annotate.JsonProperty(PARENT_ID)
+    @JsonProperty(PARENT_ID)
     public String parentId;
 
     public static final String CHILD_EPCS = "child_epcs";
     @SerializedName(CHILD_EPCS)
-    @org.codehaus.jackson.annotate.JsonProperty(CHILD_EPCS)
+    @JsonProperty(CHILD_EPCS)
     public List<String> childEpcs;
 
     public static final String CHILD_QUANTITY_LIST = "child_quantity_list";
     @SerializedName(CHILD_QUANTITY_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(CHILD_QUANTITY_LIST)
+    @JsonProperty(CHILD_QUANTITY_LIST)
     public List<QuantityElement> childQuantityList;
 
     public AggregationEvent() {

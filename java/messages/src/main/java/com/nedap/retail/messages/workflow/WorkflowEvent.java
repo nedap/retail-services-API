@@ -3,6 +3,7 @@ package com.nedap.retail.messages.workflow;
 import java.io.Serializable;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
@@ -19,15 +20,15 @@ public class WorkflowEvent implements Serializable {
 
     public String type;
 
-    @org.codehaus.jackson.annotate.JsonProperty(EVENT_TIME)
+    @JsonProperty(EVENT_TIME)
     public DateTime eventTime;
 
     public String location;
 
-    @org.codehaus.jackson.annotate.JsonProperty(EPC_COUNT)
+    @JsonProperty(EPC_COUNT)
     public Long epcCount;
 
-    @org.codehaus.jackson.annotate.JsonProperty(MESSAGE_IDS)
+    @JsonProperty(MESSAGE_IDS)
     public List<String> messageIds;
 
     // Empty constructor used by Jackson

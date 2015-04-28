@@ -123,8 +123,8 @@ public class EpcisExample {
     private static String printCaptureEpcisEvents(final EpcisEventContainer epcisEventContainer) {
         final StringBuilder sb = new StringBuilder("Captured EPCIS object events with ids:");
         for (int i = 0; i < epcisEventContainer.events.size(); i++) {
-            sb.append(NEW_LINE + TAB);
-            sb.append((i + 1) + DOT);
+            sb.append(NEW_LINE).append(TAB);
+            sb.append((i + 1)).append(DOT);
             sb.append(epcisEventContainer.events.get(i).id);
         }
         return sb.toString();
@@ -146,8 +146,8 @@ public class EpcisExample {
     private static String printEpcisEvents(final List<EpcisEvent> events) {
         final StringBuilder sb = new StringBuilder("Retrieved EPCIS events within last minute:");
         for (int i = 0; i < events.size(); i++) {
-            sb.append(NEW_LINE + NEW_LINE + TAB);
-            sb.append("EPCIS event " + (i + 1) + COLON);
+            sb.append(NEW_LINE).append(NEW_LINE).append(TAB);
+            sb.append("EPCIS event ").append((i + 1)).append(COLON);
             sb.append(printEpcisEvent(events.get(i)));
         }
         return sb.toString();
@@ -155,15 +155,15 @@ public class EpcisExample {
 
     private static String printEpcisEvent(final EpcisEvent event) {
         final StringBuilder sb = new StringBuilder();
-        sb.append(NEW_LINE + TAB + "Id: " + event.id);
-        sb.append(NEW_LINE + TAB + "Type: " + event.type);
-        sb.append(NEW_LINE + TAB + "Event time: " + event.eventTime);
-        sb.append(NEW_LINE + TAB + "Action: " + event.action);
-        sb.append(NEW_LINE + TAB + "Disposition: " + event.disposition);
-        sb.append(NEW_LINE + TAB + "Biz location: " + event.bizLocation);
-        sb.append(NEW_LINE + TAB + "Biz step: " + event.bizStep);
-        sb.append(NEW_LINE + TAB + "Read point: " + event.readPoint);
-        sb.append(NEW_LINE + TAB + "Epc list: ");
+        sb.append(NEW_LINE).append(TAB).append("Id: ").append(event.id);
+        sb.append(NEW_LINE).append(TAB).append("Type: ").append(event.type);
+        sb.append(NEW_LINE).append(TAB).append("Event time: ").append(event.eventTime);
+        sb.append(NEW_LINE).append(TAB).append("Action: ").append(event.action);
+        sb.append(NEW_LINE).append(TAB).append("Disposition: ").append(event.disposition);
+        sb.append(NEW_LINE).append(TAB).append("Biz location: ").append(event.bizLocation);
+        sb.append(NEW_LINE).append(TAB).append("Biz step: ").append(event.bizStep);
+        sb.append(NEW_LINE).append(TAB).append("Read point: ").append(event.readPoint);
+        sb.append(NEW_LINE).append(TAB).append("Epc list: ");
         sb.append(printEpcList(event));
         return sb.toString();
     }
@@ -172,8 +172,8 @@ public class EpcisExample {
         final ObjectEvent event = (ObjectEvent) epcisEvent;
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < event.epcList.size(); i++) {
-            sb.append(NEW_LINE + DOUBLE_TAB);
-            sb.append((i + 1) + event.epcList.get(i));
+            sb.append(NEW_LINE).append(DOUBLE_TAB);
+            sb.append((i + 1)).append(event.epcList.get(i));
         }
         return sb.toString();
     }

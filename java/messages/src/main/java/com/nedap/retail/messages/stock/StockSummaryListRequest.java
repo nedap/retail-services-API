@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.stock;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
@@ -11,10 +12,10 @@ public class StockSummaryListRequest {
 
     public String location;
 
-    @org.codehaus.jackson.annotate.JsonProperty(FROM_EVENT_TIME)
+    @JsonProperty(FROM_EVENT_TIME)
     public DateTime fromEventTime;
 
-    @org.codehaus.jackson.annotate.JsonProperty(UNTIL_EVENT_TIME)
+    @JsonProperty(UNTIL_EVENT_TIME)
     public DateTime untilEventTime;
 
     public StockSummaryListRequest() {

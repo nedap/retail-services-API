@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.epc.v2.stock;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
@@ -8,19 +9,19 @@ public class StockLevelSummary {
 
     public DateTime generated;
 
-    @org.codehaus.jackson.annotate.JsonProperty("rfid_stock_time")
+    @JsonProperty("rfid_stock_time")
     public DateTime rfidStockTime;
 
-    @org.codehaus.jackson.annotate.JsonProperty("stock_rooms_quantity")
+    @JsonProperty("stock_rooms_quantity")
     public Integer stockRoomsQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty("sales_floors_quantity")
+    @JsonProperty("sales_floors_quantity")
     public Integer salesFloorsQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty("store_quantity")
+    @JsonProperty("store_quantity")
     public Integer storeQuantity;
 
-    @org.codehaus.jackson.annotate.JsonProperty("stock_ratio")
+    @JsonProperty("stock_ratio")
     public Double stockRatio;
 
     public StockLevelSummary() {
