@@ -10,7 +10,6 @@ public class ClientException extends RuntimeException {
     private static final long serialVersionUID = -7956896457958967026L;
 
     private final int statusCode;
-
     private final String errorReason;
 
     public ClientException(final String message, final int statusCode, final String errorReason) {

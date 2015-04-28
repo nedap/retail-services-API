@@ -2,9 +2,9 @@ package com.nedap.retail.messages.epcis.v1_1;
 
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
@@ -17,22 +17,19 @@ public class AggregationEvent extends EpcisEvent {
      * Example: urn:epc:id:sscc:08410580.999999999
      */
     public static final String PARENT_ID = "parent_id";
-    @JsonProperty(PARENT_ID)
     @SerializedName(PARENT_ID)
-    @org.codehaus.jackson.annotate.JsonProperty(PARENT_ID)
+    @JsonProperty(PARENT_ID)
     public String parentId;
 
     public static final String CHILD_EPCS = "child_epcs";
-    @JsonProperty(CHILD_EPCS)
     @SerializedName(CHILD_EPCS)
-    @org.codehaus.jackson.annotate.JsonProperty(CHILD_EPCS)
-    public List<String> epcList;
+    @JsonProperty(CHILD_EPCS)
+    public List<String> childEpcs;
 
     public static final String CHILD_QUANTITY_LIST = "child_quantity_list";
-    @JsonProperty(CHILD_QUANTITY_LIST)
     @SerializedName(CHILD_QUANTITY_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(CHILD_QUANTITY_LIST)
-    public List<QuantityElement> quantityList;
+    @JsonProperty(CHILD_QUANTITY_LIST)
+    public List<QuantityElement> childQuantityList;
 
     public AggregationEvent() {
         type = EventType.AggregationEvent;
@@ -48,14 +45,19 @@ public class AggregationEvent extends EpcisEvent {
      * @param id The ID that identifies this message uniquely to an organization
      * @param eventTime The date and time at which the EPCIS Capturing Applications asserts the event occurred
      * @param recordTime The date and time at which this event was recorded by the EPCIS Repository.
-     * @param eventTimeZoneOffset The time zone offset in effect at the time and place the event occurred, expressed as an offset from UTC
+     * @param eventTimeZoneOffset The time zone offset in effect at the time and place the event occurred, expressed as
+     *            an offset from UTC
      * @param action How this event relates to the lifecycle of the EPCs named in this event.
-     * @param bizLocation The business location where the objects associated with the EPCs may be found, until contradicted by a subsequent event.
+     * @param bizLocation The business location where the objects associated with the EPCs may be found, until
+     *            contradicted by a subsequent event.
      * @param readPoint The read point at which the event took place.
-     * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until contradicted by a subsequent event.
-     * @param parentId The identifier of the parent of the association. If the parentID is an EPC, the EPC's URI is required. This field is required, unless the action is OBSERVE.
+     * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until
+     *            contradicted by a subsequent event.
+     * @param parentId The identifier of the parent of the association. If the parentID is an EPC, the EPC's URI is
+     *            required. This field is required, unless the action is OBSERVE.
      * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained.
-     * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained.
+     * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to
+     *            which the event pertained.
      */
     public AggregationEvent(final String id, final DateTime eventTime, final DateTime recordTime,
             final String eventTimeZoneOffset, final Action action, final String bizLocation, final String readPoint,
@@ -71,14 +73,14 @@ public class AggregationEvent extends EpcisEvent {
         this.readPoint = readPoint;
         this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
         this.parentId = parentId;
-        this.epcList = epcList;
-        this.quantityList = quantityList;
+        this.childEpcs = epcList;
+        this.childQuantityList = quantityList;
     }
 
     @Override
     public String toString() {
-        final String epcListSize = epcList == null ? "null" : Integer.toString(epcList.size());
-        final String quantityListSize = quantityList == null ? "null" : Integer.toString(quantityList.size());
+        final String epcListSize = childEpcs == null ? "null" : Integer.toString(childEpcs.size());
+        final String quantityListSize = childQuantityList == null ? "null" : Integer.toString(childQuantityList.size());
 
         return "AggregationEvent" + super.toString() + "[parent_id(" + parentId + "),child_epcs(" + epcListSize
                 + "),quantityList(" + quantityListSize + ")]";

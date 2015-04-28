@@ -27,7 +27,7 @@ public class ErpExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** ERP API example ***");
 
-        final String locationId = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).id;
 
         try {
             // Capture ERP stock
@@ -71,16 +71,16 @@ public class ErpExample {
 
     private static String printStock(final Stock stock) {
         final StringBuilder sb = new StringBuilder();
-        sb.append(NEW_LINE + TAB + "Id: " + stock.id);
-        sb.append(NEW_LINE + TAB + "Location: " + stock.location);
-        sb.append(NEW_LINE + TAB + "Event time: " + stock.eventTime);
-        sb.append(NEW_LINE + TAB + "External reference: " + stock.externRef);
-        sb.append(NEW_LINE + TAB + "Status: " + stock.status);
-        sb.append(NEW_LINE + TAB + "Quantity: " + stock.quantity);
-        sb.append(NEW_LINE + TAB + "Gtin quantity: " + stock.gtinQuantity);
-        sb.append(NEW_LINE + TAB + "In use: " + stock.inUse);
+        sb.append(NEW_LINE).append(TAB).append("Id: ").append(stock.id);
+        sb.append(NEW_LINE).append(TAB).append("Location: ").append(stock.location);
+        sb.append(NEW_LINE).append(TAB).append("Event time: ").append(stock.eventTime);
+        sb.append(NEW_LINE).append(TAB).append("External reference: ").append(stock.externRef);
+        sb.append(NEW_LINE).append(TAB).append("Status: ").append(stock.status);
+        sb.append(NEW_LINE).append(TAB).append("Quantity: ").append(stock.quantity);
+        sb.append(NEW_LINE).append(TAB).append("Gtin quantity: ").append(stock.gtinQuantity);
+        sb.append(NEW_LINE).append(TAB).append("In use: ").append(stock.inUse);
         if (!CollectionUtils.isEmpty(stock.quantityList)) {
-            sb.append(NEW_LINE + TAB + "Quantity list:");
+            sb.append(NEW_LINE).append(TAB).append("Quantity list:");
             sb.append(printQuantityList(stock.quantityList));
         }
         return sb.toString();
@@ -89,8 +89,8 @@ public class ErpExample {
     private static String printQuantityList(final List<GtinQuantity> quantityList) {
         final StringBuilder sb = new StringBuilder();
         for (final GtinQuantity gtinQuantity : quantityList) {
-            sb.append(NEW_LINE + DOUBLE_TAB);
-            sb.append(gtinQuantity.gtin + WHITESPACE + gtinQuantity.quantity);
+            sb.append(NEW_LINE).append(DOUBLE_TAB);
+            sb.append(gtinQuantity.gtin).append(WHITESPACE).append(gtinQuantity.quantity);
         }
         return sb.toString();
     }
@@ -116,10 +116,10 @@ public class ErpExample {
     }
 
     private static String printStockSummaryList(final List<StockSummary> stocks) {
-        final StringBuilder sb = new StringBuilder("Retrieved " + stocks.size() + " ERP stock summaries");
+        final StringBuilder sb = new StringBuilder("Retrieved ").append(stocks.size()).append(" ERP stock summaries");
         for (int i = 0; i < stocks.size(); i++) {
-            sb.append(NEW_LINE + NEW_LINE + TAB);
-            sb.append("Stock summary " + (i + 1) + COLON);
+            sb.append(NEW_LINE).append(NEW_LINE).append(TAB);
+            sb.append("Stock summary ").append((i + 1)).append(COLON);
             final Stock stock = castStockSummaryToStock(stocks.get(i));
             sb.append(printStock(stock));
         }

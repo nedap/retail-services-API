@@ -576,17 +576,17 @@ public class Client {
     public List<WorkflowEvent> queryWorkflow(final QueryRequest request) {
         WebTarget target = target("/workflow/v2/query");
 
-        if (request.getLocation() != null) {
-            target = target.queryParam("location", request.getLocation());
+        if (request.location != null) {
+            target = target.queryParam("location", request.location);
         }
-        if (request.getType() != null) {
-            target = target.queryParam("type", request.getType());
+        if (request.type != null) {
+            target = target.queryParam("type", request.type);
         }
-        if (request.getFrom() != null) {
-            target = target.queryParam("from_event_time", request.getFrom().toString());
+        if (request.fromEventTime != null) {
+            target = target.queryParam("from_event_time", request.fromEventTime.toString());
         }
-        if (request.getTo() != null) {
-            target = target.queryParam("until_event_time", request.getTo().toString());
+        if (request.untilEventTime != null) {
+            target = target.queryParam("until_event_time", request.untilEventTime.toString());
         }
 
         return get(target, new GenericType<List<WorkflowEvent>>() {

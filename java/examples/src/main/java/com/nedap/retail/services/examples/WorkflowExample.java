@@ -32,7 +32,7 @@ public class WorkflowExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** Workflow API example ***");
 
-        final String locationId = client.getSites().get(0).getId();
+        final String locationId = client.getSites().get(0).id;
 
         try {
             // Make some EPCIS events first
@@ -131,8 +131,8 @@ public class WorkflowExample {
     private static String printCaptureEpcisEvents(final EpcisEventContainer epcisEventContainer) {
         final StringBuilder sb = new StringBuilder("Captured EPCIS object events with ids:");
         for (int i = 0; i < epcisEventContainer.events.size(); i++) {
-            sb.append(NEW_LINE + TAB);
-            sb.append((i + 1) + DOT);
+            sb.append(NEW_LINE).append(TAB);
+            sb.append((i + 1)).append(DOT);
             sb.append(epcisEventContainer.events.get(i).id);
         }
         return sb.toString();
@@ -142,11 +142,11 @@ public class WorkflowExample {
             final EpcisEventContainer epcisEventsContainer) {
 
         final WorkflowEvent workflow = new WorkflowEvent();
-        workflow.setType("cycle_count_finished");
-        workflow.setEventTime(DateTime.now());
-        workflow.setLocation(locationId);
-        workflow.setEpcCount(countEpcs(epcisEventsContainer));
-        workflow.setMessageIds(MESSAGE_IDS);
+        workflow.type = "cycle_count_finished";
+        workflow.eventTime = DateTime.now();
+        workflow.location = locationId;
+        workflow.epcCount = countEpcs(epcisEventsContainer);
+        workflow.messageIds = MESSAGE_IDS;
         return workflow;
     }
 
@@ -162,36 +162,36 @@ public class WorkflowExample {
 
     private static String printWorkflow(final WorkflowEvent workflow) {
         final StringBuilder sb = new StringBuilder();
-        sb.append(NEW_LINE + TAB + "Type: " + workflow.getType());
-        sb.append(NEW_LINE + TAB + "Event time: " + workflow.getEventTime());
-        sb.append(NEW_LINE + TAB + "Location: " + workflow.getLocation());
-        sb.append(NEW_LINE + TAB + "Epc count: " + workflow.getEpcCount());
-        sb.append(NEW_LINE + TAB + "Message ids: ");
+        sb.append(NEW_LINE).append(TAB).append("Type: ").append(workflow.type);
+        sb.append(NEW_LINE).append(TAB).append("Event time: ").append(workflow.eventTime);
+        sb.append(NEW_LINE).append(TAB).append("Location: ").append(workflow.location);
+        sb.append(NEW_LINE).append(TAB).append("Epc count: ").append(workflow.epcCount);
+        sb.append(NEW_LINE).append(TAB).append("Message ids: ");
         sb.append(printMessageIds(workflow));
         return sb.toString();
     }
 
     private static String printMessageIds(final WorkflowEvent workflow) {
         final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < workflow.getMessageIds().size(); i++) {
-            sb.append(NEW_LINE + DOUBLE_TAB);
-            sb.append((i + 1) + DOT);
-            sb.append(workflow.getMessageIds().get(i));
+        for (int i = 0; i < workflow.messageIds.size(); i++) {
+            sb.append(NEW_LINE).append(DOUBLE_TAB);
+            sb.append((i + 1)).append(DOT);
+            sb.append(workflow.messageIds.get(i));
         }
         return sb.toString();
     }
 
     private static QueryRequest makeWorkflowQueryRequest() {
         final QueryRequest request = new QueryRequest();
-        request.setFrom(DateTime.now().minusMinutes(10));
+        request.fromEventTime = DateTime.now().minusMinutes(10);
         return request;
     }
 
     private static String printWorkflowEvents(final List<WorkflowEvent> workflowEvents) {
         final StringBuilder sb = new StringBuilder("Retrieved workflow events within a last 10 minutes:");
         for (int i = 0; i < workflowEvents.size(); i++) {
-            sb.append(NEW_LINE + NEW_LINE + TAB);
-            sb.append("Workflow event " + (i + 1) + DOT);
+            sb.append(NEW_LINE).append(NEW_LINE).append(TAB);
+            sb.append("Workflow event ").append((i + 1)).append(DOT);
             sb.append(printWorkflow(workflowEvents.get(i)));
         }
         return sb.toString();

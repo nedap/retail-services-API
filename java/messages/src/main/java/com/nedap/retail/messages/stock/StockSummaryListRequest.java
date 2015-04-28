@@ -1,13 +1,9 @@
 package com.nedap.retail.messages.stock;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class StockSummaryListRequest {
 
@@ -17,15 +13,12 @@ public class StockSummaryListRequest {
     public String location;
 
     @JsonProperty(FROM_EVENT_TIME)
-    @org.codehaus.jackson.annotate.JsonProperty(FROM_EVENT_TIME)
     public DateTime fromEventTime;
 
     @JsonProperty(UNTIL_EVENT_TIME)
-    @org.codehaus.jackson.annotate.JsonProperty(UNTIL_EVENT_TIME)
     public DateTime untilEventTime;
 
     public StockSummaryListRequest() {
-
     }
 
     public StockSummaryListRequest(final String location, final DateTime fromEventTime, final DateTime untilEventTime) {
@@ -33,5 +26,4 @@ public class StockSummaryListRequest {
         this.fromEventTime = fromEventTime;
         this.untilEventTime = untilEventTime;
     }
-
 }

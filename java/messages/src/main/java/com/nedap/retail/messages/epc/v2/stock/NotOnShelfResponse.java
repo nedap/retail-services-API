@@ -4,19 +4,13 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.retail.messages.article.Article;
 
-@JsonInclude(Include.NON_NULL)
 public class NotOnShelfResponse extends NotOnShelfSummary {
+
     public List<String> gtins;
-    @JsonProperty("sales_floor_stock")
     public List<Integer> salesFloorStock;
-    @JsonProperty("stock_room_locations")
     public List<String> stockRoomLocations;
-    @JsonProperty("stock_room_stock")
     public List<Integer> stockRoomStock;
     public List<Article> articles;
 

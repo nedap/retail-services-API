@@ -3,14 +3,12 @@ package com.nedap.retail.messages.stock;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Stock extends StockSummary {
 
     @JsonProperty("quantity_list")
-    @org.codehaus.jackson.annotate.JsonProperty("quantity_list")
     public List<GtinQuantity> quantityList;
 
     public Stock() {

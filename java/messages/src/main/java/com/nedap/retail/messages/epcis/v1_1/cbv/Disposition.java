@@ -1,8 +1,7 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 /**
- * Enumerates EPCIS Dispositions
- * Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
+ * Enumerates EPCIS Dispositions Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
  *
  * @see http://nvs0272/confluence/pages/viewpage.action?pageId=9733350
  */
@@ -55,8 +54,7 @@ public enum Disposition {
      */
     IN_TRANSIT(6, "urn:epcglobal:cbv:disp:in_transit"),
     /**
-     * Object is maybe stolen by a person. It might or might not be in the store anymore.
-     * Nedap-specific
+     * Object is maybe stolen by a person. It might or might not be in the store anymore. Nedap-specific
      *
      * @since v2
      */
@@ -146,7 +144,7 @@ public enum Disposition {
     private final int number;
     private final String disposition;
 
-    private Disposition(int aNumber, String aDisposition) {
+    private Disposition(final int aNumber, final String aDisposition) {
         number = aNumber;
         disposition = aDisposition;
     }
@@ -160,13 +158,10 @@ public enum Disposition {
     }
 
     /**
-     * Provides similar functionality to valueOf(..). However, valueOf does not
-     * know how to access values() to lookup the Disposition. Instead, it will
-     * access name() which does not match its serialized counterpart.
+     * Provides similar functionality to valueOf(..). However, valueOf does not know how to access values() to lookup
+     * the Disposition. Instead, it will access name() which does not match its serialized counterpart.
      *
-     * Example:
-     * Enum value: IN_TRANSIT
-     * Serialized value (which is looked for): urn:epcglobal:cbv:disp:in_transit
+     * Example: Enum value: IN_TRANSIT Serialized value (which is looked for): urn:epcglobal:cbv:disp:in_transit
      *
      * @param value String value of requested disposition
      * @return Disposition enum value for provided String
@@ -177,7 +172,7 @@ public enum Disposition {
             throw new IllegalArgumentException("disposition missing");
         }
         for (final Disposition d : values()) {
-            if (value.equalsIgnoreCase(d.disposition())) {
+            if (value.equalsIgnoreCase(d.disposition)) {
                 return d;
             }
         }

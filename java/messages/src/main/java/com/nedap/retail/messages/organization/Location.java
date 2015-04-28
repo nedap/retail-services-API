@@ -4,31 +4,28 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Location implements Serializable {
 
     private static final long serialVersionUID = 1096488161535906856L;
 
-    private String id;
+    public String id;
+
     @JsonProperty("parent_id")
-    @org.codehaus.jackson.annotate.JsonProperty("parent_id")
-    private String parentId;
-    private LocationType type;
-    private LocationSubType subtype;
-    private String name;
+    public String parentId;
+
+    public LocationType type;
+    public LocationSubType subtype;
+    public String name;
+
     @JsonProperty("store_code")
-    @org.codehaus.jackson.annotate.JsonProperty("store_code")
-    private String storeCode;
-    private Address address;
-    private List<Location> children;
+    public String storeCode;
+
+    public Address address;
+    public List<Location> children;
 
     public Location() {
     }
@@ -42,72 +39,6 @@ public class Location implements Serializable {
         this.name = name;
         this.storeCode = storeCode;
         this.address = address;
-        this.children = children;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(final String parentId) {
-        this.parentId = parentId;
-    }
-
-    public LocationType getType() {
-        return type;
-    }
-
-    public void setType(final LocationType type) {
-        this.type = type;
-    }
-
-    public LocationSubType getSubtype() {
-        return subtype;
-    }
-
-    public void setSubtype(final LocationSubType subtype) {
-        this.subtype = subtype;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    @JsonIgnore
-    public String getStoreCode() {
-        return storeCode;
-    }
-
-    public void setStoreCode(final String storeCode) {
-        this.storeCode = storeCode;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(final Address address) {
-        this.address = address;
-    }
-
-    public List<Location> getChildren() {
-        return children;
-    }
-
-    public void setChildren(final List<Location> children) {
         this.children = children;
     }
 

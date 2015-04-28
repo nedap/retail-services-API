@@ -5,15 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Article implements Serializable {
 
@@ -35,27 +32,27 @@ public class Article implements Serializable {
     public static final String LAST_UPDATED = "last_updated";
     public static final String MARKDOWN = "markdown";
 
-    private String gtin;
-    private List<Barcode> barcodes;
-    private String code;
-    private String brand;
-    private String season;
-    private String name;
-    private String option;
-    private String style;
-    private String color;
-    private List<Size> sizes;
-    private String supplier;
-    private String category;
-    private List<Price> prices;
-    private Boolean markdown;
+    public String gtin;
+    public List<Barcode> barcodes;
+    public String code;
+    public String brand;
+    public String season;
+    public String name;
+    public String option;
+    public String style;
+    public String color;
+    public List<Size> sizes;
+    public String supplier;
+    public String category;
+    public List<Price> prices;
+    public Boolean markdown;
+
     @JsonProperty(LAST_UPDATED)
-    @org.codehaus.jackson.annotate.JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
+
     @JsonIgnore
     @org.codehaus.jackson.annotate.JsonIgnore
     public UUID lastUpdatedUUID;
-
 
     // Empty constructor used by Jackson
     public Article() {
@@ -79,128 +76,6 @@ public class Article implements Serializable {
         this.category = category;
         this.prices = prices;
         this.lastUpdated = lastUpdated;
-    }
-
-    public List<Barcode> getBarcodes() {
-        return barcodes;
-    }
-
-    public void setBarcodes(final List<Barcode> barcodes) {
-        this.barcodes = barcodes;
-    }
-
-    public List<Size> getSizes() {
-        return sizes;
-    }
-
-    public void setSizes(final List<Size> sizes) {
-        this.sizes = sizes;
-    }
-
-    public List<Price> getPrices() {
-        return prices;
-    }
-
-    public void setPrices(final List<Price> prices) {
-        this.prices = prices;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(final String code) {
-        this.code = code;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(final String brand) {
-        this.brand = brand;
-    }
-
-    public String getSeason() {
-        return season;
-    }
-
-    public void setSeason(final String season) {
-        this.season = season;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getOption() {
-        return option;
-    }
-
-    public void setOption(final String option) {
-        this.option = option;
-    }
-
-    public String getStyle() {
-        return style;
-    }
-
-    public void setStyle(final String style) {
-        this.style = style;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(final String color) {
-        this.color = color;
-    }
-
-    public String getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(final String supplier) {
-        this.supplier = supplier;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    public void setGtin(final String gtin) {
-        this.gtin = gtin;
-    }
-
-    public String getGtin() {
-        return gtin;
-    }
-
-    @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
-    public DateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(final DateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    public Boolean getMarkdown() {
-        return markdown;
-    }
-
-    public void setMarkdown(final Boolean markdown) {
-        this.markdown = markdown;
     }
 
     @Override

@@ -2,17 +2,15 @@ package com.nedap.retail.messages.epc.v2.approved_difference_list;
 
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApprovedDifferenceListSummary {
+
     public static final String ORGANIZATION_ID = "organization_id";
     public static final String APPROVED_ON = "approved_on";
     public static final String APPROVED_BY = "approved_by";
@@ -33,11 +31,9 @@ public class ApprovedDifferenceListSummary {
     public static final String EXTERN_REF = "extern_ref";
 
     @JsonProperty(APPROVED_ON)
-    @org.codehaus.jackson.annotate.JsonProperty(APPROVED_ON)
     public DateTime approvedOn;
 
     @JsonProperty(APPROVED_BY)
-    @org.codehaus.jackson.annotate.JsonProperty(APPROVED_BY)
     public String approvedBy;
 
     @JsonIgnore
@@ -46,61 +42,47 @@ public class ApprovedDifferenceListSummary {
     public String location;
 
     @JsonProperty(ERP_STOCK_ID)
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_STOCK_ID)
     public String erpStockId;
 
     @JsonProperty(ERP_STOCK_TIME)
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_STOCK_TIME)
     public DateTime erpStockTime;
 
     @JsonProperty(ERP_QUANTITY)
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_QUANTITY)
     public int erpQuantity;
 
     @JsonProperty(ERP_GTIN_QUANTITY)
-    @org.codehaus.jackson.annotate.JsonProperty(ERP_GTIN_QUANTITY)
     public int erpGtinQuantity;
 
     @JsonProperty(RFID_STOCK_TIME)
-    @org.codehaus.jackson.annotate.JsonProperty(RFID_STOCK_TIME)
     public DateTime rfidStockTime;
 
     @JsonProperty(RFID_QUANTITY)
-    @org.codehaus.jackson.annotate.JsonProperty(RFID_QUANTITY)
     public int rfidQuantity;
 
     @JsonProperty(RFID_GTIN_QUANTITY)
-    @org.codehaus.jackson.annotate.JsonProperty(RFID_GTIN_QUANTITY)
     public int rfidGtinQuantity;
 
     @JsonProperty(ABSOLUTE_DIFFERENCE)
-    @org.codehaus.jackson.annotate.JsonProperty(ABSOLUTE_DIFFERENCE)
     public int absoluteDifference;
 
     @JsonProperty(PLUS_DIFFERENCE)
-    @org.codehaus.jackson.annotate.JsonProperty(PLUS_DIFFERENCE)
     public int plusDifference;
 
     @JsonProperty(MINUS_DIFFERENCE)
-    @org.codehaus.jackson.annotate.JsonProperty(MINUS_DIFFERENCE)
     public int minusDifference;
 
     @JsonProperty(EXPORT_STATUS)
-    @org.codehaus.jackson.annotate.JsonProperty(EXPORT_STATUS)
     public ExportStatus exportStatus;
 
     @JsonProperty(EXPORT_TIME)
-    @org.codehaus.jackson.annotate.JsonProperty(EXPORT_TIME)
     public DateTime exportTime;
 
     @JsonProperty(EXTERN_REF)
-    @org.codehaus.jackson.annotate.JsonProperty(EXTERN_REF)
     public String externRef;
 
     public UUID id;
 
     public ApprovedDifferenceListSummary() {
-
     }
 
     public ApprovedDifferenceListSummary(final ApprovedDifferenceListSummary approvedDifferenceListSummary) {
@@ -123,5 +105,4 @@ public class ApprovedDifferenceListSummary {
         externRef = approvedDifferenceListSummary.externRef;
         id = approvedDifferenceListSummary.id;
     }
-
 }

@@ -2,33 +2,34 @@ package com.nedap.retail.messages.epc.v2.difference_list;
 
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.retail.messages.article.Article;
 
 public class DifferenceListResponse {
 
-    private List<String> gtins;
+    public List<String> gtins;
+
     @JsonProperty("erp_stock")
-    @org.codehaus.jackson.annotate.JsonProperty("erp_stock")
-    private List<Integer> erpStock;
+    public List<Integer> erpStock;
+
     @JsonProperty("rfid_stock")
-    @org.codehaus.jackson.annotate.JsonProperty("rfid_stock")
-    private List<Integer> rfidStock;
-    private List<Article> articles;
+    public List<Integer> rfidStock;
+
+    public List<Article> articles;
+
     @JsonProperty("erp_stock_time")
-    @org.codehaus.jackson.annotate.JsonProperty("erp_stock_time")
-    private DateTime erpStockTime;
+    public DateTime erpStockTime;
+
     @JsonProperty("rfid_stock_time")
-    @org.codehaus.jackson.annotate.JsonProperty("rfid_stock_time")
-    private DateTime rfidStockTime;
+    public DateTime rfidStockTime;
+
     @JsonProperty("erp_gtin_quantity")
-    @org.codehaus.jackson.annotate.JsonProperty("erp_gtin_quantity")
-    private Integer erpGtinQuantity;
+    public Integer erpGtinQuantity;
+
     @JsonProperty("rfid_gtin_quantity")
-    @org.codehaus.jackson.annotate.JsonProperty("rfid_gtin_quantity")
-    private Integer rfidGtinQuantity;
+    public Integer rfidGtinQuantity;
 
     public DifferenceListResponse() {
     }
@@ -43,70 +44,6 @@ public class DifferenceListResponse {
         this.erpStockTime = erpStockTime;
         this.rfidStockTime = rfidStockTime;
         this.erpGtinQuantity = erpGtinQuantity;
-        this.rfidGtinQuantity = rfidGtinQuantity;
-    }
-
-    public List<String> getGtins() {
-        return gtins;
-    }
-
-    public void setGtins(final List<String> gtins) {
-        this.gtins = gtins;
-    }
-
-    public List<Integer> getErpStock() {
-        return erpStock;
-    }
-
-    public void setErpStock(final List<Integer> erpStock) {
-        this.erpStock = erpStock;
-    }
-
-    public List<Integer> getRfidStock() {
-        return rfidStock;
-    }
-
-    public void setRfidStock(final List<Integer> rfidStock) {
-        this.rfidStock = rfidStock;
-    }
-
-    public List<Article> getArticles() {
-        return articles;
-    }
-
-    public void setArticles(final List<Article> articles) {
-        this.articles = articles;
-    }
-
-    public DateTime getErpStockTime() {
-        return erpStockTime;
-    }
-
-    public void setErpStockTime(final DateTime erpStockTime) {
-        this.erpStockTime = erpStockTime;
-    }
-
-    public DateTime getRfidStockTime() {
-        return rfidStockTime;
-    }
-
-    public void setRfidStockTime(final DateTime rfidStockTime) {
-        this.rfidStockTime = rfidStockTime;
-    }
-
-    public Integer getErpGtinQuantity() {
-        return erpGtinQuantity;
-    }
-
-    public void setErpGtinQuantity(final Integer erpGtinQuantity) {
-        this.erpGtinQuantity = erpGtinQuantity;
-    }
-
-    public Integer getRfidGtinQuantity() {
-        return rfidGtinQuantity;
-    }
-
-    public void setRfidGtinQuantity(final Integer rfidGtinQuantity) {
         this.rfidGtinQuantity = rfidGtinQuantity;
     }
 }

@@ -40,40 +40,40 @@ public class SystemExample {
     }
 
     private static String printSystems(final List<SystemListPayload> systems) {
-        final StringBuilder sb = new StringBuilder("Got " + systems.size() + " systems");
+        final StringBuilder sb = new StringBuilder("Got ").append(systems.size()).append(" systems");
         for (int i = 0; i < systems.size(); i++) {
-            sb.append(NEW_LINE + TAB + "System " + (i + 1) + COLON);
-            sb.append(NEW_LINE + TAB + "System id: " + systems.get(i).getSystemId());
-            sb.append(NEW_LINE + TAB + "Name: " + systems.get(i).getName());
-            sb.append(NEW_LINE + TAB + "Location: " + systems.get(i).getLocation());
+            sb.append(NEW_LINE).append(TAB).append("System ").append((i + 1)).append(COLON);
+            sb.append(NEW_LINE).append(TAB).append("System id: ").append(systems.get(i).systemId);
+            sb.append(NEW_LINE).append(TAB).append("Name: ").append(systems.get(i).name);
+            sb.append(NEW_LINE).append(TAB).append("Location: ").append(systems.get(i).location);
         }
         return sb.toString();
     }
 
     private static String printSystemStatuses(final List<SystemStatusPayload> statuses) {
-        final StringBuilder sb = new StringBuilder("Got " + statuses.size() + " systems");
+        final StringBuilder sb = new StringBuilder("Got ").append(statuses.size()).append(" systems");
         for (int i = 0; i < statuses.size(); i++) {
-            sb.append(NEW_LINE + TAB + "System " + (i + 1) + COLON);
-            sb.append(NEW_LINE + TAB + "System id: " + statuses.get(i).getSystemId());
-            sb.append(NEW_LINE + TAB + "Firmware version: " + statuses.get(i).getFirmwareVersion());
-            sb.append(NEW_LINE + TAB + "Status: " + statuses.get(i).getStatus());
+            sb.append(NEW_LINE).append(TAB).append("System ").append((i + 1)).append(COLON);
+            sb.append(NEW_LINE).append(TAB).append("System id: ").append(statuses.get(i).systemId);
+            sb.append(NEW_LINE).append(TAB).append("Firmware version: ").append(statuses.get(i).firmwareVersion);
+            sb.append(NEW_LINE).append(TAB).append("Status: ").append(statuses.get(i).status);
 
-            if (statuses.get(i).getStatus() == Status.OFFLINE) {
-                sb.append(NEW_LINE + TAB + "Offline since: " + statuses.get(i).getOfflineSince());
+            if (statuses.get(i).status == Status.OFFLINE) {
+                sb.append(NEW_LINE).append(TAB).append("Offline since: ").append(statuses.get(i).offlineSince);
             }
-            if (CollectionUtils.isEmpty(statuses.get(i).getDetailedStatus())) {
-                sb.append(showStatusDetails(statuses.get(i).getDetailedStatus()));
+            if (CollectionUtils.isEmpty(statuses.get(i).detailedStatus)) {
+                sb.append(showStatusDetails(statuses.get(i).detailedStatus));
             }
         }
         return sb.toString();
     }
 
     private static String showStatusDetails(final List<DetailedStatus> detailedStatuses) {
-        final StringBuilder sb = new StringBuilder(NEW_LINE + TAB + "Detailed status:");
+        final StringBuilder sb = new StringBuilder(NEW_LINE).append(TAB).append("Detailed status:");
         for (int i = 0; i < detailedStatuses.size(); i++) {
-            sb.append(NEW_LINE + TAB + "Detailed status " + (i + 1) + COLON);
-            sb.append(NEW_LINE + DOUBLE_TAB + "Type: " + detailedStatuses.get(i).getType());
-            sb.append(NEW_LINE + DOUBLE_TAB + "Status: " + detailedStatuses.get(i).getStatus());
+            sb.append(NEW_LINE).append(TAB).append("Detailed status ").append((i + 1)).append(COLON);
+            sb.append(NEW_LINE).append(DOUBLE_TAB).append("Type: ").append(detailedStatuses.get(i).type);
+            sb.append(NEW_LINE).append(DOUBLE_TAB).append("Status: ").append(detailedStatuses.get(i).status);
             sb.append(NEW_LINE);
         }
         return sb.toString();

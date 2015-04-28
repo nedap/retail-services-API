@@ -10,7 +10,7 @@ public class ClientFactory {
 
     /**
      * Create default client with connection timeout of 10000 and read timeout of 60000
-     * 
+     *
      * @return http client to use
      */
     public static javax.ws.rs.client.Client createDefault() {
@@ -19,7 +19,7 @@ public class ClientFactory {
 
     /**
      * Create http client with default configuration and specified timeout values
-     * 
+     *
      * @param connectionTimeout connection timeout to set
      * @param readTimeout read timeout to set
      * @return http client to use
@@ -38,5 +38,4 @@ public class ClientFactory {
 
         return client;
     }
-
 }

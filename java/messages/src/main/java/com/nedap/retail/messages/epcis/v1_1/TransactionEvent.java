@@ -3,9 +3,9 @@ package com.nedap.retail.messages.epcis.v1_1;
 import java.util.List;
 import java.util.Objects;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
@@ -19,21 +19,18 @@ public class TransactionEvent extends EpcisEvent {
      * Example: urn:epc:id:sscc:08410580.999999999
      */
     public static final String PARENT_ID = "parent_id";
-    @JsonProperty(PARENT_ID)
     @SerializedName(PARENT_ID)
-    @org.codehaus.jackson.annotate.JsonProperty(PARENT_ID)
+    @JsonProperty(PARENT_ID)
     public String parentId;
 
     public static final String EPC_LIST = "epc_list";
-    @JsonProperty(EPC_LIST)
     @SerializedName(EPC_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(EPC_LIST)
+    @JsonProperty(EPC_LIST)
     public List<String> epcList;
 
     public static final String QUANTITY_LIST = "quantity_list";
-    @JsonProperty(QUANTITY_LIST)
     @SerializedName(QUANTITY_LIST)
-    @org.codehaus.jackson.annotate.JsonProperty(QUANTITY_LIST)
+    @JsonProperty(QUANTITY_LIST)
     public List<QuantityElement> quantityList;
 
     public TransactionEvent() {
@@ -50,14 +47,19 @@ public class TransactionEvent extends EpcisEvent {
      * @param id The ID that identifies this message uniquely to an organization
      * @param eventTime The date and time at which the EPCIS Capturing Applications asserts the event occurred
      * @param recordTime The date and time at which this event was recorded by the EPCIS Repository.
-     * @param eventTimeZoneOffset The time zone offset in effect at the time and place the event occurred, expressed as an offset from UTC
+     * @param eventTimeZoneOffset The time zone offset in effect at the time and place the event occurred, expressed as
+     *            an offset from UTC
      * @param action How this event relates to the lifecycle of the EPCs named in this event.
-     * @param bizLocation The business location where the objects associated with the EPCs may be found, until contradicted by a subsequent event.
+     * @param bizLocation The business location where the objects associated with the EPCs may be found, until
+     *            contradicted by a subsequent event.
      * @param readPoint The read point at which the event took place.
-     * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until contradicted by a subsequent event.
+     * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until
+     *            contradicted by a subsequent event.
      * @param parentId
-     * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained. A TransactionEvent must contain either an epc_list or a quantity_list.
-     * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained. A TransactionEvent must contain either an epc_list or a quantity_list.
+     * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained. A
+     *            TransactionEvent must contain either an epc_list or a quantity_list.
+     * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to
+     *            which the event pertained. A TransactionEvent must contain either an epc_list or a quantity_list.
      * @param bizTransactionList An unordered list of business transactions that define the context of this event.
      */
     public TransactionEvent(final String id, final DateTime eventTime, final DateTime recordTime,

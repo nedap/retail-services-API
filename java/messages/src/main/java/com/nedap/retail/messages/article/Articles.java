@@ -5,30 +5,18 @@ import java.util.List;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-@JsonInclude(Include.NON_NULL)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Articles implements Serializable {
 
     private static final long serialVersionUID = -4848388482600713978L;
 
-    private List<Article> articles;
+    public List<Article> articles;
 
     // Empty constructor used by Jackson
     public Articles() {
     }
 
     public Articles(final List<Article> articles) {
-        this.articles = articles;
-    }
-
-    public List<Article> getArticles() {
-        return articles;
-    }
-
-    public void setArticles(final List<Article> articles) {
         this.articles = articles;
     }
 }
