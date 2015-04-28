@@ -12,8 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.nedap.retail.messages.IdCloudObjectMapperFactory;
 
 /**
  * Unit tests for User.
@@ -24,9 +23,7 @@ public class UserTest {
 
     @Before
     public void setUp() {
-        mapper = new ObjectMapper();
-        mapper.registerModule(new JodaModule());
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        mapper = IdCloudObjectMapperFactory.create();
     }
 
     @Test
