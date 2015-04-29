@@ -1,8 +1,10 @@
 package com.nedap.retail.services.examples;
 
+import static com.nedap.retail.services.examples.PrintHelper.BLACK;
 import static com.nedap.retail.services.examples.PrintHelper.COLON;
 import static com.nedap.retail.services.examples.PrintHelper.COMMA;
 import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
+import static com.nedap.retail.services.examples.PrintHelper.EAN13;
 import static com.nedap.retail.services.examples.PrintHelper.GTIN_1;
 import static com.nedap.retail.services.examples.PrintHelper.GTIN_2;
 import static com.nedap.retail.services.examples.PrintHelper.GTIN_3;
@@ -40,6 +42,9 @@ public class EpcExample {
 
     private static final DateTime EVENT_TIME = DateTime.now();
     private static final String EXTERNAL_REFERENCE = "generated_import";
+
+    private EpcExample() {
+    }
 
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** EPC API example ***");
@@ -141,12 +146,12 @@ public class EpcExample {
         final Article article = new Article();
 
         final List<Barcode> barcodes = new ArrayList<>();
-        barcodes.add(new Barcode("EAN13", "2011200000019"));
+        barcodes.add(new Barcode(EAN13, "2011200000019"));
         article.barcodes = barcodes;
 
         article.gtin = GTIN_1;
         article.name = "T-shirt with V-neck and short sleeves";
-        article.color = "Black";
+        article.color = BLACK;
         article.sizes = setArticleSizes1();
 
         return article;
@@ -164,12 +169,12 @@ public class EpcExample {
         final Article article = new Article();
 
         final List<Barcode> barcodes = new ArrayList<>();
-        barcodes.add(new Barcode("EAN13", "2011200000064"));
+        barcodes.add(new Barcode(EAN13, "2011200000064"));
         article.barcodes = barcodes;
 
         article.gtin = GTIN_2;
         article.name = "Straight regular jeans";
-        article.color = "Black";
+        article.color = BLACK;
         article.sizes = setArticleSizes2();
 
         return article;
@@ -177,7 +182,7 @@ public class EpcExample {
 
     private static List<Size> setArticleSizes2() {
         final List<Size> sizes = new ArrayList<>();
-        sizes.add(new Size("31/35", "NL"));
+        sizes.add(new Size("31/36", "NL"));
         sizes.add(new Size("31/33", "DE"));
         sizes.add(new Size("31/35", "GB"));
         return sizes;
@@ -187,12 +192,12 @@ public class EpcExample {
         final Article article = new Article();
 
         final List<Barcode> barcodes = new ArrayList<>();
-        barcodes.add(new Barcode("EAN13", "2011200000163"));
+        barcodes.add(new Barcode(EAN13, "2011200000163"));
         article.barcodes = barcodes;
 
         article.gtin = GTIN_3;
         article.name = "Washed leather in a classic maritime style shoes";
-        article.color = "Black";
+        article.color = BLACK;
         article.sizes = setArticleSizes3();
 
         return article;

@@ -18,6 +18,9 @@ import com.nedap.retail.messages.system.SystemStatusPayload;
 
 public class SystemExample {
 
+    private SystemExample() {
+    }
+
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** System API example ***");
 
@@ -42,7 +45,7 @@ public class SystemExample {
     private static String printSystems(final List<SystemListPayload> systems) {
         final StringBuilder sb = new StringBuilder("Got ").append(systems.size()).append(" systems");
         for (int i = 0; i < systems.size(); i++) {
-            sb.append(NEW_LINE).append(TAB).append("System ").append((i + 1)).append(COLON);
+            sb.append(NEW_LINE).append(TAB).append("System ").append(i + 1).append(COLON);
             sb.append(NEW_LINE).append(TAB).append("System id: ").append(systems.get(i).systemId);
             sb.append(NEW_LINE).append(TAB).append("Name: ").append(systems.get(i).name);
             sb.append(NEW_LINE).append(TAB).append("Location: ").append(systems.get(i).location);
@@ -53,7 +56,7 @@ public class SystemExample {
     private static String printSystemStatuses(final List<SystemStatusPayload> statuses) {
         final StringBuilder sb = new StringBuilder("Got ").append(statuses.size()).append(" systems");
         for (int i = 0; i < statuses.size(); i++) {
-            sb.append(NEW_LINE).append(TAB).append("System ").append((i + 1)).append(COLON);
+            sb.append(NEW_LINE).append(TAB).append("System ").append(i + 1).append(COLON);
             sb.append(NEW_LINE).append(TAB).append("System id: ").append(statuses.get(i).systemId);
             sb.append(NEW_LINE).append(TAB).append("Firmware version: ").append(statuses.get(i).firmwareVersion);
             sb.append(NEW_LINE).append(TAB).append("Status: ").append(statuses.get(i).status);
@@ -71,7 +74,7 @@ public class SystemExample {
     private static String showStatusDetails(final List<DetailedStatus> detailedStatuses) {
         final StringBuilder sb = new StringBuilder(NEW_LINE).append(TAB).append("Detailed status:");
         for (int i = 0; i < detailedStatuses.size(); i++) {
-            sb.append(NEW_LINE).append(TAB).append("Detailed status ").append((i + 1)).append(COLON);
+            sb.append(NEW_LINE).append(TAB).append("Detailed status ").append(i + 1).append(COLON);
             sb.append(NEW_LINE).append(DOUBLE_TAB).append("Type: ").append(detailedStatuses.get(i).type);
             sb.append(NEW_LINE).append(DOUBLE_TAB).append("Status: ").append(detailedStatuses.get(i).status);
             sb.append(NEW_LINE);

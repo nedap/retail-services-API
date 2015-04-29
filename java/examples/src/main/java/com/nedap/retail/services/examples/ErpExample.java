@@ -24,6 +24,9 @@ import com.nedap.retail.messages.stock.StockSummaryListRequest;
 
 public class ErpExample {
 
+    private ErpExample() {
+    }
+
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** ERP API example ***");
 
@@ -119,7 +122,7 @@ public class ErpExample {
         final StringBuilder sb = new StringBuilder("Retrieved ").append(stocks.size()).append(" ERP stock summaries");
         for (int i = 0; i < stocks.size(); i++) {
             sb.append(NEW_LINE).append(NEW_LINE).append(TAB);
-            sb.append("Stock summary ").append((i + 1)).append(COLON);
+            sb.append("Stock summary ").append(i + 1).append(COLON);
             final Stock stock = castStockSummaryToStock(stocks.get(i));
             sb.append(printStock(stock));
         }
