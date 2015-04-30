@@ -63,7 +63,8 @@ public class App {
         }
     }
 
-    private static Options createCliOption() throws IllegalArgumentException {
+    @SuppressWarnings("static-access")
+    private static Options createCliOption() {
         final Options options = new Options();
         options.addOption(OptionBuilder.isRequired().hasArg().withArgName("id").withDescription("OAuth 2.0 client ID")
                 .create(OPTION_CLIENTID));

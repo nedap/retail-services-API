@@ -1,9 +1,11 @@
 package com.nedap.retail.services.examples;
 
+import static com.nedap.retail.services.examples.PrintHelper.BLACK;
 import static com.nedap.retail.services.examples.PrintHelper.COLON;
 import static com.nedap.retail.services.examples.PrintHelper.COMMA;
 import static com.nedap.retail.services.examples.PrintHelper.DOT;
 import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
+import static com.nedap.retail.services.examples.PrintHelper.EAN13;
 import static com.nedap.retail.services.examples.PrintHelper.GTIN_1;
 import static com.nedap.retail.services.examples.PrintHelper.GTIN_2;
 import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
@@ -24,6 +26,9 @@ import com.nedap.retail.messages.article.Price;
 import com.nedap.retail.messages.article.Size;
 
 public class ArticleExample {
+
+    private ArticleExample() {
+    }
 
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** Article API example ***");
@@ -73,11 +78,11 @@ public class ArticleExample {
         // required fields
         article.gtin = GTIN_1;
         article.name = "T-shirt with V-neck and short sleeves";
-        article.color = "Black";
+        article.color = BLACK;
         article.sizes = setArticleSizes();
 
         final List<Barcode> barcodes = new ArrayList<>();
-        barcodes.add(new Barcode("EAN13", "2011200000019"));
+        barcodes.add(new Barcode(EAN13, "2011200000019"));
         article.barcodes = barcodes;
 
         // optional fields
@@ -130,7 +135,7 @@ public class ArticleExample {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < articles.size(); i++) {
             sb.append(NEW_LINE).append(NEW_LINE);
-            sb.append(TAB).append("Article ").append((i + 1)).append(COLON).append(NEW_LINE);
+            sb.append(TAB).append("Article ").append(i + 1).append(COLON).append(NEW_LINE);
             sb.append(TAB).append("Gtin: ").append(articles.get(i).gtin).append(NEW_LINE);
             sb.append(TAB).append("Barcodes: ").append(printBarcodes(articles.get(i).barcodes)).append(NEW_LINE);
             sb.append(TAB).append("Code: ").append(articles.get(i).code).append(NEW_LINE);
@@ -153,7 +158,7 @@ public class ArticleExample {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < barcodes.size(); i++) {
             sb.append(NEW_LINE);
-            sb.append(DOUBLE_TAB).append("Barcode ").append(i).append(COLON);
+            sb.append(DOUBLE_TAB).append("Barcode ").append(i + 1).append(COLON);
             sb.append(barcodes.get(i).type).append(WHITESPACE);
             sb.append(barcodes.get(i).value);
         }
@@ -164,7 +169,7 @@ public class ArticleExample {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < sizes.size(); i++) {
             sb.append(NEW_LINE);
-            sb.append(DOUBLE_TAB).append("Size ").append(i).append(COLON);
+            sb.append(DOUBLE_TAB).append("Size ").append(i + 1).append(COLON);
             sb.append(sizes.get(i).description).append(WHITESPACE);
             sb.append(sizes.get(i).region);
         }
@@ -179,7 +184,7 @@ public class ArticleExample {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < prices.size(); i++) {
             sb.append(NEW_LINE);
-            sb.append(DOUBLE_TAB).append("Price ").append(i).append(COLON);
+            sb.append(DOUBLE_TAB).append("Price ").append(i + 1).append(COLON);
             sb.append(prices.get(i).currency).append(WHITESPACE);
             sb.append(prices.get(i).region).append(WHITESPACE);
             sb.append(prices.get(i).amount);
