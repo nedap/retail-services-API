@@ -15,7 +15,7 @@ namespace Nedap.Retail.Api.Example
             {
                 // capture
                 Console.WriteLine("------------- Capture epcis events");
-                string captureResult = client.EpcisV1_1.Capture(events);
+                client.EpcisV1_1.Capture(events);
                 Console.WriteLine("captured epcis events");
 
                 // query
@@ -76,7 +76,10 @@ namespace Nedap.Retail.Api.Example
                 BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
                 Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
                 ReadPoint = "urn:epc:id:sgln:012345.67890.001",
-                BizLocation = "urn:epc:id:sgln:012345.67890.001"
+                BizLocation = "urn:epc:id:sgln:012345.67890.001",
+                BizTransactionList = new List<BusinessTransaction>() {
+                    new BusinessTransaction() { BizTransaction = "123" }
+                }
             });
             events.Add(new ObjectEvent()
             {
@@ -95,7 +98,54 @@ namespace Nedap.Retail.Api.Example
                 BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
                 Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
                 ReadPoint = "urn:epc:id:sgln:012345.67890.001",
-                BizLocation = "urn:epc:id:sgln:012345.67890.002"
+                BizLocation = "urn:epc:id:sgln:012345.67890.002",
+                BizTransactionList = new List<BusinessTransaction>() {
+                    new BusinessTransaction() { BizTransaction = "456" }
+                }
+            });
+            events.Add(new ObjectEvent()
+            {
+                Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a68"),
+                EventTime = DateTime.Now,
+                EventTimeZoneOffset = "+01:00",
+                RecordTime = DateTime.Now,
+                EpcList = new List<string>()
+                {
+                    "urn:epc:id:sgtin:1234567.000246.0009",
+                    "urn:epc:id:sgtin:1234567.000246.0010",
+                    "urn:epc:id:sgtin:1234567.000246.0011",
+                    "urn:epc:id:sgtin:1234567.000246.0012"
+                },
+                Action = Epcis.V1_1.Action.OBSERVE,
+                BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
+                Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
+                ReadPoint = "urn:epc:id:sgln:012345.67890.001",
+                BizLocation = "urn:epc:id:sgln:012345.67890.001",
+                BizTransactionList = new List<BusinessTransaction>() {
+                    new BusinessTransaction() { BizTransaction = "123" }
+                }
+            });
+            events.Add(new ObjectEvent()
+            {
+                Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a69"),
+                EventTime = DateTime.Now,
+                EventTimeZoneOffset = "+01:00",
+                RecordTime = DateTime.Now,
+                EpcList = new List<string>()
+                {
+                    "urn:epc:id:sgtin:1234567.000246.0013",
+                    "urn:epc:id:sgtin:1234567.000246.0014",
+                    "urn:epc:id:sgtin:1234567.000246.0015",
+                    "urn:epc:id:sgtin:1234567.000246.0016"
+                },
+                Action = Epcis.V1_1.Action.OBSERVE,
+                BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
+                Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
+                ReadPoint = "urn:epc:id:sgln:012345.67890.001",
+                BizLocation = "urn:epc:id:sgln:012345.67890.002",
+                BizTransactionList = new List<BusinessTransaction>() {
+                    new BusinessTransaction() { BizTransaction = "456" }
+                }
             });
 
             return events;

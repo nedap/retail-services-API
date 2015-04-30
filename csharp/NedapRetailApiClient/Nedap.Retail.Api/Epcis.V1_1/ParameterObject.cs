@@ -66,14 +66,12 @@ namespace Nedap.Retail.Api.Epcis.V1_1
         /// Type
         /// </summary>
         [JsonProperty("type")]
-        [JsonIgnore]
         public string Type { get; private set; }
 
         /// <summary>
         /// Value
         /// </summary>
         [JsonProperty("value")]
-        [JsonIgnore]
         public string Value { get; private set; }
 
         /// <summary>
