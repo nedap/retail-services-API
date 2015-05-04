@@ -83,6 +83,6 @@ namespace Nedap.Retail.Api.Epcis.V1_1
         /// Optional. An unordered list of Destination elements that provide context about the terminating endpoint of a business transfer of which this event is a part.
         /// </summary>
         [JsonProperty("destination_list")]
-        public string DestinationList { get; set; }
+        public List<Destination> DestinationList { get; set; }
     }
 }
