@@ -1,5 +1,8 @@
 package com.nedap.retail.messages.stock;
 
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
@@ -29,11 +32,14 @@ public class StockSummary {
     @JsonProperty("in_use")
     public boolean inUse;
 
+    @JsonProperty("client_ids")
+    public Set<String> clientIds;
+
     public StockSummary() {
     }
 
     public StockSummary(final String id, final String location, final DateTime eventTime, final String externRef,
-            final String status, final boolean inUse) {
+            final String status, final boolean inUse, final Set<String> clientIds) {
         this.id = id;
         this.location = location;
         this.eventTime = eventTime;
@@ -42,11 +48,13 @@ public class StockSummary {
             this.status = Status.valueOf(status);
         }
         this.inUse = inUse;
+        this.clientIds = clientIds;
     }
 
     public StockSummary(final String id, final String location, final DateTime eventTime, final String externRef,
-            final String status, final Integer quantity, final Integer gtinQuantity, final boolean inUse) {
-        this(id, location, eventTime, externRef, status, inUse);
+            final String status, final Integer quantity, final Integer gtinQuantity, final boolean inUse,
+            final Set<String> clientIds) {
+        this(id, location, eventTime, externRef, status, inUse, clientIds);
         this.quantity = quantity;
         this.gtinQuantity = gtinQuantity;
     }
@@ -55,6 +63,7 @@ public class StockSummary {
     public String toString() {
         return "StockSummary {" + "id=" + id + ", location=" + location + ", eventTime="
                 + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef=" + externRef + ", status=" + status
-                + ", quantity=" + quantity + ", gtinQuantity=" + gtinQuantity + '}';
+                + ", quantity=" + quantity + ", gtinQuantity=" + gtinQuantity + ", clientIds="
+                + StringUtils.join(clientIds, ',') + '}';
     }
 }

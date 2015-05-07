@@ -2,7 +2,9 @@ package com.nedap.retail.messages.stock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
@@ -15,15 +17,16 @@ public class Stock extends StockSummary {
         this.quantityList = new ArrayList<>();
     }
 
-    public Stock(final String location, final DateTime eventTime, final String externRef,
+    public Stock(final String location, final DateTime eventTime, final String externRef, final Set<String> clientIds,
             final List<GtinQuantity> quantityList) {
-        super(null, location, eventTime, externRef, null, false);
+        super(null, location, eventTime, externRef, null, false, clientIds);
         this.quantityList = quantityList;
     }
 
     public Stock(final StockSummary stockSummary, final List<GtinQuantity> quantityList) {
         super(stockSummary.id, stockSummary.location, stockSummary.eventTime, stockSummary.externRef,
-                stockSummary.status.toString(), stockSummary.quantity, stockSummary.gtinQuantity, stockSummary.inUse);
+                stockSummary.status.toString(), stockSummary.quantity, stockSummary.gtinQuantity, stockSummary.inUse,
+                stockSummary.clientIds);
         this.quantityList = quantityList;
     }
 
@@ -33,7 +36,8 @@ public class Stock extends StockSummary {
 
     @Override
     public String toString() {
-        final String result = "Stock {location=" + location + "; eventTime=" + eventTime + "; quantity(gtins)="
+        final String result = "Stock {location=" + location + "; eventTime=" + eventTime + "; clientIds="
+                + StringUtils.join(clientIds, ',') + "; quantity(gtins)="
                 + quantityList.size() + "; quantity(total)=";
         long total = 0;
         for (final GtinQuantity q : quantityList) {
