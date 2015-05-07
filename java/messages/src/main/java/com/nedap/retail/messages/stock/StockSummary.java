@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.stock;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +37,7 @@ public class StockSummary {
     public Set<String> clientIds;
 
     public StockSummary() {
+        this.clientIds = new HashSet<>();
     }
 
     public StockSummary(final String id, final String location, final DateTime eventTime, final String externRef,
