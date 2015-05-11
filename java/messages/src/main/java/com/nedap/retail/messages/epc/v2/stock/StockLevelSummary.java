@@ -12,6 +12,9 @@ public class StockLevelSummary {
     @JsonProperty("rfid_stock_time")
     public DateTime rfidStockTime;
 
+    @JsonProperty("rfid_stock_start_time")
+    public DateTime rfidStockStartTime;
+
     @JsonProperty("stock_rooms_quantity")
     public Integer stockRoomsQuantity;
 
@@ -27,10 +30,12 @@ public class StockLevelSummary {
     public StockLevelSummary() {
     }
 
-    public StockLevelSummary(final DateTime generated, final DateTime rfidStockTime, final Integer stockRoomsQuantity,
-            final Integer salesFloorsQuantity, final Integer storeQuantity, final Double stockRatio) {
+    public StockLevelSummary(final DateTime generated, final DateTime rfidStockTime, final DateTime rfidStockStartTime,
+            final Integer stockRoomsQuantity, final Integer salesFloorsQuantity, final Integer storeQuantity,
+            final Double stockRatio) {
         this.generated = generated;
         this.rfidStockTime = rfidStockTime;
+        this.rfidStockStartTime = rfidStockStartTime;
         this.stockRoomsQuantity = stockRoomsQuantity;
         this.salesFloorsQuantity = salesFloorsQuantity;
         this.storeQuantity = storeQuantity;

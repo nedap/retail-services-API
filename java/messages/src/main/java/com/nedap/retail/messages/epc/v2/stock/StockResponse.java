@@ -31,6 +31,7 @@ public class StockResponse extends StockLevelSummary {
     public void setStockLevelSummary(final StockLevelSummary stockLevelSummary) {
         generated = stockLevelSummary.generated;
         rfidStockTime = stockLevelSummary.rfidStockTime;
+        rfidStockStartTime = stockLevelSummary.rfidStockStartTime;
         stockRoomsQuantity = stockLevelSummary.stockRoomsQuantity;
         salesFloorsQuantity = stockLevelSummary.salesFloorsQuantity;
         storeQuantity = stockLevelSummary.storeQuantity;
