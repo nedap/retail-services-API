@@ -27,6 +27,7 @@ public class Stock extends StockSummary {
         super(stockSummary.id, stockSummary.location, stockSummary.eventTime, stockSummary.externRef,
                 stockSummary.status.toString(), stockSummary.quantity, stockSummary.gtinQuantity, stockSummary.inUse,
                 stockSummary.clientIds);
+        this.startTime = stockSummary.startTime;
         this.quantityList = quantityList;
     }
 
