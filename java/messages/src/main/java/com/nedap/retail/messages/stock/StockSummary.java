@@ -19,7 +19,11 @@ public class StockSummary {
     public String location;
 
     @JsonProperty("event_time")
+    // event time is time of last event (end time), will not be changed because of backward compatibility
     public DateTime eventTime;
+
+    @JsonProperty("start_time")
+    public DateTime startTime;
 
     @JsonProperty("extern_ref")
     public String externRef;
