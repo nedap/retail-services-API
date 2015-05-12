@@ -14,6 +14,7 @@ public class WorkflowEvent implements Serializable {
 
     public static final String TYPE = "type";
     public static final String EVENT_TIME = "event_time";
+    public static final String START_TIME = "start_time";
     public static final String LOCATION = "location";
     public static final String EPC_COUNT = "epc_count";
     public static final String MESSAGE_IDS = "message_ids";
@@ -22,6 +23,9 @@ public class WorkflowEvent implements Serializable {
 
     @JsonProperty(EVENT_TIME)
     public DateTime eventTime;
+
+    @JsonProperty(START_TIME)
+    public DateTime startTime;
 
     public String location;
 
