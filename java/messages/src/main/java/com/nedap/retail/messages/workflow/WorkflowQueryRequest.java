@@ -2,7 +2,7 @@ package com.nedap.retail.messages.workflow;
 
 import org.joda.time.DateTime;
 
-public class QueryRequest {
+public class WorkflowQueryRequest {
 
     public static final String MESSAGE_ID = "message_id";
 
@@ -13,6 +13,6 @@ public class QueryRequest {
     public String messageId;
 
     // Empty constructor used by Jackson
-    public QueryRequest() {
+    public WorkflowQueryRequest() {
     }
 }

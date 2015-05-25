@@ -19,7 +19,7 @@ import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
 import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
-import com.nedap.retail.messages.workflow.QueryRequest;
+import com.nedap.retail.messages.workflow.WorkflowQueryRequest;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
 
 public class WorkflowExample {
@@ -105,8 +105,8 @@ public class WorkflowExample {
         return sb.toString();
     }
 
-    private static QueryRequest makeWorkflowQueryRequest() {
-        final QueryRequest request = new QueryRequest();
+    private static WorkflowQueryRequest makeWorkflowQueryRequest() {
+        final WorkflowQueryRequest request = new WorkflowQueryRequest();
         request.fromEventTime = DateTime.now().minusMinutes(10);
         return request;
     }
