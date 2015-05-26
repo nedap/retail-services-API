@@ -1,5 +1,7 @@
 package com.nedap.retail.messages.epc.v2.stock;
 
+import java.util.Set;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
@@ -27,12 +29,15 @@ public class StockLevelSummary {
     @JsonProperty("stock_ratio")
     public Double stockRatio;
 
+    @JsonProperty("client_ids")
+    public Set<String> clientIds;
+
     public StockLevelSummary() {
     }
 
     public StockLevelSummary(final DateTime generated, final DateTime rfidStockTime, final DateTime rfidStockStartTime,
             final Integer stockRoomsQuantity, final Integer salesFloorsQuantity, final Integer storeQuantity,
-            final Double stockRatio) {
+            final Double stockRatio, final Set<String> clientIds) {
         this.generated = generated;
         this.rfidStockTime = rfidStockTime;
         this.rfidStockStartTime = rfidStockStartTime;
@@ -40,5 +45,6 @@ public class StockLevelSummary {
         this.salesFloorsQuantity = salesFloorsQuantity;
         this.storeQuantity = storeQuantity;
         this.stockRatio = stockRatio;
+        this.clientIds = clientIds;
     }
 }
