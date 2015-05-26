@@ -37,8 +37,8 @@ import com.nedap.retail.messages.subscription.Subscription;
 import com.nedap.retail.messages.system.SystemListPayload;
 import com.nedap.retail.messages.system.SystemStatusPayload;
 import com.nedap.retail.messages.users.User;
-import com.nedap.retail.messages.workflow.QueryRequest;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
+import com.nedap.retail.messages.workflow.WorkflowQueryRequest;
 
 /**
  * Nedap Retail Services Client.
@@ -46,6 +46,8 @@ import com.nedap.retail.messages.workflow.WorkflowEvent;
 public class Client {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
+
+    protected static final String LOCATION = "location";
     private final String url;
     private final javax.ws.rs.client.Client httpClient;
 
@@ -87,7 +89,7 @@ public class Client {
     /**
      * To update a system to a new firmware version, you need to know which updates are available for the system. This
      * could depend on the current firmware version, or on the installed hardware.
-     *
+     * 
      * @param systemId Identifies the system.
      * @return List of fimware versions available for upgrade.
      */
@@ -105,10 +107,10 @@ public class Client {
      * older than the currently installed version is not possible. Systems that do not run an officially released
      * firmware version can not be upgraded this way. Official firmware versions have a version number in the form of
      * year.weeknumber (for example, 13.21).
-     *
+     * 
      * You can check if the firmware update succeeded by requesting the status of the system regularly, for example
      * every 5 minutes after sending the request.
-     *
+     * 
      * @param systemId Identifies the system to be upgraded.
      * @param firmwareVersion Requested firmware version to upgrade to.
      */
@@ -120,7 +122,7 @@ public class Client {
 
     /**
      * ERP API: capture stock
-     *
+     * 
      * @param stock Stock entry to capture
      * @return ID of processed stock
      */
@@ -133,7 +135,7 @@ public class Client {
 
     /**
      * ERP API: retrieve stock
-     *
+     * 
      * @param id ID of stock
      * @return The requested stock
      */
@@ -144,7 +146,7 @@ public class Client {
 
     /**
      * ERP API: retrieve stock status and summary
-     *
+     * 
      * @param id ID of stock
      * @return Summary of the requested stock
      */
@@ -155,12 +157,12 @@ public class Client {
 
     /**
      * ERP API: get a list of available stocks
-     *
+     * 
      * @param request Stock summary list request with location and start/stop search dates
      * @return List of summaries per stock available for the specified location
      */
     public List<StockSummary> getErpStockList(final StockSummaryListRequest request) {
-        WebTarget target = target("/erp/v1/stock.list").queryParam("location", request.location);
+        WebTarget target = target("/erp/v1/stock.list").queryParam(LOCATION, request.location);
 
         if (request.fromEventTime != null) {
             target = target.queryParam("from_event_time", request.fromEventTime.toString());
@@ -175,7 +177,7 @@ public class Client {
 
     /**
      * ERP API: delete stock for provided stock id
-     *
+     * 
      * @param id ID of stock
      * @return 204 status if delete is successful, this process is irreversible
      */
@@ -186,7 +188,7 @@ public class Client {
 
     /**
      * Requests the total number of articles registered in !D Cloud.
-     *
+     * 
      * @return Total number of articles.
      */
     public Long articleQuantity() {
@@ -198,7 +200,7 @@ public class Client {
 
     /**
      * Retrieve one or more articles based on GTIN value(s). Optionally specify returned Article properties.
-     *
+     * 
      * @param gtins The GTIN(s) of which article information should be returned. Repeat key-value for retrieving
      *            multiple GTINs.
      * @param fields Optional. Which fields should be included in the response. Can be any of the Article fields. When
@@ -225,7 +227,7 @@ public class Client {
      * Retrieve one or more articles based on barcode(s). Optionally specify returned Article properties. Barcode type
      * is ignored. All articles that have a barcode that match (case insensitive for alphanumeric barcodes) one of the
      * given barcodes is returned.
-     *
+     * 
      * @param barcodes The barcode(s) of which article information should be returned. Repeat key-value for retrieving
      *            multiple barcodes.
      * @param fields Optional. Which fields should be included in the response. Can be any of the Article fields. When
@@ -250,7 +252,7 @@ public class Client {
 
     /**
      * Retrieve articles. Optionally specify returned Article properties.
-     *
+     * 
      * @param updatedAfter Articles updated on or after this time. When omitted: return all Article objects since 1
      *            january 1970.
      * @param skip Skip this number of articles. When omitted: skip none.
@@ -283,7 +285,7 @@ public class Client {
 
     /**
      * Article API: create or replace article information.
-     *
+     * 
      * @param articles Articles to create or replace.
      */
     public void captureArticles(final List<Article> articles) {
@@ -293,7 +295,7 @@ public class Client {
 
     /**
      * Article API: update article information.
-     *
+     * 
      * @param articles Articles to update or add (only non blank information will be updated).
      */
     public void updateArticles(final List<Article> articles) {
@@ -312,7 +314,7 @@ public class Client {
 
     /**
      * Captures RFID stock.
-     *
+     * 
      * @param stock RFID stock to capture
      * @return Id of captured stock
      */
@@ -325,7 +327,7 @@ public class Client {
 
     /**
      * Captures approved difference list.
-     *
+     * 
      * @param approvedDifferenceListCaptureRequest
      * @return Id of the captured approved difference list
      */
@@ -341,7 +343,7 @@ public class Client {
 
     /**
      * Returns approved difference list with a given id.
-     *
+     * 
      * @param approvedDifferenceListId Id of wanted approved difference list
      * @return Wanted approved difference list
      */
@@ -356,7 +358,7 @@ public class Client {
      * Retrieve GTIN-based difference list for a single location. By default, only differences are returned and items
      * where there is no difference are omitted. When a difference list for multiple locations are required, this call
      * should be used repeatedly. How it works: Get ERP stock defined by erp_stock_id. Get RFID count at time.
-     *
+     * 
      * @param erpStockId ERP stock ID. A list of ERP stock ID's can be retrieved with the ERP API. Implicitly defines
      *            LocationIdentifier for the location for which the difference list is generated.
      * @param rfidTime The date and time you would like to have the RFID stock information from. When omitted: the
@@ -387,7 +389,7 @@ public class Client {
 
     /**
      * Retrieves approved difference list using difference list ID as it is going to be exported.
-     *
+     * 
      * @param approvedDifferenceListId Id approved difference list
      * @return Approved difference list for exporting with provided id
      */
@@ -404,7 +406,7 @@ public class Client {
 
     /**
      * Returns approved difference list summaries for location optional between counting times.
-     *
+     * 
      * @param organizationId Id of organization for approved difference list
      * @param locationId Location identifier
      * @param fromRfidTime Lower boundary for approved difference list time
@@ -414,7 +416,7 @@ public class Client {
     public List<ApprovedDifferenceListSummary> getApprovedDifferenceListSummaries(final String locationId,
             final DateTime fromRfidTime, final DateTime untilRfidTime) {
 
-        WebTarget target = target("/epc/v2/approved_difference_list.list").queryParam("location", locationId);
+        WebTarget target = target("/epc/v2/approved_difference_list.list").queryParam(LOCATION, locationId);
 
         if (fromRfidTime != null) {
             target = target.queryParam("from_rfid_time", fromRfidTime.toString());
@@ -429,14 +431,14 @@ public class Client {
 
     /**
      * Returns summary of approved difference list for location and RFID time.
-     *
+     * 
      * @param locationId The location for status of approved difference list
      * @param rfidTime Rfid time of approved difference list for status information
      * @return list of approved difference list summary resources
      */
     public ApprovedDifferenceListSummary getApprovedDifferenceListStatus(final String locationId, final String rfidTime) {
 
-        final WebTarget target = target("/epc/v2/approved_difference_list.status").queryParam("location", locationId)
+        final WebTarget target = target("/epc/v2/approved_difference_list.status").queryParam(LOCATION, locationId)
                 .queryParam("rfid_time", rfidTime);
 
         return get(target, ApprovedDifferenceListSummary.class);
@@ -444,7 +446,7 @@ public class Client {
 
     /**
      * Deletes approved difference list with provided id
-     *
+     * 
      * @param id Id of approved difference list for deletion
      */
     public void deleteApprovedDifferenceList(final UUID id) {
@@ -458,7 +460,7 @@ public class Client {
      * replenishment by querying the stock in any of sublocations. If site stock is requested stock summary for store is
      * included in response. On !D Cloud we apply logic that filters out EPCs based on their location as defined by the
      * EPC's bizLocation and the status at that location as defined by the EPC's disposition.
-     *
+     * 
      * @param location Contains the location that we are interested in. Based on GLN + extension number; see also EPCIS
      *            master data.
      * @param gtins Optional. Filter by GTIN. When omitted: returns all available GTINs, so no filtering based on GTIN
@@ -475,7 +477,7 @@ public class Client {
      */
     public StockResponse stockGtin(final String location, final List<String> gtins, final List<String> dispositions,
             final DateTime time, final Boolean includeArticles) {
-        WebTarget target = target("/epc/v3/stock.gtin14").queryParam("location", location);
+        WebTarget target = target("/epc/v3/stock.gtin14").queryParam(LOCATION, location);
 
         if (gtins != null) {
             for (final String gtin : gtins) {
@@ -499,7 +501,7 @@ public class Client {
 
     /**
      * Returns RFID Stock for location.
-     *
+     * 
      * @param locationId Location identifier
      * @param fromRfidTime Lower boundary for rfid stock time
      * @param untilRfidTime Upper boundary for rfid stock time
@@ -508,7 +510,7 @@ public class Client {
     public List<StockSummary> getRfidStockList(final String locationId, final DateTime fromRfidTime,
             final DateTime untilRfidTime) {
 
-        WebTarget target = target("/epc/v2/stock.list").queryParam("location", locationId);
+        WebTarget target = target("/epc/v2/stock.list").queryParam(LOCATION, locationId);
 
         if (fromRfidTime != null) {
             target = target.queryParam("from_event_time", fromRfidTime.toString());
@@ -523,12 +525,12 @@ public class Client {
 
     /**
      * Lists all the items that are not-on-shelf for a certain store.
-     *
+     * 
      * @param request NotOnShelfRequest
      * @return NotOnShelfResponse
      */
     public NotOnShelfResponse notOnShelf(final NotOnShelfRequest request) {
-        final WebTarget target = target("/epc/v2/not_on_shelf").queryParam("location", request.location);
+        final WebTarget target = target("/epc/v2/not_on_shelf").queryParam(LOCATION, request.location);
         return get(target, NotOnShelfResponse.class);
     }
 
@@ -536,7 +538,7 @@ public class Client {
      * The Capture Service captures one or more EPCIS events at a time. This does not imply any relationship between
      * these EPCIS events. Each element of the argument list is accepted if it is a valid EPCIS event or subtype that
      * conforms to the above EPCIS event types.
-     *
+     * 
      * @param events EPCIS events to capture
      */
     public void captureEpcisEvents(final EpcisEventContainer events) {
@@ -546,7 +548,7 @@ public class Client {
 
     /**
      * Return a list of EPCIS events with given parameters.
-     *
+     * 
      * @param request Epcis query parameters
      * @return List of EPCIS events which satisfies query parameters
      */
@@ -559,7 +561,7 @@ public class Client {
 
     /**
      * Stores the workflow event.
-     *
+     * 
      * @param workflow Workflow event object.
      */
     public void captureWorkflow(final WorkflowEvent workflow) {
@@ -569,15 +571,15 @@ public class Client {
 
     /**
      * Returns a list od Workflow events with required parameters.
-     *
+     * 
      * @param request Query request with parameters
      * @return List of Workflow events matching required parameters
      */
-    public List<WorkflowEvent> queryWorkflow(final QueryRequest request) {
+    public List<WorkflowEvent> queryWorkflow(final WorkflowQueryRequest request) {
         WebTarget target = target("/workflow/v2/query");
 
         if (request.location != null) {
-            target = target.queryParam("location", request.location);
+            target = target.queryParam(LOCATION, request.location);
         }
         if (request.type != null) {
             target = target.queryParam("type", request.type);
@@ -595,7 +597,7 @@ public class Client {
 
     /**
      * Retrieves organizations.
-     *
+     * 
      * @return organizations.
      */
     public Organizations getOrganizations() {
@@ -605,7 +607,7 @@ public class Client {
 
     /**
      * Retrieves location by id.
-     *
+     * 
      * @param locationId Location identifier
      * @return Location
      */
@@ -616,7 +618,7 @@ public class Client {
 
     /**
      * Retrieves list of sites.
-     *
+     * 
      * @return List of sites.
      */
     public List<Location> getSites() {
@@ -626,7 +628,7 @@ public class Client {
 
     /**
      * Retrieves list of sites.
-     *
+     * 
      * @param storeCode (Optional) Store code (branch id) to search for. Can be null.
      * @return List of sites.
      */
@@ -664,7 +666,7 @@ public class Client {
 
     /**
      * Get user profile by user ID. Endpoint GET /users/1.0/get
-     *
+     * 
      * @param userId The ID of the user to get the profile for. The special value "me" can be used to indicate the
      *            authenticated user.
      * @return User profile. Returns <tt>null</tt> when not found (status code 404).
