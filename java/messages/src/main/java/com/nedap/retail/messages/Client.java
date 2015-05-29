@@ -10,6 +10,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -720,11 +722,8 @@ public class Client {
     }
 
     protected static void post(final WebTarget target) {
-        try {
-            target.request(APPLICATION_JSON).post(Entity.json(null));
-        } catch (final WebApplicationException webApplicationException) {
-            throw new ClientException(webApplicationException);
-        }
+        final Object nullRequest = null;
+        post(target, nullRequest);
     }
 
     protected static <T> T post(final WebTarget target, final GenericType<T> responseClass) {
@@ -744,10 +743,12 @@ public class Client {
     }
 
     protected static void post(final WebTarget target, final Object requestEntity) {
-        try {
-            target.request(APPLICATION_JSON).post(Entity.json(requestEntity));
-        } catch (final WebApplicationException webApplicationException) {
-            throw new ClientException(webApplicationException);
+        // post without response class is not throwing WebApplicationException so we need to handle response status
+        // manually
+        final Response response = target.request(APPLICATION_JSON).post(Entity.json(requestEntity));
+
+        if (!Status.Family.SUCCESSFUL.equals(Status.Family.familyOf(response.getStatus()))) {
+            throw new ClientException(new WebApplicationException(response));
         }
     }
 
@@ -768,10 +769,12 @@ public class Client {
     }
 
     protected static void delete(final WebTarget target) {
-        try {
-            target.request(APPLICATION_JSON).delete();
-        } catch (final WebApplicationException webApplicationException) {
-            throw new ClientException(webApplicationException);
+        // delete without response class is not throwing WebApplicationException so we need to handle response status
+        // manually
+        final Response response = target.request(APPLICATION_JSON).delete();
+
+        if (!Status.Family.SUCCESSFUL.equals(Status.Family.familyOf(response.getStatus()))) {
+            throw new ClientException(new WebApplicationException(response));
         }
     }
 }
