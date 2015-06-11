@@ -1,6 +1,7 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -17,12 +18,11 @@ public class EpcisEventContainer {
     public EpcisEventContainer() {
     }
 
-    public EpcisEventContainer(final List<EpcisEvent> events) {
-        this.events = events;
+    public EpcisEventContainer(final List<? extends EpcisEvent> events) {
+        this.events = new ArrayList<>(events);
     }
 
     public EpcisEventContainer(final EpcisEvent epcisEvent) {
-        events = new ArrayList<>();
-        events.add(epcisEvent);
+        events = new ArrayList<>(Arrays.asList(epcisEvent));
     }
 }
