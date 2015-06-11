@@ -23,6 +23,6 @@ public class EpcisEventContainer {
     }
 
     public EpcisEventContainer(final EpcisEvent epcisEvent) {
-        events = new ArrayList<>(Arrays.asList(epcisEvent));
+        events = Arrays.asList(epcisEvent);
     }
 }
