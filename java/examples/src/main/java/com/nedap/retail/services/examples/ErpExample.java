@@ -80,7 +80,9 @@ public class ErpExample {
         sb.append(NEW_LINE).append(TAB).append("External reference: ").append(stock.externRef);
         sb.append(NEW_LINE).append(TAB).append("Status: ").append(stock.status);
         sb.append(NEW_LINE).append(TAB).append("Quantity: ").append(stock.quantity);
+        sb.append(NEW_LINE).append(TAB).append("Excluded quantity: ").append(stock.excludedQuantity);
         sb.append(NEW_LINE).append(TAB).append("Gtin quantity: ").append(stock.gtinQuantity);
+        sb.append(NEW_LINE).append(TAB).append("Excluded gtin quantity: ").append(stock.excludedGtinQuantity);
         sb.append(NEW_LINE).append(TAB).append("In use: ").append(stock.inUse);
         if (!CollectionUtils.isEmpty(stock.quantityList)) {
             sb.append(NEW_LINE).append(TAB).append("Quantity list:");
@@ -106,7 +108,9 @@ public class ErpExample {
         stock.externRef = summary.externRef;
         stock.status = summary.status;
         stock.quantity = summary.quantity;
+        stock.excludedQuantity = summary.excludedQuantity;
         stock.gtinQuantity = summary.gtinQuantity;
+        stock.excludedGtinQuantity = summary.excludedGtinQuantity;
         stock.inUse = summary.inUse;
         return stock;
     }
