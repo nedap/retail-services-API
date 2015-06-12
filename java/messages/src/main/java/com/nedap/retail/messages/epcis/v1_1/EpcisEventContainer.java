@@ -18,7 +18,7 @@ public class EpcisEventContainer {
     public EpcisEventContainer() {
     }
 
-    public EpcisEventContainer(final List<? extends EpcisEvent> events) {
+    public EpcisEventContainer(final List<EpcisEvent> events) {
         this.events = new ArrayList<>(events);
     }
 
