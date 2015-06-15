@@ -8,12 +8,12 @@ public class GtinQuantity {
 
     public GtinQuantity() {
     }
-
+    
     public GtinQuantity(final String gtin, final int quantity) {
-        this(gtin, quantity, false);
+    	this(gtin, quantity, false);
     }
 
-    public GtinQuantity(final String gtin, final int quantity, final boolean exclude) {
+    public GtinQuantity(final String gtin, final int quantity, boolean exclude) {
         this.gtin = gtin;
         this.quantity = quantity;
         this.exclude = exclude;
@@ -21,7 +21,7 @@ public class GtinQuantity {
 
     @Override
     public String toString() {
-        return "GtinQuantity{" + "gtin=" + gtin + ", quantity=" + quantity + ", exclude=" + exclude + '}';
+        return "GtinQuantity{" + "gtin=" + gtin + ", quantity=" + quantity + "exclude=" + exclude + '}';
     }
 
     @Override
@@ -56,11 +56,12 @@ public class GtinQuantity {
         if (quantity != other.quantity) {
             return false;
         }
-
+        
         if (exclude != other.exclude) {
-            return false;
+        	return false;
         }
-
+        
+        
         return true;
     }
 }
