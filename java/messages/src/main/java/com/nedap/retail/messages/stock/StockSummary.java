@@ -28,11 +28,20 @@ public class StockSummary {
     @JsonProperty("extern_ref")
     public String externRef;
 
+    @JsonProperty("status")
     public Status status;
+
+    @JsonProperty("quantity")
     public Integer quantity;
+
+    @JsonProperty("excluded_quantity")
+    public Integer excludedQuantity;
 
     @JsonProperty("gtin_quantity")
     public Integer gtinQuantity;
+
+    @JsonProperty("excluded_gtin_quantity")
+    public Integer excludedGtinQuantity;
 
     @JsonProperty("in_use")
     public boolean inUse;
@@ -58,18 +67,21 @@ public class StockSummary {
     }
 
     public StockSummary(final String id, final String location, final DateTime eventTime, final String externRef,
-            final String status, final Integer quantity, final Integer gtinQuantity, final boolean inUse,
-            final Set<String> clientIds) {
+            final String status, final Integer quantity, final Integer excludedQuantity, final Integer gtinQuantity,
+            final Integer excludedGtinQuantity, final boolean inUse, final Set<String> clientIds) {
         this(id, location, eventTime, externRef, status, inUse, clientIds);
         this.quantity = quantity;
+        this.excludedQuantity = excludedQuantity;
         this.gtinQuantity = gtinQuantity;
+        this.excludedGtinQuantity = excludedGtinQuantity;
     }
 
     @Override
     public String toString() {
         return "StockSummary {" + "id=" + id + ", location=" + location + ", eventTime="
                 + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef=" + externRef + ", status=" + status
-                + ", quantity=" + quantity + ", gtinQuantity=" + gtinQuantity + ", clientIds="
+                + ", quantity=" + quantity + ", excludedQuantity=" + excludedQuantity + ", gtinQuantity="
+                + gtinQuantity + ", excludedGtinQuantity=" + excludedGtinQuantity + ", clientIds="
                 + StringUtils.join(clientIds, ',') + '}';
     }
 }
