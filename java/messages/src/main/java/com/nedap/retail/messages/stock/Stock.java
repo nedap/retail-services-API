@@ -25,7 +25,8 @@ public class Stock extends StockSummary {
 
     public Stock(final StockSummary stockSummary, final List<GtinQuantity> quantityList) {
         super(stockSummary.id, stockSummary.location, stockSummary.eventTime, stockSummary.externRef,
-                stockSummary.status.toString(), stockSummary.quantity, stockSummary.gtinQuantity, stockSummary.inUse,
+                stockSummary.status.toString(), stockSummary.quantity, stockSummary.excludedQuantity,
+                stockSummary.gtinQuantity, stockSummary.excludedGtinQuantity, stockSummary.inUse,
                 stockSummary.clientIds);
         this.startTime = stockSummary.startTime;
         this.quantityList = quantityList;
@@ -38,8 +39,8 @@ public class Stock extends StockSummary {
     @Override
     public String toString() {
         final String result = "Stock {location=" + location + "; eventTime=" + eventTime + "; clientIds="
-                + StringUtils.join(clientIds, ',') + "; quantity(gtins)="
-                + quantityList.size() + "; quantity(total)=";
+                + StringUtils.join(clientIds, ',') + "; quantity(gtins)=" + gtinQuantity
+                + "; quantity(excluded gtins)=" + excludedGtinQuantity + "; quantity(total)=";
         long total = 0;
         for (final GtinQuantity q : quantityList) {
             total += q.quantity;
