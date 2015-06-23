@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RetrieveStockSummaryRequest {
 
-    private final String WITH_EXCLUDED = "with_excluded";
+    private static final String WITH_EXCLUDED = "with_excluded";
 
     public String id;
 
