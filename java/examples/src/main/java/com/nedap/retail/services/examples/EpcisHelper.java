@@ -2,11 +2,8 @@ package com.nedap.retail.services.examples;
 
 import static com.nedap.retail.services.examples.PrintHelper.DOT;
 import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
-import static com.nedap.retail.services.examples.PrintHelper.ORGANIZATION_PREFIX;
 import static com.nedap.retail.services.examples.PrintHelper.TAB;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +31,7 @@ public class EpcisHelper {
 
     private static EpcisEvent createEpcisEvent1(final String locationId) {
         final ObjectEvent event = new ObjectEvent();
-        event.id = generateEpcisEventID(ORGANIZATION_PREFIX, 1).toString();
+        event.id = UUID.randomUUID().toString();
         event.eventTime = DateTime.now();
         event.action = Action.OBSERVE.action();
         event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
@@ -47,7 +44,7 @@ public class EpcisHelper {
 
     private static EpcisEvent createEpcisEvent2(final String locationId) {
         final ObjectEvent event = new ObjectEvent();
-        event.id = generateEpcisEventID(ORGANIZATION_PREFIX, 2).toString();
+        event.id = UUID.randomUUID().toString();
         event.eventTime = DateTime.now();
         event.action = Action.OBSERVE.action();
         event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
@@ -56,19 +53,6 @@ public class EpcisHelper {
         event.readPoint = locationId;
         event.epcList = makeEpcList2();
         return event;
-    }
-
-    /**
-     * Calculates consistent (hash) ID based on organization prefix and counter value of epc events.
-     */
-    public static UUID generateEpcisEventID(final long organizationPrefix, final int epcisEventCounter) {
-        try {
-            final MessageDigest md = MessageDigest.getInstance("MD5");
-            final byte[] digest = md.digest(("" + organizationPrefix + epcisEventCounter).getBytes());
-            return UUID.nameUUIDFromBytes(digest);
-        } catch (final NoSuchAlgorithmException ex) {
-            throw new IllegalStateException("Could not create SHA-256 message digester", ex);
-        }
     }
 
     private static List<String> makeEpcList1() {

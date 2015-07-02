@@ -1,12 +1,10 @@
 package com.nedap.retail.services.examples;
 
 import static com.nedap.retail.services.examples.EpcisHelper.createEvents;
-import static com.nedap.retail.services.examples.EpcisHelper.generateEpcisEventID;
 import static com.nedap.retail.services.examples.EpcisHelper.printCaptureEpcisEvents;
 import static com.nedap.retail.services.examples.PrintHelper.DOT;
 import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
 import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
-import static com.nedap.retail.services.examples.PrintHelper.ORGANIZATION_PREFIX;
 import static com.nedap.retail.services.examples.PrintHelper.TAB;
 
 import java.util.ArrayList;
@@ -19,8 +17,8 @@ import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
 import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
-import com.nedap.retail.messages.workflow.WorkflowQueryRequest;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
+import com.nedap.retail.messages.workflow.WorkflowQueryRequest;
 
 public class WorkflowExample {
 
@@ -37,10 +35,14 @@ public class WorkflowExample {
         try {
             // Make some EPCIS events first
             System.out.println(NEW_LINE + "Capturing some EPCIS events first...");
+
             final EpcisEventContainer epcisEventsContainer = new EpcisEventContainer();
             epcisEventsContainer.events = createEvents(locationId);
-            MESSAGE_IDS.add(generateEpcisEventID(ORGANIZATION_PREFIX, 1).toString());
-            MESSAGE_IDS.add(generateEpcisEventID(ORGANIZATION_PREFIX, 2).toString());
+
+            for (final EpcisEvent event : epcisEventsContainer.events) {
+                MESSAGE_IDS.add(event.id);
+            }
+
             client.captureEpcisEvents(epcisEventsContainer);
             System.out.println(printCaptureEpcisEvents(epcisEventsContainer));
 
