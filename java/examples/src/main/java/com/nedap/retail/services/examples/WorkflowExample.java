@@ -9,7 +9,6 @@ import static com.nedap.retail.services.examples.PrintHelper.TAB;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.joda.time.DateTime;
 
@@ -36,10 +35,14 @@ public class WorkflowExample {
         try {
             // Make some EPCIS events first
             System.out.println(NEW_LINE + "Capturing some EPCIS events first...");
+
             final EpcisEventContainer epcisEventsContainer = new EpcisEventContainer();
             epcisEventsContainer.events = createEvents(locationId);
-            MESSAGE_IDS.add(UUID.randomUUID().toString());
-            MESSAGE_IDS.add(UUID.randomUUID().toString());
+
+            for (final EpcisEvent event : epcisEventsContainer.events) {
+                MESSAGE_IDS.add(event.id);
+            }
+
             client.captureEpcisEvents(epcisEventsContainer);
             System.out.println(printCaptureEpcisEvents(epcisEventsContainer));
 
