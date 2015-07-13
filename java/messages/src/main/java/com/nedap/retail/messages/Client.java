@@ -147,6 +147,24 @@ public class Client {
     }
 
     /**
+     * ERP API: retrieve stock
+     * 
+     * @param id ID of stock
+     * @param withExcluded flag should we also return excluded gtins
+     * 
+     * @return The requested stock
+     */
+    public Stock retrieveErpStock(final String id, final Boolean withExcluded) {
+        final WebTarget target = target("/erp/v1/stock.retrieve").queryParam("id", id);
+
+        if (withExcluded != null) {
+            target.queryParam("with_excluded", withExcluded);
+        }
+
+        return get(target, Stock.class);
+    }
+
+    /**
      * ERP API: retrieve stock status and summary
      * 
      * @param id ID of stock
