@@ -141,8 +141,13 @@ public class Client {
      * @param id ID of stock
      * @return The requested stock
      */
-    public Stock retrieveErpStock(final String id) {
+    public Stock retrieveErpStock(final String id, final Boolean withExcluded) {
         final WebTarget target = target("/erp/v1/stock.retrieve").queryParam("id", id);
+
+        if (withExcluded != null) {
+            target.queryParam("with_excluded", withExcluded);
+        }
+
         return get(target, Stock.class);
     }
 

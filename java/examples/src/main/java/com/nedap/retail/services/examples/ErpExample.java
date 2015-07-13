@@ -41,7 +41,7 @@ public class ErpExample {
 
             // Retrieve ERP stock
             System.out.println(NEW_LINE + "Retrieving ERP stock...");
-            final Stock retrievedStock = client.retrieveErpStock(stockId);
+            final Stock retrievedStock = client.retrieveErpStock(stockId, true);
             System.out.println("Retrieved ERP stock with:" + printStock(retrievedStock));
 
             // Get ERP stock summary status
