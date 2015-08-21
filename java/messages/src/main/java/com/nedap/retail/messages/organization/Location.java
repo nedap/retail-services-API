@@ -3,7 +3,7 @@ package com.nedap.retail.messages.organization;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -44,8 +44,8 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return StringUtils.join(new Object[] {"location ", id, parentId, type, subtype, name, address,
-                "children(size)", children == null ? null : children.size()}, ";");
+        return StringUtils.join(new Object[] {"location ", id, parentId, type, subtype, name, address, "children(size)",
+                children == null ? null : children.size()}, ";");
     }
 
     @Override

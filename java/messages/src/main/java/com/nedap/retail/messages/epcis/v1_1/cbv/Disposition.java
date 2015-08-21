@@ -44,8 +44,7 @@ public enum Disposition {
      */
     INACTIVE(4, "urn:epcglobal:cbv:disp:inactive"),
     /**
-     * Default disposition for object proceeding through points in the
-     * supply chain.
+     * Default disposition for object proceeding through points in the supply chain.
      */
     IN_PROGRESS(5, "urn:epcglobal:cbv:disp:in_progress"),
     /**

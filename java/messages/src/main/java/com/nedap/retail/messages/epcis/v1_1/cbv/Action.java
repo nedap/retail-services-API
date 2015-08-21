@@ -10,8 +10,7 @@ public enum Action {
      */
     ADD(1, "ADD"),
     /**
-     * The entity in question has not been changed: it has neither been created, added to, destroyed, or
-     * removed from.
+     * The entity in question has not been changed: it has neither been created, added to, destroyed, or removed from.
      */
     OBSERVE(2, "OBSERVE"),
     /**

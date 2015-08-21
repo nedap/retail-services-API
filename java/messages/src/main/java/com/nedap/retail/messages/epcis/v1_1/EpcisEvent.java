@@ -151,6 +151,7 @@ abstract public class EpcisEvent {
      *
      * @param a A list of strings
      * @param b A second list of strings
+     * @param <T> Type of list content
      *
      * @return true if every member of list A is contained in list B (and vise versa)
      */

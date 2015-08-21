@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
@@ -39,8 +39,8 @@ public class Stock extends StockSummary {
     @Override
     public String toString() {
         final String result = "Stock {location=" + location + "; eventTime=" + eventTime + "; clientIds="
-                + StringUtils.join(clientIds, ',') + "; quantity(gtins)=" + gtinQuantity
-                + "; quantity(excluded gtins)=" + excludedGtinQuantity + "; quantity(total)=";
+                + StringUtils.join(clientIds, ',') + "; quantity(gtins)=" + gtinQuantity + "; quantity(excluded gtins)="
+                + excludedGtinQuantity + "; quantity(total)=";
         long total = 0;
         for (final GtinQuantity q : quantityList) {
             total += q.quantity;

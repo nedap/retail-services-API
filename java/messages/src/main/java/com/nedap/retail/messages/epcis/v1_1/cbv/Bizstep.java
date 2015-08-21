@@ -153,8 +153,8 @@ public enum Bizstep {
      */
     RETAIL_TRYING(37, "http://nedapretail.com/bizstep/retail_trying"),
     /**
-     * Indicates the overall process of staging_outbound, loading and departing. - Used when more granular process
-     * step information is unknown or inaccessible. - The use of shipping is mutually exclusive from the use of
+     * Indicates the overall process of staging_outbound, loading and departing. - Used when more granular process step
+     * information is unknown or inaccessible. - The use of shipping is mutually exclusive from the use of
      * staging_outbound, loading and departing.
      */
     SHIPPING(28, "urn:epcglobal:cbv:bizstep:shipping"),
@@ -199,8 +199,7 @@ public enum Bizstep {
      */
     UNLOADING(40, "urn:epcglobal:cbv:bizstep:unloading"),
     /**
-     * Removing objects from a larger container, usually after
-     * receiving or accepting. Disaggregation of one unit from
+     * Removing objects from a larger container, usually after receiving or accepting. Disaggregation of one unit from
      * another typically occurs at this point.
      *
      * @since v2

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
@@ -80,9 +80,9 @@ public class Article implements Serializable {
 
     @Override
     public String toString() {
-        return "Article [gtin=" + gtin + ", barcodes=" + StringUtils.join(barcodes, ";") + ", code=" + code
-                + ", brand=" + brand + ", season=" + season + ", name=" + name + ", option=" + option + ", style="
-                + style + ", color=" + color + ", sizes=" + StringUtils.join(sizes, ";") + ", supplier=" + supplier
+        return "Article [gtin=" + gtin + ", barcodes=" + StringUtils.join(barcodes, ";") + ", code=" + code + ", brand="
+                + brand + ", season=" + season + ", name=" + name + ", option=" + option + ", style=" + style
+                + ", color=" + color + ", sizes=" + StringUtils.join(sizes, ";") + ", supplier=" + supplier
                 + ", category=" + category + ", prices=" + StringUtils.join(prices, ";") + ", last updated="
                 + lastUpdated + "]";
     }

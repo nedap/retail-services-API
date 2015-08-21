@@ -3,7 +3,7 @@ package com.nedap.retail.messages;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class ClientException extends RuntimeException {
 

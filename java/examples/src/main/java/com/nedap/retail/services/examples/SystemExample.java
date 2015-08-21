@@ -7,7 +7,7 @@ import static com.nedap.retail.services.examples.PrintHelper.TAB;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
