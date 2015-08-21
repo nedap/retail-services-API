@@ -6,7 +6,6 @@ import java.util.Objects;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
-import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
@@ -14,24 +13,15 @@ import com.nedap.retail.messages.epcis.v1_1.elements.QuantityElement;
 
 /**
  * Required parameters to construct an object_event are: - epcList - *or* quantityList
- *
- * @see http://nvs0272/confluence/display/storeid/EPCIS+1.1+Event#EPCIS1.1Event-ObjectEvent
  */
 public class ObjectEvent extends EpcisEvent {
 
-    public static final String EPC_LIST = "epc_list";
-    @SerializedName(EPC_LIST)
-    @JsonProperty(EPC_LIST)
+    @JsonProperty("epc_list")
     public List<String> epcList;
 
-    public static final String QUANTITY_LIST = "quantity_list";
-    @SerializedName(QUANTITY_LIST)
-    @JsonProperty(QUANTITY_LIST)
+    @JsonProperty("quantity_list")
     public List<QuantityElement> quantityList;
 
-    public static final String ILMD = "ilmd";
-    @SerializedName(ILMD)
-    @JsonProperty(ILMD)
     public String ilmd;
 
     public ObjectEvent() {
@@ -87,25 +77,34 @@ public class ObjectEvent extends EpcisEvent {
 
     @Override
     public boolean equals(final Object obj) {
-        if (!super.equals(obj)) {
-            return false;
-        }
         if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
+        if (!super.equals(obj)) {
+            return false;
+        }
         final ObjectEvent other = (ObjectEvent) obj;
         if (!compareAsSet(this.epcList, other.epcList)) {
             return false;
         }
-        if (!Objects.equals(this.quantityList, other.quantityList)) {
+        if (!compareAsSet(this.quantityList, other.quantityList)) {
             return false;
         }
         if (!Objects.equals(this.ilmd, other.ilmd)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (epcList != null ? epcList.hashCode() : 0);
+        result = 31 * result + (quantityList != null ? quantityList.hashCode() : 0);
+        result = 31 * result + (ilmd != null ? ilmd.hashCode() : 0);
+        return result;
     }
 }

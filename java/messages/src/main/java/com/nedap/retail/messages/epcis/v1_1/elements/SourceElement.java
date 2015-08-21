@@ -1,19 +1,9 @@
 package com.nedap.retail.messages.epcis.v1_1.elements;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
-import com.google.gson.annotations.SerializedName;
-
 public class SourceElement {
 
-    public static final String TYPE = "type";
-    @SerializedName(TYPE)
-    @JsonProperty(TYPE)
     public String type;
 
-    public static final String SOURCE = "source";
-    @SerializedName(SOURCE)
-    @JsonProperty(SOURCE)
     public String source;
 
     public SourceElement() {

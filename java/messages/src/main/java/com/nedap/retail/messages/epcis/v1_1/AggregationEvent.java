@@ -1,11 +1,11 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
-import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
@@ -16,19 +16,13 @@ public class AggregationEvent extends EpcisEvent {
     /**
      * Example: urn:epc:id:sscc:08410580.999999999
      */
-    public static final String PARENT_ID = "parent_id";
-    @SerializedName(PARENT_ID)
-    @JsonProperty(PARENT_ID)
+    @JsonProperty("parent_id")
     public String parentId;
 
-    public static final String CHILD_EPCS = "child_epcs";
-    @SerializedName(CHILD_EPCS)
-    @JsonProperty(CHILD_EPCS)
+    @JsonProperty("child_epcs")
     public List<String> childEpcs;
 
-    public static final String CHILD_QUANTITY_LIST = "child_quantity_list";
-    @SerializedName(CHILD_QUANTITY_LIST)
-    @JsonProperty(CHILD_QUANTITY_LIST)
+    @JsonProperty("child_quantity_list")
     public List<QuantityElement> childQuantityList;
 
     public AggregationEvent() {
@@ -84,5 +78,38 @@ public class AggregationEvent extends EpcisEvent {
 
         return "AggregationEvent" + super.toString() + "[parent_id(" + parentId + "),child_epcs(" + epcListSize
                 + "),quantityList(" + quantityListSize + ")]";
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        final AggregationEvent other = (AggregationEvent) obj;
+        if (!Objects.equals(this.parentId, other.parentId)) {
+            return false;
+        }
+        if (!compareAsSet(this.childEpcs, other.childEpcs)) {
+            return false;
+        }
+        if (!compareAsSet(this.childQuantityList, other.childQuantityList)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (parentId != null ? parentId.hashCode() : 0);
+        result = 31 * result + (childEpcs != null ? childEpcs.hashCode() : 0);
+        result = 31 * result + (childQuantityList != null ? childQuantityList.hashCode() : 0);
+        return result;
     }
 }

@@ -29,8 +29,8 @@ public class DifferenceListRequest {
     /**
      * Fallback handler for all unrecognized properties found in JSON content.
      *
-     * @param key
-     * @param value
+     * @param key unknown key
+     * @param value value of unkown key
      */
     @JsonAnySetter
     public void handleUnknown(final String key, final Object value) {

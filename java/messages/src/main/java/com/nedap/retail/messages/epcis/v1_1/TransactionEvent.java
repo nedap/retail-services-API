@@ -6,7 +6,6 @@ import java.util.Objects;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
-import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
@@ -18,19 +17,13 @@ public class TransactionEvent extends EpcisEvent {
     /**
      * Example: urn:epc:id:sscc:08410580.999999999
      */
-    public static final String PARENT_ID = "parent_id";
-    @SerializedName(PARENT_ID)
-    @JsonProperty(PARENT_ID)
+    @JsonProperty("parent_id")
     public String parentId;
 
-    public static final String EPC_LIST = "epc_list";
-    @SerializedName(EPC_LIST)
-    @JsonProperty(EPC_LIST)
+    @JsonProperty("epc_list")
     public List<String> epcList;
 
-    public static final String QUANTITY_LIST = "quantity_list";
-    @SerializedName(QUANTITY_LIST)
-    @JsonProperty(QUANTITY_LIST)
+    @JsonProperty("quantity_list")
     public List<QuantityElement> quantityList;
 
     public TransactionEvent() {
@@ -55,7 +48,7 @@ public class TransactionEvent extends EpcisEvent {
      * @param readPoint The read point at which the event took place.
      * @param disposition The business condition of the objects associated with the EPCs, presumed to hold true until
      *            contradicted by a subsequent event.
-     * @param parentId
+     * @param parentId A URI that defines the parent conform EPCIS.
      * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained. A
      *            TransactionEvent must contain either an epc_list or a quantity_list.
      * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to
@@ -92,13 +85,13 @@ public class TransactionEvent extends EpcisEvent {
 
     @Override
     public boolean equals(final Object obj) {
-        if (!super.equals(obj)) {
-            return false;
-        }
         if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (!super.equals(obj)) {
             return false;
         }
         final TransactionEvent other = (TransactionEvent) obj;
@@ -108,9 +101,18 @@ public class TransactionEvent extends EpcisEvent {
         if (!compareAsSet(this.epcList, other.epcList)) {
             return false;
         }
-        if (!Objects.equals(this.quantityList, other.quantityList)) {
+        if (!compareAsSet(this.quantityList, other.quantityList)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (parentId != null ? parentId.hashCode() : 0);
+        result = 31 * result + (epcList != null ? epcList.hashCode() : 0);
+        result = 31 * result + (quantityList != null ? quantityList.hashCode() : 0);
+        return result;
     }
 }
