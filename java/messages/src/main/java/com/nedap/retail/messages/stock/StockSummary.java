@@ -3,7 +3,7 @@ package com.nedap.retail.messages.stock;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
@@ -80,8 +80,8 @@ public class StockSummary {
     public String toString() {
         return "StockSummary {" + "id=" + id + ", location=" + location + ", eventTime="
                 + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef=" + externRef + ", status=" + status
-                + ", quantity=" + quantity + ", excludedQuantity=" + excludedQuantity + ", gtinQuantity="
-                + gtinQuantity + ", excludedGtinQuantity=" + excludedGtinQuantity + ", clientIds="
-                + StringUtils.join(clientIds, ',') + '}';
+                + ", quantity=" + quantity + ", excludedQuantity=" + excludedQuantity + ", gtinQuantity=" + gtinQuantity
+                + ", excludedGtinQuantity=" + excludedGtinQuantity + ", clientIds=" + StringUtils.join(clientIds, ',')
+                + '}';
     }
 }

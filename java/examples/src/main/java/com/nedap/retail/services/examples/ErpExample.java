@@ -12,7 +12,7 @@ import static com.nedap.retail.services.examples.PrintHelper.WHITESPACE;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.Client;
@@ -67,8 +67,8 @@ public class ErpExample {
         stock.location = locationId;
         stock.eventTime = DateTime.now();
         stock.externRef = "generated_import";
-        stock.quantityList = Arrays.asList(new GtinQuantity(GTIN_1, 5), new GtinQuantity(GTIN_2, 10), new GtinQuantity(
-                GTIN_3, 20));
+        stock.quantityList = Arrays.asList(new GtinQuantity(GTIN_1, 5), new GtinQuantity(GTIN_2, 10),
+                new GtinQuantity(GTIN_3, 20));
         return stock;
     }
 

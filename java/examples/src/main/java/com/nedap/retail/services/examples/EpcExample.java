@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.Client;
@@ -75,12 +75,12 @@ public class EpcExample {
                 System.out.println(NEW_LINE + "Creating some RFID stock for sublocations...");
                 final String salesFloorRfidStockHistoryId = client
                         .captureRfidStock(createSalesFloorRfidStockHistory(sublocationIds.get(0)));
-                final String stockRoomRfidStockId = client.captureRfidStock(createStockRoomRfidStock(sublocationIds
-                        .get(1)));
+                final String stockRoomRfidStockId = client
+                        .captureRfidStock(createStockRoomRfidStock(sublocationIds.get(1)));
                 final String salesFloorRfidStockPresentId = client
                         .captureRfidStock(createSalesFloorRfidStockPresent(sublocationIds.get(0)));
-                final List<String> generatedStockIds = Arrays.asList(salesFloorRfidStockHistoryId,
-                        stockRoomRfidStockId, salesFloorRfidStockPresentId);
+                final List<String> generatedStockIds = Arrays.asList(salesFloorRfidStockHistoryId, stockRoomRfidStockId,
+                        salesFloorRfidStockPresentId);
                 System.out.println(printSublocationStocks(sublocationIds, generatedStockIds));
 
                 // Not on shelf
@@ -126,8 +126,8 @@ public class EpcExample {
 
             // Status of approved difference list
             System.out.println(NEW_LINE + "Retrieving status of approved difference list...");
-            final ApprovedDifferenceListSummary approvedDifferenceListStatus = client.getApprovedDifferenceListStatus(
-                    locationId, EVENT_TIME.toString());
+            final ApprovedDifferenceListSummary approvedDifferenceListStatus = client
+                    .getApprovedDifferenceListStatus(locationId, EVENT_TIME.toString());
             System.out.println(printApprovedDifferenceListStatus(approvedDifferenceListStatus));
 
             // Delete approved difference list
@@ -297,7 +297,8 @@ public class EpcExample {
         return rfidStock;
     }
 
-    private static String printSublocationStocks(final List<String> sublocationIds, final List<String> generatedStocks) {
+    private static String printSublocationStocks(final List<String> sublocationIds,
+            final List<String> generatedStocks) {
         final StringBuilder sb = new StringBuilder();
         sb.append("For location: ").append(sublocationIds.get(0)).append(" created stocks with ids:");
         sb.append(NEW_LINE).append(TAB).append(generatedStocks.get(0));
@@ -360,7 +361,8 @@ public class EpcExample {
         return sb.toString();
     }
 
-    private static String printApprovedDifferenceListExportResponse(final ApprovedDifferenceListExportResponse response) {
+    private static String printApprovedDifferenceListExportResponse(
+            final ApprovedDifferenceListExportResponse response) {
         final StringBuilder sb = new StringBuilder("Approved difference list export status:");
         for (int i = 0; i < response.gtins.size(); i++) {
             sb.append(NEW_LINE).append(TAB);
@@ -370,8 +372,8 @@ public class EpcExample {
         return sb.toString();
     }
 
-    private static String printListOfApprovedDifferenceListSummaries(
-            final List<ApprovedDifferenceListSummary> response, final String location) {
+    private static String printListOfApprovedDifferenceListSummaries(final List<ApprovedDifferenceListSummary> response,
+            final String location) {
 
         final StringBuilder sb = new StringBuilder("Approved difference lists ids for location: ").append(location)
                 .append(" are:");

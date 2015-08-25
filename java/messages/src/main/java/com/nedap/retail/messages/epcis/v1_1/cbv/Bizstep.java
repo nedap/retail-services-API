@@ -2,8 +2,6 @@ package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 /**
  * Enumerates Business Steps Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
- *
- * @see http://nvs0272/confluence/pages/viewpage.action?pageId=9733350
  */
 public enum Bizstep {
 
@@ -237,7 +235,6 @@ public enum Bizstep {
      *
      * @param value String value of requested biz step
      * @return Bizstep enum value for provided String
-     * @see valueOf(..)
      */
     public static Bizstep permissiveValueOf(final String value) {
         if (value == null) {

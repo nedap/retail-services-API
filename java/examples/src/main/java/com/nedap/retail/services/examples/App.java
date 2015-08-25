@@ -19,7 +19,7 @@ import com.nedap.retail.messages.ClientException;
 /**
  * This tool can be used to test the !D Cloud APIs.
  *
- * usage: java -jar examples.jar -clientid <CLIENTID> -secret <SECRET> [-url <url>]
+ * usage: java -jar examples.jar -clientid CLIENTID -secret SECRET [-url URL]
  *
  * Exit codes: 0: successfull. 1: not successfull.
  */
@@ -32,6 +32,10 @@ public class App {
     private static final String OPTION_URL = "url";
     private static final String URL = "https://api.nedapretail.com";
     private final Client apiClient;
+
+    public App(final String clientId, final String secret, final String url) throws IOException {
+        apiClient = new Client(url, clientId, secret);
+    }
 
     public static void main(final String[] args) throws Exception {
 
@@ -73,10 +77,6 @@ public class App {
         options.addOption(OptionBuilder.hasArg().withArgName("url")
                 .withDescription("(Optional) Default is https://api.nedapretail.com").create(OPTION_URL));
         return options;
-    }
-
-    public App(final String clientId, final String secret, final String url) throws IOException {
-        apiClient = new Client(url, clientId, secret);
     }
 
     private void loop() throws IOException {
@@ -126,7 +126,7 @@ public class App {
         }
     }
 
-    private void printMenu() {
+    private static void printMenu() {
         final StringBuilder sb = new StringBuilder();
 
         sb.append(NEW_LINE).append("*** Nedap Retail API examples ***");

@@ -72,6 +72,8 @@ public class Client {
 
     /**
      * System API: list
+     *
+     * @return List of systems
      */
     public List<SystemListPayload> getSystemList() {
         final WebTarget target = target("/system/v1/list");
@@ -81,6 +83,8 @@ public class Client {
 
     /**
      * System API: status
+     *
+     * @return list of systems with their statuses
      */
     public List<SystemStatusPayload> getSystemStatus() {
         final WebTarget target = target("/system/v1/status");
@@ -117,8 +121,8 @@ public class Client {
      * @param firmwareVersion Requested firmware version to upgrade to.
      */
     public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) {
-        final WebTarget target = target("/system/v1/update").queryParam("system_id", systemId).queryParam(
-                "firmware_version", firmwareVersion);
+        final WebTarget target = target("/system/v1/update").queryParam("system_id", systemId)
+                .queryParam("firmware_version", firmwareVersion);
         post(target);
     }
 
@@ -199,7 +203,6 @@ public class Client {
      * ERP API: delete stock for provided stock id
      * 
      * @param id ID of stock
-     * @return 204 status if delete is successful, this process is irreversible
      */
     public void deleteErpStock(final String id) {
         final WebTarget target = target("/erp/v1/stock.delete").queryParam("id", id);
@@ -348,7 +351,7 @@ public class Client {
     /**
      * Captures approved difference list.
      * 
-     * @param approvedDifferenceListCaptureRequest
+     * @param approvedDifferenceListCaptureRequest request details
      * @return Id of the captured approved difference list
      */
     public String captureApprovedDifferenceList(
@@ -427,7 +430,6 @@ public class Client {
     /**
      * Returns approved difference list summaries for location optional between counting times.
      * 
-     * @param organizationId Id of organization for approved difference list
      * @param locationId Location identifier
      * @param fromRfidTime Lower boundary for approved difference list time
      * @param untilRfidTime Upper boundary for approved difference list time
@@ -456,7 +458,8 @@ public class Client {
      * @param rfidTime Rfid time of approved difference list for status information
      * @return list of approved difference list summary resources
      */
-    public ApprovedDifferenceListSummary getApprovedDifferenceListStatus(final String locationId, final String rfidTime) {
+    public ApprovedDifferenceListSummary getApprovedDifferenceListStatus(final String locationId,
+            final String rfidTime) {
 
         final WebTarget target = target("/epc/v2/approved_difference_list.status").queryParam(LOCATION, locationId)
                 .queryParam("rfid_time", rfidTime);
@@ -659,16 +662,23 @@ public class Client {
 
     /**
      * Push API: subscribe.
+     *
+     * @param topic The type of the object you want to receive updates about.
+     * @param callback The URI to receive the updates to the topic.
+     * @param secret A shared secret key that generates a SHA1 HMAC of the outgoing body content.
+     * @param leaseSeconds Number of seconds for which the subscriber would like to have the subscription active.
      */
-    public void subscribe(final String topic, final String callback, final String secret, final int lease_seconds) {
+    public void subscribe(final String topic, final String callback, final String secret, final int leaseSeconds) {
         final WebTarget target = target("/subscription/1.0/subscribe").queryParam("hub.topic", topic)
                 .queryParam("hub.callback", callback).queryParam("hub.secret", secret)
-                .queryParam("hub.lease_seconds", "" + lease_seconds);
+                .queryParam("hub.lease_seconds", Integer.toString(leaseSeconds));
         post(target);
     }
 
     /**
      * Push API: unsubscribe
+     *
+     * @param topic The topic used in the subscribe to identify which subscription to end.
      */
     public void unsubscribe(final String topic) {
         final WebTarget target = target("/subscription/1.0/unsubscribe").queryParam("hub.topic", topic);
@@ -677,6 +687,8 @@ public class Client {
 
     /**
      * Push API: list
+     *
+     * @return List of active subscriptions
      */
     public List<Subscription> getSubscriptionList() {
         final WebTarget target = target("/subscription/1.0/list");
@@ -778,7 +790,8 @@ public class Client {
         }
     }
 
-    protected static <T> T post(final WebTarget target, final GenericType<T> responseClass, final Object requestEntity) {
+    protected static <T> T post(final WebTarget target, final GenericType<T> responseClass,
+            final Object requestEntity) {
         try {
             return target.request(APPLICATION_JSON).post(Entity.json(requestEntity), responseClass);
         } catch (final WebApplicationException webApplicationException) {

@@ -1,41 +1,29 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 
-import com.google.gson.annotations.SerializedName;
 import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
 import com.nedap.retail.messages.epcis.v1_1.cbv.EventType;
 import com.nedap.retail.messages.epcis.v1_1.elements.QuantityElement;
 
 public class TransformationEvent extends EpcisEvent {
 
-    public static final String INPUT_EPC_LIST = "input_epc_list";
-    @SerializedName(INPUT_EPC_LIST)
-    @JsonProperty(INPUT_EPC_LIST)
+    @JsonProperty("input_epc_list")
     public List<String> inputEpcList;
 
-    public static final String OUTPUT_EPC_LIST = "output_epc_list";
-    @SerializedName(OUTPUT_EPC_LIST)
-    @JsonProperty(OUTPUT_EPC_LIST)
+    @JsonProperty("output_epc_list")
     public List<String> outputEpcList;
 
-    public static final String INPUT_QUANTITY_LIST = "input_quantity_list";
-    @SerializedName(INPUT_QUANTITY_LIST)
-    @JsonProperty(INPUT_QUANTITY_LIST)
+    @JsonProperty("input_quantity_list")
     public List<QuantityElement> inputQuantityList;
 
-    public static final String OUTPUT_QUANTITY_LIST = "output_quantity_list";
-    @SerializedName(OUTPUT_QUANTITY_LIST)
-    @JsonProperty(OUTPUT_QUANTITY_LIST)
+    @JsonProperty("output_quantity_list")
     public List<QuantityElement> outputQuantityList;
 
-    public static final String TRANSFORMATION_ID = "transformation_id";
-    @SerializedName(TRANSFORMATION_ID)
-    @JsonProperty(TRANSFORMATION_ID)
+    @JsonProperty("transformation_id")
     public String transformationId;
 
     public TransformationEvent() {
@@ -77,10 +65,10 @@ public class TransformationEvent extends EpcisEvent {
     public String toString() {
         final String inputEpcListSize = inputEpcList == null ? "null" : Integer.toString(inputEpcList.size());
         final String outputEpcListSize = outputEpcList == null ? "null" : Integer.toString(outputEpcList.size());
-        final String inputQuantityListSize = inputQuantityList == null ? "null" : Integer.toString(inputQuantityList
-                .size());
-        final String outputQuantityListSize = outputQuantityList == null ? "null" : Integer.toString(outputQuantityList
-                .size());
+        final String inputQuantityListSize = inputQuantityList == null ? "null"
+                : Integer.toString(inputQuantityList.size());
+        final String outputQuantityListSize = outputQuantityList == null ? "null"
+                : Integer.toString(outputQuantityList.size());
 
         return "TransformationEvent" + super.toString() + "[input_epc_list(" + inputEpcListSize + "),output_epc_list("
                 + outputEpcListSize + "),input_quantity_list(" + inputQuantityListSize + "),output_quantity_list("
@@ -89,13 +77,13 @@ public class TransformationEvent extends EpcisEvent {
 
     @Override
     public boolean equals(final Object obj) {
-        if (!super.equals(obj)) {
-            return false;
-        }
         if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (!super.equals(obj)) {
             return false;
         }
         final TransformationEvent other = (TransformationEvent) obj;
@@ -105,12 +93,23 @@ public class TransformationEvent extends EpcisEvent {
         if (!compareAsSet(this.outputEpcList, other.outputEpcList)) {
             return false;
         }
-        if (!Objects.equals(this.inputQuantityList, other.inputQuantityList)) {
+        if (!compareAsSet(this.inputQuantityList, other.inputQuantityList)) {
             return false;
         }
-        if (!Objects.equals(this.outputQuantityList, other.outputQuantityList)) {
+        if (!compareAsSet(this.outputQuantityList, other.outputQuantityList)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (inputEpcList != null ? inputEpcList.hashCode() : 0);
+        result = 31 * result + (outputEpcList != null ? outputEpcList.hashCode() : 0);
+        result = 31 * result + (inputQuantityList != null ? inputQuantityList.hashCode() : 0);
+        result = 31 * result + (outputQuantityList != null ? outputQuantityList.hashCode() : 0);
+        result = 31 * result + (transformationId != null ? transformationId.hashCode() : 0);
+        return result;
     }
 }

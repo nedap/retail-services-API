@@ -2,8 +2,6 @@ package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 /**
  * Enumerates EPCIS Actions Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
- *
- * @see http://nvs0272/confluence/pages/viewpage.action?pageId=9733350
  */
 public enum Action {
 

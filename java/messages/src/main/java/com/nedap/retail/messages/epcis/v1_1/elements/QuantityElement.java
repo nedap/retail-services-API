@@ -4,8 +4,6 @@ import java.util.Objects;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.google.gson.annotations.SerializedName;
-
 public class QuantityElement {
 
     /**
@@ -13,26 +11,18 @@ public class QuantityElement {
      * For SGTIN, use URI syntax: urn:epc:id:sgtin:CompanyPrefix.ItemRefAndIndicator.SerialNumber
      * For GTIN, use URI syntax: urn:epc:id:gtin:CompanyPrefix.ItemRefAndIndicator
      */
-    public static final String EPC_CLASS = "epc_class";
-    @SerializedName(EPC_CLASS)
-    @JsonProperty(EPC_CLASS)
+    @JsonProperty("epc_class")
     public String epcClass;
     /**
      * A number that specifies how many or how much of the specified EPCClass is denoted by this QuantityElement.
      * Negative values are not allowed
      */
-    public static final String QUANTITY = "quantity";
-    @SerializedName(QUANTITY)
-    @JsonProperty(QUANTITY)
     public float quantity;
 
     /**
      * Specifies a unit of measure by which the specified quantity is to be interpreted as a physical measure,
      * specifying how much of the specified EPCClass is denoted by this QuantityElement.
      */
-    public static final String UOM = "uom";
-    @SerializedName(UOM)
-    @JsonProperty(UOM)
     public String uom;
 
     public QuantityElement() {

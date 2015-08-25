@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -9,10 +10,10 @@
     </parent>
 
     <artifactId>examples</artifactId>
-
-    <name>API examples</name>
     <packaging>jar</packaging>
-    <description>This is example code for the APIs for !D Cloud.</description>
+    <name>Nedap Retail API examples</name>
+    <description>Examples on how to use the Nedap Retail APIs</description>
+    <url>http://www.nedap-retail.com/</url>
 
     <dependencies>
         <dependency>
@@ -23,7 +24,7 @@
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.2</version>
+            <version>1.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -32,16 +33,18 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>apache-snapshots</id>
-            <name>Apache snapshots</name>
-            <url>http://repository.apache.org/snapshots</url>
-        </repository>
-    </repositories>
-
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-version}</version>
+                <configuration>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
+                </configuration>
+            </plugin>
 
             <!--
               Usage:
@@ -56,7 +59,7 @@
                 invalid and won’t load or run your JAR file.
               - Collate the various META-INF/services entries in the JARs instead of overwriting them. (Jersey doesn’t
                 work without those.)
-              - Set com.nedap.retail.services.tool.push.App as the JAR’s MainClass. This will allow you to run
+              - Set com.nedap.retail.services.examples.App as the JAR’s MainClass. This will allow you to run
                 the JAR using java -jar.
   
               See also http://dropwizard.codahale.com/getting-started/
@@ -64,15 +67,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.4.1</version>
                 <configuration>
                     <transformers>
                         <!--
                           Collate the various META-INF/services entries in the JARs instead of overwriting them.
                           (Jersey doesn’t work without those.)
                         -->
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>com.nedap.retail.services.examples.App</mainClass>
                         </transformer>
                     </transformers>
@@ -104,7 +109,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1.1</version>
+                <version>1.4.0</version>
                 <configuration>
                     <executable>java</executable>
                     <mainClass>com.nedap.retail.services.examples.App</mainClass>

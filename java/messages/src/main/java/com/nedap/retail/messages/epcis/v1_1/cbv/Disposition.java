@@ -2,8 +2,6 @@ package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 /**
  * Enumerates EPCIS Dispositions Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
- *
- * @see http://nvs0272/confluence/pages/viewpage.action?pageId=9733350
  */
 public enum Disposition {
 
@@ -91,7 +89,7 @@ public enum Disposition {
      * In validating the pedigree for the product, no match was found, causing the product to be quarantined for further
      * investigation and disposition
      *
-     * @see NO_PEDIFREE_MATCH
+     * @see NO_PEDIGREE_MATCH
      * @deprecated
      */
     NON_SELLABLE_NO_PEDIGREE_MATCH(10, "urn:epcglobal:cbv:disp:non_sellable_no_pedigree_match"),
@@ -165,7 +163,6 @@ public enum Disposition {
      *
      * @param value String value of requested disposition
      * @return Disposition enum value for provided String
-     * @see valueOf(..)
      */
     public static Disposition permissiveValueOf(final String value) {
         if (value == null) {
