@@ -11,13 +11,6 @@
     <description>Reference implementations and test tools for using the Nedap Retail APIs</description>
     <url>http://www.nedap-retail.com/</url>
 
-    <!--<licenses>
-        <license>
-            <name>To be discussed</name>
-            <url>...</url>
-        </license>
-    </licenses>-->
-
     <developers>
         <developer>
             <name>Nedap Retail</name>
@@ -98,15 +91,6 @@
                 <configuration>
                     <keyname>idcloud@nedap.com</keyname>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
