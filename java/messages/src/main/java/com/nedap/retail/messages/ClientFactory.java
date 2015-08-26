@@ -8,6 +8,10 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 
 public class ClientFactory {
 
+    private ClientFactory() {
+        // avoid instantiation
+    }
+
     /**
      * Create default client with connection timeout of 10000 and read timeout of 60000
      *

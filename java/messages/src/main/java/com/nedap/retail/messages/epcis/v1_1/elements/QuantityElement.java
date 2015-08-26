@@ -45,6 +45,14 @@ public class QuantityElement {
     }
 
     @Override
+    public int hashCode() {
+        int result = epcClass != null ? epcClass.hashCode() : 0;
+        result = 31 * result + (quantity != +0.0f ? Float.floatToIntBits(quantity) : 0);
+        result = 31 * result + (uom != null ? uom.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
