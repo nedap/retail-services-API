@@ -34,5 +34,6 @@ public class DifferenceListRequest {
      */
     @JsonAnySetter
     public void handleUnknown(final String key, final Object value) {
+        // ignore unknown properties
     }
 }

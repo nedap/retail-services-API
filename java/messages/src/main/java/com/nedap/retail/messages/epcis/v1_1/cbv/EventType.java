@@ -28,7 +28,8 @@ public enum EventType {
      */
     TransactionEvent(3, "transaction_event", TransactionEvent.class),
     /**
-     * @deprecated
+     * @deprecated The Quantity Event is deprecated in EPCIS 1.1, as it is replaced by new features added to the Object
+     *             Event in EPCIS 1.1
      */
     QuantityEvent(4, "quantity_event", QuantityEvent.class),
     /**
