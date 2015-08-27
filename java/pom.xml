@@ -11,6 +11,13 @@
     <description>Reference implementations and test tools for using the Nedap Retail APIs</description>
     <url>http://www.nedap-retail.com/</url>
 
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/nedap/retail-services-API/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+
     <developers>
         <developer>
             <name>Nedap Retail</name>
