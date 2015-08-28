@@ -49,7 +49,9 @@ public class EpcExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** EPC API example ***");
 
-        final String locationId = client.getSites().get(0).id;
+        final Location location = client.getSites().get(0);
+        final String locationId = location.id;
+        System.out.println("Using location " + location.name);
 
         try {
             // Create some articles
@@ -68,7 +70,7 @@ public class EpcExample {
             System.out.println("Created RFID stock with id: " + rfidStockId);
 
             // Check if location has stock room and sales floor sublocations
-            final List<String> sublocationIds = getSublocations(locationId, client);
+            final List<String> sublocationIds = getSublocationIds(locationId, client);
             if (sublocationIds.size() > 1) {
 
                 // Create some stock differences between the two
@@ -239,7 +241,7 @@ public class EpcExample {
         return rfidStock;
     }
 
-    private static List<String> getSublocations(final String locationId, final Client client) {
+    private static List<String> getSublocationIds(final String locationId, final Client client) {
         final List<String> sublocationIds = new ArrayList<>();
         final Location location = client.getLocation(locationId);
         if (!CollectionUtils.isEmpty(location.children)) {
@@ -251,7 +253,7 @@ public class EpcExample {
 
     private static String getSalesFloorSublocationId(final List<Location> sublocations) {
         for (final Location sublocation : sublocations) {
-            if (sublocation.subtype.equals(LocationSubType.SALES_FLOOR)) {
+            if (LocationSubType.SALES_FLOOR.equals(sublocation.subtype)) {
                 return sublocation.id;
             }
         }
@@ -260,7 +262,7 @@ public class EpcExample {
 
     private static String getStockRoomSublocationId(final List<Location> sublocations) {
         for (final Location sublocation : sublocations) {
-            if (sublocation.subtype.equals(LocationSubType.STOCK_ROOM)) {
+            if (LocationSubType.STOCK_ROOM.equals(sublocation.subtype)) {
                 return sublocation.id;
             }
         }

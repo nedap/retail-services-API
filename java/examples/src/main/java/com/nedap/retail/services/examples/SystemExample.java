@@ -73,6 +73,9 @@ public class SystemExample {
 
     private static String showStatusDetails(final List<DetailedStatus> detailedStatuses) {
         final StringBuilder sb = new StringBuilder(NEW_LINE).append(TAB).append("Detailed status:");
+        if (detailedStatuses == null) {
+            return sb.append(" not available").toString();
+        }
         for (int i = 0; i < detailedStatuses.size(); i++) {
             sb.append(NEW_LINE).append(TAB).append("Detailed status ").append(i + 1).append(COLON);
             sb.append(NEW_LINE).append(DOUBLE_TAB).append("Type: ").append(detailedStatuses.get(i).type);

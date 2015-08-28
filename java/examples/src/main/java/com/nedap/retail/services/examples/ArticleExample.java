@@ -87,11 +87,11 @@ public class ArticleExample {
 
         // optional fields
         article.code = GTIN_1;
-        article.brand = "River Island";
+        article.brand = "Nedap Retail";
         article.season = "Summer 2015";
         article.option = "T-shirt with V-neck and short sleeves, Black";
         article.style = "T-shirt with V-neck and short sleeves";
-        article.supplier = "River Island";
+        article.supplier = "Nedap Retail";
         article.category = "T-shirt";
         article.markdown = false;
         article.prices = setArticlePrices();
