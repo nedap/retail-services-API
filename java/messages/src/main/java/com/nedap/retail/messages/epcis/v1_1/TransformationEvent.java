@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -28,6 +29,12 @@ public class TransformationEvent extends EpcisEvent {
 
     public TransformationEvent() {
         type = EventType.TransformationEvent;
+
+        this.inputEpcList = new ArrayList<>();
+        this.inputQuantityList = new ArrayList<>();
+
+        this.outputEpcList = new ArrayList<>();
+        this.outputQuantityList = new ArrayList<>();
     }
 
     /**
@@ -36,7 +43,7 @@ public class TransformationEvent extends EpcisEvent {
      * represent actual observations of objects, but strictly speaking it can be used for any event a Capturing
      * Application wants to assert about objects, including for example capturing the fact that an expected observation
      * failed to occur.
-     *
+     * 
      * @param id The ID that identifies this message uniquely to an organization
      * @param eventTime The date and time at which the EPCIS Capturing Applications asserts the event occurred
      * @param recordTime The date and time at which this event was recorded by the EPCIS Repository.
@@ -65,10 +72,10 @@ public class TransformationEvent extends EpcisEvent {
     public String toString() {
         final String inputEpcListSize = inputEpcList == null ? "null" : Integer.toString(inputEpcList.size());
         final String outputEpcListSize = outputEpcList == null ? "null" : Integer.toString(outputEpcList.size());
-        final String inputQuantityListSize = inputQuantityList == null ? "null"
-                : Integer.toString(inputQuantityList.size());
-        final String outputQuantityListSize = outputQuantityList == null ? "null"
-                : Integer.toString(outputQuantityList.size());
+        final String inputQuantityListSize = inputQuantityList == null ? "null" : Integer.toString(inputQuantityList
+                .size());
+        final String outputQuantityListSize = outputQuantityList == null ? "null" : Integer.toString(outputQuantityList
+                .size());
 
         return "TransformationEvent" + super.toString() + "[input_epc_list(" + inputEpcListSize + "),output_epc_list("
                 + outputEpcListSize + "),input_quantity_list(" + inputQuantityListSize + "),output_quantity_list("
