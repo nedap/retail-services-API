@@ -318,7 +318,7 @@ public class Client {
      */
     public ArticleFindResponse findArticles(final String query, final int skip, final int count,
                                             final List<String> orderColumns) {
-        WebTarget target = target("/article/v3/find");
+        WebTarget target = target("/article/v2/find");
 
         target = target.queryParam("query", query);
         target = target.queryParam("skip", String.valueOf(skip));

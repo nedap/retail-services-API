@@ -128,7 +128,7 @@ public class ArticleExample {
         for (final String gtin : gtins) {
             sb.append(gtin).append(COMMA);
         }
-        sb.append("founded articles: ");
+        sb.append("Found articles: ");
         sb.append(printArticles(articles));
         return sb.toString();
     }
@@ -137,7 +137,7 @@ public class ArticleExample {
         final StringBuilder sb = new StringBuilder();
         sb.append("Total records before filtering: ").append(articleFindResponse.recordsTotal).append(NEW_LINE);
         sb.append("Total records after filtering: ").append(articleFindResponse.recordsFiltered).append(NEW_LINE);
-        sb.append("Founded articles: ");
+        sb.append("Found articles: ");
         sb.append(printArticles(articleFindResponse.articles));
         return sb.toString();
     }
@@ -208,7 +208,7 @@ public class ArticleExample {
         for (final String barcode : barcodes) {
             sb.append(barcode).append(COMMA);
         }
-        sb.append(" founded articles with names: ");
+        sb.append(" found articles with names: ");
         for (int i = 0; i < articles.size(); i++) {
             sb.append(NEW_LINE).append(TAB).append(i + 1).append(DOT).append(articles.get(i).name);
         }

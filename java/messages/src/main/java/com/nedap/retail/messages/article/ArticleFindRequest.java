@@ -7,6 +7,7 @@ public class ArticleFindRequest {
 
     /**
      * Search query.
+     * Please refer to the Article API documentation for a complete description.
      */
     public String query;
     /**
@@ -19,6 +20,8 @@ public class ArticleFindRequest {
     public Integer skip;
     /**
      * Columns to which ordering should be applied.
+     * For example "color", "name", "barcodes.value".
+     * Please refer to the Article API documentation for a complete description.
      */
     public List<String> order;
     /**
