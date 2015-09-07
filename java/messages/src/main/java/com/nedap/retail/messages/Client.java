@@ -310,10 +310,11 @@ public class Client {
     /**
      * Find articles using search query.
      *
-     * @param query Search query.
-     * @param skip Skip this number of articles.
-     * @param count Return this number of articles.
-     * @param orderColumns Columns to which ordering should be applied.
+     * @param query        Search query.
+     * @param skip         Skip this number of articles.
+     * @param count        Return this number of articles.
+     * @param orderColumns Columns to which ordering should be applied. For example "color", "name", "barcodes.value".
+     *                     Please refer to the Article API documentation for a complete description.
      * @return Article find response.
      */
     public ArticleFindResponse findArticles(final String query, final int skip, final int count,
