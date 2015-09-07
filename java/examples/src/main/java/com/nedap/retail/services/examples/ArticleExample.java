@@ -16,14 +16,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.nedap.retail.messages.article.*;
 import org.apache.commons.collections4.CollectionUtils;
 
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
-import com.nedap.retail.messages.article.Article;
-import com.nedap.retail.messages.article.Barcode;
-import com.nedap.retail.messages.article.Price;
-import com.nedap.retail.messages.article.Size;
 
 public class ArticleExample {
 
@@ -50,6 +47,11 @@ public class ArticleExample {
             final List<String> gtins = Arrays.asList(GTIN_1, GTIN_2);
             final List<Article> articlesWithGtins = client.articleDetailsByGtins(gtins, null);
             System.out.println(printRetrievedArticlesByGtins(articlesWithGtins, gtins));
+
+            // Find articles with search query
+            System.out.println(NEW_LINE + "Finding article with search query: 'summer'...");
+            final ArticleFindResponse articleFindResponse = client.findArticles("summer", 0, 100, null);
+            System.out.println(printArticleFindResponse(articleFindResponse));
 
             // Article datails by barcodes with name field
             System.out.println(NEW_LINE + "Retrieving article names by barcodes...");
@@ -128,6 +130,15 @@ public class ArticleExample {
         }
         sb.append("founded articles: ");
         sb.append(printArticles(articles));
+        return sb.toString();
+    }
+
+    private static String printArticleFindResponse(final ArticleFindResponse articleFindResponse) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Total records before filtering: ").append(articleFindResponse.recordsTotal).append(NEW_LINE);
+        sb.append("Total records after filtering: ").append(articleFindResponse.recordsFiltered).append(NEW_LINE);
+        sb.append("Founded articles: ");
+        sb.append(printArticles(articleFindResponse.articles));
         return sb.toString();
     }
 
