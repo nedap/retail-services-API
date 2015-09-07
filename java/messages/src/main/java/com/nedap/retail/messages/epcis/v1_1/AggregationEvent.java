@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +27,10 @@ public class AggregationEvent extends EpcisEvent {
     public List<QuantityElement> childQuantityList;
 
     public AggregationEvent() {
-        type = EventType.AggregationEvent;
+        this.type = EventType.AggregationEvent;
+
+        this.childEpcs = new ArrayList<>();
+        this.childQuantityList = new ArrayList<>();
     }
 
     /**
@@ -35,7 +39,7 @@ public class AggregationEvent extends EpcisEvent {
      * represent actual observations of objects, but strictly speaking it can be used for any event a Capturing
      * Application wants to assert about objects, including for example capturing the fact that an expected observation
      * failed to occur.
-     *
+     * 
      * @param id The ID that identifies this message uniquely to an organization
      * @param eventTime The date and time at which the EPCIS Capturing Applications asserts the event occurred
      * @param recordTime The date and time at which this event was recorded by the EPCIS Repository.
@@ -49,9 +53,10 @@ public class AggregationEvent extends EpcisEvent {
      *            contradicted by a subsequent event.
      * @param parentId The identifier of the parent of the association. If the parentID is an EPC, the EPC's URI is
      *            required. This field is required, unless the action is OBSERVE.
-     * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained.
+     * @param epcList An unordered list of one or more EPCs naming specific objects to which the event pertained. If
+     *            null empty list is assigned
      * @param quantityList An unordered list of one or more QuantityElements identifying (at the class level) objects to
-     *            which the event pertained.
+     *            which the event pertained. If null empty list is assigned
      */
     public AggregationEvent(final String id, final DateTime eventTime, final DateTime recordTime,
             final String eventTimeZoneOffset, final Action action, final String bizLocation, final String readPoint,
@@ -67,8 +72,8 @@ public class AggregationEvent extends EpcisEvent {
         this.readPoint = readPoint;
         this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
         this.parentId = parentId;
-        this.childEpcs = epcList;
-        this.childQuantityList = quantityList;
+        this.childEpcs = epcList == null ? new ArrayList<String>() : epcList;
+        this.childQuantityList = quantityList == null ? new ArrayList<QuantityElement>() : quantityList;
     }
 
     @Override

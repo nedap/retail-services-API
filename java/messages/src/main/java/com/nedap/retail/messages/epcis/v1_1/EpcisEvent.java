@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -72,6 +73,12 @@ abstract public class EpcisEvent {
 
     @JsonProperty("biz_transaction_list")
     public List<BizTransactionElement> bizTransactionList;
+
+    public EpcisEvent() {
+        this.sourceList = new ArrayList<>();
+        this.destinationList = new ArrayList<>();
+        this.bizTransactionList = new ArrayList<>();
+    }
 
     @Override
     public String toString() {
@@ -148,11 +155,11 @@ abstract public class EpcisEvent {
     /**
      * Returns true if every member of list A is contained in list B (and vise versa). The order of the elements is not
      * relevant and may contain duplicates. (compares 2 lists as if they were sets).
-     *
+     * 
      * @param a A list of strings
      * @param b A second list of strings
      * @param <T> Type of list content
-     *
+     * 
      * @return true if every member of list A is contained in list B (and vise versa)
      */
     public static <T> boolean compareAsSet(final List<T> a, final List<T> b) {

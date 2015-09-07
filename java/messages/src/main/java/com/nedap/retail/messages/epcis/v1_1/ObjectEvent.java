@@ -1,5 +1,6 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +27,9 @@ public class ObjectEvent extends EpcisEvent {
 
     public ObjectEvent() {
         type = EventType.ObjectEvent;
+
+        this.epcList = new ArrayList<>();
+        this.quantityList = new ArrayList<>();
     }
 
     /**
@@ -34,7 +38,7 @@ public class ObjectEvent extends EpcisEvent {
      * represent actual observations of objects, but strictly speaking it can be used for any event a Capturing
      * Application wants to assert about objects, including for example capturing the fact that an expected observation
      * failed to occur.
-     *
+     * 
      * @param id The ID that identifies this message uniquely to an organization
      * @param eventTime The date and time at which the EPCIS Capturing Applications asserts the event occurred
      * @param recordTime The date and time at which this event was recorded by the EPCIS Repository.
@@ -62,8 +66,8 @@ public class ObjectEvent extends EpcisEvent {
         this.bizLocation = bizLocation;
         this.readPoint = readPoint;
         this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
-        this.epcList = epcList;
-        this.quantityList = quantityList;
+        this.epcList = epcList == null ? new ArrayList<String>() : epcList;
+        this.quantityList = quantityList == null ? new ArrayList<QuantityElement>() : quantityList;
     }
 
     @Override
