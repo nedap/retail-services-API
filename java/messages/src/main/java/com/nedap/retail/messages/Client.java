@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
+import com.nedap.retail.messages.article.ArticleFindResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
@@ -307,8 +308,35 @@ public class Client {
     }
 
     /**
+     * Find articles using search query.
+     *
+     * @param query        Search query.
+     * @param skip         Skip this number of articles.
+     * @param count        Return this number of articles.
+     * @param orderColumns Columns to which ordering should be applied. For example "color", "name", "barcodes.value".
+     *                     Please refer to the Article API documentation for a complete description.
+     * @return Article find response.
+     */
+    public ArticleFindResponse findArticles(final String query, final int skip, final int count,
+                                            final List<String> orderColumns) {
+        WebTarget target = target("/article/v2/find");
+
+        target = target.queryParam("query", query);
+        target = target.queryParam("skip", String.valueOf(skip));
+        target = target.queryParam("count", String.valueOf(count));
+        
+        if (orderColumns != null) {
+            for (final String orderColumn : orderColumns) {
+                target = target.queryParam("order[]", orderColumn);
+            }
+        }
+
+        return get(target, ArticleFindResponse.class);
+    }
+
+    /**
      * Article API: create or replace article information.
-     * 
+     *
      * @param articles Articles to create or replace.
      */
     public void captureArticles(final List<Article> articles) {
