@@ -30,7 +30,6 @@ public class Article implements Serializable {
     public static final String NAME = "name";
     public static final String BARCODES = "barcodes";
     public static final String LAST_UPDATED = "last_updated";
-    public static final String MARKDOWN = "markdown";
 
     public String gtin;
     public List<Barcode> barcodes;
@@ -45,7 +44,6 @@ public class Article implements Serializable {
     public String supplier;
     public String category;
     public List<Price> prices;
-    public Boolean markdown;
 
     @JsonProperty(LAST_UPDATED)
     public DateTime lastUpdated;
@@ -80,9 +78,9 @@ public class Article implements Serializable {
 
     @Override
     public String toString() {
-        return "Article [gtin=" + gtin + ", barcodes=" + StringUtils.join(barcodes, ";") + ", code=" + code + ", brand="
-                + brand + ", season=" + season + ", name=" + name + ", option=" + option + ", style=" + style
-                + ", color=" + color + ", sizes=" + StringUtils.join(sizes, ";") + ", supplier=" + supplier
+        return "Article [gtin=" + gtin + ", barcodes=" + StringUtils.join(barcodes, ";") + ", code=" + code
+                + ", brand=" + brand + ", season=" + season + ", name=" + name + ", option=" + option + ", style="
+                + style + ", color=" + color + ", sizes=" + StringUtils.join(sizes, ";") + ", supplier=" + supplier
                 + ", category=" + category + ", prices=" + StringUtils.join(prices, ";") + ", last updated="
                 + lastUpdated + "]";
     }

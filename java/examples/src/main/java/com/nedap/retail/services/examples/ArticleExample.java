@@ -16,11 +16,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.nedap.retail.messages.article.*;
 import org.apache.commons.collections4.CollectionUtils;
 
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
+import com.nedap.retail.messages.article.Article;
+import com.nedap.retail.messages.article.ArticleFindResponse;
+import com.nedap.retail.messages.article.Barcode;
+import com.nedap.retail.messages.article.Price;
+import com.nedap.retail.messages.article.Size;
 
 public class ArticleExample {
 
@@ -95,7 +99,6 @@ public class ArticleExample {
         article.style = "T-shirt with V-neck and short sleeves";
         article.supplier = "Nedap Retail";
         article.category = "T-shirt";
-        article.markdown = false;
         article.prices = setArticlePrices();
 
         return article;
@@ -160,7 +163,6 @@ public class ArticleExample {
             sb.append(TAB).append("Supplier: ").append(articles.get(i).supplier).append(NEW_LINE);
             sb.append(TAB).append("Category: ").append(articles.get(i).category).append(NEW_LINE);
             sb.append(TAB).append("Prices: ").append(printPrices(articles.get(i).prices)).append(NEW_LINE);
-            sb.append(TAB).append("Markdown: ").append(articles.get(i).markdown);
         }
         return sb.toString();
     }
