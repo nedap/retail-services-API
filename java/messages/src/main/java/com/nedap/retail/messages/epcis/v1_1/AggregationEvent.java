@@ -1,6 +1,5 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,8 +68,8 @@ public class AggregationEvent extends EpcisEvent {
         this.readPoint = readPoint;
         this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
         this.parentId = parentId;
-        this.childEpcs = epcList == null ? new ArrayList<String>() : epcList;
-        this.childQuantityList = quantityList == null ? new ArrayList<QuantityElement>() : quantityList;
+        this.childEpcs = epcList;
+        this.childQuantityList = quantityList;
     }
 
     @Override
