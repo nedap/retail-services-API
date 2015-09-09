@@ -1,6 +1,5 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,8 +62,8 @@ public class ObjectEvent extends EpcisEvent {
         this.bizLocation = bizLocation;
         this.readPoint = readPoint;
         this.disposition = disposition != null ? disposition.disposition() : Disposition.UNKNOWN.disposition();
-        this.epcList = epcList == null ? new ArrayList<String>() : epcList;
-        this.quantityList = quantityList == null ? new ArrayList<QuantityElement>() : quantityList;
+        this.epcList = epcList;
+        this.quantityList = quantityList;
     }
 
     @Override
