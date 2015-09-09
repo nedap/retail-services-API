@@ -1,6 +1,5 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -29,12 +28,6 @@ public class TransformationEvent extends EpcisEvent {
 
     public TransformationEvent() {
         type = EventType.TransformationEvent;
-
-        this.inputEpcList = new ArrayList<>();
-        this.inputQuantityList = new ArrayList<>();
-
-        this.outputEpcList = new ArrayList<>();
-        this.outputQuantityList = new ArrayList<>();
     }
 
     /**

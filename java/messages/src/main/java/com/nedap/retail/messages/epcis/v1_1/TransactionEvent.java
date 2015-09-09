@@ -29,9 +29,6 @@ public class TransactionEvent extends EpcisEvent {
 
     public TransactionEvent() {
         type = EventType.TransactionEvent;
-
-        this.epcList = new ArrayList<>();
-        this.quantityList = new ArrayList<>();
     }
 
     /**

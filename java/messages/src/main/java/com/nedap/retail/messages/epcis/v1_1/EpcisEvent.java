@@ -1,6 +1,5 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -75,9 +74,6 @@ abstract public class EpcisEvent {
     public List<BizTransactionElement> bizTransactionList;
 
     public EpcisEvent() {
-        this.sourceList = new ArrayList<>();
-        this.destinationList = new ArrayList<>();
-        this.bizTransactionList = new ArrayList<>();
     }
 
     @Override
