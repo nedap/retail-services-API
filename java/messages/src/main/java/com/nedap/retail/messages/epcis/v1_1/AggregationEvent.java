@@ -28,9 +28,6 @@ public class AggregationEvent extends EpcisEvent {
 
     public AggregationEvent() {
         this.type = EventType.AggregationEvent;
-
-        this.childEpcs = new ArrayList<>();
-        this.childQuantityList = new ArrayList<>();
     }
 
     /**

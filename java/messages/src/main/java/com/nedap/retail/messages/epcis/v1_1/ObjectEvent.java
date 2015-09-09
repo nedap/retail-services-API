@@ -27,9 +27,6 @@ public class ObjectEvent extends EpcisEvent {
 
     public ObjectEvent() {
         type = EventType.ObjectEvent;
-
-        this.epcList = new ArrayList<>();
-        this.quantityList = new ArrayList<>();
     }
 
     /**
