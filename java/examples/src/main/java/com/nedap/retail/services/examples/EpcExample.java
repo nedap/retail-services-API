@@ -26,6 +26,7 @@ import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Barcode;
 import com.nedap.retail.messages.article.Size;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.ExportStatus;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
@@ -119,6 +120,10 @@ public class EpcExample {
             final ApprovedDifferenceListExportResponse approvedDifferenceListExportResponse = client
                     .approvedDifferenceListExport(approvedDifferenceListId);
             System.out.println(printApprovedDifferenceListExportResponse(approvedDifferenceListExportResponse));
+
+            // Mark exported approved difference list as exported
+            System.out.println(NEW_LINE + "Setting export status of approved difference list...");
+            client.updateApprovedDifferenceListExportStatus(approvedDifferenceListId, ExportStatus.EXPORTED);
 
             // List of approved difference list summaries
             System.out.println(NEW_LINE + "Getting list of approved difference list summaries...");
