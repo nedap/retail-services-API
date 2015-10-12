@@ -21,7 +21,9 @@ import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.article.ArticleFindResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.ExportStatus;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
+import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListExportStatusUpdateRequest;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
@@ -453,6 +455,26 @@ public class Client {
                 approvedDifferenceListId);
 
         return get(target, ApprovedDifferenceListExportResponse.class);
+    }
+
+    /**
+     * Sets the export status of the approved difference list
+     *
+     * @param approvedDifferenceListId Id approved difference list
+     * @param exportStatus Export status for approved difference list
+     */
+    public void updateApprovedDifferenceListExportStatus(final String approvedDifferenceListId,
+            final ExportStatus exportStatus) {
+        if (approvedDifferenceListId == null) {
+            throw new IllegalArgumentException("Approved difference list id is required");
+        }
+
+        final WebTarget target = target("/epc/v2/approved_difference_list.export_status");
+
+        final ApprovedDifferenceListExportStatusUpdateRequest request = new ApprovedDifferenceListExportStatusUpdateRequest();
+        request.exportStatus = exportStatus;
+        request.id = UUID.fromString(approvedDifferenceListId);
+        post(target, request);
     }
 
     /**
