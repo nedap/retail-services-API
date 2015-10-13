@@ -79,6 +79,12 @@ public class AuthorizationClientFilter implements ClientRequestFilter, ClientRes
             return;
         }
 
+        // When request is made to authorization server, don't don't ask for access token! It will result in endless
+        // loop!
+        if (LOGIN_PATH.equals(requestContext.getUri().getPath())) {
+            return;
+        }
+
         logger.info("access token is expired or invalid. get new access token...");
         accessToken = accessTokenResolver.resolve();
 
