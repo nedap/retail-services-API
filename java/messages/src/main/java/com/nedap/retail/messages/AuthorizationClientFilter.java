@@ -52,8 +52,7 @@ public class AuthorizationClientFilter implements ClientRequestFilter, ClientRes
         if ("true".equals(requestContext.getProperty(REQUEST_PROPERTY_FILTER_REUSED))) {
             return;
         }
-        // When request is made to authorization server, don't don't ask for access token! It will result in endless
-        // loop!
+        // When request is made to authorization server, don't ask for access token! It will result in endless loop!
         if (LOGIN_PATH.equals(requestContext.getUri().getPath())) {
             return;
         }
@@ -76,6 +75,11 @@ public class AuthorizationClientFilter implements ClientRequestFilter, ClientRes
         // The server asked for authentication ? (status 401)
         if (responseContext.getStatus() != Response.Status.UNAUTHORIZED.getStatusCode()) {
             // Not 401 status : no authentication issue
+            return;
+        }
+
+        // When request is made to authorization server, don't ask for access token! It will result in endless loop!
+        if (LOGIN_PATH.equals(requestContext.getUri().getPath())) {
             return;
         }
 
