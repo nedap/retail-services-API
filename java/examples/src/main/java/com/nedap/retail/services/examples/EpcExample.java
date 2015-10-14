@@ -12,6 +12,7 @@ import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
 import static com.nedap.retail.services.examples.PrintHelper.TAB;
 import static com.nedap.retail.services.examples.PrintHelper.WHITESPACE;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -114,6 +115,16 @@ public class EpcExample {
             final ApprovedDifferenceListResponse approvedDifferenceList = client
                     .getApprovedDifferenceList(approvedDifferenceListId);
             System.out.println(printApprovedDifferenceList(approvedDifferenceList));
+
+            // Download approved difference list in CSV format
+            System.out.println(NEW_LINE + "Downloading approved difference list in CSV format...");
+            final byte[] csvData = client.getApprovedDifferenceListAsCsv(approvedDifferenceListId);
+            try {
+                final String csvString = new String(csvData, "UTF-8");
+                System.out.println(csvString);
+            } catch (UnsupportedEncodingException e) {
+                System.out.println("Sorry, encoding not supported");
+            }
 
             // Export approved difference list
             System.out.println(NEW_LINE + "Exporting approved difference list...");
