@@ -830,7 +830,6 @@ public class Client {
     }
 
     protected static byte[] getAsCsv(final WebTarget target) {
-        final byte[] byteArray = new byte[] {};
         try {
             return target.request(APPLICATION_CSV).get(byte[].class);
         } catch (final WebApplicationException webApplicationException) {
