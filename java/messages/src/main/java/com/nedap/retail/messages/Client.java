@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
-import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.article.ArticleFindResponse;
+import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ExportStatus;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.request.ApprovedDifferenceListCaptureRequest;
@@ -53,6 +53,8 @@ public class Client {
     private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 
     protected static final String LOCATION = "location";
+    private static final String APPLICATION_CSV = "application/csv";
+    private static final String APPLICATION_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     private final String url;
     private final javax.ws.rs.client.Client httpClient;
 
@@ -312,21 +314,21 @@ public class Client {
     /**
      * Find articles using search query.
      *
-     * @param query        Search query.
-     * @param skip         Skip this number of articles.
-     * @param count        Return this number of articles.
+     * @param query Search query.
+     * @param skip Skip this number of articles.
+     * @param count Return this number of articles.
      * @param orderColumns Columns to which ordering should be applied. For example "color", "name", "barcodes.value".
-     *                     Please refer to the Article API documentation for a complete description.
+     *            Please refer to the Article API documentation for a complete description.
      * @return Article find response.
      */
     public ArticleFindResponse findArticles(final String query, final int skip, final int count,
-                                            final List<String> orderColumns) {
+            final List<String> orderColumns) {
         WebTarget target = target("/article/v2/find");
 
         target = target.queryParam("query", query);
         target = target.queryParam("skip", String.valueOf(skip));
         target = target.queryParam("count", String.valueOf(count));
-        
+
         if (orderColumns != null) {
             for (final String orderColumn : orderColumns) {
                 target = target.queryParam("order[]", orderColumn);
@@ -405,6 +407,32 @@ public class Client {
                 approvedDifferenceListId);
 
         return get(target, ApprovedDifferenceListResponse.class);
+    }
+
+    /**
+     * Returns approved difference list with a given id in CSV format (UTF-8 encoding).
+     *
+     * @param approvedDifferenceListId Id of wanted approved difference list
+     * @return Wanted approved difference list in CSV format
+     */
+    public byte[] getApprovedDifferenceListAsCsv(final String approvedDifferenceListId) {
+        final WebTarget target = target("/epc/v2/approved_difference_list.retrieve").queryParam("id",
+                approvedDifferenceListId);
+
+        return getAsCsv(target);
+    }
+
+    /**
+     * Returns approved difference list with a given id in Excel format.
+     *
+     * @param approvedDifferenceListId Id of wanted approved difference list
+     * @return Wanted approved difference list in Excel format
+     */
+    public byte[] getApprovedDifferenceListAsExcel(final String approvedDifferenceListId) {
+        final WebTarget target = target("/epc/v2/approved_difference_list.retrieve").queryParam("id",
+                approvedDifferenceListId);
+
+        return getAsExcel(target);
     }
 
     /**
@@ -796,6 +824,23 @@ public class Client {
     protected static <T> T get(final WebTarget target, final GenericType<T> responseClass) {
         try {
             return target.request(APPLICATION_JSON).get(responseClass);
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
+        }
+    }
+
+    protected static byte[] getAsCsv(final WebTarget target) {
+        final byte[] byteArray = new byte[] {};
+        try {
+            return target.request(APPLICATION_CSV).get(byte[].class);
+        } catch (final WebApplicationException webApplicationException) {
+            throw new ClientException(webApplicationException);
+        }
+    }
+
+    protected static byte[] getAsExcel(final WebTarget target) {
+        try {
+            return target.request(APPLICATION_EXCEL).get(byte[].class);
         } catch (final WebApplicationException webApplicationException) {
             throw new ClientException(webApplicationException);
         }
