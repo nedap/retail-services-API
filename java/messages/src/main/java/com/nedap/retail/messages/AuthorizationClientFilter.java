@@ -63,7 +63,7 @@ public class AuthorizationClientFilter implements ClientRequestFilter, ClientRes
         }
 
         // Add access token as header.
-        requestContext.getHeaders().putSingle(HttpHeaders.AUTHORIZATION, accessToken);
+        requestContext.getHeaders().putSingle(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
     }
 
     @Override
