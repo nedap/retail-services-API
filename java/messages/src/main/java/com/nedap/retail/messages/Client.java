@@ -27,6 +27,7 @@ import com.nedap.retail.messages.epc.v2.approved_difference_list.request.Approve
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
+import com.nedap.retail.messages.epc.v2.expected_stock.ExpectedStock;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfRequest;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
@@ -378,6 +379,17 @@ public class Client {
         final Map<String, String> response = post(target, new GenericType<Map<String, String>>() {
         }, stock);
         return response.get("id");
+    }
+
+    /**
+     * Returns expected stock for a location.
+     *
+     * @param locationId Location identifier
+     * @return Expected stock
+     */
+    public ExpectedStock getExpectedStock(final String locationId) {
+        final WebTarget target = target("/epc/v1/expected_stock").queryParam(LOCATION, locationId);
+        return get(target, ExpectedStock.class);
     }
 
     /**

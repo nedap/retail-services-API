@@ -32,6 +32,7 @@ import com.nedap.retail.messages.epc.v2.approved_difference_list.request.Approve
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
+import com.nedap.retail.messages.epc.v2.expected_stock.ExpectedStock;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfRequest;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
@@ -152,6 +153,11 @@ public class EpcExample {
             System.out.println(NEW_LINE + "Deleting approved difference list...");
             client.deleteApprovedDifferenceList(UUID.fromString(approvedDifferenceListId));
             System.out.println("Approved difference list with id: " + approvedDifferenceListId + " has been deleted");
+
+            // Check if we have expected stock
+            System.out.println(NEW_LINE + "Checking for expected stock...");
+            final ExpectedStock expectedStock = client.getExpectedStock(locationId);
+            System.out.println("Found expected stock with " + expectedStock.gtinQuantity + " GTINs");
 
             System.out.println(NEW_LINE + "--- EPC API example finished ---");
 
