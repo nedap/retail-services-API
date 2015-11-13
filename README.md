@@ -7,3 +7,5 @@ Provided for you as help to integrate the Nedap Retail platform into your own in
 - Cube
 - Renos
 - Nedap Retail Device Management
+
+The Java version is also available on Maven Central. This is the preferred way of including this library into your own source code: see http://mvnrepository.com/artifact/com.nedap.retail.services
