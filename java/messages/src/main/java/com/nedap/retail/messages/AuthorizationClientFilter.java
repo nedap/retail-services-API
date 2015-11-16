@@ -118,7 +118,7 @@ public class AuthorizationClientFilter implements ClientRequestFilter, ClientRes
             newHeaders.put(entry.getKey(), entry.getValue());
         }
 
-        newHeaders.add(HttpHeaders.AUTHORIZATION, newAuthorizationHeader);
+        newHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + newAuthorizationHeader);
         builder.headers(newHeaders);
 
         builder.property(REQUEST_PROPERTY_FILTER_REUSED, "true");
