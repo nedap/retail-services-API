@@ -27,11 +27,20 @@ public class Location implements Serializable {
     public Address address;
     public List<Location> children;
 
+    @JsonProperty("foreign_locations")
+    public List<Location> foreignLocations;
+
     public Location() {
     }
 
     public Location(final String id, final String parentId, final LocationType type, final LocationSubType subtype,
             final String name, final String storeCode, final Address address, final List<Location> children) {
+        this(id, parentId, type, subtype, name, storeCode, address, children, null);
+    }
+
+    public Location(final String id, final String parentId, final LocationType type, final LocationSubType subtype,
+            final String name, final String storeCode, final Address address, final List<Location> children,
+            final List<Location> foreignLocations) {
         this.id = id;
         this.parentId = parentId;
         this.type = type;
@@ -40,12 +49,14 @@ public class Location implements Serializable {
         this.storeCode = storeCode;
         this.address = address;
         this.children = children;
+        this.foreignLocations = foreignLocations;
     }
 
     @Override
     public String toString() {
         return StringUtils.join(new Object[] {"location ", id, parentId, type, subtype, name, address, "children(size)",
-                children == null ? null : children.size()}, ";");
+                children == null ? null : children.size(), "foreign locations(size)",
+                foreignLocations == null ? null : foreignLocations.size()}, ";");
     }
 
     @Override
@@ -60,6 +71,7 @@ public class Location implements Serializable {
         result = prime * result + (storeCode == null ? 0 : storeCode.hashCode());
         result = prime * result + (subtype == null ? 0 : subtype.hashCode());
         result = prime * result + (type == null ? 0 : type.hashCode());
+        result = prime * result + (foreignLocations == null ? 0 : foreignLocations.hashCode());
         return result;
     }
 
@@ -121,6 +133,13 @@ public class Location implements Serializable {
             return false;
         }
         if (type != other.type) {
+            return false;
+        }
+        if (foreignLocations == null) {
+            if (other.foreignLocations != null) {
+                return false;
+            }
+        } else if (!foreignLocations.equals(other.foreignLocations)) {
             return false;
         }
         return true;
