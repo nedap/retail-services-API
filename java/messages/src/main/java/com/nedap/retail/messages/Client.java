@@ -248,7 +248,7 @@ public class Client {
             }
         }
 
-        return get(target, new GenericType<List<Article>>() {
+        return post(target, new GenericType<List<Article>>() {
         });
     }
 
