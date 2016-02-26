@@ -248,6 +248,11 @@ public class Client {
             }
         }
 
+        /*
+         * Note that we use a post request instead of get. When retrieving article information by gtins using the get
+         * method the number of characters in the url might exceed the server limit. The post method puts the gtins in
+         * the body of the http request, instead of the url.
+         */
         return post(target, new GenericType<List<Article>>() {
         });
     }
