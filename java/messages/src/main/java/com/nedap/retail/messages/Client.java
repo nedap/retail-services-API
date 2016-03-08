@@ -13,13 +13,13 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.nedap.retail.messages.article.ArticleRetrieveRequest;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.ArticleFindResponse;
+import com.nedap.retail.messages.article.ArticleRetrieveRequest;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ExportStatus;
