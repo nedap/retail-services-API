@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.ArticleFindResponse;
+import com.nedap.retail.messages.article.ArticleRetrieveRequest;
 import com.nedap.retail.messages.article.Articles;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ExportStatus;
@@ -239,22 +240,11 @@ public class Client {
     public List<Article> articleDetailsByGtins(final List<String> gtins, final List<String> fields) {
         WebTarget target = target("/article/v2/retrieve");
 
-        for (final String gtin : gtins) {
-            target = target.queryParam("gtins[]", gtin);
-        }
-        if (fields != null) {
-            for (final String field : fields) {
-                target = target.queryParam("fields[]", field);
-            }
-        }
+        final ArticleRetrieveRequest request = new ArticleRetrieveRequest(gtins, null, fields);
 
-        /*
-         * Note that we use a post request instead of get. When retrieving article information by gtins using the get
-         * method the number of characters in the url might exceed the server limit. The post method puts the gtins in
-         * the body of the http request, instead of the url.
-         */
+        // use POST instead of GET because of URL length
         return post(target, new GenericType<List<Article>>() {
-        });
+        }, request);
     }
 
     /**
@@ -271,17 +261,11 @@ public class Client {
     public List<Article> articleDetailsByBarcodes(final List<String> barcodes, final List<String> fields) {
         WebTarget target = target("/article/v2/retrieve");
 
-        for (final String barcode : barcodes) {
-            target = target.queryParam("barcodes[]", barcode);
-        }
-        if (fields != null) {
-            for (final String field : fields) {
-                target = target.queryParam("fields[]", field);
-            }
-        }
+        final ArticleRetrieveRequest request = new ArticleRetrieveRequest(null, barcodes, fields);
 
-        return get(target, new GenericType<List<Article>>() {
-        });
+        // use POST instead of GET because of URL length
+        return post(target, new GenericType<List<Article>>() {
+        }, request);
     }
 
     /**
