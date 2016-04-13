@@ -13,4 +13,13 @@ public enum StockType {
     public int getValue() {
         return type;
     }
+
+    public static StockType getStockTypeFromValue(int value) {
+        for (StockType type : StockType.values()) {
+            if (type.getValue() == value) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Value " + value + " cannot be converted to a StockType.");
+    }
 }
