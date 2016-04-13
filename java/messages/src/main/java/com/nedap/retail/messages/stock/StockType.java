@@ -14,7 +14,13 @@ public enum StockType {
         return type;
     }
 
-    public static StockType getStockTypeFromValue(int value) {
+    /**
+     * Provides similar functionality to valueOf(..).
+     *
+     * @param value int value of requested stockType.
+     * @return StockType enum value for provided String.
+     */
+    public static StockType permissiveValueOf(int value) {
         for (StockType type : StockType.values()) {
             if (type.getValue() == value) {
                 return type;

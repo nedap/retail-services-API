@@ -15,7 +15,7 @@ public class StockTypeTest {
     @Test
     public void getStockTypeFromValue_shouldReturnRFID() throws Exception {
         // act
-        final StockType stockType = StockType.getStockTypeFromValue(2);
+        final StockType stockType = StockType.permissiveValueOf(2);
 
         // assert
         assertThat(stockType, is(StockType.RFID_COUNT));
@@ -27,7 +27,7 @@ public class StockTypeTest {
         thrown.expectMessage("Value 0 cannot be converted to a StockType.");
 
         // act
-        StockType.getStockTypeFromValue(0);
+        StockType.permissiveValueOf(0);
 
         // assert (@Rule)
     }
