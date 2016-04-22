@@ -32,6 +32,12 @@ namespace Nedap.Retail.Api.Article.V2
         public string Code { get; set; }
 
         /// <summary>
+        /// Optional. Article category, e.g. Dresses, Jeans
+        /// </summary>
+        [JsonProperty("category")]
+        public string Category { get; set; }
+
+        /// <summary>
         /// Optional. The brand of the product, e.g. Nike or Adidas.
         /// </summary>
         [JsonProperty("brand")]
