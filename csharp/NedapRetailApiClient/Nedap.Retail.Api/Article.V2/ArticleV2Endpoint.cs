@@ -60,7 +60,7 @@ namespace Nedap.Retail.Api.Article.V2
             if (updatedAfter.HasValue) parameters.Add("updated_after", updatedAfter.Value.ToString());
             if (skip.HasValue) parameters.Add("skip", skip.Value.ToString());
             if (count.HasValue) parameters.Add("count", count.Value.ToString());
-            fields.ForEach(f => parameters.Add("fields[]", f));
+            if (fields != null) fields.ForEach(f => parameters.Add("fields[]", f));
             return apiCaller.Get<List<Article>>("/article/v2/retrieve", parameters);
         }
 
@@ -68,7 +68,7 @@ namespace Nedap.Retail.Api.Article.V2
         /// Articles are created or replaced using the GTIN as primary key.
         /// Entire entry is replaced if existed: all existing fields are cleared for these entries.
         /// </summary>
-        /// <param name="articles">List of input articles</param>
+        /// <param name="articles">List of articles</param>
         /// <returns>Status code</returns>
         public string CreateOrReplace(List<Article> articles)
         {
@@ -77,6 +77,21 @@ namespace Nedap.Retail.Api.Article.V2
             CreateOrReplaceRequest request = new CreateOrReplaceRequest();
             request.Articles = articles;
             return apiCaller.Post<string>("/article/v2/create_or_replace", request);
+        }
+
+        /// <summary>
+        /// Articles are created or updated using the GTIN as primary key.
+        /// Information is merged with existing information in the database.
+        /// </summary>
+        /// <param name="articles">List of articles</param>
+        /// <returns>Status code</returns>
+        public string CreateOrUpdate(List<Article> articles)
+        {
+            articles.Required(() => articles);
+
+            CreateOrReplaceRequest request = new CreateOrReplaceRequest();
+            request.Articles = articles;
+            return apiCaller.Post<string>("/article/v2/create_or_update", request);
         }
 
         /// <summary>
