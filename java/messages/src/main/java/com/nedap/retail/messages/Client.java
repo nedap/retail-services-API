@@ -371,17 +371,6 @@ public class Client {
     }
 
     /**
-     * Returns expected stock for a location.
-     *
-     * @param locationId Location identifier
-     * @return Expected stock
-     */
-    public ExpectedStock getExpectedStock(final String locationId) {
-        final WebTarget target = target("/epc/v1/expected_stock").queryParam(LOCATION, locationId);
-        return get(target, ExpectedStock.class);
-    }
-
-    /**
      * Captures approved difference list.
      * 
      * @param approvedDifferenceListCaptureRequest request details
