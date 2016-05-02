@@ -154,11 +154,6 @@ public class EpcExample {
             client.deleteApprovedDifferenceList(UUID.fromString(approvedDifferenceListId));
             System.out.println("Approved difference list with id: " + approvedDifferenceListId + " has been deleted");
 
-            // Check if we have expected stock
-            System.out.println(NEW_LINE + "Checking for expected stock...");
-            final ExpectedStock expectedStock = client.getExpectedStock(locationId);
-            System.out.println("Found expected stock with " + expectedStock.gtinQuantity + " GTINs");
-
             System.out.println(NEW_LINE + "--- EPC API example finished ---");
 
         } catch (final ClientException ex) {
