@@ -1,5 +1,7 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * Enumerates EPCIS Dispositions Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
  */
@@ -164,6 +166,8 @@ public enum Disposition {
      * @param value String value of requested disposition
      * @return Disposition enum value for provided String
      */
+    @JsonCreator
+    @org.codehaus.jackson.annotate.JsonCreator
     public static Disposition permissiveValueOf(final String value) {
         if (value == null) {
             throw new IllegalArgumentException("disposition missing");
