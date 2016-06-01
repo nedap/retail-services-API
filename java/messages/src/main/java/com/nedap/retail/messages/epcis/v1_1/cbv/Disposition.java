@@ -1,6 +1,7 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Enumerates EPCIS Dispositions Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
@@ -153,6 +154,8 @@ public enum Disposition {
         return number;
     }
 
+    @JsonValue
+    @org.codehaus.jackson.annotate.JsonValue
     public final String disposition() {
         return disposition;
     }
