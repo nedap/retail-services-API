@@ -1,6 +1,5 @@
 package com.nedap.retail.messages.epcis.v1_1.elements;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -18,7 +17,7 @@ public class QuantityElement {
      * A number that specifies how many or how much of the specified EPCClass is denoted by this QuantityElement.
      * Negative values are not allowed
      */
-    public BigDecimal quantity;
+    public float quantity;
 
     /**
      * Specifies a unit of measure by which the specified quantity is to be interpreted as a physical measure,
@@ -29,12 +28,12 @@ public class QuantityElement {
     public QuantityElement() {
     }
 
-    public QuantityElement(final String epcClass, final BigDecimal quantity) {
+    public QuantityElement(final String epcClass, final float quantity) {
         this.epcClass = epcClass;
         this.quantity = quantity;
     }
 
-    public QuantityElement(final String epcClass, final BigDecimal quantity, final String uom) {
+    public QuantityElement(final String epcClass, final float quantity, final String uom) {
         this.epcClass = epcClass;
         this.quantity = quantity;
         this.uom = uom;
@@ -46,23 +45,31 @@ public class QuantityElement {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof QuantityElement)) return false;
-
-        QuantityElement that = (QuantityElement) o;
-
-        if (!epcClass.equals(that.epcClass)) return false;
-        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
-        return uom != null ? uom.equals(that.uom) : that.uom == null;
-
+    public int hashCode() {
+        int result = epcClass != null ? epcClass.hashCode() : 0;
+        result = 31 * result + (quantity != +0.0f ? Float.floatToIntBits(quantity) : 0);
+        result = 31 * result + (uom != null ? uom.hashCode() : 0);
+        return result;
     }
 
     @Override
-    public int hashCode() {
-        int result = epcClass.hashCode();
-        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
-        result = 31 * result + (uom != null ? uom.hashCode() : 0);
-        return result;
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final QuantityElement other = (QuantityElement) obj;
+        if (!Objects.equals(this.epcClass, other.epcClass)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.quantity) != Float.floatToIntBits(other.quantity)) {
+            return false;
+        }
+        if (!Objects.equals(this.uom, other.uom)) {
+            return false;
+        }
+        return true;
     }
 }
