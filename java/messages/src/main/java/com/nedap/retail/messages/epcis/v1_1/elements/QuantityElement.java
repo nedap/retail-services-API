@@ -46,31 +46,23 @@ public class QuantityElement {
     }
 
     @Override
-    public int hashCode() {
-        int result = epcClass != null ? epcClass.hashCode() : 0;
-        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
-        result = 31 * result + (uom != null ? uom.hashCode() : 0);
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof QuantityElement)) return false;
+
+        QuantityElement that = (QuantityElement) o;
+
+        if (!epcClass.equals(that.epcClass)) return false;
+        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
+        return uom != null ? uom.equals(that.uom) : that.uom == null;
+
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final QuantityElement other = (QuantityElement) obj;
-        if (!Objects.equals(this.epcClass, other.epcClass)) {
-            return false;
-        }
-        if (!Objects.equals(this.quantity, other.quantity)) {
-            return false;
-        }
-        if (!Objects.equals(this.uom, other.uom)) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        int result = epcClass.hashCode();
+        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
+        result = 31 * result + (uom != null ? uom.hashCode() : 0);
+        return result;
     }
 }
