@@ -1,9 +1,6 @@
 package com.nedap.retail.messages.epcis.v1_1;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -39,6 +36,7 @@ import com.nedap.retail.messages.epcis.v1_1.elements.SourceElement;
 abstract public class EpcisEvent {
 
     public String id;
+    public UUID storedId;
 
     @JsonProperty("event_time")
     public DateTime eventTime;
@@ -78,7 +76,7 @@ abstract public class EpcisEvent {
 
     @Override
     public String toString() {
-        return "[id=" + id + ",eventTime=" + eventTime + "," + "type=" + (type != null ? type : "null") + ",action="
+        return "[id=" + id + ",storedId=" + storedId.toString() + ",eventTime=" + eventTime + "," + "type=" + (type != null ? type : "null") + ",action="
                 + action + ",bizLocation=" + bizLocation + ",disposition=" + disposition + ",bizStep=" + bizStep + "]";
     }
 
@@ -93,6 +91,9 @@ abstract public class EpcisEvent {
         }
         final EpcisEvent other = (EpcisEvent) obj;
         if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.storedId, other.storedId)) {
             return false;
         }
         if (!Objects.equals(this.eventTime.toDate(), other.eventTime.toDate())) {
@@ -134,6 +135,7 @@ abstract public class EpcisEvent {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (storedId != null ? storedId.hashCode() : 0);
         result = 31 * result + (eventTime != null ? eventTime.hashCode() : 0);
         result = 31 * result + (eventTimeZoneOffset != null ? eventTimeZoneOffset.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
