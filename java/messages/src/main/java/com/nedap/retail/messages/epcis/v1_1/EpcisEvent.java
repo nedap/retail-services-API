@@ -151,7 +151,6 @@ abstract public class EpcisEvent {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        
         result = 31 * result + (eventId != null ? eventId.hashCode() : 0);
         result = 31 * result + (eventTime != null ? eventTime.hashCode() : 0);
         result = 31 * result + (eventTimeZoneOffset != null ? eventTimeZoneOffset.hashCode() : 0);
