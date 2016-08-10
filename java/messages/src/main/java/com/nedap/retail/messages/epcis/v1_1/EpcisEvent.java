@@ -109,10 +109,6 @@ abstract public class EpcisEvent {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        // @TODO Discuss: Include in equals or not (same as record time)
-//        if (!Objects.equals(this.storedId, other.storedId)) {
-//            return false;
-//        }
         if (!Objects.equals(this.eventId, other.eventId)) {
             return false;
         }
@@ -155,8 +151,7 @@ abstract public class EpcisEvent {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        // @TODO Discuss: Include in equals or not (same as record time)
-//        result = 31 * result + (storedId != null ? storedId.hashCode() : 0);
+        
         result = 31 * result + (eventId != null ? eventId.hashCode() : 0);
         result = 31 * result + (eventTime != null ? eventTime.hashCode() : 0);
         result = 31 * result + (eventTimeZoneOffset != null ? eventTimeZoneOffset.hashCode() : 0);
