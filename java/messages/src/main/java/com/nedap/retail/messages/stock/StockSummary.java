@@ -51,6 +51,8 @@ public class StockSummary {
     @JsonProperty("client_ids")
     public Set<String> clientIds;
 
+    public boolean isComplete = true;
+
     public StockSummary() {
         this.clientIds = new HashSet<>();
     }
@@ -93,7 +95,7 @@ public class StockSummary {
                 + eventTime.toString("dd/MM/yyyy HH:mm:ss") + ", externRef=" + externRef + ", status=" + status
                 + ", type=" + type + ", quantity=" + quantity + ", excludedQuantity=" + excludedQuantity
                 + ", gtinQuantity=" + gtinQuantity + ", excludedGtinQuantity=" + excludedGtinQuantity + ", "
-                + "clientIds=" + StringUtils.join(clientIds, ',')
+                + "clientIds=" + StringUtils.join(clientIds, ',') + ", isComplete=" + isComplete
                 + '}';
     }
 }
