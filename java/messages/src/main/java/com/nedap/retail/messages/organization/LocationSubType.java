@@ -21,5 +21,5 @@ public enum LocationSubType {
     GOODS_RECEIVING_AREA,
     STOCK_ROOM,
     SALES_FLOOR,
-    REMOTE_STOCK_ROOM
+    OFF_SITE_STORAGE
 }
