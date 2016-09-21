@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nedap.retail.services</groupId>
     <artifactId>api</artifactId>
-    <version>1.44-SNAPSHOT</version>
+    <version>1.44</version>
     <packaging>pom</packaging>
     <name>Netap Retail API</name>
     <description>Reference implementations and test tools for using the Nedap Retail APIs</description>
@@ -43,7 +43,7 @@
     <scm>
         <connection>scm:git:git@github.com:nedap/retail-services-API.git</connection>
         <url>https://github.com/nedap/retail-services-API</url>
-        <tag>HEAD</tag>
+        <tag>api-1.44</tag>
     </scm>
 
     <modules>
