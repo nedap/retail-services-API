@@ -46,7 +46,6 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemExample.cs" />
     <Compile Include="WorkflowExample.cs" />
   </ItemGroup>
   <ItemGroup>
