@@ -78,10 +78,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Erp.V1\GtinQuantity.cs" />
     <Compile Include="OAuth\ApiCaller.cs" />
-    <Compile Include="System.V1\StatusDetail.cs" />
-    <Compile Include="System.V1\System.cs" />
-    <Compile Include="System.V1\SystemStatus.cs" />
-    <Compile Include="System.V1\SystemV1Endpoint.cs" />
     <Compile Include="Workflow.V2\WorkflowEvent.cs" />
     <Compile Include="Workflow.V2\WorkflowV2Endpoint.cs" />
   </ItemGroup>

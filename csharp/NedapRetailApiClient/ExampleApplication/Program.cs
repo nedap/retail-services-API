@@ -26,12 +26,11 @@ namespace Nedap.Retail.Api.Example
                 Console.WriteLine("Nedap Retail API examples");
                 Console.WriteLine("-------------------------");
                 Console.WriteLine("Which example do you want to run?");
-                Console.WriteLine("1. System API");
-                Console.WriteLine("2. ERP API");
-                Console.WriteLine("3. EPC API");
-                Console.WriteLine("4. Article API");
-                Console.WriteLine("5. Epcis API");
-                Console.WriteLine("6. Workflow API");
+                Console.WriteLine("1. ERP API");
+                Console.WriteLine("2. EPC API");
+                Console.WriteLine("3. Article API");
+                Console.WriteLine("4. Epcis API");
+                Console.WriteLine("5. Workflow API");
                 Console.Write("Your choice: ");
                 ConsoleKeyInfo key = Console.ReadKey();
                 Console.WriteLine();
@@ -39,21 +38,18 @@ namespace Nedap.Retail.Api.Example
                 switch (key.Key)
                 {
                     case ConsoleKey.D1:
-                        SystemExample.RunExample(client);
-                        break;
-                    case ConsoleKey.D2:
                         ErpExample.RunExample(client);
                         break;
-                    case ConsoleKey.D3:
+                    case ConsoleKey.D2:
                         EpcExample.RunExample(client);
                         break;
-                    case ConsoleKey.D4:
+                    case ConsoleKey.D3:
                         ArticleExample.RunExample(client);
                         break;
-                    case ConsoleKey.D5:
+                    case ConsoleKey.D4:
                         EpcisExample.RunExample(client);
                         break;
-                    case ConsoleKey.D6:
+                    case ConsoleKey.D5:
                         WorkflowExample.RunExample(client);
                         break;
                 }
