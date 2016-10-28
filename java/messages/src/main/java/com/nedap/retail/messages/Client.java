@@ -49,7 +49,7 @@ public class Client {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 
-    private static final String LOCATION = "location";
+    protected static final String LOCATION = "location";
     private static final String APPLICATION_CSV = "application/csv";
     private static final String APPLICATION_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     private final String url;
