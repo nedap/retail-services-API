@@ -3,7 +3,6 @@ using Nedap.Retail.Api.Epc.V2;
 using Nedap.Retail.Api.Epcis.V1_1;
 using Nedap.Retail.Api.Erp.V1;
 using Nedap.Retail.Api.OAuth;
-using Nedap.Retail.Api.System.V1;
 using Nedap.Retail.Api.Workflow.V2;
 using System;
 
@@ -30,7 +29,6 @@ namespace Nedap.Retail.Api
             EpcV2 = new EpcV2Endpoint(apiCaller);
             EpcisV1_1 = new EpcisV1_1Endpoint(apiCaller);
             ErpV1 = new ErpV1Endpoint(apiCaller);
-            SystemV1 = new SystemV1Endpoint(apiCaller);
             WorkflowV2 = new WorkflowV2Endpoint(apiCaller);
         }
 
@@ -53,11 +51,6 @@ namespace Nedap.Retail.Api
         /// Erp V1 API endpoint
         /// </summary>
         public ErpV1Endpoint ErpV1 { get; private set; }
-
-        /// <summary>
-        /// System V1 API endpoint
-        /// </summary>
-        public SystemV1Endpoint SystemV1 { get; private set; }
 
         /// <summary>
         /// Workflow V2 API endpoint

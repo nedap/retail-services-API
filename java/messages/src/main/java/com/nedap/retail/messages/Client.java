@@ -1,22 +1,5 @@
 package com.nedap.retail.messages;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.article.ArticleFindResponse;
 import com.nedap.retail.messages.article.ArticleRetrieveRequest;
@@ -28,7 +11,6 @@ import com.nedap.retail.messages.epc.v2.approved_difference_list.request.Approve
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
-import com.nedap.retail.messages.epc.v2.expected_stock.ExpectedStock;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfRequest;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
@@ -41,11 +23,24 @@ import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.stock.StockSummary;
 import com.nedap.retail.messages.stock.StockSummaryListRequest;
 import com.nedap.retail.messages.subscription.Subscription;
-import com.nedap.retail.messages.system.SystemListPayload;
-import com.nedap.retail.messages.system.SystemStatusPayload;
 import com.nedap.retail.messages.users.User;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
 import com.nedap.retail.messages.workflow.WorkflowQueryRequest;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * Nedap Retail Services Client.
@@ -54,7 +49,7 @@ public class Client {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 
-    protected static final String LOCATION = "location";
+    private static final String LOCATION = "location";
     private static final String APPLICATION_CSV = "application/csv";
     private static final String APPLICATION_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     private final String url;
@@ -75,62 +70,6 @@ public class Client {
 
     public void destroy() {
         httpClient.close();
-    }
-
-    /**
-     * System API: list
-     *
-     * @return List of systems
-     */
-    public List<SystemListPayload> getSystemList() {
-        final WebTarget target = target("/system/v1/list");
-        return get(target, new GenericType<List<SystemListPayload>>() {
-        });
-    }
-
-    /**
-     * System API: status
-     *
-     * @return list of systems with their statuses
-     */
-    public List<SystemStatusPayload> getSystemStatus() {
-        final WebTarget target = target("/system/v1/status");
-        return get(target, new GenericType<List<SystemStatusPayload>>() {
-        });
-    }
-
-    /**
-     * To update a system to a new firmware version, you need to know which updates are available for the system. This
-     * could depend on the current firmware version, or on the installed hardware.
-     * 
-     * @param systemId Identifies the system.
-     * @return List of fimware versions available for upgrade.
-     */
-    public List<String> getFirmwareList(final String systemId) {
-        final WebTarget target = target("/system/v1/firmware_versions").queryParam("system_id", systemId);
-        return get(target, new GenericType<List<String>>() {
-        });
-    }
-
-    /**
-     * This request triggers the firmware update mechanism on a system. This starts a download and installation of the
-     * firmware. During download and installation, the system remains fully functional. After installation, the system
-     * is restarted. Depending on the speed of the internet connection, the number of changes in the firmware and the
-     * number of devices within the system, the update can take up to one hour. Installing a firmware version that is
-     * older than the currently installed version is not possible. Systems that do not run an officially released
-     * firmware version can not be upgraded this way. Official firmware versions have a version number in the form of
-     * year.weeknumber (for example, 13.21).
-     * 
-     * You can check if the firmware update succeeded by requesting the status of the system regularly, for example
-     * every 5 minutes after sending the request.
-     * 
-     * @param systemId Identifies the system to be upgraded.
-     * @param firmwareVersion Requested firmware version to upgrade to.
-     */
-    public void triggerFirmwareUpgrade(final String systemId, final String firmwareVersion) {
-        final WebTarget target = target("/system/v1/update").queryParam("system_id", systemId)
-                .queryParam("firmware_version", firmwareVersion);
-        post(target);
     }
 
     /**
