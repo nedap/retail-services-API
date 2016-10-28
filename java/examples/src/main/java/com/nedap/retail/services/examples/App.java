@@ -1,20 +1,13 @@
 package com.nedap.retail.services.examples;
 
-import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
+import com.nedap.retail.messages.Client;
+import com.nedap.retail.messages.ClientException;
+import org.apache.commons.cli.*;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
-import com.nedap.retail.messages.Client;
-import com.nedap.retail.messages.ClientException;
+import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
 
 /**
  * This tool can be used to test the !D Cloud APIs.
@@ -103,9 +96,6 @@ public class App {
                             ErpExample.runExample(apiClient);
                             break;
                         case "5":
-                            SystemExample.runExample(apiClient);
-                            break;
-                        case "6":
                             WorkflowExample.runExample(apiClient);
                             break;
                         case "0":
@@ -135,8 +125,7 @@ public class App {
         sb.append(NEW_LINE).append("2 : EPC API");
         sb.append(NEW_LINE).append("3 : EPCIS API");
         sb.append(NEW_LINE).append("4 : ERP API");
-        sb.append(NEW_LINE).append("5 : System API");
-        sb.append(NEW_LINE).append("6 : Workflow API");
+        sb.append(NEW_LINE).append("5 : Workflow API");
         sb.append(NEW_LINE).append("0 : Quit");
         sb.append(NEW_LINE);
 
