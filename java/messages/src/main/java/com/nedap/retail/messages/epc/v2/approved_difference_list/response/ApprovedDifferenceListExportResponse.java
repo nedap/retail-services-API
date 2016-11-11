@@ -3,6 +3,7 @@ package com.nedap.retail.messages.epc.v2.approved_difference_list.response;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nedap.retail.messages.article.Article;
 import org.apache.commons.collections4.CollectionUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -18,6 +19,8 @@ public class ApprovedDifferenceListExportResponse extends ApprovedDifferenceList
 
     @JsonProperty("approved_quantity")
     public List<Integer> approvedQuantity;
+
+    public List<Article> articles;
 
     public ApprovedDifferenceListExportResponse() {
     }
