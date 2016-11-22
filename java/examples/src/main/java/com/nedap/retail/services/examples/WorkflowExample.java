@@ -1,17 +1,5 @@
 package com.nedap.retail.services.examples;
 
-import static com.nedap.retail.services.examples.EpcisHelper.createEvents;
-import static com.nedap.retail.services.examples.EpcisHelper.printCaptureEpcisEvents;
-import static com.nedap.retail.services.examples.PrintHelper.DOT;
-import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
-import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
-import static com.nedap.retail.services.examples.PrintHelper.TAB;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.joda.time.DateTime;
-
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
@@ -19,6 +7,14 @@ import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
 import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
 import com.nedap.retail.messages.workflow.WorkflowEvent;
 import com.nedap.retail.messages.workflow.WorkflowQueryRequest;
+import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.nedap.retail.services.examples.EpcisHelper.createEvents;
+import static com.nedap.retail.services.examples.EpcisHelper.printCaptureEpcisEvents;
+import static com.nedap.retail.services.examples.PrintHelper.*;
 
 public class WorkflowExample {
 
@@ -30,7 +26,7 @@ public class WorkflowExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** Workflow API example ***");
 
-        final String locationId = client.getSites().get(0).id;
+        final String locationId = "http://nedapretail.com/loc/testing";
 
         try {
             // Make some EPCIS events first

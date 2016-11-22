@@ -1,26 +1,18 @@
 package com.nedap.retail.services.examples;
 
-import static com.nedap.retail.services.examples.PrintHelper.COLON;
-import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
-import static com.nedap.retail.services.examples.PrintHelper.GTIN_1;
-import static com.nedap.retail.services.examples.PrintHelper.GTIN_2;
-import static com.nedap.retail.services.examples.PrintHelper.GTIN_3;
-import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
-import static com.nedap.retail.services.examples.PrintHelper.TAB;
-import static com.nedap.retail.services.examples.PrintHelper.WHITESPACE;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.joda.time.DateTime;
-
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.stock.GtinQuantity;
 import com.nedap.retail.messages.stock.Stock;
 import com.nedap.retail.messages.stock.StockSummary;
 import com.nedap.retail.messages.stock.StockSummaryListRequest;
+import org.apache.commons.collections4.CollectionUtils;
+import org.joda.time.DateTime;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static com.nedap.retail.services.examples.PrintHelper.*;
 
 public class ErpExample {
 
@@ -30,7 +22,7 @@ public class ErpExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** ERP API example ***");
 
-        final String locationId = client.getSites().get(0).id;
+        final String locationId = "http://nedapretail.com/loc/testing";
 
         try {
             // Capture ERP stock
