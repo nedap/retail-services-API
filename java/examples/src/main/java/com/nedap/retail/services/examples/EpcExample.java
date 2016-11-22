@@ -1,26 +1,5 @@
 package com.nedap.retail.services.examples;
 
-import static com.nedap.retail.services.examples.PrintHelper.BLACK;
-import static com.nedap.retail.services.examples.PrintHelper.COLON;
-import static com.nedap.retail.services.examples.PrintHelper.COMMA;
-import static com.nedap.retail.services.examples.PrintHelper.DOUBLE_TAB;
-import static com.nedap.retail.services.examples.PrintHelper.EAN13;
-import static com.nedap.retail.services.examples.PrintHelper.GTIN_1;
-import static com.nedap.retail.services.examples.PrintHelper.GTIN_2;
-import static com.nedap.retail.services.examples.PrintHelper.GTIN_3;
-import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
-import static com.nedap.retail.services.examples.PrintHelper.TAB;
-import static com.nedap.retail.services.examples.PrintHelper.WHITESPACE;
-
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.joda.time.DateTime;
-
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.article.Article;
@@ -32,7 +11,6 @@ import com.nedap.retail.messages.epc.v2.approved_difference_list.request.Approve
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListExportResponse;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.response.ApprovedDifferenceListResponse;
 import com.nedap.retail.messages.epc.v2.difference_list.DifferenceListResponse;
-import com.nedap.retail.messages.epc.v2.expected_stock.ExpectedStock;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfRequest;
 import com.nedap.retail.messages.epc.v2.stock.NotOnShelfResponse;
 import com.nedap.retail.messages.epc.v2.stock.StockResponse;
@@ -40,6 +18,16 @@ import com.nedap.retail.messages.organization.Location;
 import com.nedap.retail.messages.organization.LocationSubType;
 import com.nedap.retail.messages.stock.GtinQuantity;
 import com.nedap.retail.messages.stock.Stock;
+import org.apache.commons.collections4.CollectionUtils;
+import org.joda.time.DateTime;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static com.nedap.retail.services.examples.PrintHelper.*;
 
 public class EpcExample {
 
@@ -52,9 +40,7 @@ public class EpcExample {
     public static void runExample(final Client client) {
         System.out.println(NEW_LINE + "*** EPC API example ***");
 
-        final Location location = client.getSites().get(0);
-        final String locationId = location.id;
-        System.out.println("Using location " + location.name);
+        final String locationId = "http://nedapretail.com/loc/testing";
 
         try {
             // Create some articles
