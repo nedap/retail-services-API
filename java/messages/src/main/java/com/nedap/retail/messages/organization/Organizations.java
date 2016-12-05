@@ -4,12 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 /**
  * Response from endpoint: GET https://api.nedapretail.com/organization/v1/retrieve
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Organizations implements Serializable {
 
     private static final long serialVersionUID = 2904138281032930023L;

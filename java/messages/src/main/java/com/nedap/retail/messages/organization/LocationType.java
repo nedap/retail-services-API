@@ -12,7 +12,6 @@ public enum LocationType {
     LOCATION_EXTERNAL;
 
     @JsonCreator
-    @org.codehaus.jackson.annotate.JsonCreator
     public static LocationType create(final String value) {
         if (value == null) {
             throw new IllegalArgumentException();

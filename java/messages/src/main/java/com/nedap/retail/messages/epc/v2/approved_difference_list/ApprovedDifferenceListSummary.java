@@ -2,13 +2,11 @@ package com.nedap.retail.messages.epc.v2.approved_difference_list;
 
 import java.util.UUID;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApprovedDifferenceListSummary {
 
     public static final String ORGANIZATION_ID = "organization_id";

@@ -2,11 +2,9 @@ package com.nedap.retail.messages.organization;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class QrCode implements Serializable {
 
     private static final long serialVersionUID = -8306009109121831979L;

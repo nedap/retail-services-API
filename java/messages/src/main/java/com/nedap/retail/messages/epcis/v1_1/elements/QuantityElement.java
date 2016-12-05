@@ -3,7 +3,7 @@ package com.nedap.retail.messages.epcis.v1_1.elements;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class QuantityElement {
 

@@ -1,6 +1,6 @@
 package com.nedap.retail.messages.epc.v2.approved_difference_list;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GtinDifference {
 

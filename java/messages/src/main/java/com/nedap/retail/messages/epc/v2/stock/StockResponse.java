@@ -2,13 +2,11 @@ package com.nedap.retail.messages.epc.v2.stock;
 
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
 import com.nedap.retail.messages.article.Article;
 import com.nedap.retail.messages.stock.StockSummary;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class StockResponse extends StockLevelSummary {
 
     public List<String> gtins;

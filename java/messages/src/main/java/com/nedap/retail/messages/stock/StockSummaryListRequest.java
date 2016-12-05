@@ -1,10 +1,8 @@
 package com.nedap.retail.messages.stock;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class StockSummaryListRequest {
 
     public static final String FROM_EVENT_TIME = "from_event_time";

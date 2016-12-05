@@ -13,7 +13,6 @@ public enum ExportStatus {
      * @return ExportStatus enum value for provided String
      */
     @JsonCreator
-    @org.codehaus.jackson.annotate.JsonCreator
     public static ExportStatus permissiveValueOf(final String value) {
         if (value == null) {
             throw new IllegalArgumentException("Export status missing");

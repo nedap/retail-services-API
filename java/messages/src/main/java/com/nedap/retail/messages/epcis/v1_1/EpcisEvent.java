@@ -3,8 +3,7 @@ package com.nedap.retail.messages.epcis.v1_1;
 import java.util.*;
 
 import com.nedap.retail.messages.epcis.v1_1.elements.ErrorDeclaration;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,16 +18,7 @@ import com.nedap.retail.messages.epcis.v1_1.elements.SourceElement;
  * Required parameters to construct any EpcisEvent are: - eventTime - recordTime - eventTimeZoneOffset - type - action
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@org.codehaus.jackson.annotate.JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@org.codehaus.jackson.annotate.JsonTypeInfo(use = org.codehaus.jackson.annotate.JsonTypeInfo.Id.NAME, include = org.codehaus.jackson.annotate.JsonTypeInfo.As.PROPERTY, property = "type")
-@org.codehaus.jackson.annotate.JsonSubTypes({
-        @org.codehaus.jackson.annotate.JsonSubTypes.Type(value = ObjectEvent.class, name = "object_event"),
-        @org.codehaus.jackson.annotate.JsonSubTypes.Type(value = AggregationEvent.class, name = "aggregation_event"),
-        @org.codehaus.jackson.annotate.JsonSubTypes.Type(value = TransactionEvent.class, name = "transaction_event"),
-        @org.codehaus.jackson.annotate.JsonSubTypes.Type(value = TransformationEvent.class, name = "transformation_event"),
-        @org.codehaus.jackson.annotate.JsonSubTypes.Type(value = QuantityEvent.class, name = "quantity_event"),})
 @JsonSubTypes({@JsonSubTypes.Type(value = ObjectEvent.class, name = "object_event"),
         @JsonSubTypes.Type(value = AggregationEvent.class, name = "aggregation_event"),
         @JsonSubTypes.Type(value = TransactionEvent.class, name = "transaction_event"),

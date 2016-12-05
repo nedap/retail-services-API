@@ -155,7 +155,6 @@ public enum Disposition {
     }
 
     @JsonValue
-    @org.codehaus.jackson.annotate.JsonValue
     public final String disposition() {
         return disposition;
     }
@@ -170,7 +169,6 @@ public enum Disposition {
      * @return Disposition enum value for provided String
      */
     @JsonCreator
-    @org.codehaus.jackson.annotate.JsonCreator
     public static Disposition permissiveValueOf(final String value) {
         if (value == null) {
             throw new IllegalArgumentException("disposition missing");

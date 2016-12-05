@@ -1,6 +1,6 @@
 package com.nedap.retail.messages.epc.v2.difference_list;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;

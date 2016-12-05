@@ -4,11 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class StockSummary {
 
     public enum Status {
