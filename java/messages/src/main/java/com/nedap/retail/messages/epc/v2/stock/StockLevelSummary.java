@@ -2,11 +2,9 @@ package com.nedap.retail.messages.epc.v2.stock;
 
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class StockLevelSummary {
 
     public DateTime generated;

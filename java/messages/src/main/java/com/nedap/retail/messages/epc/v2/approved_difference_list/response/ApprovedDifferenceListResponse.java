@@ -5,14 +5,12 @@ import java.util.List;
 
 import com.nedap.retail.messages.article.Article;
 import org.apache.commons.collections4.CollectionUtils;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceList;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.ApprovedDifferenceListSummary;
 import com.nedap.retail.messages.epc.v2.approved_difference_list.GtinDifference;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApprovedDifferenceListResponse extends ApprovedDifferenceListSummary {
 
     public List<String> gtins;

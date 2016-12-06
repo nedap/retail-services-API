@@ -2,10 +2,8 @@ package com.nedap.retail.messages.users;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Authorisation implements Serializable {
 
     private static final long serialVersionUID = -961930253964396609L;

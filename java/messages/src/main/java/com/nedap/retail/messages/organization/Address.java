@@ -2,10 +2,8 @@ package com.nedap.retail.messages.organization;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Address implements Serializable {
 
     private static final long serialVersionUID = -1023613965561621788L;

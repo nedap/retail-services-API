@@ -5,13 +5,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Article implements Serializable {
 
     private static final long serialVersionUID = 3681466505727698821L;
@@ -49,7 +47,6 @@ public class Article implements Serializable {
     public DateTime lastUpdated;
 
     @JsonIgnore
-    @org.codehaus.jackson.annotate.JsonIgnore
     public UUID lastUpdatedUUID;
 
     // Empty constructor used by Jackson

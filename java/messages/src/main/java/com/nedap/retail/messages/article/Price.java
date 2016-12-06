@@ -2,9 +2,6 @@ package com.nedap.retail.messages.article;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Price implements Serializable {
 
     private static final long serialVersionUID = 7065318648199132728L;

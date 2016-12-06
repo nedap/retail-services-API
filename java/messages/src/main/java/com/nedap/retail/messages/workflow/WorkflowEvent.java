@@ -3,11 +3,9 @@ package com.nedap.retail.messages.workflow;
 import java.io.Serializable;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class WorkflowEvent implements Serializable {
 
     private static final long serialVersionUID = -2412276734501447304L;

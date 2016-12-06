@@ -1,6 +1,6 @@
 package com.nedap.retail.messages.epcis.v1_1.elements;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BizTransactionElement {
 

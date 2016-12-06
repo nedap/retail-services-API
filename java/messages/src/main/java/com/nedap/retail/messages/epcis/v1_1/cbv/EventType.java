@@ -60,7 +60,6 @@ public enum EventType {
      * @return EPCIS' event type
      */
     @JsonValue
-    @org.codehaus.jackson.annotate.JsonValue
     public final String eventType() {
         return eventType;
     }
@@ -79,7 +78,6 @@ public enum EventType {
      * @return EventType enum value for provided String
      */
     @JsonCreator
-    @org.codehaus.jackson.annotate.JsonCreator
     public static EventType permissiveValueOf(final String value) {
         if (value == null) {
             throw new IllegalArgumentException("event type missing");
