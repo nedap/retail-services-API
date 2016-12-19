@@ -27,6 +27,7 @@ public class ApprovedDifferenceListSummary {
     public static final String EXPORT_STATUS = "export_status";
     public static final String EXPORT_TIME = "export_time";
     public static final String EXTERN_REF = "extern_ref";
+    public static final String ACCURACY = "accuracy";
 
     @JsonProperty(APPROVED_ON)
     public DateTime approvedOn;
@@ -80,6 +81,9 @@ public class ApprovedDifferenceListSummary {
 
     public UUID id;
 
+    @JsonProperty(ACCURACY)
+    public Double accuracy;
+
     public ApprovedDifferenceListSummary() {
     }
 
@@ -102,5 +106,6 @@ public class ApprovedDifferenceListSummary {
         exportTime = approvedDifferenceListSummary.exportTime;
         externRef = approvedDifferenceListSummary.externRef;
         id = approvedDifferenceListSummary.id;
+        accuracy = approvedDifferenceListSummary.accuracy;
     }
 }
