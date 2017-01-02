@@ -16,11 +16,17 @@ public class AccessTokenResolver implements IAccessTokenResolver {
 
     private final String clientId;
     private final String secret;
-    private final String url;
+    private final String accessTokenUri;
     private final Client httpClient;
 
-    public AccessTokenResolver(final String url, final String clientId, final String secret, final Client httpClient) {
-        this.url = url;
+    /**
+     * @param accessTokenUri The URL to use to obtain an OAuth2 access token
+     * @param clientId       The client identifier to use for this protected resource
+     * @param secret         The client secret
+     * @param httpClient     HTTP client
+     */
+    public AccessTokenResolver(final String accessTokenUri, final String clientId, final String secret, final Client httpClient) {
+        this.accessTokenUri = accessTokenUri;
         this.clientId = clientId;
         this.secret = secret;
         this.httpClient = httpClient;
@@ -30,7 +36,7 @@ public class AccessTokenResolver implements IAccessTokenResolver {
     public String resolve() {
         logger.debug("getting OAuth 2.0 access token: {}", clientId);
 
-        final WebTarget target = httpClient.target(url).path("/login/oauth/token")
+        final WebTarget target = httpClient.target(accessTokenUri)
                 .queryParam("grant_type", "client_credentials").queryParam("client_id", clientId)
                 .queryParam("client_secret", secret);
 

@@ -55,10 +55,10 @@ public class Client {
     private final String url;
     private final javax.ws.rs.client.Client httpClient;
 
-    public Client(final String url, final String clientId, final String secret) {
-        this.url = url;
+    public Client(final String apiUrl, final String accessTokenUri, final String clientId, final String secret) {
+        this.url = apiUrl;
         this.httpClient = ClientFactory.createDefault();
-        final AccessTokenResolver accessTokenResolver = new AccessTokenResolver(url, clientId, secret, httpClient);
+        final AccessTokenResolver accessTokenResolver = new AccessTokenResolver(accessTokenUri, clientId, secret, httpClient);
         this.httpClient.register(new AuthorizationClientFilter(accessTokenResolver));
     }
 
