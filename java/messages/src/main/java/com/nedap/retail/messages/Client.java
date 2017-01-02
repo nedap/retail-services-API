@@ -52,13 +52,18 @@ public class Client {
     protected static final String LOCATION = "location";
     private static final String APPLICATION_CSV = "application/csv";
     private static final String APPLICATION_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    private static final String OAUTH_ACCESS_TOKEN_PATH = "/login/oauth/token";
     private final String url;
     private final javax.ws.rs.client.Client httpClient;
 
     public Client(final String url, final String clientId, final String secret) {
-        this.url = url;
+        this(url, url + OAUTH_ACCESS_TOKEN_PATH, clientId, secret);
+    }
+
+    public Client(final String apiUrl, final String accessTokenUri, final String clientId, final String secret) {
+        this.url = apiUrl;
         this.httpClient = ClientFactory.createDefault();
-        final AccessTokenResolver accessTokenResolver = new AccessTokenResolver(url, clientId, secret, httpClient);
+        final AccessTokenResolver accessTokenResolver = new AccessTokenResolver(accessTokenUri, clientId, secret, httpClient);
         this.httpClient.register(new AuthorizationClientFilter(accessTokenResolver));
     }
 
