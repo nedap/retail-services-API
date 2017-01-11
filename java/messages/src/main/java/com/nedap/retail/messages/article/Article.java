@@ -1,14 +1,13 @@
 package com.nedap.retail.messages.article;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.UUID;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
+import java.util.List;
+import java.util.UUID;
 
 public class Article implements Serializable {
 
@@ -28,6 +27,7 @@ public class Article implements Serializable {
     public static final String NAME = "name";
     public static final String BARCODES = "barcodes";
     public static final String LAST_UPDATED = "last_updated";
+    public static final String DELETED_AT = "deleted_at";
 
     public String gtin;
     public List<Barcode> barcodes;
@@ -48,6 +48,9 @@ public class Article implements Serializable {
 
     @JsonIgnore
     public UUID lastUpdatedUUID;
+
+    @JsonIgnore
+    public DateTime deletedAt;
 
     // Empty constructor used by Jackson
     public Article() {
