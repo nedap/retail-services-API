@@ -1,0 +1,730 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "!D Cloud is an RFID integration platform for retail stores. While we\n                                        provide core functionality for retail companies, a lot of functionality can be\n                                        added or extended by 3rd party developers. We encourage you to do so!",
+    "version" : "v1",
+    "title" : "!D Cloud API",
+    "termsOfService" : "bla bla bla",
+    "contact" : {
+      "url" : "http://www.nedap-idcloud.com/contact/",
+      "email" : "info@nedap-idcloud.com"
+    },
+    "license" : {
+      "name" : "The MIT License (MIT)",
+      "url" : "https://github.com/nedap/retail-services-API/blob/master/LICENSE"
+    }
+  },
+  "host" : "api.nedapretail.com",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/article/v2/create_or_replace" : {
+      "post" : {
+        "summary" : "Create or replace article(s)",
+        "description" : "Create or replace article(s) in !D Cloud. Replacing will happen based on GTIN, which is the primary key.",
+        "operationId" : "articleCreateOrReplace",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "articles",
+          "description" : "An array of articles that should be created or replaced.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Articles"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/article/v2/delete" : {
+      "delete" : {
+        "summary" : "Delete all articles",
+        "description" : "Delete all articles from the database. This cannot be undone! Please note the articles are not deleted from the !D Cloud mobile apps. To do that, reset the app and re-register using the QR code.",
+        "operationId" : "articleDelete",
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/article/v2/find" : {
+      "get" : {
+        "summary" : "Find articles using search query",
+        "description" : "",
+        "operationId" : "articleFind",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "query",
+          "in" : "query",
+          "description" : "Search query.",
+          "required" : false,
+          "type" : "string",
+          "default" : "*"
+        }, {
+          "name" : "count",
+          "in" : "query",
+          "description" : "Return this number of articles.",
+          "required" : false,
+          "type" : "integer",
+          "default" : 100,
+          "format" : "int32"
+        }, {
+          "name" : "skip",
+          "in" : "query",
+          "description" : "Skip this number of articles. When omitted: skip none.",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0,
+          "format" : "int32"
+        }, {
+          "name" : "extern_ref",
+          "in" : "query",
+          "description" : "This can be used to match requests with responses from the server (for example, Ajax requests are asynchronous and thus can return out of sequence).",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "order[]",
+          "in" : "query",
+          "description" : "Column to which ordering should be applied. When omitted: default order wil be based on score.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi",
+          "x-example" : "color, name, barcodes.value"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ArticleFindResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/article/v2/quantity" : {
+      "get" : {
+        "summary" : "Get quantity of articles",
+        "description" : "Returns the total number of articles registered in !D Cloud.",
+        "operationId" : "articleQuantity",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/QuantityResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/article/v2/retrieve" : {
+      "get" : {
+        "summary" : "Get articles",
+        "description" : "Retrieve articles. There are three ways to call this endpoint: 1) specify gtins, 2) specify barcodes, or 3) specify updated_after, skip and count. You can not mix these sets: skip and count have no meaning when specifying gtins or barcodes, and combining gtins and updated_after also doesn't work.",
+        "operationId" : "articleRetrieve",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "gtins[]",
+          "in" : "query",
+          "description" : "The GTIN(s) of which article information should be returned. Repeat key-value for retrieving multiple GTINs. Mutually exclusive with barcodes[] and updated_after.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "barcodes[]",
+          "in" : "query",
+          "description" : "The barcode(s) of which article information should be returned. Repeat key-value for retrieving multiple barcodes. Mutually exclusive with gtins[] and updated_after.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "updated_after",
+          "in" : "query",
+          "description" : "Articles updated on or after this time. When omitted: return all Article objects since 1 january 1970.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date-time"
+        }, {
+          "name" : "skip",
+          "in" : "query",
+          "description" : "Skip this number of articles. When omitted: skip none.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "count",
+          "in" : "query",
+          "description" : "Return this number of articles. The maximum number of returned articles is limited at 50.000. When omitted: return 100 Article objects.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Article"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/erp_stock/v1/create" : {
+      "post" : {
+        "summary" : "Capture ERP stock",
+        "description" : "Store an ERP stock.",
+        "operationId" : "erpStockCreate",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "ERP stock",
+          "description" : "The ERP stock to store.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Stock"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ErpStockCreateResponse"
+            }
+          }
+        }
+      }
+    },
+    "/erp_stock/v1/delete" : {
+      "delete" : {
+        "summary" : "Delete ERP stock summary",
+        "description" : "Delete an ERP stock summary.",
+        "operationId" : "erpStockDelete",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "The ID of the stock summary to delete.",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/erp_stock/v1/list" : {
+      "get" : {
+        "summary" : "Get ERP stock summaries",
+        "description" : "Retrieves ERP stock summary list for given location.",
+        "operationId" : "erpStockList",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "location",
+          "in" : "query",
+          "description" : "The location for which the stock is defined.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "from_event_time",
+          "in" : "query",
+          "description" : "Retrieve the ERP stock summaries from this time.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date-time"
+        }, {
+          "name" : "until_event_time",
+          "in" : "query",
+          "description" : "Retrieve the ERP stock summaries until this time.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date-time"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/StockSummary"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/erp_stock/v1/retrieve" : {
+      "get" : {
+        "summary" : "Retrieve a list of GTINs and quantities for a certain ERP stock.",
+        "description" : "",
+        "operationId" : "erpStockRetrieve",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "The ID of the ERP stock to retrieve.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "with_excluded",
+          "in" : "query",
+          "description" : "Boolean parameter that indicates if we want to include excluded GTINs from ERP stock.",
+          "required" : false,
+          "type" : "boolean",
+          "default" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Stock"
+            }
+          }
+        }
+      }
+    },
+    "/erp_stock/v1/retrieve_summary" : {
+      "get" : {
+        "summary" : "Retrieve ERP stock summary.",
+        "description" : "",
+        "operationId" : "erpStockRetrieveSummary",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "The ID of the ERP stock summary to retrieve.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/StockSummary"
+            }
+          }
+        }
+      }
+    },
+    "/shipment/v1/retrieve" : {
+      "get" : {
+        "summary" : "Retrieve shipments",
+        "description" : "",
+        "operationId" : "retrieveShipment",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Shipment"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "auth" : {
+      "type" : "oauth2",
+      "authorizationUrl" : "https://api.nedapretail.com/login/oauth/token",
+      "flow" : "implicit"
+    }
+  },
+  "definitions" : {
+    "Article" : {
+      "type" : "object",
+      "properties" : {
+        "gtin" : {
+          "type" : "string"
+        },
+        "barcodes" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Barcode"
+          }
+        },
+        "code" : {
+          "type" : "string"
+        },
+        "brand" : {
+          "type" : "string"
+        },
+        "season" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "option" : {
+          "type" : "string"
+        },
+        "style" : {
+          "type" : "string"
+        },
+        "color" : {
+          "type" : "string"
+        },
+        "sizes" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Size"
+          }
+        },
+        "supplier" : {
+          "type" : "string"
+        },
+        "category" : {
+          "type" : "string"
+        },
+        "prices" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Price"
+          }
+        },
+        "last_updated" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      }
+    },
+    "ArticleFindResponse" : {
+      "type" : "object",
+      "properties" : {
+        "externRef" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "recordsTotal" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "recordsFiltered" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "articles" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Article"
+          }
+        }
+      }
+    },
+    "Articles" : {
+      "type" : "object",
+      "properties" : {
+        "articles" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Article"
+          }
+        }
+      }
+    },
+    "Barcode" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "value" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ErpStockCreateResponse" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        }
+      }
+    },
+    "GtinQuantity" : {
+      "type" : "object",
+      "properties" : {
+        "gtin" : {
+          "type" : "string"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "exclude" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      }
+    },
+    "Price" : {
+      "type" : "object",
+      "properties" : {
+        "currency" : {
+          "type" : "string"
+        },
+        "region" : {
+          "type" : "string"
+        },
+        "amount" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "QuantityResponse" : {
+      "type" : "object",
+      "properties" : {
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "Shipment" : {
+      "type" : "object",
+      "properties" : {
+        "parentId" : {
+          "type" : "string"
+        },
+        "externRef" : {
+          "type" : "string"
+        },
+        "source" : {
+          "type" : "string"
+        },
+        "destination" : {
+          "type" : "string"
+        },
+        "createdAt" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "lastModifiedAt" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "INTRANSIT", "RECEIVED" ]
+        },
+        "sentQuantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "receivedQuantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "receivedPercentage" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "gtins" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "sentQuantities" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "receivedQuantities" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "articles" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Article"
+          }
+        }
+      }
+    },
+    "Size" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "region" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Stock" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "location" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string",
+          "enum" : [ "ERP", "RFID_COUNT", "REALTIME_SNAPSHOT" ]
+        },
+        "isComplete" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "event_time" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "start_time" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "extern_ref" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "ACCEPTED", "VALIDATING" ]
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "excluded_quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "excluded_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "in_use" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "client_ids" : {
+          "type" : "array",
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "quantity_list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/GtinQuantity"
+          }
+        }
+      }
+    },
+    "StockSummary" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "location" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string",
+          "enum" : [ "ERP", "RFID_COUNT", "REALTIME_SNAPSHOT" ]
+        },
+        "isComplete" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "event_time" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "start_time" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "extern_ref" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "ACCEPTED", "VALIDATING" ]
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "excluded_quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "excluded_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "in_use" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "client_ids" : {
+          "type" : "array",
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}

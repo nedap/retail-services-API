@@ -1,6 +1,10 @@
 package com.nedap.retail.services.examples;
 
-import com.nedap.retail.messages.Client;
+import com.nedap.retail.client.ApiClient;
+import com.nedap.retail.client.Configuration;
+import com.nedap.retail.client.api.DefaultApi;
+import com.nedap.retail.messages.AccessTokenResolver;
+import com.nedap.retail.messages.AuthorizationClientFilter;
 import com.nedap.retail.messages.ClientException;
 import org.apache.commons.cli.*;
 
@@ -11,9 +15,9 @@ import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
 
 /**
  * This tool can be used to test the !D Cloud APIs.
- *
+ * <p>
  * usage: java -jar examples.jar -clientid CLIENTID -secret SECRET [-url URL]
- *
+ * <p>
  * Exit codes: 0: successfull. 1: not successfull.
  */
 public class App {
@@ -24,10 +28,16 @@ public class App {
     private static final String OPTION_SECRET = "secret";
     private static final String OPTION_URL = "url";
     private static final String URL = "https://api.nedapretail.com";
-    private final Client apiClient;
+    private final DefaultApi apiClient;
 
-    public App(final String clientId, final String secret, final String url) throws IOException {
-        apiClient = new Client(url, clientId, secret);
+    public App(final String clientId, final String secret, final String url) {
+        final ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost:9090");
+        final javax.ws.rs.client.Client httpClient = defaultClient.getHttpClient();
+        final AccessTokenResolver accessTokenResolver = new AccessTokenResolver("http://localhost:9091/login/oauth/token",
+                clientId, secret, httpClient);
+        httpClient.register(new AuthorizationClientFilter(accessTokenResolver));
+        apiClient = new DefaultApi(defaultClient);
     }
 
     public static void main(final String[] args) throws Exception {
@@ -86,18 +96,18 @@ public class App {
                         case "1":
                             ArticleExample.runExample(apiClient);
                             break;
-                        case "2":
-                            EpcExample.runExample(apiClient);
-                            break;
-                        case "3":
-                            EpcisExample.runExample(apiClient);
-                            break;
+//                        case "2":
+//                            EpcExample.runExample(apiClient);
+//                            break;
+//                        case "3":
+//                            EpcisExample.runExample(apiClient);
+//                            break;
                         case "4":
                             ErpExample.runExample(apiClient);
                             break;
-                        case "5":
-                            WorkflowExample.runExample(apiClient);
-                            break;
+//                        case "5":
+//                            WorkflowExample.runExample(apiClient);
+//                            break;
                         case "0":
                             quit = true;
                             break;
@@ -112,7 +122,7 @@ public class App {
             scanner.close();
 
         } finally {
-            apiClient.destroy();
+//            apiClient.destroy();
         }
     }
 
