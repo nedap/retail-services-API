@@ -4,7 +4,6 @@
     "description" : "!D Cloud is an RFID integration platform for retail stores. While we\n                                        provide core functionality for retail companies, a lot of functionality can be\n                                        added or extended by 3rd party developers. We encourage you to do so!",
     "version" : "v1",
     "title" : "!D Cloud API",
-    "termsOfService" : "bla bla bla",
     "contact" : {
       "url" : "http://www.nedap-idcloud.com/contact/",
       "email" : "info@nedap-idcloud.com"
@@ -143,7 +142,7 @@
     "/article/v2/retrieve" : {
       "get" : {
         "summary" : "Get articles",
-        "description" : "Retrieve articles. There are three ways to call this endpoint: 1) specify gtins, 2) specify barcodes, or 3) specify updated_after, skip and count. You can not mix these sets: skip and count have no meaning when specifying gtins or barcodes, and combining gtins and updated_after also doesn't work.",
+        "description" : "Retrieve articles. There are three ways to call this endpoint:\n 1) specify gtins,\n 2) specify barcodes, or\n 3) specify updated_after, skip and count.\n You can not mix these sets: skip and count have no meaning when specifying gtins or barcodes, and combining gtins and updated_after also doesn't work.",
         "operationId" : "articleRetrieve",
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -204,10 +203,107 @@
         } ]
       }
     },
+    "/epcis/v2/capture" : {
+      "post" : {
+        "summary" : "Captures and stores EPCIS events in !D Cloud.",
+        "description" : "The capture endpoint captures one or more EPCIS events at a time. This does not imply any relationship between these EPCIS events. Each element of the argument list is accepted if it is a valid EPCIS event or subtype that conforms to the above EPCIS event types.",
+        "operationId" : "epcisCapture",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "events",
+          "description" : "An array of EPCISEvent(s) to capture and store.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/EpcisEventContainer"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/epcis/v2/delete" : {
+      "delete" : {
+        "summary" : "Deletes EPCIS events in !D Cloud.",
+        "description" : "Deletes all EPCIS.",
+        "operationId" : "epcisDelete",
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/epcis/v2/query" : {
+      "post" : {
+        "summary" : "Query and retrieve EPCIS event(s) from !D Cloud.",
+        "description" : "Returns a set of EPCIS Events that matches the criteria specified in the query parameters.",
+        "operationId" : "epcisQuery",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "parameters",
+          "description" : "Query parameter object. If two or more query parameters are defined, then the AND operation is always applied.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/EpcisQueryParameters"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/EpcisEvent"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/epcis/v2/retract" : {
+      "post" : {
+        "summary" : "Retracts EPCIS event(s) from !D Cloud.",
+        "description" : "!DCloud looks up the original EPCISEvent by its stored ID. It will duplicate this event, add an ErrorDeclaration-element and change its recordTime and id. Two almost identical EPCISEvents are eventually stored in !D Cloud.",
+        "operationId" : "epcisRetract",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "EPCISRetractEvent",
+          "description" : "Describes the event to retract.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/EpcisRetractEvent"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
     "/erp_stock/v1/create" : {
       "post" : {
-        "summary" : "Capture ERP stock",
-        "description" : "Store an ERP stock.",
+        "summary" : "Create ERP stock",
+        "description" : "Create an ERP stock.",
         "operationId" : "erpStockCreate",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -232,13 +328,13 @@
     },
     "/erp_stock/v1/delete" : {
       "delete" : {
-        "summary" : "Delete ERP stock summary",
-        "description" : "Delete an ERP stock summary.",
+        "summary" : "Delete ERP stock",
+        "description" : "Delete the ERP stock.",
         "operationId" : "erpStockDelete",
         "parameters" : [ {
           "name" : "id",
           "in" : "query",
-          "description" : "The ID of the stock summary to delete.",
+          "description" : "The ID of the stock to delete.",
           "required" : false,
           "type" : "string"
         } ],
@@ -370,6 +466,30 @@
     }
   },
   "definitions" : {
+    "AggregationEvent" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/EpcisEvent"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "parent_id" : {
+            "type" : "string"
+          },
+          "child_epcs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "child_quantity_list" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/QuantityElement"
+            }
+          }
+        }
+      } ]
+    },
     "Article" : {
       "type" : "object",
       "properties" : {
@@ -472,11 +592,157 @@
         }
       }
     },
+    "BizTransactionElement" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "biz_transaction" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DestinationElement" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "destination" : {
+          "type" : "string"
+        }
+      }
+    },
+    "EpcisEvent" : {
+      "type" : "object",
+      "discriminator" : "type",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "storedId" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "eventId" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string",
+          "enum" : [ "ObjectEvent", "AggregationEvent", "TransactionEvent", "QuantityEvent", "TransformationEvent" ]
+        },
+        "action" : {
+          "type" : "string"
+        },
+        "disposition" : {
+          "type" : "string"
+        },
+        "errorDeclaration" : {
+          "$ref" : "#/definitions/ErrorDeclaration"
+        },
+        "event_time" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "record_time" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "event_time_zone_offset" : {
+          "type" : "string"
+        },
+        "biz_step" : {
+          "type" : "string"
+        },
+        "biz_location" : {
+          "type" : "string"
+        },
+        "read_point" : {
+          "type" : "string"
+        },
+        "source_list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SourceElement"
+          }
+        },
+        "destination_list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DestinationElement"
+          }
+        },
+        "biz_transaction_list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/BizTransactionElement"
+          }
+        }
+      }
+    },
+    "EpcisEventContainer" : {
+      "type" : "object",
+      "properties" : {
+        "events" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EpcisEvent"
+          }
+        }
+      }
+    },
+    "EpcisQueryParameters" : {
+      "type" : "object",
+      "properties" : {
+        "parameters" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ParameterObject"
+          }
+        }
+      }
+    },
+    "EpcisRetractEvent" : {
+      "type" : "object",
+      "properties" : {
+        "storedId" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "declarationTime" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "errorReasonId" : {
+          "type" : "string",
+          "enum" : [ "DID_NOT_OCCUR", "INCORRECT_DATA" ]
+        }
+      }
+    },
     "ErpStockCreateResponse" : {
       "type" : "object",
       "properties" : {
         "id" : {
           "type" : "string"
+        }
+      }
+    },
+    "ErrorDeclaration" : {
+      "type" : "object",
+      "properties" : {
+        "declarationTime" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "reason" : {
+          "type" : "string"
+        },
+        "correctiveEventIDs" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
         }
       }
     },
@@ -496,6 +762,50 @@
         }
       }
     },
+    "ObjectEvent" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/EpcisEvent"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "ilmd" : {
+            "type" : "string"
+          },
+          "epc_list" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "quantity_list" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/QuantityElement"
+            }
+          }
+        }
+      } ]
+    },
+    "ParameterObject" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "value" : {
+          "type" : "string"
+        },
+        "values" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
     "Price" : {
       "type" : "object",
       "properties" : {
@@ -510,6 +820,27 @@
           "format" : "double"
         }
       }
+    },
+    "QuantityElement" : {
+      "type" : "object",
+      "properties" : {
+        "quantity" : {
+          "type" : "number"
+        },
+        "uom" : {
+          "type" : "string"
+        },
+        "epc_class" : {
+          "type" : "string"
+        }
+      }
+    },
+    "QuantityEvent" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/EpcisEvent"
+      }, {
+        "type" : "object"
+      } ]
     },
     "QuantityResponse" : {
       "type" : "object",
@@ -594,6 +925,17 @@
           "type" : "string"
         },
         "region" : {
+          "type" : "string"
+        }
+      }
+    },
+    "SourceElement" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "source" : {
           "type" : "string"
         }
       }
@@ -725,6 +1067,66 @@
           }
         }
       }
+    },
+    "TransactionEvent" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/EpcisEvent"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "parent_id" : {
+            "type" : "string"
+          },
+          "epc_list" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "quantity_list" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/QuantityElement"
+            }
+          }
+        }
+      } ]
+    },
+    "TransformationEvent" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/EpcisEvent"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "input_epc_list" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "output_epc_list" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "input_quantity_list" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/QuantityElement"
+            }
+          },
+          "output_quantity_list" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/QuantityElement"
+            }
+          },
+          "transformation_id" : {
+            "type" : "string"
+          }
+        }
+      } ]
     }
   }
 }

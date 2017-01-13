@@ -99,9 +99,9 @@ public class App {
 //                        case "2":
 //                            EpcExample.runExample(apiClient);
 //                            break;
-//                        case "3":
-//                            EpcisExample.runExample(apiClient);
-//                            break;
+                        case "3":
+                            EpcisExample.runExample(apiClient);
+                            break;
                         case "4":
                             ErpExample.runExample(apiClient);
                             break;
