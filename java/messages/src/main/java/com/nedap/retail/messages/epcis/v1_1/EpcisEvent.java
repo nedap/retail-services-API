@@ -20,6 +20,12 @@ import com.nedap.retail.messages.epcis.v1_1.elements.SourceElement;
  * Required parameters to construct any EpcisEvent are: - eventTime - recordTime - eventTimeZoneOffset - type - action
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({@JsonSubTypes.Type(value = ObjectEvent.class, name = "object_event"),
+        @JsonSubTypes.Type(value = AggregationEvent.class, name = "aggregation_event"),
+        @JsonSubTypes.Type(value = TransactionEvent.class, name = "transaction_event"),
+        @JsonSubTypes.Type(value = TransformationEvent.class, name = "transformation_event"),
+        @JsonSubTypes.Type(value = QuantityEvent.class, name = "quantity_event"),})
 @ApiModel(value = "EpcisEvent", subTypes = {ObjectEvent.class, AggregationEvent.class, TransactionEvent.class,
         QuantityEvent.class, TransformationEvent.class},
         discriminator = "type")
