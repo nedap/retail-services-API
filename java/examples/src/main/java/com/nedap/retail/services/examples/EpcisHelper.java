@@ -33,7 +33,7 @@ public class EpcisHelper {
         return new ObjectEvent()
                 .epcList(makeEpcList1())
                 .id(UUID.randomUUID().toString())
-                .type(EpcisEvent.TypeEnum.OBJECTEVENT)
+                .type(EpcisEvent.TypeEnum.OBJECT_EVENT)
                 .eventTime(DateTime.now())
                 .action(Action.OBSERVE.action())
                 .disposition(Disposition.SELLABLE_ACCESSIBLE.disposition())
@@ -45,7 +45,7 @@ public class EpcisHelper {
     private static EpcisEvent createEpcisEvent2(final String locationId) {
         return new ObjectEvent()
                 .epcList(makeEpcList2())
-                .type(EpcisEvent.TypeEnum.OBJECTEVENT)
+                .type(EpcisEvent.TypeEnum.OBJECT_EVENT)
                 .id(UUID.randomUUID().toString())
                 .eventTime(DateTime.now())
                 .action(Action.OBSERVE.action())
