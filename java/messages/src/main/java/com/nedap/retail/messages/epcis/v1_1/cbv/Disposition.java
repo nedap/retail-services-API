@@ -2,10 +2,12 @@ package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 
 /**
  * Enumerates EPCIS Dispositions Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
  */
+@ApiModel
 public enum Disposition {
 
     /**

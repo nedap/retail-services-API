@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nedap.retail.services</groupId>
     <artifactId>api</artifactId>
-    <version>1.48-SNAPSHOT</version>
+    <version>1.49-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Netap Retail API</name>
     <description>Reference implementations and test tools for using the Nedap Retail APIs</description>

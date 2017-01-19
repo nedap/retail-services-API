@@ -7,7 +7,11 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nedap.retail.client.model.*;
+import com.nedap.retail.client.model.EpcisEvent.TypeEnum;
+
 import java.io.IOException;
+
+import static com.nedap.retail.client.model.EpcisEvent.TypeEnum.*;
 
 /**
  * Custom Jackson JSON deserializer for deserialization of EpcisEvent and child objects.
@@ -34,24 +38,24 @@ public class EpcisEventDeserializer extends JsonDeserializer<EpcisEvent> {
     public EpcisEvent deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException {
         final JsonNode node = jp.getCodec().readTree(jp);
         final String type = node.get("type").asText();
-        final EpcisEvent.TypeEnum typeEnum = EpcisEvent.TypeEnum.fromValue(type);
+        final TypeEnum typeEnum = fromValue(type);
 
         Class<? extends EpcisEvent> valueType = null;
 
         switch (typeEnum) {
-            case OBJECT_EVENT:
+            case OBJECTEVENT:
                 valueType = ObjectEvent.class;
                 break;
-            case AGGREGATION_EVENT:
+            case AGGREGATIONEVENT:
                 valueType = AggregationEvent.class;
                 break;
-            case TRANSACTION_EVENT:
+            case TRANSACTIONEVENT:
                 valueType = TransactionEvent.class;
                 break;
-            case QUANTITY_EVENT:
+            case QUANTITYEVENT:
                 valueType = QuantityEvent.class;
                 break;
-            case TRANSFORMATION_EVENT:
+            case TRANSFORMATIONEVENT:
                 valueType = TransformationEvent.class;
                 break;
         }

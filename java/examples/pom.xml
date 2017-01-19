@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.nedap.retail.services</groupId>
         <artifactId>api</artifactId>
-        <version>1.48-SNAPSHOT</version>
+        <version>1.49-SNAPSHOT</version>
     </parent>
 
     <artifactId>examples</artifactId>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.nedap.retail.services</groupId>
             <artifactId>messages</artifactId>
-            <version>1.48-SNAPSHOT</version>
+            <version>1.49-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>

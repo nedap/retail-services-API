@@ -2,11 +2,13 @@ package com.nedap.retail.messages.epcis.v1_1.cbv;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 
 /**
  * Enumerates EPCIS ErrorDeclation Specifications follow CBV Standard v1.2 Draft.
  * As it is backwards compatible it's put in the v1_1 for ease of use.
  */
+@ApiModel
 public enum ErrorReasonId {
 
     DID_NOT_OCCUR("urn:epcglobal:cbv:er:did_not_occur"),
