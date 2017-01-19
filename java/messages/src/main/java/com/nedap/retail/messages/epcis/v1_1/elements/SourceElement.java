@@ -1,5 +1,8 @@
 package com.nedap.retail.messages.epcis.v1_1.elements;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel
 public class SourceElement {
 
     public String type;

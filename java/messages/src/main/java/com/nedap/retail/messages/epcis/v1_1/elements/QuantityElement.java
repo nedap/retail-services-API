@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 
+@ApiModel
 public class QuantityElement {
 
     /**

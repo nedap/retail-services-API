@@ -27,7 +27,7 @@ public class WorkflowExample {
         System.out.println(NEW_LINE + "*** Workflow API example ***");
 
         final String locationId = "http://nedapretail.com/loc/testing";
-
+/*
         try {
             // Make some EPCIS events first
             System.out.println(NEW_LINE + "Capturing some EPCIS events first...");
@@ -58,6 +58,7 @@ public class WorkflowExample {
         } catch (final ClientException ex) {
             System.err.println("Server responded with an error: " + ex.getMessage());
         }
+    */
     }
 
     private static WorkflowEvent makeWorkflowEvent(final String locationId,

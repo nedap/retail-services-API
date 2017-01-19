@@ -8,10 +8,12 @@ import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
 import com.nedap.retail.messages.epcis.v1_1.QuantityEvent;
 import com.nedap.retail.messages.epcis.v1_1.TransactionEvent;
 import com.nedap.retail.messages.epcis.v1_1.TransformationEvent;
+import io.swagger.annotations.ApiModel;
 
 /**
  * Enumerates EPCIS EventType Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
  */
+@ApiModel
 public enum EventType {
 
     /**

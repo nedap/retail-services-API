@@ -1,7 +1,9 @@
 package com.nedap.retail.messages.epcis.v1_1.elements;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 
+@ApiModel
 public class BizTransactionElement {
 
     public String type;

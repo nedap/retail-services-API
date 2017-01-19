@@ -1,8 +1,11 @@
 package com.nedap.retail.messages.epcis.v1_1.cbv;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * Enumerates EPCIS Actions Specifications follow GS1 EPCIS v1.1 standard + Nedap extensions
  */
+@ApiModel
 public enum Action {
 
     /**
