@@ -49,6 +49,7 @@ public class StockSummary {
     @JsonProperty("client_ids")
     public Set<String> clientIds;
 
+    @JsonProperty("is_complete")
     public boolean isComplete = true;
 
     public StockSummary() {
