@@ -1,9 +1,0 @@
-{
-    "id": "123",
-    "location": "loc:A",
-    "event_time": "2011-03-02T12:13:00.000+01:00",
-    "status": "ACCEPTED",
-    "quantity": 16,
-    "gtin_quantity": 3,
-    "in_use": true
-}

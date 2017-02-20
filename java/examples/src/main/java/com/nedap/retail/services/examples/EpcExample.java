@@ -1,5 +1,6 @@
 package com.nedap.retail.services.examples;
 
+import com.nedap.retail.client.api.EpcisApi;
 import com.nedap.retail.messages.Client;
 import com.nedap.retail.messages.ClientException;
 import com.nedap.retail.messages.article.Article;

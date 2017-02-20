@@ -1,0 +1,6 @@
+{
+    "library": "jersey2",
+    "artifactId": "api-client-jersey2",
+    "groupId": "com.nedap.retail.services",
+    "name": "Nedap Retail API - Java-Jersey2 client"
+}

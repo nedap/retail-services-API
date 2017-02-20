@@ -33,14 +33,14 @@ public class WorkflowExample {
             System.out.println(NEW_LINE + "Capturing some EPCIS events first...");
 
             final EpcisEventContainer epcisEventsContainer = new EpcisEventContainer();
-            epcisEventsContainer.events = createEvents(locationId);
+            //epcisEventsContainer.events = createEvents(locationId);
 
             for (final EpcisEvent event : epcisEventsContainer.events) {
                 MESSAGE_IDS.add(event.id);
             }
 
             client.captureEpcisEvents(epcisEventsContainer);
-            System.out.println(printCaptureEpcisEvents(epcisEventsContainer));
+            //System.out.println(printCaptureEpcisEvents(epcisEventsContainer));
 
             // Workflow capture
             System.out.println(NEW_LINE + "Capturing workflow event...");
