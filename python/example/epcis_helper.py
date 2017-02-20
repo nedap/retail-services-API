@@ -1,6 +1,6 @@
 import uuid
 import datetime
-from nedap_retail_api import *
+from nedap_retail_api_client import *
 
 class EpcisHelper(object) :
 

@@ -1,0 +1,88 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "!D Cloud is an RFID integration platform for retail stores. While we\n                                        provide core functionality for retail companies, a lot of functionality can be\n                                        added or extended by 3rd party developers. We encourage you to do so!",
+    "version": "v1",
+    "title": "!D Cloud API",
+    "contact": {
+      "url": "http://www.nedap-idcloud.com/contact/",
+      "email": "info@nedap-idcloud.com"
+    },
+    "license": {
+      "name": "The MIT License (MIT)",
+      "url": "https://github.com/nedap/retail-services-API/blob/master/LICENSE"
+    }
+  },
+  "host": "api.nedapretail.com",
+  "tags": [
+    {
+      "name": "AccessTokenResolver"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/login/oauth/token": {
+      "get": {
+        "tags": [
+          "AccessTokenResolver"
+        ],
+        "summary": "Resolved OAuth 2.0 access tokens",
+        "description": "",
+        "operationId": "resolve",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "grant_type",
+            "in": "query",
+            "description": "Grant type.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "description": "Client id.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "client_secret",
+            "in": "query",
+            "description": "Client secret.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OAuthResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "auth": {
+      "type": "oauth2",
+      "authorizationUrl": "https://api.nedapretail.com/login/oauth/token",
+      "flow": "implicit"
+    }
+  },
+  "definitions": {
+    "OAuthResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

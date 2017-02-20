@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="2.2.1"
+VERSION="2.2.2-SNAPSHOT"
 URL="http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/${VERSION}/swagger-codegen-cli-${VERSION}.jar"
 SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 

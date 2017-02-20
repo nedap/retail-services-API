@@ -1,6 +1,6 @@
-from nedap_retail_api import *
+from nedap_retail_api_client import *
 from epcis_helper import *
-from nedap_retail_api.api_client import ApiException
+from nedap_retail_api_client.api_client import ApiException
 
 NEW_LINE = "\n"
 LOCATION_ID = "http://nedapretail.com/loc/testing"
