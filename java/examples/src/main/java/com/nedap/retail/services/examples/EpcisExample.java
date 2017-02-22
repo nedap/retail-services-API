@@ -4,8 +4,6 @@ import com.nedap.retail.client.ApiClient;
 import com.nedap.retail.client.ApiException;
 import com.nedap.retail.client.api.EpcisApi;
 import com.nedap.retail.client.model.*;
-import com.nedap.retail.messages.ClientException;
-import org.joda.time.DateTime;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +11,8 @@ import java.util.List;
 import static com.nedap.retail.services.examples.EpcisHelper.createEvents;
 import static com.nedap.retail.services.examples.EpcisHelper.printCaptureEpcisEvents;
 import static com.nedap.retail.services.examples.PrintHelper.*;
+
+import org.joda.time.DateTime;
 
 public class EpcisExample {
 
@@ -43,8 +43,8 @@ public class EpcisExample {
             System.out.println(NEW_LINE + "--- EPCIS API example finished ---");
 
         } catch (final ApiException ex) {
-            System.err.println("Server responded with an error: " + ex.getMessage());
-        }
+           System.err.println("Server responded with an error: " + ex.getMessage());
+       }
     }
 
     private static EpcisQueryParameters makeEpcisQueryParameters() {

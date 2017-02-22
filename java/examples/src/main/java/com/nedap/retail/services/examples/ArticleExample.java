@@ -20,7 +20,6 @@ import com.nedap.retail.client.ApiClient;
 import com.nedap.retail.client.ApiException;
 import com.nedap.retail.client.api.ArticleApi;
 import com.nedap.retail.client.model.*;
-import com.nedap.retail.messages.ClientException;
 import org.apache.commons.collections4.CollectionUtils;
 
 public class ArticleExample {

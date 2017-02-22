@@ -1,12 +1,10 @@
 package com.nedap.retail.services.examples;
 
 import com.nedap.retail.client.*;
-import com.nedap.retail.messages.ClientException;
-import com.nedap.retail.client.model.*;
+import com.nedap.retail.services.examples.oauth.AccessTokenResolver;
+import com.nedap.retail.services.examples.oauth.AuthorizationClientFilter;
+import com.nedap.retail.services.examples.oauth.IAccessTokenResolver;
 import org.apache.commons.cli.*;
-import com.nedap.retail.messages.AccessTokenResolver;
-import com.nedap.retail.messages.AuthorizationClientFilter;
-import com.nedap.retail.messages.IAccessTokenResolver;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -96,18 +94,15 @@ public class App {
                         case "1":
                             ArticleExample.runExample(apiClient);
                             break;
-//                        case "2":
-//                            EpcExample.runExample(apiClient);
-//                            break;
-                        case "3":
+                        case "2":
                             EpcisExample.runExample(apiClient);
                             break;
-                        case "4":
-                            //ErpExample.runExample(apiClient);
+                        case "3":
+                            ErpExample.runExample(apiClient);
                             break;
-//                        case "5":
-//                            WorkflowExample.runExample(apiClient);
-//                            break;
+                        case "4":
+                            WorkflowExample.runExample(apiClient);
+                            break;
                         case "0":
                             quit = true;
                             break;
@@ -115,7 +110,7 @@ public class App {
                             quit = true;
                             break;
                     }
-                } catch (final ClientException ex) {
+                } catch (final Throwable ex) {
                     System.err.println(ex.getMessage());
                 }
             }
@@ -132,10 +127,9 @@ public class App {
         sb.append(NEW_LINE).append("*** Nedap Retail API examples ***");
         sb.append(NEW_LINE).append("Choose example you want to run");
         sb.append(NEW_LINE).append("1 : Article API");
-        sb.append(NEW_LINE).append("2 : EPC API");
-        sb.append(NEW_LINE).append("3 : EPCIS API");
-        sb.append(NEW_LINE).append("4 : ERP API");
-        sb.append(NEW_LINE).append("5 : Workflow API");
+        sb.append(NEW_LINE).append("2 : EPCIS API");
+        sb.append(NEW_LINE).append("3 : ERP API");
+        sb.append(NEW_LINE).append("4 : Workflow API");
         sb.append(NEW_LINE).append("0 : Quit");
         sb.append(NEW_LINE);
 
