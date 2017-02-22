@@ -41,12 +41,6 @@
             <version>${swagger-core-version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.nedap.retail.services</groupId>
-            <artifactId>messages</artifactId>
-            <version>1.48</version>
-        </dependency>
-
         <!-- HTTP client: jersey-client -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
@@ -114,12 +108,29 @@
                 <version>${swagger-codegen-maven-plugin-version}</version>
                 <executions>
                     <execution>
-                        <id>generate-java8-jersey2</id>
+                        <id>generate-java8-jersey2-oauth</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/../../squashed_swagger.json</inputSpec>
+                            <inputSpec>${project.basedir}/../../swagger/oauth-openapi.json</inputSpec>
+                            <language>java</language>
+                            <apiPackage>com.nedap.retail.client.api</apiPackage>
+                            <modelPackage>com.nedap.retail.client.model</modelPackage>
+                            <configOptions>
+                                <library>jersey2</library>
+                                <dateLibrary>joda</dateLibrary>
+                            </configOptions>
+                            <output>${project.build.directory}/generated-sources/swagger</output>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-java8-jersey2-idcloud</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/../../swagger/idcloud-openapi.json</inputSpec>
                             <language>java</language>
                             <apiPackage>com.nedap.retail.client.api</apiPackage>
                             <modelPackage>com.nedap.retail.client.model</modelPackage>

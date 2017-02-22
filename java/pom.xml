@@ -54,11 +54,6 @@
             <artifactId>swagger-annotations</artifactId>
             <version>${swagger-core-version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.nedap.retail.services</groupId>
-            <artifactId>messages</artifactId>
-            <version>1.48</version>
-        </dependency>
 
         <!-- HTTP client: jersey-client -->
         <dependency>

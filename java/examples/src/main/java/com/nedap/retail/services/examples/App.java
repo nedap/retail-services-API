@@ -136,19 +136,11 @@ public class App {
         System.out.println(sb);
     }
 
-    public static ApiClient createApiClient(final String apiUrl, final IAccessTokenResolver accessTokenResolver) {
-        final ApiClient apiClient = createApiClient(apiUrl);
-        registerAuthorizationClientFilter(apiClient, accessTokenResolver);
-
-        return apiClient;
-    }
-
     public static ApiClient createApiClient(final String apiUrl, final String oauthAccessTokenUri, final String
             clientId, final String secret) {
         final ApiClient apiClient = createApiClient(apiUrl);
 
-        final IAccessTokenResolver accessTokenResolver = new AccessTokenResolver(oauthAccessTokenUri, clientId, secret,
-                apiClient.getHttpClient());
+        final IAccessTokenResolver accessTokenResolver = new AccessTokenResolver(oauthAccessTokenUri, clientId, secret);
         registerAuthorizationClientFilter(apiClient, accessTokenResolver);
 
         return apiClient;

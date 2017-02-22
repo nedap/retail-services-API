@@ -1,11 +1,12 @@
 package com.nedap.retail.services.examples.oauth;
 
+import com.nedap.retail.client.ApiException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestContext;
@@ -21,9 +22,6 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This Client filter automatically adds the "Authorization" header to the HTTP request.
  *
@@ -31,7 +29,6 @@ import org.slf4j.LoggerFactory;
  */
 public class AuthorizationClientFilter implements ClientRequestFilter, ClientResponseFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthorizationClientFilter.class);
     private static final String LOGIN_PATH = "/login/oauth/token";
     private final IAccessTokenResolver accessTokenResolver;
     private static final String REQUEST_PROPERTY_FILTER_REUSED = "com.nedap.retail.messages.AuthorizationClientFilter.reused";
@@ -49,6 +46,7 @@ public class AuthorizationClientFilter implements ClientRequestFilter, ClientRes
 
     @Override
     public void filter(final ClientRequestContext requestContext) throws IOException {
+
         if ("true".equals(requestContext.getProperty(REQUEST_PROPERTY_FILTER_REUSED))) {
             return;
         }
@@ -58,8 +56,12 @@ public class AuthorizationClientFilter implements ClientRequestFilter, ClientRes
         }
 
         if (accessToken == null) {
-            logger.info("getting acces token...");
-            accessToken = accessTokenResolver.resolve();
+           System.out.println("getting acces token...");
+           try {
+               accessToken = accessTokenResolver.resolve();
+           } catch (ApiException e){
+               throw new IOException(e);
+           }
         }
 
         // Add access token as header.
@@ -83,8 +85,13 @@ public class AuthorizationClientFilter implements ClientRequestFilter, ClientRes
             return;
         }
 
-        logger.info("access token is expired or invalid. get new access token...");
-        accessToken = accessTokenResolver.resolve();
+        System.out.println("access token is expired or invalid. get new access token...");
+
+        try {
+            accessToken = accessTokenResolver.resolve();
+        } catch (ApiException e){
+            new IOException(e);
+        }
 
         repeatRequest(requestContext, responseContext, accessToken);
     }
