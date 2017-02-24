@@ -20,7 +20,6 @@ namespace Nedap.Retail.Api.Example
                 Console.WriteLine("------------- Capture epcis events");
                 EpcisEventContainer events = new EpcisEventContainer();
                 events.Events = CreateEvents();
-                Console.WriteLine("captured epcis events");
                 epcisApi.Capture(events);
                 printEpcisEvents(events.Events);
                 Console.WriteLine("captured epcis events");
