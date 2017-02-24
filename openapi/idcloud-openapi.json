@@ -241,7 +241,7 @@
         "tags" : [ "Article" ],
         "summary" : "Create or replace article(s)",
         "description" : "Create or replace article(s) in !D Cloud. Replacing will happen based on GTIN, which is the primary key.",
-        "operationId" : "articleCreateOrReplace",
+        "operationId" : "createOrReplace",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
@@ -265,12 +265,41 @@
         } ]
       }
     },
+    "/article/v2/create_or_update" : {
+      "post" : {
+        "tags" : [ "Article" ],
+        "summary" : "Create or update articles",
+        "description" : "Articles are create or updated using the GTIN as primary key.",
+        "operationId" : "createOrUpdate",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "articles",
+          "description" : "An array of articles that should be updated.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Articles"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
     "/article/v2/find" : {
       "get" : {
         "tags" : [ "Article" ],
         "summary" : "Find articles using search query",
         "description" : "",
-        "operationId" : "articleFind",
+        "operationId" : "find",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "query",
@@ -332,7 +361,7 @@
         "tags" : [ "Article" ],
         "summary" : "Get quantity of articles",
         "description" : "Returns the total number of articles registered in !D Cloud.",
-        "operationId" : "articleQuantity",
+        "operationId" : "quantity",
         "produces" : [ "application/json" ],
         "parameters" : [ ],
         "responses" : {
@@ -353,7 +382,7 @@
         "tags" : [ "Article" ],
         "summary" : "Get articles",
         "description" : "Retrieve articles. There are three ways to call this endpoint:\n 1) specify gtins,\n 2) specify barcodes, or\n 3) specify updated_after, skip and count.\n You can not mix these sets: skip and count have no meaning when specifying gtins or barcodes, and combining gtins and updated_after also doesn't work.",
-        "operationId" : "articleRetrieve",
+        "operationId" : "retrieve",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "gtins[]",
@@ -428,18 +457,17 @@
         "tags" : [ "Article" ],
         "summary" : "Delete articles",
         "description" : "Delete specified articles from the database. This cannot be undone! Please note the articles are not  deleted from the !D Cloud mobile apps. To do that, reset the app and re-register using the QR code.",
-        "operationId" : "articleDelete",
+        "operationId" : "delete",
         "parameters" : [ {
-          "in" : "body",
-          "name" : "gtins",
+          "name" : "gtins[]",
+          "in" : "query",
           "description" : "GTIN(s) to delete. Repeat key-value for deleting multiple articles. If empty or not specified, all articles are deleted.",
           "required" : true,
-          "schema" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
         } ],
         "responses" : {
           "204" : {
@@ -459,7 +487,7 @@
         "tags" : [ "Article" ],
         "summary" : "Delete all articles",
         "description" : "Delete all articles from the database. This cannot be undone! Please note the articles are not deleted from the !D Cloud mobile apps. To do that, reset the app and re-register using the QR code.",
-        "operationId" : "articleDeleteAll",
+        "operationId" : "deleteAll",
         "parameters" : [ ],
         "responses" : {
           "204" : {
@@ -589,7 +617,7 @@
         "tags" : [ "ErpStock" ],
         "summary" : "Create ERP stock",
         "description" : "Create an ERP stock.",
-        "operationId" : "erpStockCreate",
+        "operationId" : "create",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -619,7 +647,7 @@
         "tags" : [ "ErpStock" ],
         "summary" : "Get ERP stock summaries",
         "description" : "Retrieves ERP stock summary list for given location.",
-        "operationId" : "erpStockList",
+        "operationId" : "list",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
@@ -663,7 +691,7 @@
         "tags" : [ "ErpStock" ],
         "summary" : "Retrieve a list of GTINs and quantities for a certain ERP stock.",
         "description" : "",
-        "operationId" : "erpStockRetrieve",
+        "operationId" : "retrieve",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -697,7 +725,7 @@
         "tags" : [ "ErpStock" ],
         "summary" : "Retrieve ERP stock summary.",
         "description" : "",
-        "operationId" : "erpStockRetrieveSummary",
+        "operationId" : "retrieveSummary",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
