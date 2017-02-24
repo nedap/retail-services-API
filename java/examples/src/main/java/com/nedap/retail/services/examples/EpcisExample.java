@@ -5,8 +5,11 @@ import com.nedap.retail.client.ApiException;
 import com.nedap.retail.client.api.EpcisApi;
 import com.nedap.retail.client.model.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 import static com.nedap.retail.services.examples.EpcisHelper.createEvents;
 import static com.nedap.retail.services.examples.EpcisHelper.printCaptureEpcisEvents;
@@ -37,6 +40,7 @@ public class EpcisExample {
             // Query EPCIS events
             System.out.println(NEW_LINE + "Quering EPCIS events...");
             final List<EpcisEvent> events = api.query(makeEpcisQueryParameters());
+            System.out.println("Retrieved EPCIS events within last minute:");
             System.out.println("Events: " + events.size());
             System.out.println(printEpcisEvents(events));
 
@@ -56,12 +60,12 @@ public class EpcisExample {
     private static ParameterObject makeParameterObject1() {
         final ParameterObject parameter = new ParameterObject();
         parameter.name("GE_event_time");
-        parameter.value(DateTime.now().minusMinutes(1).toString());
+        parameter.value(formatDateTime(DateTime.now().minusMinutes(1)));
         return parameter;
     }
 
     private static String printEpcisEvents(final List<EpcisEvent> events) {
-        final StringBuilder sb = new StringBuilder("Retrieved EPCIS events within last minute:");
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < events.size(); i++) {
             sb.append(NEW_LINE).append(NEW_LINE).append(TAB);
             sb.append("EPCIS event ").append(i + 1).append(COLON);
@@ -92,5 +96,11 @@ public class EpcisExample {
             sb.append(i + 1).append(DOT).append(WHITESPACE).append(event.getEpcList().get(i));
         }
         return sb.toString();
+    }
+
+    private static String formatDateTime(DateTime dateTime) {
+        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.format(dateTime.toDate());
     }
 }
