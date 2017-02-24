@@ -2,6 +2,7 @@ import nedap_retail_api_oauth
 import nedap_retail_api_client
 
 from epcis_example import *
+from dateutil.tz import tzlocal
 
 def main() :
     oauth = nedap_retail_api_oauth.AccessTokenResolverApi(nedap_retail_api_oauth.ApiClient("http://localhost:9091"))
@@ -10,4 +11,5 @@ def main() :
     EpcisExample.run_example(client)
 
 if __name__ == '__main__':
+    print (datetime.datetime.now(tzlocal()) - datetime.timedelta(minutes=10)).isoformat()
     main();
