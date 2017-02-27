@@ -24,7 +24,7 @@
   ],
   "paths": {
     "/login/oauth/token": {
-      "get": {
+      "post": {
         "tags": [
           "AccessTokenResolver"
         ],
