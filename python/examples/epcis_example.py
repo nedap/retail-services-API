@@ -21,7 +21,7 @@ class EpcisExample(object) :
             print NEW_LINE + "Capturing EPCIS events..."
             epcisEventsList = EpcisEventContainer()
             epcisEventsList.events = EpcisExample.createEvents(LOCATION_ID)
-            api.capture(epcisEventsList)
+            api.capture_epcis_events(epcisEventsList)
             print EpcisExample.printEpcisEvents(epcisEventsList.events)
 
             time.sleep(2)
@@ -29,7 +29,7 @@ class EpcisExample(object) :
             # Query EPCIS events
             print NEW_LINE + "Quering EPCIS events...";
             print NEW_LINE + "Retrieved EPCIS events within last minute:"
-            events = api.query(EpcisExample.makeEpcisQueryParameters());
+            events = api.query_epcis_events(EpcisExample.makeEpcisQueryParameters());
 
             print "Events: " + str(len(events))
             print EpcisExample.printEpcisEvents(events)
