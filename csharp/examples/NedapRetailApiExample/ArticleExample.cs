@@ -21,11 +21,11 @@ namespace Nedap.Retail.Api.Example
             List<Article> articlesList = new List<Article>();
             articlesList.Add(CreateArticle());
             Articles articles = new Articles(articlesList);
-            articleApi.CreateOrReplace(articles);
+            articleApi.CreateOrReplaceArticles(articles);
 
             // get quantity
             Console.WriteLine("------------- Retrieving article quantity");
-            long? quantity = articleApi.Quantity().Quantity;
+            long? quantity = articleApi.GetArticleQuantity().Quantity;
             Console.WriteLine("article quantity = " + quantity);
         }
         catch (ApiException e)

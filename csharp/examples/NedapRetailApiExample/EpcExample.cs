@@ -17,13 +17,13 @@ namespace Nedap.Retail.Api.Example
                 // get difference list
                 Console.WriteLine("------------- Retrieving difference list");
                 DifferenceListApi differenceListApi = new DifferenceListApi(configuration);
-                DifferenceListResponse dl = differenceListApi.Retrieve("12345678901231", null, null, null);
+                DifferenceListResponse dl = differenceListApi.RetrieveDifferenceList("12345678901231", null, null, null);
                 Console.WriteLine(dl.ToString());
 
                 // get stock gtin
                 Console.WriteLine("------------- Retrieving stock gtin");
                 RfidCountApi rfidCountApi = new RfidCountApi(configuration);
-                StockResponse sg = rfidCountApi.Retrieve(location);
+                StockResponse sg = rfidCountApi.RetrieveRfidCount(location);
                 Console.WriteLine(sg.ToString());
     }
             catch (ApiException e)

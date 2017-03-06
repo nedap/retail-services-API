@@ -20,7 +20,7 @@ namespace Nedap.Retail.Api.Example
                 Console.WriteLine("------------- Capture epcis events");
                 EpcisEventContainer events = new EpcisEventContainer();
                 events.Events = CreateEvents();
-                epcisApi.Capture(events);
+                epcisApi.CaptureEpcisEvents(events);
                 printEpcisEvents(events.Events);
                 Console.WriteLine("captured epcis events");
 
@@ -30,7 +30,7 @@ namespace Nedap.Retail.Api.Example
                 parameters.Add(new ParameterObject("EQ_read_point", null, null, new List<string>(new string[] { "urn:epc:id:sgln:012345.67890.001" })));
                 EpcisQueryParameters queryParameters = new EpcisQueryParameters(parameters);
 
-                List<EpcisEvent> queryResult = epcisApi.Query(queryParameters);
+                List<EpcisEvent> queryResult = epcisApi.QueryEpcisEvents(queryParameters);
                 Console.WriteLine("Got " + queryResult.Count + " epcis events:");
                 foreach (EpcisEvent epcisEvent in queryResult)
                 {

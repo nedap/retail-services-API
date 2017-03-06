@@ -19,7 +19,7 @@ namespace Nedap.Retail.Api.Example
                 // capture
                 WorkflowApi workflowApi = new WorkflowApi(confgiration);
                 Console.WriteLine("------------- Capture workflow event");
-                workflowApi.Capture(workflow);
+                workflowApi.CaptureWorkflowEvent(workflow);
                 Console.WriteLine("captured workflow events");
             }
             catch (ApiException e)
