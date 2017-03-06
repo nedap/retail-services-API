@@ -29,23 +29,23 @@ public class ErpExample {
             // Capture ERP stock
             System.out.println(NEW_LINE + "Capturing ERP stock...");
             final Stock erpStock = createErpStock(locationId);
-            final String stockId = erpStockApi.create(erpStock).getId();
+            final String stockId = erpStockApi.createErpStock(erpStock).getId();
             System.out.println("Captured ERP stock id: " + stockId);
 
             // Retrieve ERP stock
             System.out.println(NEW_LINE + "Retrieving ERP stock...");
-            final Stock retrievedStock = erpStockApi.retrieve(stockId, true);
+            final Stock retrievedStock = erpStockApi.retrieveErpStock(stockId, true);
             System.out.println("Retrieved ERP stock with:" + printStock(retrievedStock));
 
             // Get ERP stock summary status
             System.out.println(NEW_LINE + "Retrieving ERP stock status...");
-            final StockSummary summary = erpStockApi.retrieveSummary(stockId);
+            final StockSummary summary = erpStockApi.retrieveErpStockSummary(stockId);
             final Stock stock = castStockSummaryToStock(summary);
             System.out.println("Retrieved ERP stock summary with:" + printStock(stock));
 
             // Get ERP stock summary list
             System.out.println(NEW_LINE + "Retrieving ERP stock summary list...");
-            final List<StockSummary> stocks = erpStockApi.list(locationId,
+            final List<StockSummary> stocks = erpStockApi.listErpStocks(locationId,
                     DateTime.now().minusMinutes(10),null);
             System.out.println(printStockSummaryList(stocks));
 

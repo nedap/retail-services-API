@@ -1,9 +1,6 @@
 package com.nedap.retail.services.examples;
 
 import com.nedap.retail.client.*;
-import com.nedap.retail.services.examples.oauth.AccessTokenResolver;
-import com.nedap.retail.services.examples.oauth.AuthorizationClientFilter;
-import com.nedap.retail.services.examples.oauth.IAccessTokenResolver;
 import org.apache.commons.cli.*;
 
 import java.io.IOException;
@@ -22,16 +19,13 @@ public class App {
 
     private static final int EXIT_CODE_OK = 0;
     private static final int EXIT_CODE_ERROR = 1;
-    private static final String OPTION_CLIENTID = "clientid";
-    private static final String OPTION_SECRET = "secret";
-    private static final String OPTION_URL_API = "api_url";
-    private static final String OPTION_URL_OAUTH = "oauth_url";
-    private static final String DEFAULT_URL_API = "https://api.nedapretail.com";
-    private static final String DEFAULT_URL_OAUTH = "/login/oauth/token";
+    private static final String OPTION_TOKEN= "token";
+    private static final String OPTION_URL_API = "url";
+    private static final String DEFAULT_URL_API = "https://api-test.nedapretail.com";
     private final ApiClient apiClient;
 
-    public App(final String clientId, final String secret, final String urlApi, final String urlOAuth) {
-        apiClient = createApiClient(urlApi, urlOAuth, clientId, secret);
+    public App(final String urlApi, final String accessToken) {
+        apiClient = createApiClient(urlApi, accessToken);
     }
 
     public static void main(final String[] args) throws Exception {
@@ -43,17 +37,11 @@ public class App {
             final CommandLine cmd = parser.parse(options, args);
 
             // Get command-line parameters.
-            final String clientId = cmd.getOptionValue(OPTION_CLIENTID);
-            final String secret = cmd.getOptionValue(OPTION_SECRET);
             final String urlApi = cmd.getOptionValue(OPTION_URL_API, DEFAULT_URL_API);
-            final String urlOAuth = cmd.getOptionValue(OPTION_URL_OAUTH, urlApi + DEFAULT_URL_OAUTH);
-
-            System.out.println(NEW_LINE + "OAuth 2.0 client ID: " + clientId);
-            System.out.println("api url: " + urlApi);
-            System.out.println("oauth url: " + urlOAuth);
+            final String accessToken = cmd.getOptionValue(OPTION_TOKEN, "");
 
             // Start app.
-            final App app = new App(clientId, secret, urlApi, urlOAuth);
+            final App app = new App(urlApi, accessToken);
             app.loop();
             System.exit(EXIT_CODE_OK);
 
@@ -61,7 +49,7 @@ public class App {
             System.out.println(ex.getMessage());
             // Automatically generate the help statement.
             final HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("java -jar erparticle.jar ", options);
+            formatter.printHelp("java -jar examples.jar ", options);
             System.exit(EXIT_CODE_ERROR);
         }
     }
@@ -69,14 +57,10 @@ public class App {
     @SuppressWarnings("static-access")
     private static Options createCliOption() {
         final Options options = new Options();
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName(OPTION_CLIENTID).withDescription("OAuth 2.0 client ID")
-                .create(OPTION_CLIENTID));
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName(OPTION_SECRET).withDescription("OAuth 2.0 secret")
-                .create(OPTION_SECRET));
+        options.addOption(OptionBuilder.isRequired().hasArg().withArgName(OPTION_TOKEN).withDescription("OAuth 2.0 access token")
+                .create(OPTION_TOKEN));
         options.addOption(OptionBuilder.hasArg().withArgName(OPTION_URL_API)
                 .withDescription("(Optional) Default is " + DEFAULT_URL_API).create(OPTION_URL_API));
-        options.addOption(OptionBuilder.hasArg().withArgName(OPTION_URL_OAUTH)
-                .withDescription("(Optional) Default is " + DEFAULT_URL_API + DEFAULT_URL_OAUTH).create(OPTION_URL_OAUTH));
         return options;
     }
 
@@ -117,7 +101,7 @@ public class App {
             scanner.close();
 
         } finally {
-//            apiClient.destroy();
+
         }
     }
 
@@ -136,27 +120,10 @@ public class App {
         System.out.println(sb);
     }
 
-    public static ApiClient createApiClient(final String apiUrl, final String oauthAccessTokenUri, final String
-            clientId, final String secret) {
-        final ApiClient apiClient = createApiClient(apiUrl);
-
-        final IAccessTokenResolver accessTokenResolver = new AccessTokenResolver(oauthAccessTokenUri, clientId, secret);
-        registerAuthorizationClientFilter(apiClient, accessTokenResolver);
-
-        return apiClient;
-    }
-
-    private static ApiClient createApiClient(final String apiUrl) {
+    public static ApiClient createApiClient(final String apiUrl, final String accessToken) {
         final ApiClient apiClient = new ApiClient();
         apiClient.setBasePath(apiUrl);
+        apiClient.setAccessToken(accessToken);
         return apiClient;
-    }
-
-    private static void registerAuthorizationClientFilter(final ApiClient apiClient,
-                                                          final IAccessTokenResolver accessTokenResolver) {
-        // This Client filter automatically adds the "Authorization" header to the HTTP request.
-        // The OAuth access token to be added as message header is received from the IAccessTokenResolver.
-        final AuthorizationClientFilter authorizationClientFilter = new AuthorizationClientFilter(accessTokenResolver);
-        apiClient.getHttpClient().register(authorizationClientFilter);
     }
 }

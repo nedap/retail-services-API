@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "!D Cloud is an RFID integration platform for retail stores. While we\n                                        provide core functionality for retail companies, a lot of functionality can be\n                                        added or extended by 3rd party developers. We encourage you to do so!",
+    "description" : "!D Cloud is an RFID integration platform for retail stores. While we provide core functionality for retail companies, a lot of functionality can be added or extended by 3rd party developers. We encourage you to do so!",
     "version" : "v1",
     "title" : "!D Cloud API",
     "contact" : {
@@ -14,33 +14,7 @@
     }
   },
   "host" : "api.nedapretail.com",
-  "tags" : [ {
-    "name" : "ApprovedDifferenceList"
-  }, {
-    "name" : "Article"
-  }, {
-    "name" : "Dashboard"
-  }, {
-    "name" : "DifferenceList"
-  }, {
-    "name" : "Epcis"
-  }, {
-    "name" : "ErpStock"
-  }, {
-    "name" : "ExpectedStock"
-  }, {
-    "name" : "NotOnShelf"
-  }, {
-    "name" : "OffsiteStorage"
-  }, {
-    "name" : "RfidCount"
-  }, {
-    "name" : "RfidStock"
-  }, {
-    "name" : "Shipment"
-  }, {
-    "name" : "Workflow"
-  } ],
+  "tags" : [ "NotOnShelf", "Epcis", "DifferenceList", "Organization", "ApprovedDifferenceList", "Article", "RfidStock", "Shipment", "Workflow", "RfidCount", "ErpStock" ],
   "schemes" : [ "https" ],
   "paths" : {
     "/approved_difference_list/v1/export" : {
@@ -48,7 +22,7 @@
         "tags" : [ "ApprovedDifferenceList" ],
         "summary" : "Export an approved difference list",
         "description" : "This endpoint returns the approved difference list with only one quantity per GTIN: the RFID quantity if the difference for that GTIN has been approved, otherwise the ERP quantity. This endpoint returns all GTINs, even the ones where RFID and ERP quantities are equal.",
-        "operationId" : "export",
+        "operationId" : "exportApprovedDifferenceList",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "id",
@@ -90,7 +64,7 @@
         "tags" : [ "ApprovedDifferenceList" ],
         "summary" : "List of approved difference list summaries",
         "description" : "Retrieves list of approved difference lists for given location.",
-        "operationId" : "list",
+        "operationId" : "listApprovedDifferenceListSummaries",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
@@ -134,7 +108,7 @@
         "tags" : [ "ApprovedDifferenceList" ],
         "summary" : "Retrieve an approved difference list",
         "description" : "Retrieve an approved difference list using the difference list ID. The response contains GTIN, ERP quantity, RFID quantity and an approved flag. This endpoint returns all GTINs, even the ones where RFID and ERP quantities are equal.",
-        "operationId" : "retrieve",
+        "operationId" : "retrieveApprovedDifferenceList",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "id",
@@ -176,7 +150,7 @@
         "tags" : [ "ApprovedDifferenceList" ],
         "summary" : "Retrieve the summary an approved difference list",
         "description" : "Returns the summary of an approved difference list for a certain location and RFID time.",
-        "operationId" : "retrieveSummary",
+        "operationId" : "retrieveApprovedDifferenceListSummary",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
@@ -210,7 +184,7 @@
         "tags" : [ "ApprovedDifferenceList" ],
         "summary" : "Update the export status of an approved difference list",
         "description" : "!D Cloud keeps track of the export status of approved difference lists. This endpoint can be used to update the status in !D Cloud.",
-        "operationId" : "updateExportStatus",
+        "operationId" : "updateApprovedDifferenceListExportStatus",
         "parameters" : [ {
           "name" : "id",
           "in" : "query",
@@ -241,7 +215,7 @@
         "tags" : [ "Article" ],
         "summary" : "Create or replace article(s)",
         "description" : "Create or replace article(s) in !D Cloud. Replacing will happen based on GTIN, which is the primary key.",
-        "operationId" : "createOrReplace",
+        "operationId" : "createOrReplaceArticles",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
@@ -270,7 +244,7 @@
         "tags" : [ "Article" ],
         "summary" : "Create or update articles",
         "description" : "Articles are create or updated using the GTIN as primary key.",
-        "operationId" : "createOrUpdate",
+        "operationId" : "createOrUpdateArticles",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
@@ -299,7 +273,7 @@
         "tags" : [ "Article" ],
         "summary" : "Find articles using search query",
         "description" : "",
-        "operationId" : "find",
+        "operationId" : "findArticles",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "query",
@@ -361,7 +335,7 @@
         "tags" : [ "Article" ],
         "summary" : "Get quantity of articles",
         "description" : "Returns the total number of articles registered in !D Cloud.",
-        "operationId" : "quantity",
+        "operationId" : "getArticleQuantity",
         "produces" : [ "application/json" ],
         "parameters" : [ ],
         "responses" : {
@@ -382,7 +356,7 @@
         "tags" : [ "Article" ],
         "summary" : "Get articles",
         "description" : "Retrieve articles. There are three ways to call this endpoint:\n 1) specify gtins,\n 2) specify barcodes, or\n 3) specify updated_after, skip and count.\n You can not mix these sets: skip and count have no meaning when specifying gtins or barcodes, and combining gtins and updated_after also doesn't work.",
-        "operationId" : "retrieve",
+        "operationId" : "retrieveArticles",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "gtins[]",
@@ -457,11 +431,11 @@
         "tags" : [ "Article" ],
         "summary" : "Delete articles",
         "description" : "Delete specified articles from the database. This cannot be undone! Please note the articles are not  deleted from the !D Cloud mobile apps. To do that, reset the app and re-register using the QR code.",
-        "operationId" : "delete",
+        "operationId" : "deleteArticles",
         "parameters" : [ {
           "name" : "gtins[]",
           "in" : "query",
-          "description" : "GTIN(s) to delete. Repeat key-value for deleting multiple articles. If empty or not specified, all articles are deleted.",
+          "description" : "GTIN(s) to delete. Repeat key-value for deleting multiple articles.",
           "required" : true,
           "type" : "array",
           "items" : {
@@ -487,7 +461,7 @@
         "tags" : [ "Article" ],
         "summary" : "Delete all articles",
         "description" : "Delete all articles from the database. This cannot be undone! Please note the articles are not deleted from the !D Cloud mobile apps. To do that, reset the app and re-register using the QR code.",
-        "operationId" : "deleteAll",
+        "operationId" : "deleteAllArticles",
         "parameters" : [ ],
         "responses" : {
           "204" : {
@@ -504,7 +478,7 @@
         "tags" : [ "DifferenceList" ],
         "summary" : "Retrieve GTIN-based difference list for a single location",
         "description" : "By default, only differences are returned and items where there is no difference are omitted",
-        "operationId" : "retrieve",
+        "operationId" : "retrieveDifferenceList",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "erp_stock_id",
@@ -558,7 +532,7 @@
         "tags" : [ "Epcis" ],
         "summary" : "Captures and stores EPCIS events in !D Cloud.",
         "description" : "The capture endpoint captures one or more EPCIS events at a time. This does not imply any relationship between these EPCIS events. Each element of the argument list is accepted if it is a valid EPCIS event or subtype that conforms to the above EPCIS event types.",
-        "operationId" : "capture",
+        "operationId" : "captureEpcisEvents",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
@@ -584,7 +558,7 @@
         "tags" : [ "Epcis" ],
         "summary" : "Query and retrieve EPCIS event(s) from !D Cloud.",
         "description" : "Returns a set of EPCIS Events that matches the criteria specified in the query parameters.",
-        "operationId" : "query",
+        "operationId" : "queryEpcisEvents",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -617,7 +591,7 @@
         "tags" : [ "ErpStock" ],
         "summary" : "Create ERP stock",
         "description" : "Create an ERP stock.",
-        "operationId" : "create",
+        "operationId" : "createErpStock",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -647,7 +621,7 @@
         "tags" : [ "ErpStock" ],
         "summary" : "Get ERP stock summaries",
         "description" : "Retrieves ERP stock summary list for given location.",
-        "operationId" : "list",
+        "operationId" : "listErpStocks",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
@@ -691,7 +665,7 @@
         "tags" : [ "ErpStock" ],
         "summary" : "Retrieve a list of GTINs and quantities for a certain ERP stock.",
         "description" : "",
-        "operationId" : "retrieve",
+        "operationId" : "retrieveErpStock",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -725,7 +699,7 @@
         "tags" : [ "ErpStock" ],
         "summary" : "Retrieve ERP stock summary.",
         "description" : "",
-        "operationId" : "retrieveSummary",
+        "operationId" : "retrieveErpStockSummary",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -752,7 +726,7 @@
         "tags" : [ "NotOnShelf" ],
         "summary" : "Lists all the items that are not-on-shelf for a certain store (taking all sales floors together), or for a certain sales floor.",
         "description" : "Not-on-shelf is defined as a situation where a certain GTIN is 'low' at a sales floor location, but still available in a stock room location. 'Low' is typically defined as 'zero available', but that might change in the future. !D Cloud excludes items that (based on historical data) never have been on the sales floor before.\nRetrieve all items that are not on the shop floor of a store, but still available in the stock-room of that same store. Those items can be replenished.",
-        "operationId" : "retrieve",
+        "operationId" : "retrieveNotOnShelf",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "location",
@@ -787,12 +761,90 @@
         } ]
       }
     },
+    "/organization/v1/location" : {
+      "get" : {
+        "tags" : [ "Organization" ],
+        "summary" : "Get Location by location identifier",
+        "description" : "",
+        "operationId" : "retrieveLocation",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "It can be either a location identifier for a location of type SITE or LOCATION.",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Location"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/organization/v1/retrieve" : {
+      "get" : {
+        "tags" : [ "Organization" ],
+        "summary" : "Get list of organizations associated with the OAuth access token",
+        "description" : "",
+        "operationId" : "retrieveOrganization",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Organizations"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
+    "/organization/v1/sites" : {
+      "get" : {
+        "tags" : [ "Organization" ],
+        "summary" : "Get list of stores or search for stores based on store code",
+        "description" : "Get list of stores, or search for stores based on store code. Note that sublocations will not be included in the response!",
+        "operationId" : "listSites",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "store_code",
+          "in" : "query",
+          "description" : "Defines the LocationObject to retrieve based on store_code.",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Location"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      }
+    },
     "/rfid_count/v1/list" : {
       "get" : {
         "tags" : [ "RfidCount" ],
         "summary" : "Get list of RFID counts",
         "description" : "Retrieve list of RFID counts for a certain location.",
-        "operationId" : "list",
+        "operationId" : "listRfidCounts",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
@@ -840,7 +892,7 @@
         "tags" : [ "RfidCount" ],
         "summary" : "Retrieve RFID count",
         "description" : "Retrieve a RFID count based on GTIN and quantity.",
-        "operationId" : "retrieve",
+        "operationId" : "retrieveRfidCount",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "location",
@@ -898,7 +950,7 @@
         "tags" : [ "RfidStock" ],
         "summary" : "Returns the real time stock at a certain location in unique items (SGTINs). Items are returned based on their last known bizLocation (location) as registered via the EPCIS Capture API.",
         "description" : "The response contains a list of stocks for all matching (sub)locations based on the given parameters:\n* If the stock for a store without sublocations is requested, the stocks list in the response  will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each   for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response   contains entries for the store and the sublocations with stock.",
-        "operationId" : "retrieve",
+        "operationId" : "retrieveRfidStock",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
@@ -936,7 +988,7 @@
         "tags" : [ "RfidStock" ],
         "summary" : "Returns the real time stock at a certain location per GTIN (and not per unique item).",
         "description" : "The response contains a list of stocks for all matching sublocations based on the given parameters.\n* If the stock for a store without sublocations is requested, the stocks list in the response   will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each   for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response   contains entries for the store and the sublocations with stock.",
-        "operationId" : "retrieveAsGtin14",
+        "operationId" : "retrieveRfidStockAsGtin14",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
@@ -981,7 +1033,7 @@
         "tags" : [ "RfidStock" ],
         "summary" : "Returns the real time stock at a certain location in unique items (SGTINs). Items are returned based on their last known bizLocation (location) as registered via the EPCIS Capture API.",
         "description" : "The response contains a list of stocks for all matching (sub)locations based on the given parameters:\n* If the stock for a store without sublocations is requested, the stocks list in the response  will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each   for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response   contains entries for the store and the sublocations with stock.",
-        "operationId" : "retrieveGroupedByDisposition",
+        "operationId" : "retrieveRfidStockGroupedByDisposition",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
@@ -1030,7 +1082,7 @@
         "tags" : [ "Shipment" ],
         "summary" : "Captures and stores a shipment notice in !D Cloud.",
         "description" : "Only shipment notices are allowed. These are represented by the status INTRANSIT.",
-        "operationId" : "capture",
+        "operationId" : "captureShipment",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
@@ -1056,7 +1108,7 @@
         "tags" : [ "Shipment" ],
         "summary" : "Deletes a shipment notice from !D Cloud.",
         "description" : "If the shipment notice was created by an aggregation event, this event will be retracted without a reason.",
-        "operationId" : "delete",
+        "operationId" : "deleteShipment",
         "parameters" : [ {
           "name" : "parent_id",
           "in" : "query",
@@ -1079,7 +1131,7 @@
         "tags" : [ "Shipment" ],
         "summary" : "Retrieves a list of shipment summaries.",
         "description" : "Either source or destination is required, not both. This endpoint can produce: JSON, CSV and Excel.",
-        "operationId" : "list",
+        "operationId" : "listShipments",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "source",
@@ -1130,7 +1182,7 @@
         "tags" : [ "Shipment" ],
         "summary" : "Retrieves a shipment from !D Cloud.",
         "description" : "",
-        "operationId" : "retrieve",
+        "operationId" : "retrieveShipment",
         "parameters" : [ {
           "name" : "parent_id",
           "in" : "query",
@@ -1163,7 +1215,7 @@
         "tags" : [ "Workflow" ],
         "summary" : "Captures and stores workflow events in !D Cloud.",
         "description" : "The capture endpoint captures one workflow events at a time.",
-        "operationId" : "capture",
+        "operationId" : "captureWorkflowEvent",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
@@ -1189,7 +1241,7 @@
         "tags" : [ "Workflow" ],
         "summary" : "Query and retrieve workflow event(s) from !D Cloud.",
         "description" : "Returns a set of workflow events that matches the criteria specified in the query parameters.",
-        "operationId" : "query",
+        "operationId" : "queryWorkflowEvents",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -2836,6 +2888,71 @@
         },
         "client_id" : {
           "type" : "string"
+        }
+      }
+    },
+    "Organization" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string",
+          "enum" : [ "ORGANIZATION", "BUSINESS_PARTNER" ]
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "organization_id" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "Organizations" : {
+      "type" : "object",
+      "properties" : {
+        "own" : {
+          "$ref" : "#/definitions/Organization"
+        },
+        "linked" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Organization"
+          }
+        }
+      }
+    },
+    "Setting" : {
+      "type" : "object",
+      "properties" : {
+        "settings" : {
+          "type" : "object",
+          "description" : "Series of key-value pairs representing the actual settings.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "version" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The version of the settings: a higher number means newer. Use this to check if your local cache of the settings is outdated."
+        },
+        "target_type" : {
+          "type" : "string",
+          "description" : "The type of target in the organizational structure",
+          "enum" : [ "CustomerOrganization", "Division", "Store", "Sublocation" ]
+        },
+        "target_id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The numeric identifier for the target."
+        },
+        "target_name" : {
+          "type" : "string",
+          "description" : "Human readable name of the target."
+        },
+        "location_id" : {
+          "type" : "string",
+          "description" : "If present, the location_id of the target."
         }
       }
     }

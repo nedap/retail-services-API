@@ -37,23 +37,23 @@ public class ArticleExample {
             System.out.println(NEW_LINE + "Uploading articles...");
             final Articles exampleArticles = new Articles().addArticlesItem(createExampleArticle());
 
-            api.createOrReplace(exampleArticles);
+            api.createOrReplaceArticles(exampleArticles);
             System.out.println(printCapturedArticles(exampleArticles.getArticles()));
 
             // Article quantity
             System.out.println(NEW_LINE + "Retrieving article quantity...");
-            final Long quantity = api.quantity().getQuantity();
+            final Long quantity = api.getArticleQuantity().getQuantity();
             System.out.println("Article quantity = " + quantity);
 
             // Article details by gtins
             System.out.println(NEW_LINE + "Retrieving article details by gtins...");
             final List<String> gtins = Arrays.asList(GTIN_1, GTIN_2);
-            final List<Article> articlesWithGtins = api.retrieve(gtins, null, null, null, null, null);
+            final List<Article> articlesWithGtins = api.retrieveArticles(gtins, null, null, null, null, null);
             System.out.println(printRetrievedArticlesByGtins(articlesWithGtins, gtins));
 
             // Find articles with search query
             System.out.println(NEW_LINE + "Finding article with search query: 'summer'...");
-            final ArticleFindResponse articleFindResponse = api.find("summer", 100, 0, null, null);
+            final ArticleFindResponse articleFindResponse = api.findArticles("summer", 100, 0, null, null);
             System.out.println(printArticleFindResponse(articleFindResponse));
 
             // Article datails by barcodes with name field
@@ -61,14 +61,14 @@ public class ArticleExample {
             final List<String> barcodes = Arrays.asList("2011200000019", "2011200000057");
             final List<String> fields = new ArrayList<>();
             fields.add("name");
-            final List<Article> articlesWithBarcodes = api.retrieve(null, barcodes, null ,null, null,
+            final List<Article> articlesWithBarcodes = api.retrieveArticles(null, barcodes, null ,null, null,
                     fields);
             System.out.println(printRetrievedArticlesByBarcodes(articlesWithBarcodes, barcodes));
 
             // Retrieve articles with gtin and name fields
             System.out.println(NEW_LINE + "Retrieving up to 50 articles with gtins and names...");
             fields.add("gtin");
-            final List<Article> articles = api.retrieve(null, null, null, 0, 50, fields);
+            final List<Article> articles = api.retrieveArticles(null, null, null, 0, 50, fields);
             System.out.println(printRetrievedArticles(articles));
 
             System.out.println(NEW_LINE + "--- Article API example finished ---");

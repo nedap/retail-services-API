@@ -41,18 +41,18 @@ public class WorkflowExample {
                 MESSAGE_IDS.add(event.getId());
             }
 
-            epcisApi.capture(epcisEventsContainer);
+            epcisApi.captureEpcisEvents(epcisEventsContainer);
             System.out.println(printCaptureEpcisEvents(epcisEventsContainer));
 
             // Workflow capture
             System.out.println(NEW_LINE + "Capturing workflow event...");
             final WorkflowEvent workflow = makeWorkflowEvent(locationId, epcisEventsContainer);
-            workflowApi.capture(workflow);
+            workflowApi.captureWorkflowEvent(workflow);
             System.out.println("Captured workflow event with:" + printWorkflow(workflow));
 
             // Workflow query
             System.out.println("Quering worflow...");
-            final List<WorkflowEvent> workflowEvents = workflowApi.query(null, null,
+            final List<WorkflowEvent> workflowEvents = workflowApi.queryWorkflowEvents(null, null,
                     DateTime.now().minusMinutes(10), null);
             System.out.println(printWorkflowEvents(workflowEvents));
 

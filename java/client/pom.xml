@@ -115,24 +115,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/../../openapi/oauth-openapi.json</inputSpec>
-                            <language>java</language>
-                            <apiPackage>com.nedap.retail.client.api</apiPackage>
-                            <modelPackage>com.nedap.retail.client.model</modelPackage>
-                            <configOptions>
-                                <library>jersey2</library>
-                                <dateLibrary>joda</dateLibrary>
-                            </configOptions>
-                            <output>${project.build.directory}/generated-sources/openapi</output>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-java8-jersey2-idcloud</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/../../openapi/idcloud-openapi.json</inputSpec>
+                            <inputSpec>${project.basedir}/../../openapi/retail-services-openapi.json</inputSpec>
                             <language>java</language>
                             <apiPackage>com.nedap.retail.client.api</apiPackage>
                             <modelPackage>com.nedap.retail.client.model</modelPackage>
