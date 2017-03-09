@@ -19,7 +19,7 @@ System.Runtime.Serialization.dll \
 -doc:../target/NedapRetailApiExample.xml \
 -platform:anycpu
 
-cp -f NedapRetailApiExample/NedapRetailApiExample.config ../target/NedapRetailApiExample.exe.config
+cp -f NedapRetailApiExample/App.config ../target/NedapRetailApiExample.exe.config
 
 if [ $? -ne 0 ]
 then

@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NedapRetailApiExample", "NedapRetailApiExample\NedapRetailApiExample.csproj", "{8465DBD2-F058-4E65-8BB6-977FB3FF488A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{4CD84E23-9FC6-4A58-8C24-F5390720571E} = {4CD84E23-9FC6-4A58-8C24-F5390720571E}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nedap.Retail.Api", "Nedap.Retail.Api\Nedap.Retail.Api.csproj", "{4CD84E23-9FC6-4A58-8C24-F5390720571E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +15,6 @@ Global
 		{8465DBD2-F058-4E65-8BB6-977FB3FF488A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8465DBD2-F058-4E65-8BB6-977FB3FF488A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8465DBD2-F058-4E65-8BB6-977FB3FF488A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4CD84E23-9FC6-4A58-8C24-F5390720571E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4CD84E23-9FC6-4A58-8C24-F5390720571E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4CD84E23-9FC6-4A58-8C24-F5390720571E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4CD84E23-9FC6-4A58-8C24-F5390720571E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
