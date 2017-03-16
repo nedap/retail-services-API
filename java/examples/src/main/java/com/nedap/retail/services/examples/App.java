@@ -1,7 +1,6 @@
 package com.nedap.retail.services.examples;
 
-import com.nedap.retail.messages.Client;
-import com.nedap.retail.messages.ClientException;
+import com.nedap.retail.client.*;
 import org.apache.commons.cli.*;
 
 import java.io.IOException;
@@ -20,14 +19,13 @@ public class App {
 
     private static final int EXIT_CODE_OK = 0;
     private static final int EXIT_CODE_ERROR = 1;
-    private static final String OPTION_CLIENTID = "clientid";
-    private static final String OPTION_SECRET = "secret";
-    private static final String OPTION_URL = "url";
-    private static final String URL = "https://api.nedapretail.com";
-    private final Client apiClient;
+    private static final String OPTION_TOKEN= "token";
+    private static final String OPTION_URL_API = "url";
+    private static final String DEFAULT_URL_API = "https://api-test.nedapretail.com";
+    private final ApiClient apiClient;
 
-    public App(final String clientId, final String secret, final String url) throws IOException {
-        apiClient = new Client(url, clientId, secret);
+    public App(final String urlApi, final String accessToken) {
+        apiClient = createApiClient(urlApi, accessToken);
     }
 
     public static void main(final String[] args) throws Exception {
@@ -39,15 +37,11 @@ public class App {
             final CommandLine cmd = parser.parse(options, args);
 
             // Get command-line parameters.
-            final String clientId = cmd.getOptionValue(OPTION_CLIENTID);
-            final String secret = cmd.getOptionValue(OPTION_SECRET);
-            final String url = cmd.getOptionValue(OPTION_URL, URL);
-
-            System.out.println(NEW_LINE + "OAuth 2.0 client ID: " + clientId);
-            System.out.println("url: " + url);
+            final String urlApi = cmd.getOptionValue(OPTION_URL_API, DEFAULT_URL_API);
+            final String accessToken = cmd.getOptionValue(OPTION_TOKEN, "");
 
             // Start app.
-            final App app = new App(clientId, secret, url);
+            final App app = new App(urlApi, accessToken);
             app.loop();
             System.exit(EXIT_CODE_OK);
 
@@ -55,7 +49,7 @@ public class App {
             System.out.println(ex.getMessage());
             // Automatically generate the help statement.
             final HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("java -jar erparticle.jar ", options);
+            formatter.printHelp("java -jar examples.jar ", options);
             System.exit(EXIT_CODE_ERROR);
         }
     }
@@ -63,12 +57,10 @@ public class App {
     @SuppressWarnings("static-access")
     private static Options createCliOption() {
         final Options options = new Options();
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("id").withDescription("OAuth 2.0 client ID")
-                .create(OPTION_CLIENTID));
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName("secret").withDescription("OAuth 2.0 secret")
-                .create(OPTION_SECRET));
-        options.addOption(OptionBuilder.hasArg().withArgName("url")
-                .withDescription("(Optional) Default is https://api.nedapretail.com").create(OPTION_URL));
+        options.addOption(OptionBuilder.isRequired().hasArg().withArgName(OPTION_TOKEN).withDescription("OAuth 2.0 access token")
+                .create(OPTION_TOKEN));
+        options.addOption(OptionBuilder.hasArg().withArgName(OPTION_URL_API)
+                .withDescription("(Optional) Default is " + DEFAULT_URL_API).create(OPTION_URL_API));
         return options;
     }
 
@@ -87,15 +79,12 @@ public class App {
                             ArticleExample.runExample(apiClient);
                             break;
                         case "2":
-                            EpcExample.runExample(apiClient);
-                            break;
-                        case "3":
                             EpcisExample.runExample(apiClient);
                             break;
-                        case "4":
+                        case "3":
                             ErpExample.runExample(apiClient);
                             break;
-                        case "5":
+                        case "4":
                             WorkflowExample.runExample(apiClient);
                             break;
                         case "0":
@@ -105,14 +94,14 @@ public class App {
                             quit = true;
                             break;
                     }
-                } catch (final ClientException ex) {
+                } catch (final Throwable ex) {
                     System.err.println(ex.getMessage());
                 }
             }
             scanner.close();
 
         } finally {
-            apiClient.destroy();
+
         }
     }
 
@@ -122,13 +111,19 @@ public class App {
         sb.append(NEW_LINE).append("*** Nedap Retail API examples ***");
         sb.append(NEW_LINE).append("Choose example you want to run");
         sb.append(NEW_LINE).append("1 : Article API");
-        sb.append(NEW_LINE).append("2 : EPC API");
-        sb.append(NEW_LINE).append("3 : EPCIS API");
-        sb.append(NEW_LINE).append("4 : ERP API");
-        sb.append(NEW_LINE).append("5 : Workflow API");
+        sb.append(NEW_LINE).append("2 : EPCIS API");
+        sb.append(NEW_LINE).append("3 : ERP API");
+        sb.append(NEW_LINE).append("4 : Workflow API");
         sb.append(NEW_LINE).append("0 : Quit");
         sb.append(NEW_LINE);
 
         System.out.println(sb);
+    }
+
+    public static ApiClient createApiClient(final String apiUrl, final String accessToken) {
+        final ApiClient apiClient = new ApiClient();
+        apiClient.setBasePath(apiUrl);
+        apiClient.setAccessToken(accessToken);
+        return apiClient;
     }
 }

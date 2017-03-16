@@ -8,14 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.nedap.retail.client.model.EpcisEvent;
+import com.nedap.retail.client.model.EpcisEventContainer;
 import org.joda.time.DateTime;
 
-import com.nedap.retail.messages.epcis.v1_1.EpcisEvent;
-import com.nedap.retail.messages.epcis.v1_1.EpcisEventContainer;
-import com.nedap.retail.messages.epcis.v1_1.ObjectEvent;
-import com.nedap.retail.messages.epcis.v1_1.cbv.Action;
-import com.nedap.retail.messages.epcis.v1_1.cbv.Bizstep;
-import com.nedap.retail.messages.epcis.v1_1.cbv.Disposition;
+
 
 public class EpcisHelper {
 
@@ -30,28 +27,30 @@ public class EpcisHelper {
     }
 
     private static EpcisEvent createEpcisEvent1(final String locationId) {
-        final ObjectEvent event = new ObjectEvent();
-        event.id = UUID.randomUUID().toString();
-        event.eventTime = DateTime.now();
-        event.action = Action.OBSERVE.action();
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
-        event.bizLocation = locationId;
-        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep();
-        event.readPoint = locationId;
-        event.epcList = makeEpcList1();
+        final EpcisEvent event = new EpcisEvent();
+        event.setType(EpcisEvent.TypeEnum.OBJECT_EVENT);
+        event.id(UUID.randomUUID().toString());
+        event.eventTime(DateTime.now());
+        event.action(EpcisEvent.ActionEnum.OBSERVE);
+        event.disposition("urn:epcglobal:cbv:disp:sellable_accessible");
+        event.bizLocation(locationId);
+        event.bizStep("urn:epcglobal:cbv:bizstep:cycle_counting");
+        event.readPoint(locationId);
+        event.epcList(makeEpcList1());
         return event;
     }
 
     private static EpcisEvent createEpcisEvent2(final String locationId) {
-        final ObjectEvent event = new ObjectEvent();
-        event.id = UUID.randomUUID().toString();
-        event.eventTime = DateTime.now();
-        event.action = Action.OBSERVE.action();
-        event.disposition = Disposition.SELLABLE_ACCESSIBLE.disposition();
-        event.bizLocation = locationId;
-        event.bizStep = Bizstep.CYCLE_COUNTING.bizStep();
-        event.readPoint = locationId;
-        event.epcList = makeEpcList2();
+        final EpcisEvent event = new EpcisEvent();
+        event.setType(EpcisEvent.TypeEnum.OBJECT_EVENT);
+        event.id(UUID.randomUUID().toString());
+        event.eventTime(DateTime.now());
+        event.action(EpcisEvent.ActionEnum.OBSERVE);
+        event.disposition("urn:epcglobal:cbv:disp:sellable_accessible");
+        event.bizLocation(locationId);
+        event.bizStep("urn:epcglobal:cbv:bizstep:cycle_counting");
+        event.readPoint(locationId);
+        event.epcList(makeEpcList2());
         return event;
     }
 
@@ -77,10 +76,10 @@ public class EpcisHelper {
 
     public static String printCaptureEpcisEvents(final EpcisEventContainer epcisEventContainer) {
         final StringBuilder sb = new StringBuilder("Captured EPCIS object events with ids:");
-        for (int i = 0; i < epcisEventContainer.events.size(); i++) {
+        for (int i = 0; i < epcisEventContainer.getEvents().size(); i++) {
             sb.append(NEW_LINE).append(TAB);
             sb.append(i + 1).append(DOT);
-            sb.append(epcisEventContainer.events.get(i).id);
+            sb.append(epcisEventContainer.getEvents().get(i).getId());
         }
         return sb.toString();
     }
