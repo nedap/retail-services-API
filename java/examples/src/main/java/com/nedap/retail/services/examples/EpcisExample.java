@@ -32,8 +32,7 @@ public class EpcisExample {
         try {
             // Capture EPCIS events
             System.out.println(NEW_LINE + "Capturing EPCIS events...");
-            final EpcisEventContainer epcisEventsList = new EpcisEventContainer();
-            epcisEventsList.events(createEvents(locationId));
+            final List<EpcisEvent> epcisEventsList = createEvents(locationId);
             api.captureEpcisEvents(epcisEventsList);
             System.out.println(printCaptureEpcisEvents(epcisEventsList));
 

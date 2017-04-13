@@ -35,10 +35,10 @@ public class ArticleExample {
         try {
             // Create or replace articles
             System.out.println(NEW_LINE + "Uploading articles...");
-            final Articles exampleArticles = new Articles().addArticlesItem(createExampleArticle());
+            final List<Article> exampleArticles = Arrays.asList(createExampleArticle());
 
             api.createOrReplaceArticles(exampleArticles);
-            System.out.println(printCapturedArticles(exampleArticles.getArticles()));
+            System.out.println(printCapturedArticles(exampleArticles));
 
             // Article quantity
             System.out.println(NEW_LINE + "Retrieving article quantity...");

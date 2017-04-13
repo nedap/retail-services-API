@@ -10,6 +10,7 @@ import com.nedap.retail.client.model.WorkflowEvent;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.nedap.retail.services.examples.EpcisHelper.createEvents;
@@ -34,19 +35,18 @@ public class WorkflowExample {
             // Make some EPCIS events first
             System.out.println(NEW_LINE + "Capturing some EPCIS events first...");
 
-            final EpcisEventContainer epcisEventsContainer = new EpcisEventContainer();
-            epcisEventsContainer.events(createEvents(locationId));
+            final List<EpcisEvent> events = createEvents(locationId);
 
-            for (final EpcisEvent event : epcisEventsContainer.getEvents()) {
+            for (final EpcisEvent event : events) {
                 MESSAGE_IDS.add(event.getId());
             }
 
-            epcisApi.captureEpcisEvents(epcisEventsContainer);
-            System.out.println(printCaptureEpcisEvents(epcisEventsContainer));
+            epcisApi.captureEpcisEvents(events);
+            System.out.println(printCaptureEpcisEvents(events));
 
             // Workflow capture
             System.out.println(NEW_LINE + "Capturing workflow event...");
-            final WorkflowEvent workflow = makeWorkflowEvent(locationId, epcisEventsContainer);
+            final WorkflowEvent workflow = makeWorkflowEvent(locationId, events);
             workflowApi.captureWorkflowEvent(workflow);
             System.out.println("Captured workflow event with:" + printWorkflow(workflow));
 
@@ -63,22 +63,21 @@ public class WorkflowExample {
         }
     }
 
-    private static WorkflowEvent makeWorkflowEvent(final String locationId,
-            final EpcisEventContainer epcisEventsContainer) {
+    private static WorkflowEvent makeWorkflowEvent(final String locationId, final List<EpcisEvent> events) {
 
         final WorkflowEvent workflow = new WorkflowEvent();
-        workflow.type(WorkflowEvent.TypeEnum.CYCLE_COUNT_FINISHED);
+        workflow.type("cycle_count_finished");
         workflow.eventTime(DateTime.now());
         workflow.location(locationId);
-        workflow.epcCount(countEpcs(epcisEventsContainer));
+        workflow.epcCount(countEpcs(events));
         workflow.messageIds(MESSAGE_IDS);
         return workflow;
     }
 
-    private static long countEpcs(final EpcisEventContainer epcisEventsContainer) {
+    private static long countEpcs(final List<EpcisEvent> events) {
         long counter = 0;
 
-        for (final EpcisEvent epcisEvent : epcisEventsContainer.getEvents()) {
+        for (final EpcisEvent epcisEvent : events) {
             counter += epcisEvent.getEpcList().size();
         }
         return Long.valueOf(counter);

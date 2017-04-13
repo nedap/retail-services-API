@@ -74,12 +74,12 @@ public class EpcisHelper {
         return epcList;
     }
 
-    public static String printCaptureEpcisEvents(final EpcisEventContainer epcisEventContainer) {
+    public static String printCaptureEpcisEvents(final List<EpcisEvent> events) {
         final StringBuilder sb = new StringBuilder("Captured EPCIS object events with ids:");
-        for (int i = 0; i < epcisEventContainer.getEvents().size(); i++) {
+        for (int i = 0; i < events.size(); i++) {
             sb.append(NEW_LINE).append(TAB);
             sb.append(i + 1).append(DOT);
-            sb.append(epcisEventContainer.getEvents().get(i).getId());
+            sb.append(events.get(i).getId());
         }
         return sb.toString();
     }
