@@ -14,34 +14,55 @@
     }
   },
   "host" : "api.nedapretail.com",
-  "tags" : [ "NotOnShelf", "Epcis", "DifferenceList", "Organization", "ApprovedDifferenceList", "Article", "RfidStock", "Shipment", "Workflow", "RfidCount", "ErpStock" ],
+  "tags" : [ {
+    "name" : "ApprovedDifferenceList"
+  }, {
+    "name" : "Article"
+  }, {
+    "name" : "DifferenceList"
+  }, {
+    "name" : "Epcis"
+  }, {
+    "name" : "ErpStock"
+  }, {
+    "name" : "RfidCount"
+  }, {
+    "name" : "RfidStock"
+  }, {
+    "name" : "Shipment"
+  }, {
+    "name" : "Workflow"
+  }, {
+    "name" : "Organization"
+  } ],
   "schemes" : [ "https" ],
   "paths" : {
     "/approved_difference_list/v1/export" : {
       "get" : {
         "tags" : [ "ApprovedDifferenceList" ],
-        "summary" : "Export an approved difference list",
-        "description" : "This endpoint returns the approved difference list with only one quantity per GTIN: the RFID quantity if the difference for that GTIN has been approved, otherwise the ERP quantity. This endpoint returns all GTINs, even the ones where RFID and ERP quantities are equal.",
+        "summary" : "Export approved difference list",
+        "description" : "Exports an approved difference list, using the approved difference list identifier. This endpoint returns the approved difference list with only one quantity per GTIN: the RFID quantity if the difference for that GTIN has been approved, otherwise the ERP quantity. This endpoint returns all GTINs, even the ones where RFID and ERP quantities are equal.",
         "operationId" : "exportApprovedDifferenceList",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "id",
           "in" : "query",
-          "description" : "Approved difference list ID.",
+          "description" : "Approved difference list identifier.",
           "required" : true,
           "type" : "string",
-          "format" : "uuid"
+          "format" : "uuid",
+          "x-example" : "96fb929a-80a7-4ddf-ac42-f153838383bb"
         }, {
           "name" : "include_articles",
           "in" : "query",
-          "description" : "When set to true the article master data will be included in the response.",
+          "description" : "Whether to include article details like name, size, etc. in the response.",
           "required" : false,
           "type" : "boolean",
           "default" : false
         }, {
           "name" : "accept",
           "in" : "header",
-          "description" : "Approved difference list ID.",
+          "description" : "Type of file to return.",
           "required" : false,
           "type" : "string",
           "enum" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ]
@@ -57,32 +78,34 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Approved Difference List API"
     },
     "/approved_difference_list/v1/list" : {
       "get" : {
         "tags" : [ "ApprovedDifferenceList" ],
-        "summary" : "List of approved difference list summaries",
-        "description" : "Retrieves list of approved difference lists for given location.",
+        "summary" : "List approved difference list summaries",
+        "description" : "Retrieves a list of approved difference list summaries for a given store.",
         "operationId" : "listApprovedDifferenceListSummaries",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "The location identifier for list of approved difference lists.",
+          "description" : "The location identifier of the store to retrieve the approved difference lists for.",
           "required" : true,
-          "type" : "string"
+          "type" : "string",
+          "x-example" : "http://nedapretail.com/loc/store-1"
         }, {
           "name" : "from_rfid_time",
           "in" : "query",
-          "description" : "Defines date+time since when approved difference lists are required.\nWhen omitted: returns all approved difference lists for specified location since the epoch.",
+          "description" : "Approved difference lists with RFID count time after this value will be returned.",
           "required" : false,
           "type" : "string",
           "format" : "date-time"
         }, {
           "name" : "until_rfid_time",
           "in" : "query",
-          "description" : "Defines date+time until when approved difference lists are required.\nWhen omitted: returns all approved difference lists for specified location up until now.",
+          "description" : "Approved difference lists with RFID count time before this value will be returned.",
           "required" : false,
           "type" : "string",
           "format" : "date-time"
@@ -101,33 +124,35 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Approved Difference List API"
     },
     "/approved_difference_list/v1/retrieve" : {
       "get" : {
         "tags" : [ "ApprovedDifferenceList" ],
-        "summary" : "Retrieve an approved difference list",
-        "description" : "Retrieve an approved difference list using the difference list ID. The response contains GTIN, ERP quantity, RFID quantity and an approved flag. This endpoint returns all GTINs, even the ones where RFID and ERP quantities are equal.",
+        "summary" : "Retrieve approved difference list",
+        "description" : "Retrieves an approved difference list, using the approved difference list identifier.",
         "operationId" : "retrieveApprovedDifferenceList",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "id",
           "in" : "query",
-          "description" : "Approved difference list ID.",
+          "description" : "Identifier of the approved difference list",
           "required" : true,
           "type" : "string",
-          "format" : "uuid"
+          "format" : "uuid",
+          "x-example" : "96fb929a-80a7-4ddf-ac42-f153838383bb"
         }, {
           "name" : "include_articles",
           "in" : "query",
-          "description" : "When set to true the article master data will be included in the response.",
+          "description" : "Whether to include article details like name, size, etc. in the response.",
           "required" : false,
           "type" : "boolean",
           "default" : false
         }, {
           "name" : "accept",
           "in" : "header",
-          "description" : "Approved difference list ID.",
+          "description" : "Type of file to return.",
           "required" : false,
           "type" : "string",
           "enum" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ]
@@ -143,25 +168,27 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Approved Difference List API"
     },
     "/approved_difference_list/v1/retrieve_summary" : {
       "get" : {
         "tags" : [ "ApprovedDifferenceList" ],
-        "summary" : "Retrieve the summary an approved difference list",
-        "description" : "Returns the summary of an approved difference list for a certain location and RFID time.",
+        "summary" : "Retrieve approved difference list summary",
+        "description" : "Returns the summary of an approved difference list for a certain location and RFID count time.",
         "operationId" : "retrieveApprovedDifferenceListSummary",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "The location identifier for list of approved difference lists.",
+          "description" : "The location identifier of the store to retrieve the approved difference list summary for.",
           "required" : true,
-          "type" : "string"
+          "type" : "string",
+          "x-example" : "http://nedapretail.com/loc/store-1"
         }, {
           "name" : "rfid_time",
           "in" : "query",
-          "description" : "Date and time of an RFID stock.",
+          "description" : "Date and time of the RFID count.",
           "required" : true,
           "type" : "string",
           "format" : "date-time"
@@ -177,28 +204,31 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Approved Difference List API"
     },
     "/approved_difference_list/v1/update_export_status" : {
       "post" : {
         "tags" : [ "ApprovedDifferenceList" ],
-        "summary" : "Update the export status of an approved difference list",
-        "description" : "!D Cloud keeps track of the export status of approved difference lists. This endpoint can be used to update the status in !D Cloud.",
+        "summary" : "Update approved difference list export status",
+        "description" : "Updates the export status of an approved difference list.",
         "operationId" : "updateApprovedDifferenceListExportStatus",
         "parameters" : [ {
           "name" : "id",
           "in" : "query",
-          "description" : "ID of approved difference list.",
+          "description" : "Identifier of the approved difference list.",
           "required" : true,
           "type" : "string",
-          "format" : "uuid"
+          "format" : "uuid",
+          "x-example" : "41a15207-2324-4beb-aded-738f3316db02"
         }, {
           "name" : "export_status",
           "in" : "query",
-          "description" : "New export status of approved difference list.",
+          "description" : "New export status of the approved difference list.",
           "required" : true,
           "type" : "string",
-          "enum" : [ "NOT_EXPORTED", "EXPORTED", "ERROR" ]
+          "enum" : [ "NOT_EXPORTED", "EXPORTED", "ERROR" ],
+          "x-example" : "NOT_EXPORTED"
         } ],
         "responses" : {
           "204" : {
@@ -208,80 +238,24 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
-    },
-    "/article/v2/create_or_replace" : {
-      "post" : {
-        "tags" : [ "Article" ],
-        "summary" : "Create or replace article(s)",
-        "description" : "Create or replace article(s) in !D Cloud. Replacing will happen based on GTIN, which is the primary key.",
-        "operationId" : "createOrReplaceArticles",
-        "consumes" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "articles",
-          "description" : "An array of articles that should be created or replaced.",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/Articles"
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "Success"
-          },
-          "400" : {
-            "description" : "Bad request"
-          }
-        },
-        "security" : [ {
-          "auth" : [ ]
-        } ]
-      }
-    },
-    "/article/v2/create_or_update" : {
-      "post" : {
-        "tags" : [ "Article" ],
-        "summary" : "Create or update articles",
-        "description" : "Articles are create or updated using the GTIN as primary key.",
-        "operationId" : "createOrUpdateArticles",
-        "consumes" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "articles",
-          "description" : "An array of articles that should be updated.",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/Articles"
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "Success"
-          },
-          "400" : {
-            "description" : "Bad request"
-          }
-        },
-        "security" : [ {
-          "auth" : [ ]
-        } ]
-      }
+      },
+      "x-gelato-group" : "Approved Difference List API"
     },
     "/article/v2/find" : {
       "get" : {
         "tags" : [ "Article" ],
-        "summary" : "Find articles using search query",
-        "description" : "",
+        "summary" : "Find articles",
+        "description" : "Finds articles based on a search query that allows search in all fields.",
         "operationId" : "findArticles",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "query",
           "in" : "query",
-          "description" : "Search query.",
+          "description" : "Search query. Comma separated values to search for in the articles database (‘AND' query). Search will be executed on all fields and is case insensitive",
           "required" : false,
           "type" : "string",
-          "default" : "*"
+          "default" : "*",
+          "x-example" : "shirt,XXL"
         }, {
           "name" : "count",
           "in" : "query",
@@ -328,19 +302,20 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Article API"
     },
     "/article/v2/quantity" : {
       "get" : {
         "tags" : [ "Article" ],
-        "summary" : "Get quantity of articles",
-        "description" : "Returns the total number of articles registered in !D Cloud.",
+        "summary" : "Get article quantity",
+        "description" : "Returns the total quantity of articles stored.",
         "operationId" : "getArticleQuantity",
         "produces" : [ "application/json" ],
         "parameters" : [ ],
         "responses" : {
           "200" : {
-            "description" : "successful operation",
+            "description" : "Success",
             "schema" : {
               "$ref" : "#/definitions/QuantityResponse"
             }
@@ -349,13 +324,14 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Article API"
     },
     "/article/v2/retrieve" : {
       "get" : {
         "tags" : [ "Article" ],
-        "summary" : "Get articles",
-        "description" : "Retrieve articles. There are three ways to call this endpoint:\n 1) specify gtins,\n 2) specify barcodes, or\n 3) specify updated_after, skip and count.\n You can not mix these sets: skip and count have no meaning when specifying gtins or barcodes, and combining gtins and updated_after also doesn't work.",
+        "summary" : "Retrieve articles",
+        "description" : "Retrieves articles. There are three ways to call this endpoint:\n * 1. specify GTINs,\n * 2. specify barcodes, or\n * 3. specify updated_after, skip and count.\n You can not mix these sets: skip and count have no meaning when specifying gtins or barcodes, and combining gtins and updated_after also doesn't work.",
         "operationId" : "retrieveArticles",
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -424,13 +400,80 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Article API"
+    },
+    "/article/v3/create_or_replace" : {
+      "post" : {
+        "tags" : [ "Article" ],
+        "summary" : "Create or replace articles",
+        "description" : "Creates or replaces article(s). Articles are replaced using the GTIN as primary key.",
+        "operationId" : "createOrReplaceArticles",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "articles",
+          "description" : "A list of articles that should be created or replaced.",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/Article"
+            }
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Article API"
+    },
+    "/article/v3/create_or_update" : {
+      "post" : {
+        "tags" : [ "Article" ],
+        "summary" : "Create or update articles",
+        "description" : "Creates or updates article(s). Articles are updated using the GTIN as primary key.",
+        "operationId" : "createOrUpdateArticles",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "articles",
+          "description" : "A list of articles that should be updated.",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/Article"
+            }
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Article API"
     },
     "/article/v3/delete" : {
       "delete" : {
         "tags" : [ "Article" ],
-        "summary" : "Delete articles",
-        "description" : "Delete specified articles from the database. This cannot be undone! Please note the articles are not  deleted from the !D Cloud mobile apps. To do that, reset the app and re-register using the QR code.",
+        "summary" : "Delete specific articles",
+        "description" : "Deletes specified articles from the database. This cannot be undone! Please note the articles are not deleted from the apps. To do that, reset the app and re-register using the QR code.",
         "operationId" : "deleteArticles",
         "parameters" : [ {
           "name" : "gtins[]",
@@ -454,13 +497,14 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Article API"
     },
     "/article/v3/delete_all" : {
       "delete" : {
         "tags" : [ "Article" ],
         "summary" : "Delete all articles",
-        "description" : "Delete all articles from the database. This cannot be undone! Please note the articles are not deleted from the !D Cloud mobile apps. To do that, reset the app and re-register using the QR code.",
+        "description" : "Deletes all articles from the database. This cannot be undone! Please note the articles are not deleted from the apps. To do that, reset the app and re-register using the QR code.",
         "operationId" : "deleteAllArticles",
         "parameters" : [ ],
         "responses" : {
@@ -471,39 +515,41 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Article API"
     },
     "/difference_list/v1/retrieve" : {
       "get" : {
         "tags" : [ "DifferenceList" ],
-        "summary" : "Retrieve GTIN-based difference list for a single location",
-        "description" : "By default, only differences are returned and items where there is no difference are omitted",
+        "summary" : "Retrieve difference list",
+        "description" : "Retrieves GTIN-based difference list for a single location. By default, only items with an ERP stock quantity that is different from the RFID count quantity are returned.",
         "operationId" : "retrieveDifferenceList",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "erp_stock_id",
           "in" : "query",
-          "description" : "ERP stock ID.",
+          "description" : "Identifier of the ERP stock to use.",
           "required" : true,
-          "type" : "string"
+          "type" : "string",
+          "x-example" : "e8a2a3b8-ea3d-4ab6-857b-db1ae25de2e9"
         }, {
           "name" : "time",
           "in" : "query",
-          "description" : "The date and time you would like to have the RFID stock information from.",
+          "description" : "Date and time of the RFID count to be used.",
           "required" : false,
           "type" : "string",
           "format" : "date-time"
         }, {
           "name" : "only_differences",
           "in" : "query",
-          "description" : "When set to true (default) this will return only differences. When set to false, this will return all entries in ERP stock or RFID stock (except when both are zero) (optional)",
+          "description" : "When set to true, only differences will be returned. When set to false, all GTINs in the ERP stock or RFID stock will be returned (except when both are zero).",
           "required" : false,
           "type" : "boolean",
           "default" : true
         }, {
           "name" : "include_articles",
           "in" : "query",
-          "description" : "When set to true the article master data will be included in the response.",
+          "description" : "Whether to include article details like name, size, etc. in the response.",
           "required" : false,
           "type" : "boolean",
           "default" : false
@@ -525,39 +571,14 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
-    },
-    "/epcis/v2/capture" : {
-      "post" : {
-        "tags" : [ "Epcis" ],
-        "summary" : "Captures and stores EPCIS events in !D Cloud.",
-        "description" : "The capture endpoint captures one or more EPCIS events at a time. This does not imply any relationship between these EPCIS events. Each element of the argument list is accepted if it is a valid EPCIS event or subtype that conforms to the above EPCIS event types.",
-        "operationId" : "captureEpcisEvents",
-        "consumes" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "events",
-          "description" : "An array of EPCISEvent(s) to capture and store.",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/EpcisEventContainer"
-          }
-        } ],
-        "responses" : {
-          "default" : {
-            "description" : "successful operation"
-          }
-        },
-        "security" : [ {
-          "auth" : [ ]
-        } ]
-      }
+      },
+      "x-gelato-group" : "Difference List API"
     },
     "/epcis/v2/query" : {
       "post" : {
         "tags" : [ "Epcis" ],
-        "summary" : "Query and retrieve EPCIS event(s) from !D Cloud.",
-        "description" : "Returns a set of EPCIS Events that matches the criteria specified in the query parameters.",
+        "summary" : "Query EPCIS events",
+        "description" : "Queries and retrieves EPCIS event(s) that match the criteria specified in the query parameters.",
         "operationId" : "queryEpcisEvents",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -584,23 +605,54 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "EPCIS API"
+    },
+    "/epcis/v3/capture" : {
+      "post" : {
+        "tags" : [ "Epcis" ],
+        "summary" : "Capture EPCIS events",
+        "description" : "Captures and stores EPCIS events. This does not imply any relationship between these EPCIS  events.",
+        "operationId" : "captureEpcisEvents",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "events",
+          "description" : "A list of EPCIS events to be captured.",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/EpcisEvent"
+            }
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "EPCIS API"
     },
     "/erp_stock/v1/create" : {
       "post" : {
         "tags" : [ "ErpStock" ],
         "summary" : "Create ERP stock",
-        "description" : "Create an ERP stock.",
+        "description" : "Creates an ERP stock.",
         "operationId" : "createErpStock",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "ERP stock",
-          "description" : "The ERP stock to store.",
+          "description" : "The ERP stock to create.",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/Stock"
+            "$ref" : "#/definitions/ErpStock"
           }
         } ],
         "responses" : {
@@ -614,19 +666,20 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "ERP Stock API"
     },
     "/erp_stock/v1/list" : {
       "get" : {
         "tags" : [ "ErpStock" ],
-        "summary" : "Get ERP stock summaries",
-        "description" : "Retrieves ERP stock summary list for given location.",
+        "summary" : "List ERP stocks",
+        "description" : "Lists the ERP stock summaries for a given location.",
         "operationId" : "listErpStocks",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "The location for which the stock is defined.",
+          "description" : "The location for which to list the ERP stocks.",
           "required" : true,
           "type" : "string"
         }, {
@@ -650,7 +703,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/StockSummary"
+                "$ref" : "#/definitions/ErpStockSummary"
               }
             }
           }
@@ -658,19 +711,20 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "ERP Stock API"
     },
     "/erp_stock/v1/retrieve" : {
       "get" : {
         "tags" : [ "ErpStock" ],
-        "summary" : "Retrieve a list of GTINs and quantities for a certain ERP stock.",
-        "description" : "",
+        "summary" : "Retrieve ERP stock",
+        "description" : "Retrieves details of an ERP stock for a given identifier.",
         "operationId" : "retrieveErpStock",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
           "in" : "query",
-          "description" : "The ID of the ERP stock to retrieve.",
+          "description" : "The identifier of the ERP stock to retrieve.",
           "required" : true,
           "type" : "string"
         }, {
@@ -685,26 +739,27 @@
           "200" : {
             "description" : "successful operation",
             "schema" : {
-              "$ref" : "#/definitions/Stock"
+              "$ref" : "#/definitions/ErpStock"
             }
           }
         },
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "ERP Stock API"
     },
     "/erp_stock/v1/retrieve_summary" : {
       "get" : {
         "tags" : [ "ErpStock" ],
-        "summary" : "Retrieve ERP stock summary.",
-        "description" : "",
+        "summary" : "Retrieve ERP stock summary",
+        "description" : "Retrieves a summary for an ERP stock.",
         "operationId" : "retrieveErpStockSummary",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
           "in" : "query",
-          "description" : "The ID of the ERP stock summary to retrieve.",
+          "description" : "The identifier of the ERP stock summary to retrieve.",
           "required" : true,
           "type" : "string"
         } ],
@@ -712,68 +767,30 @@
           "200" : {
             "description" : "successful operation",
             "schema" : {
-              "$ref" : "#/definitions/StockSummary"
+              "$ref" : "#/definitions/ErpStockSummary"
             }
           }
         },
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
-    },
-    "/not_on_shelf/v1/retrieve" : {
-      "get" : {
-        "tags" : [ "NotOnShelf" ],
-        "summary" : "Lists all the items that are not-on-shelf for a certain store (taking all sales floors together), or for a certain sales floor.",
-        "description" : "Not-on-shelf is defined as a situation where a certain GTIN is 'low' at a sales floor location, but still available in a stock room location. 'Low' is typically defined as 'zero available', but that might change in the future. !D Cloud excludes items that (based on historical data) never have been on the sales floor before.\nRetrieve all items that are not on the shop floor of a store, but still available in the stock-room of that same store. Those items can be replenished.",
-        "operationId" : "retrieveNotOnShelf",
-        "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
-        "parameters" : [ {
-          "name" : "location",
-          "in" : "query",
-          "description" : "The location to retrieve the not-on-shelf list for",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "include_articles",
-          "in" : "query",
-          "description" : "When set to true the article master data will be included in the response.",
-          "required" : false,
-          "type" : "boolean",
-          "default" : false
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "$ref" : "#/definitions/NotOnShelfResponse"
-            }
-          },
-          "400" : {
-            "description" : "Invalid location."
-          },
-          "412" : {
-            "description" : "No data available."
-          }
-        },
-        "security" : [ {
-          "auth" : [ ]
-        } ]
-      }
+      },
+      "x-gelato-group" : "ERP Stock API"
     },
     "/organization/v1/location" : {
       "get" : {
         "tags" : [ "Organization" ],
-        "summary" : "Get Location by location identifier",
-        "description" : "",
+        "summary" : "Get location information",
+        "description" : "Retrieves location information by location identifier.",
         "operationId" : "retrieveLocation",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
           "in" : "query",
-          "description" : "It can be either a location identifier for a location of type SITE or LOCATION.",
-          "required" : false,
-          "type" : "string"
+          "description" : "Location identifier for a location of type 'site' or 'location'.",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "http://nedapretail.com/loc/store-1"
         } ],
         "responses" : {
           "200" : {
@@ -786,13 +803,14 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Organization API"
     },
     "/organization/v1/retrieve" : {
       "get" : {
         "tags" : [ "Organization" ],
-        "summary" : "Get list of organizations associated with the OAuth access token",
-        "description" : "",
+        "summary" : "Retrieve organizations",
+        "description" : "Retrieves organizations for the current active authentication token.",
         "operationId" : "retrieveOrganization",
         "produces" : [ "application/json" ],
         "parameters" : [ ],
@@ -807,19 +825,20 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Organization API"
     },
     "/organization/v1/sites" : {
       "get" : {
         "tags" : [ "Organization" ],
-        "summary" : "Get list of stores or search for stores based on store code",
-        "description" : "Get list of stores, or search for stores based on store code. Note that sublocations will not be included in the response!",
+        "summary" : "Get stores",
+        "description" : "Gets list of stores, optionally filtered by store code. Note that sublocations will not be included in the response.",
         "operationId" : "listSites",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "store_code",
           "in" : "query",
-          "description" : "Defines the LocationObject to retrieve based on store_code.",
+          "description" : "Defines the LocationObject to retrieve based on store code.",
           "required" : false,
           "type" : "string"
         } ],
@@ -837,33 +856,34 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Organization API"
     },
     "/rfid_count/v1/list" : {
       "get" : {
         "tags" : [ "RfidCount" ],
-        "summary" : "Get list of RFID counts",
-        "description" : "Retrieve list of RFID counts for a certain location.",
+        "summary" : "List RFID counts",
+        "description" : "Lists RFID counts for a certain location.",
         "operationId" : "listRfidCounts",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "The location to retrieve the count for",
+          "description" : "The location identifier to retrieve the count for.",
           "required" : true,
           "type" : "string",
-          "x-example" : "http://nedapretail.com/loc/26865"
+          "x-example" : "http://nedapretail.com/loc/store-1"
         }, {
           "name" : "from_event_time",
           "in" : "query",
-          "description" : "Limits the returned list to stocks with an event time after the specified date and time",
+          "description" : "Limits the returned list to counts with an event time after the specified date and time.",
           "required" : false,
           "type" : "string",
           "format" : "date-time"
         }, {
           "name" : "until_event_time",
           "in" : "query",
-          "description" : "Limits the returned list to stocks with an event time before the specified date and time",
+          "description" : "Limits the returned list to counts with an event time before the specified date and time.",
           "required" : false,
           "type" : "string",
           "format" : "date-time"
@@ -885,26 +905,27 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "RFID Count API"
     },
     "/rfid_count/v1/retrieve" : {
       "get" : {
         "tags" : [ "RfidCount" ],
         "summary" : "Retrieve RFID count",
-        "description" : "Retrieve a RFID count based on GTIN and quantity.",
+        "description" : "Retrieves an RFID count.",
         "operationId" : "retrieveRfidCount",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "The location to retrieve the count for",
+          "description" : "The location identifier to retrieve the count for.",
           "required" : true,
           "type" : "string",
-          "x-example" : "http://nedapretail.com/loc/26865"
+          "x-example" : "http://nedapretail.com/loc/store-1"
         }, {
           "name" : "gtins[]",
           "in" : "query",
-          "description" : "Filter by GTIN. When omitted: returns all available GTINs, so no filtering based on GTIN is applied",
+          "description" : "Filter by GTIN. When omitted: returns all available GTINs, so no filtering based on GTIN is applied.",
           "required" : false,
           "type" : "array",
           "items" : {
@@ -914,14 +935,14 @@
         }, {
           "name" : "time",
           "in" : "query",
-          "description" : "The time of the count to retrieve (relates to the event_time of the count). When omitted: the report will contain the latest available stock information.",
+          "description" : "The time of the count to retrieve (relates to the event_time of the count). When omitted: the response will be the latest RFID count.",
           "required" : false,
           "type" : "string",
           "format" : "date-time"
         }, {
           "name" : "include_articles",
           "in" : "query",
-          "description" : "Include article information in the response.",
+          "description" : "Whether to include article details like name, size, etc. in the response.",
           "required" : false,
           "type" : "boolean",
           "default" : false
@@ -943,32 +964,34 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "RFID Count API"
     },
     "/rfid_stock/v1/retrieve" : {
       "get" : {
         "tags" : [ "RfidStock" ],
-        "summary" : "Returns the real time stock at a certain location in unique items (SGTINs). Items are returned based on their last known bizLocation (location) as registered via the EPCIS Capture API.",
-        "description" : "The response contains a list of stocks for all matching (sub)locations based on the given parameters:\n* If the stock for a store without sublocations is requested, the stocks list in the response  will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each   for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response   contains entries for the store and the sublocations with stock.",
+        "summary" : "Retrieve RFID stock",
+        "description" : "Returns the real time stock at a certain location in unique items (SGTINs). Items are returned based on their last known bizLocation (location) as registered via the EPCIS Capture API. The response contains a list of stocks for all matching (sub)locations based on the given parameters:\n* If the stock for a store without sublocations is requested, the stocks list in the response will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response contains entries for the store and the sublocations with stock.",
         "operationId" : "retrieveRfidStock",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "Location ID of a store or a sublocation.",
+          "description" : "Location identifier of a store or a sublocation.",
           "required" : true,
           "type" : "string",
-          "x-example" : "http://nedapretail.com/loc/26865"
+          "x-example" : "http://nedapretail.com/loc/store-1"
         }, {
           "name" : "location_types[]",
           "in" : "query",
-          "description" : "Filter on sublocation type(s): only stock on sublocations of the specified type(s) will be returned. Repeat key-value for specifying multiple sublocation types.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all sublocation types except FOREIGN.",
+          "description" : "Filter on sublocation types: only stock on sublocations of the specified types will be returned. Multiple  sublocation types can be specified.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all sublocation types except FOREIGN.",
           "required" : false,
           "type" : "array",
           "items" : {
             "type" : "string"
           },
-          "collectionFormat" : "multi"
+          "collectionFormat" : "multi",
+          "x-example" : "STOCK_ROOM"
         } ],
         "responses" : {
           "200" : {
@@ -981,36 +1004,38 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "RFID Stock API"
     },
     "/rfid_stock/v1/retrieve_as_gtin14" : {
       "get" : {
         "tags" : [ "RfidStock" ],
-        "summary" : "Returns the real time stock at a certain location per GTIN (and not per unique item).",
-        "description" : "The response contains a list of stocks for all matching sublocations based on the given parameters.\n* If the stock for a store without sublocations is requested, the stocks list in the response   will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each   for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response   contains entries for the store and the sublocations with stock.",
+        "summary" : "Retrieve RFID stock (GTIN/quantity)",
+        "description" : "Returns the real time stock at a certain location per GTIN. Items are returned based on their last known bizLocation (location) as registered via the EPCIS Capture API. The response contains a list of stocks for all matching (sub)locations based on the given parameters:\n* If the stock for a store without sublocations is requested, the stocks list in the response will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response contains entries for the store and the sublocations with stock.",
         "operationId" : "retrieveRfidStockAsGtin14",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "Location ID of a store or a sublocation.",
+          "description" : "Location identifier of a store or a sublocation.",
           "required" : true,
           "type" : "string",
-          "x-example" : "http://nedapretail.com/loc/26865"
+          "x-example" : "http://nedapretail.com/loc/store-1"
         }, {
           "name" : "location_types[]",
           "in" : "query",
-          "description" : "Filter on sublocation type(s): only stock on sublocations of the specified type(s) will be returned. Repeat key-value for specifying multiple sublocation types.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all sublocation types except FOREIGN.",
+          "description" : "Filter on sublocation types: only stock on sublocations of the specified types will be returned. Multiple  sublocation types can be specified.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all sublocation types except FOREIGN.",
           "required" : false,
           "type" : "array",
           "items" : {
             "type" : "string"
           },
-          "collectionFormat" : "multi"
+          "collectionFormat" : "multi",
+          "x-example" : "STOCK_ROOM"
         }, {
           "name" : "include_articles",
           "in" : "query",
-          "description" : "Include article information in the response.",
+          "description" : "Whether to include article details like name, size, etc. in the response.",
           "required" : false,
           "type" : "boolean",
           "default" : false
@@ -1026,32 +1051,34 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "RFID Stock API"
     },
     "/rfid_stock/v1/retrieve_grouped_by_disposition" : {
       "get" : {
         "tags" : [ "RfidStock" ],
-        "summary" : "Returns the real time stock at a certain location in unique items (SGTINs). Items are returned based on their last known bizLocation (location) as registered via the EPCIS Capture API.",
-        "description" : "The response contains a list of stocks for all matching (sub)locations based on the given parameters:\n* If the stock for a store without sublocations is requested, the stocks list in the response  will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each   for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response   contains entries for the store and the sublocations with stock.",
+        "summary" : "Retrieve RFID stock (grouped by disposition)",
+        "description" : "Returns the real time stock at a certain location in unique items (SGTINs), grouped by disposition. Items are returned based on their last known bizLocation (location) as registered via the EPCIS Capture API. The response contains a list of stocks for all matching (sub)locations based on the given parameters:\n* If the stock for a store without sublocations is requested, the stocks list in the response will contain one entry containing the stock for the entire store. \n* If a store has sublocations, the list of stocks in the response will contain an entry each for the sublocations.\n* If a store has stock for both sublocations and store, the list of stocks in the response contains entries for the store and the sublocations with stock.",
         "operationId" : "retrieveRfidStockGroupedByDisposition",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "Location ID of a store or a sublocation.",
+          "description" : "Location identifier of a store or a sublocation.",
           "required" : true,
           "type" : "string",
-          "x-example" : "http://nedapretail.com/loc/26865"
+          "x-example" : "http://nedapretail.com/loc/store-1"
         }, {
           "name" : "location_types[]",
           "in" : "query",
-          "description" : "Filter on sublocation type(s): only stock on sublocations of the specified type(s) will be returned. Repeat key-value for specifying multiple sublocation types.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all sublocation types except FOREIGN.",
+          "description" : "Filter on sublocation types: only stock on sublocations of the specified types will be returned. Multiple sublocation types can be  specified.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all  sublocation types except FOREIGN.",
           "required" : false,
           "type" : "array",
           "items" : {
             "type" : "string"
           },
-          "collectionFormat" : "multi"
+          "collectionFormat" : "multi",
+          "x-example" : "STOCK_ROOM"
         }, {
           "name" : "dispositions[]",
           "in" : "query",
@@ -1075,18 +1102,19 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "RFID Stock API"
     },
     "/shipment/v1/capture" : {
       "post" : {
         "tags" : [ "Shipment" ],
-        "summary" : "Captures and stores a shipment notice in !D Cloud.",
-        "description" : "Only shipment notices are allowed. These are represented by the status INTRANSIT.",
+        "summary" : "Capture shipment",
+        "description" : "Captures and stores a shipment notice. Shipment notices always have the status 'INTRANSIT'.",
         "operationId" : "captureShipment",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
-          "name" : "Shipment notice",
+          "name" : "body",
           "description" : "Shipment notice to capture.",
           "required" : true,
           "schema" : {
@@ -1101,20 +1129,22 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Shipment API"
     },
     "/shipment/v1/delete" : {
       "delete" : {
         "tags" : [ "Shipment" ],
-        "summary" : "Deletes a shipment notice from !D Cloud.",
-        "description" : "If the shipment notice was created by an aggregation event, this event will be retracted without a reason.",
+        "summary" : "Delete shipment",
+        "description" : "Deletes a shipment notice. If the shipment notice was created through an aggregation event, this event will be retracted.",
         "operationId" : "deleteShipment",
         "parameters" : [ {
           "name" : "parent_id",
           "in" : "query",
-          "description" : "Parent ID of a shipment.",
+          "description" : "Parent identifier of a shipment.",
           "required" : true,
-          "type" : "string"
+          "type" : "string",
+          "x-example" : "urn:epc:id:sscc:0614141.1234567890"
         } ],
         "responses" : {
           "204" : {
@@ -1124,13 +1154,14 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Shipment API"
     },
     "/shipment/v1/list" : {
       "get" : {
         "tags" : [ "Shipment" ],
-        "summary" : "Retrieves a list of shipment summaries.",
-        "description" : "Either source or destination is required, not both. This endpoint can produce: JSON, CSV and Excel.",
+        "summary" : "List shipments",
+        "description" : "Retrieves a list of shipment summaries. Either source or destination is required, not both.",
         "operationId" : "listShipments",
         "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
         "parameters" : [ {
@@ -1138,13 +1169,15 @@
           "in" : "query",
           "description" : "Source of a shipment.",
           "required" : false,
-          "type" : "string"
+          "type" : "string",
+          "x-example" : "http://nedapretail.com/loc/store-1"
         }, {
           "name" : "destination",
           "in" : "query",
           "description" : "Destination of a shipment.",
           "required" : false,
-          "type" : "string"
+          "type" : "string",
+          "x-example" : "http://nedapretail.com/loc/store-2"
         }, {
           "name" : "status",
           "in" : "query",
@@ -1152,7 +1185,8 @@
           "required" : false,
           "type" : "string",
           "default" : "INTRANSIT",
-          "enum" : [ "INTRANSIT", "RECEIVED" ]
+          "enum" : [ "INTRANSIT", "RECEIVED" ],
+          "x-example" : "INTRANSIT"
         }, {
           "name" : "last_modified_since",
           "in" : "query",
@@ -1175,24 +1209,26 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Shipment API"
     },
     "/shipment/v1/retrieve" : {
       "get" : {
         "tags" : [ "Shipment" ],
-        "summary" : "Retrieves a shipment from !D Cloud.",
-        "description" : "",
+        "summary" : "Retrieve shipment",
+        "description" : "Retrieves a shipment based on the parent identifier.",
         "operationId" : "retrieveShipment",
         "parameters" : [ {
           "name" : "parent_id",
           "in" : "query",
-          "description" : "Parent ID of a shipment.",
+          "description" : "Parent identifier of a shipment.",
           "required" : true,
-          "type" : "string"
+          "type" : "string",
+          "x-example" : "urn:epc:id:sscc:0614141.1234567890"
         }, {
           "name" : "include_articles",
           "in" : "query",
-          "description" : "When set to true the article master data will be included in the response.",
+          "description" : "Whether to include article details like name, size, etc. in the response.",
           "required" : false,
           "type" : "boolean",
           "default" : false
@@ -1208,13 +1244,14 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Shipment API"
     },
     "/workflow/v2/capture" : {
       "post" : {
         "tags" : [ "Workflow" ],
-        "summary" : "Captures and stores workflow events in !D Cloud.",
-        "description" : "The capture endpoint captures one workflow events at a time.",
+        "summary" : "Capture workflow event",
+        "description" : "Captures a workflow event.",
         "operationId" : "captureWorkflowEvent",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
@@ -1234,12 +1271,13 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Workflow API"
     },
     "/workflow/v2/query" : {
       "get" : {
         "tags" : [ "Workflow" ],
-        "summary" : "Query and retrieve workflow event(s) from !D Cloud.",
+        "summary" : "Query workflow events",
         "description" : "Returns a set of workflow events that matches the criteria specified in the query parameters.",
         "operationId" : "queryWorkflowEvents",
         "consumes" : [ "application/json" ],
@@ -1247,26 +1285,27 @@
         "parameters" : [ {
           "name" : "location",
           "in" : "query",
-          "description" : "Identifies location.\nWhen omitted: return all workflow events for all locations.",
+          "description" : "Location identifier of the workflow event.\nWhen omitted: return all workflow events for all locations.",
           "required" : false,
           "type" : "string"
         }, {
           "name" : "type",
           "in" : "query",
-          "description" : "Defines the type of the workflow event.\nWhen omitted: return all workflow events for all types.",
+          "description" : "Type of the workflow event.\nWhen omitted: return all workflow events for all types.",
           "required" : false,
-          "type" : "string"
+          "type" : "string",
+          "enum" : [ "cycle_count_started", "cycle_count_finished", "partial_count_finished" ]
         }, {
           "name" : "from_event_time",
           "in" : "query",
-          "description" : "Defines date+time since when the counts are required.\nWhen omitted: returns all workflow events for specified location since the epoch.",
+          "description" : "Minimum event time of the workflow event.\nWhen omitted: returns all workflow events since the epoch.",
           "required" : false,
           "type" : "string",
           "format" : "date-time"
         }, {
           "name" : "until_event_time",
           "in" : "query",
-          "description" : "Defines date+time until when the counts are required.\n When omitted: returns all workflow events for specified location up until now.",
+          "description" : "Maximum event time of the workflow event.\nWhen omitted: returns all workflow events up until now.",
           "required" : false,
           "type" : "string",
           "format" : "date-time"
@@ -1285,7 +1324,8 @@
         "security" : [ {
           "auth" : [ ]
         } ]
-      }
+      },
+      "x-gelato-group" : "Workflow API"
     }
   },
   "securityDefinitions" : {
@@ -1300,24 +1340,24 @@
       "type" : "object",
       "properties" : {
         "address" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Dam 4",
+          "description" : "Street name and house number."
         },
         "zipcode" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "1012 NP",
+          "description" : "ZIP code."
         },
         "city" : {
-          "type" : "string"
-        },
-        "latitude" : {
-          "type" : "number",
-          "format" : "double"
-        },
-        "longitude" : {
-          "type" : "number",
-          "format" : "double"
+          "type" : "string",
+          "example" : "Amsterdam",
+          "description" : "Name of the city."
         },
         "country_code" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "NL",
+          "description" : "ISO 3166-1 alpha-2 two letter country code."
         }
       }
     },
@@ -1325,17 +1365,23 @@
       "type" : "object",
       "properties" : {
         "location" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store the difference list will be approved for."
         },
         "rfid_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "The date and time of the RFID count to be used."
         },
         "erp_stock_id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "e8a2a3b8-ea3d-4ab6-857b-db1ae25de2e9",
+          "description" : "The identifier of the ERP stock to use."
         },
         "approved_gtins" : {
           "type" : "array",
+          "description" : "List of GTINs for which the differences will be approved.",
           "items" : {
             "type" : "string"
           }
@@ -1347,7 +1393,9 @@
       "properties" : {
         "id" : {
           "type" : "string",
-          "format" : "uuid"
+          "format" : "uuid",
+          "example" : "7ac36dac-49b3-4207-b923-1ca467e96e88",
+          "description" : "Unique identifier for the created approved difference list"
         }
       }
     },
@@ -1355,87 +1403,121 @@
       "type" : "object",
       "properties" : {
         "location" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store the difference list is for."
         },
         "id" : {
           "type" : "string",
-          "format" : "uuid"
+          "format" : "uuid",
+          "example" : "7ac36dac-49b3-4207-b923-1ca467e96e88",
+          "description" : "Unique identifier for the approved difference list"
         },
         "gtins" : {
           "type" : "array",
+          "description" : "List of GTINs in the exported approved difference list.",
           "items" : {
             "type" : "string"
           }
         },
         "articles" : {
           "type" : "array",
+          "description" : "Article details like name, size, etc., corresponding to the GTIN in the GTIN list.",
           "items" : {
             "$ref" : "#/definitions/Article"
           }
         },
         "approved_on" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time when this difference list was approved."
         },
         "approved_by" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "John Doe",
+          "description" : "Person that approved the difference list."
         },
         "erp_stock_id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "e8a2a3b8-ea3d-4ab6-857b-db1ae25de2e9",
+          "description" : "The identifier of the ERP stock that was used in this approved difference list."
         },
         "erp_stock_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "The date and time of the ERP stock that was used in this approved difference list."
         },
         "erp_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 5263,
+          "description" : "Quantity of items in the ERP stock that was used in this approved difference list."
         },
         "erp_gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 1982,
+          "description" : "Quantity of GTINs in the ERP stock that was used in this approved difference list."
         },
         "rfid_stock_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "The date and time of the RFID count that was used in this approved difference list."
         },
         "rfid_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 5134,
+          "description" : "Quantity of items in the RFID count that was used in this approved difference list."
         },
         "rfid_gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 1924,
+          "description" : "Quantity of GTINs in the RFID count that was used in this approved difference list."
         },
         "absolute_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : -44,
+          "description" : "Absolute difference in items between the RFID count and ERP stock."
         },
         "plus_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 12,
+          "description" : "Positive difference in items between the RFID count and ERP stock."
         },
         "minus_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 56,
+          "description" : "Negative difference in items between the RFID count and ERP stock."
         },
         "export_status" : {
           "type" : "string",
-          "enum" : [ "NOT_EXPORTED", "EXPORTED", "ERROR" ]
+          "example" : "EXPORTED",
+          "description" : "Transfer status of this approved difference list towards the ERP system. Values: NOT_EXPORTED, EXPORTED or ERROR"
         },
         "export_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time when this approved difference list was exported."
         },
         "extern_ref" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "export_monday_store-1",
+          "description" : "The extern_ref field of the ERP stock used for this approved difference list."
         },
         "accuracy" : {
           "type" : "number",
-          "format" : "double"
+          "format" : "double",
+          "example" : 98.3,
+          "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
         },
         "approved_quantity" : {
           "type" : "array",
+          "description" : "Quantity of approved GTINs in the exported approved difference list.",
           "items" : {
             "type" : "integer",
             "format" : "int32"
@@ -1447,93 +1529,128 @@
       "type" : "object",
       "properties" : {
         "location" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store the difference list is for."
         },
         "id" : {
           "type" : "string",
-          "format" : "uuid"
+          "format" : "uuid",
+          "example" : "7ac36dac-49b3-4207-b923-1ca467e96e88",
+          "description" : "Unique identifier for the approved difference list"
         },
         "gtins" : {
           "type" : "array",
+          "description" : "List of GTINs in the approved difference list.",
           "items" : {
             "type" : "string"
           }
         },
         "articles" : {
           "type" : "array",
+          "description" : "Article details like name, size, etc., corresponding to the GTIN in the GTIN list.",
           "items" : {
             "$ref" : "#/definitions/Article"
           }
         },
         "approved" : {
           "type" : "array",
+          "description" : "Approved status, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "boolean"
           }
         },
         "approved_on" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time when this difference list was approved."
         },
         "approved_by" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "John Doe",
+          "description" : "Person that approved the difference list."
         },
         "erp_stock_id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "e8a2a3b8-ea3d-4ab6-857b-db1ae25de2e9",
+          "description" : "The identifier of the ERP stock that was used in this approved difference list."
         },
         "erp_stock_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "The date and time of the ERP stock that was used in this approved difference list."
         },
         "erp_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 5263,
+          "description" : "Quantity of items in the ERP stock that was used in this approved difference list."
         },
         "erp_gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 1982,
+          "description" : "Quantity of GTINs in the ERP stock that was used in this approved difference list."
         },
         "rfid_stock_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "The date and time of the RFID count that was used in this approved difference list."
         },
         "rfid_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 5134,
+          "description" : "Quantity of items in the RFID count that was used in this approved difference list."
         },
         "rfid_gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 1924,
+          "description" : "Quantity of GTINs in the RFID count that was used in this approved difference list."
         },
         "absolute_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : -44,
+          "description" : "Absolute difference in items between the RFID count and ERP stock."
         },
         "plus_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 12,
+          "description" : "Positive difference in items between the RFID count and ERP stock."
         },
         "minus_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 56,
+          "description" : "Negative difference in items between the RFID count and ERP stock."
         },
         "export_status" : {
           "type" : "string",
-          "enum" : [ "NOT_EXPORTED", "EXPORTED", "ERROR" ]
+          "example" : "EXPORTED",
+          "description" : "Transfer status of this approved difference list towards the ERP system. Values: NOT_EXPORTED, EXPORTED or ERROR"
         },
         "export_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time when this approved difference list was exported."
         },
         "extern_ref" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "export_monday_store-1",
+          "description" : "The extern_ref field of the ERP stock used for this approved difference list."
         },
         "accuracy" : {
           "type" : "number",
-          "format" : "double"
+          "format" : "double",
+          "example" : 98.3,
+          "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
         },
         "erp_stock" : {
           "type" : "array",
+          "description" : "ERP stock quantity, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "integer",
             "format" : "int32"
@@ -1541,6 +1658,7 @@
         },
         "rfid_stock" : {
           "type" : "array",
+          "description" : "RFID count quantity, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "integer",
             "format" : "int32"
@@ -1552,163 +1670,215 @@
       "type" : "object",
       "properties" : {
         "location" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store the difference list is for."
         },
         "id" : {
           "type" : "string",
-          "format" : "uuid"
+          "format" : "uuid",
+          "example" : "7ac36dac-49b3-4207-b923-1ca467e96e88",
+          "description" : "Unique identifier for the approved difference list"
         },
         "approved_on" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time when this difference list was approved."
         },
         "approved_by" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "John Doe",
+          "description" : "Person that approved the difference list."
         },
         "erp_stock_id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "e8a2a3b8-ea3d-4ab6-857b-db1ae25de2e9",
+          "description" : "The identifier of the ERP stock that was used in this approved difference list."
         },
         "erp_stock_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "The date and time of the ERP stock that was used in this approved difference list."
         },
         "erp_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 5263,
+          "description" : "Quantity of items in the ERP stock that was used in this approved difference list."
         },
         "erp_gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 1982,
+          "description" : "Quantity of GTINs in the ERP stock that was used in this approved difference list."
         },
         "rfid_stock_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "The date and time of the RFID count that was used in this approved difference list."
         },
         "rfid_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 5134,
+          "description" : "Quantity of items in the RFID count that was used in this approved difference list."
         },
         "rfid_gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 1924,
+          "description" : "Quantity of GTINs in the RFID count that was used in this approved difference list."
         },
         "absolute_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : -44,
+          "description" : "Absolute difference in items between the RFID count and ERP stock."
         },
         "plus_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 12,
+          "description" : "Positive difference in items between the RFID count and ERP stock."
         },
         "minus_difference" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 56,
+          "description" : "Negative difference in items between the RFID count and ERP stock."
         },
         "export_status" : {
           "type" : "string",
-          "enum" : [ "NOT_EXPORTED", "EXPORTED", "ERROR" ]
+          "example" : "EXPORTED",
+          "description" : "Transfer status of this approved difference list towards the ERP system. Values: NOT_EXPORTED, EXPORTED or ERROR"
         },
         "export_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time when this approved difference list was exported."
         },
         "extern_ref" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "export_monday_store-1",
+          "description" : "The extern_ref field of the ERP stock used for this approved difference list."
         },
         "accuracy" : {
           "type" : "number",
-          "format" : "double"
+          "format" : "double",
+          "example" : 98.3,
+          "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
         }
       }
     },
     "Article" : {
       "type" : "object",
+      "required" : [ "barcodes", "name" ],
       "properties" : {
         "gtin" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "02123456789126",
+          "description" : "GTIN-14, length of 14 digits. Primary key to identify an article (or SKU). GTIN-14 value is validated against the GS1 standard. When no GTIN-14 is provided, it will be generated and unique for this organization."
         },
         "barcodes" : {
           "type" : "array",
+          "description" : "Contains all barcodes for this article, for example EAN-13 and UPC-12. Minimum of 1 linear barcode is required.",
           "items" : {
             "$ref" : "#/definitions/Barcode"
           }
         },
         "code" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "AB123456",
+          "description" : "Article code as assigned by the retailer. No relation to GTIN or other barcodes is assumed."
         },
         "brand" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Miss Fashion",
+          "description" : "The brand of the product."
         },
         "season" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Fall 2023",
+          "description" : "The season the product belongs to."
         },
         "name" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Shirt Awesome",
+          "description" : "Name of the article."
         },
         "option" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Shirt Awesome, Blue",
+          "description" : "Combination of name and color of an article. When omitted: option is automatically filled with name and color fields."
         },
         "style" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Shirt Awesome",
+          "description" : "Name of the article, independent of color. When omitted: style is automatically filled with name."
         },
         "color" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Blue",
+          "description" : "Contains color description."
         },
         "sizes" : {
           "type" : "array",
+          "description" : "Contains region dependent size descriptions.",
           "items" : {
             "$ref" : "#/definitions/Size"
           }
         },
         "supplier" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Supplier Factory",
+          "description" : "Supplier name. Can also be factory name."
         },
         "category" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Shirts",
+          "description" : "Category name. Used to group articles (or SKU's) in the web interface and the apps"
         },
         "prices" : {
           "type" : "array",
+          "description" : "Contains various prices that can be country specific.",
           "items" : {
             "$ref" : "#/definitions/Price"
           }
         },
         "last_updated" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "The time when the article was last updated. This field will be overwritten when new article data is uploaded."
         }
       }
     },
     "ArticleFindResponse" : {
       "type" : "object",
       "properties" : {
-        "externRef" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
-        "recordsTotal" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
-        "recordsFiltered" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
         "articles" : {
           "type" : "array",
+          "description" : "Article details like name, size, etc.",
           "items" : {
             "$ref" : "#/definitions/Article"
           }
-        }
-      }
-    },
-    "Articles" : {
-      "type" : "object",
-      "properties" : {
-        "articles" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Article"
-          }
+        },
+        "extern_ref" : {
+          "type" : "integer",
+          "format" : "int64",
+          "example" : 91828367401,
+          "description" : "The external reference as specified in the request."
+        },
+        "records_total" : {
+          "type" : "integer",
+          "format" : "int64",
+          "example" : 849256,
+          "description" : "Total number of records, before filtering (i.e. the total number of records in the database)."
+        },
+        "records_filtered" : {
+          "type" : "integer",
+          "format" : "int64",
+          "example" : 2963,
+          "description" : "Total number of records, after filtering (i.e. the total number of records after filtering has been applied - not just the number of records being returned for this page of data)."
         }
       }
     },
@@ -1716,23 +1886,30 @@
       "type" : "object",
       "properties" : {
         "type" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "ean_13",
+          "description" : "Barcode type. Typically ean_13 or upc_12. Values are described in lowercase, digits and underscores. Values can include ean_8, ean_13, upc_12, gs1_128, code_39."
         },
         "value" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "2123456789126",
+          "description" : "Value of barcode."
         }
       }
     },
     "BizTransactionElement" : {
       "type" : "object",
+      "required" : [ "biz_transaction" ],
       "properties" : {
         "type" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epcglobal:cbv:btt:po",
+          "description" : "An identifier that indicates what kind of business transaction this BusinessTransaction denotes."
         },
         "biz_transaction" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "http://transaction.acme.com/po/12345678",
+          "description" : "An identifier that denotes a specific business transaction."
         }
       }
     },
@@ -1912,8 +2089,7 @@
           "format" : "date-time"
         },
         "difference_list_status" : {
-          "type" : "string",
-          "enum" : [ "APPROVED", "CAN_BE_APPROVED", "PERFORM_NEW_RFID_COUNT", "IMPORT_ERP_BEFORE_APPROVING", "PAYMENT_REQUIRED" ]
+          "type" : "string"
         },
         "shipments_in_transit" : {
           "type" : "integer",
@@ -1947,14 +2123,17 @@
     },
     "DestinationElement" : {
       "type" : "object",
+      "required" : [ "destination", "type" ],
       "properties" : {
         "type" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epcglobal:cbv:sdt:owning_party",
+          "description" : "An identifier that indicates what kind of destination this Destination denotes."
         },
         "destination" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epc:id:sgln:0614141.00001.0",
+          "description" : "An identifier that denotes a specific destination."
         }
       }
     },
@@ -1963,18 +2142,21 @@
       "properties" : {
         "gtins" : {
           "type" : "array",
+          "description" : "List of GTINs in the difference list.",
           "items" : {
             "type" : "string"
           }
         },
         "articles" : {
           "type" : "array",
+          "description" : "Article details like name, size, etc., corresponding to the GTIN in the GTIN list.",
           "items" : {
             "$ref" : "#/definitions/Article"
           }
         },
         "erp_stock" : {
           "type" : "array",
+          "description" : "ERP stock quantity, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "integer",
             "format" : "int32"
@@ -1982,6 +2164,7 @@
         },
         "rfid_stock" : {
           "type" : "array",
+          "description" : "RFID count quantity, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "integer",
             "format" : "int32"
@@ -1989,172 +2172,196 @@
         },
         "erp_stock_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of the ERP stock creation."
         },
         "rfid_stock_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of the RFID count creation."
         },
         "erp_gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 6272,
+          "description" : "Total quantity of GTINs in the ERP stock."
         },
         "rfid_gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 6132,
+          "description" : "Total quantity of GTINs in the RFID count."
+        },
+        "accuracy" : {
+          "type" : "number",
+          "format" : "double",
+          "example" : 98.3,
+          "description" : "Accuracy relation between the ERP stock and RFID count, according to the SMAPE definition."
         }
       }
     },
     "EpcisEvent" : {
       "type" : "object",
+      "required" : [ "action", "event_time", "event_time_zone_offset", "type" ],
       "discriminator" : "type",
       "properties" : {
         "id" : {
           "type" : "string",
-          "description" : "Identifier, unique per organization, that identifies the EPCIS event."
+          "example" : "43abaed0-5d11-4b78-83e0-f49caa777b94",
+          "description" : "EPCIS event message identifier, assigned by the creator of the event. This identifier must be unique within the organization."
         },
         "type" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1",
-          "enum" : [ "object_event", "aggregation_event", "transaction_event", "quantity_event", "transformation_event" ]
+          "example" : "object_event",
+          "description" : "Type of EPCIS event.",
+          "enum" : [ "object_event", "aggregation_event", "transaction_event", "transformation_event" ]
         },
         "action" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1",
+          "example" : "ADD",
+          "description" : "The action field describes the event’s relationship to the lifecycle of the object, aggregation, transaction or transformation.",
           "enum" : [ "ADD", "OBSERVE", "DELETE" ]
         },
         "disposition" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epcglobal:cbv:disp:in_transit",
+          "description" : "The business condition of the objects associated with the EPCs, presumed to hold true until contradicted by a subsequent event."
         },
         "stored_id" : {
           "type" : "string",
           "format" : "uuid",
-          "description" : "Identifier, globally unique. Automatically created by !D Cloud when it's stored in !DCloud."
+          "example" : "138a02fd-a7d2-47bf-81fe-1861dc97fea1",
+          "description" : "Identifier for the event, automatically assigned when the event is stored in the database."
         },
         "event_id" : {
           "type" : "string",
-          "description" : "(Optional) A \"globally unique identifier\" for this event.\nThis is used to mark the events as a corrective event for an event which is marked as in error by an ErrorDeclaration.\nAs this \"corrective\" event can become erroneous as well, it's not so globally unique.\nThis is specified in EPCIS-standard-1.2-draft and is not implemented in !DCloud."
+          "example" : "b6f3738d-ec80-4fa6-92e6-b20cfcc99af7",
+          "description" : "An identifier for this event as specified by the capturing application, globally unique across all events other than error declarations.\n"
         },
         "event_time" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "The date and time at which the EPCIS Capturing Applications asserts the event occurred. See EPCIS version 1.1"
+          "description" : "The date and time at which the EPCIS Capturing Applications asserts the event occurred."
         },
         "record_time" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "The date and time at which this event was recorded by an EPCIS Repository. If a client adds record_time, it will be overridden by the server. See EPCIS version 1.1"
+          "description" : "The date and time at which this event was recorded by an EPCIS Repository."
         },
         "event_time_zone_offset" : {
           "type" : "string",
           "example" : "+01:00",
-          "description" : "The time zone offset in effect at the time and place the event occurred, expressed as an offset from UTC. Values range from -14:59 to +14:59. See EPCIS version 1.1"
+          "description" : "The time zone offset in effect at the time and place the event occurred, expressed as an offset from UTC."
         },
         "biz_step" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epcglobal:cbv:bizstep:shipping",
+          "description" : "The business step of which this event was a part."
         },
         "biz_location" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epc:id:sgln:0012345.11111.0",
+          "description" : "The business location where the objects associated with the containing and contained EPCs may be found, until contradicted by a subsequent event."
         },
         "read_point" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epc:id:sgln:0012345.11111.400",
+          "description" : "The read point at which the event took place."
         },
         "source_list" : {
           "type" : "array",
-          "description" : "See EPCIS version 1.1",
+          "description" : "An unordered list of Source elements that provide context about the originating endpoint of a business transfer of which this event is a part.",
           "items" : {
             "$ref" : "#/definitions/SourceElement"
           }
         },
         "destination_list" : {
           "type" : "array",
-          "description" : "See EPCIS version 1.1",
+          "description" : "An unordered list of Destination elements that provide context about the terminating endpoint of a business transfer of which this event is a part.",
           "items" : {
             "$ref" : "#/definitions/DestinationElement"
           }
         },
         "biz_transaction_list" : {
           "type" : "array",
-          "description" : "See EPCIS version 1.1",
+          "description" : "An unordered list of business transactions that define the context of this event.",
           "items" : {
             "$ref" : "#/definitions/BizTransactionElement"
           }
         },
         "error_declaration" : {
-          "description" : "See EPCIS version 1.1",
+          "description" : "If present, indicates that this event serves to assert that the assertions made by a prior event are in error.",
           "$ref" : "#/definitions/ErrorDeclaration"
         },
         "parent_id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "urn:epc:id:sscc:08410580.999999999",
+          "description" : "The identifier of the parent of the association."
         },
         "child_epcs" : {
           "type" : "array",
+          "description" : "An unordered list of the EPCs of contained objects identified by instance-level identifiers.",
           "items" : {
             "type" : "string"
           }
         },
         "child_quantity_list" : {
           "type" : "array",
+          "description" : "An unordered list of one or more QuantityElements identifying (at the class level) contained objects.",
           "items" : {
             "$ref" : "#/definitions/QuantityElement"
           }
         },
         "ilmd" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Instance/Lot master data (Section 7.3.6) that describes the objects created during this event."
         },
         "epc_list" : {
           "type" : "array",
+          "description" : "An unordered list of one or more EPCs naming specific objects to which the event  pertained.",
           "items" : {
             "type" : "string"
           }
         },
         "quantity_list" : {
           "type" : "array",
+          "description" : "An unordered list of one or more QuantityElements identifying (at the class level) objects to which the event pertained.",
           "items" : {
             "$ref" : "#/definitions/QuantityElement"
           }
         },
         "input_epc_list" : {
           "type" : "array",
+          "description" : "An unordered list of one or more EPCs identifying (at the instance level) objects that were inputs to the transformation.",
           "items" : {
             "type" : "string"
           }
         },
         "output_epc_list" : {
           "type" : "array",
+          "description" : "An unordered list of one or more EPCs naming (at the instance level) objects that were outputs from the transformation.",
           "items" : {
             "type" : "string"
           }
         },
         "input_quantity_list" : {
           "type" : "array",
+          "description" : "An unordered list of one or more QuantityElements identifying (at the class level) objects that were inputs to the transformation.",
           "items" : {
             "$ref" : "#/definitions/QuantityElement"
           }
         },
         "output_quantity_list" : {
           "type" : "array",
+          "description" : "An unordered list of one or more QuantityElements identifying (at the class level) objects that were outputs from the transformation.",
           "items" : {
             "$ref" : "#/definitions/QuantityElement"
           }
         },
         "transformation_id" : {
-          "type" : "string"
-        }
-      }
-    },
-    "EpcisEventContainer" : {
-      "type" : "object",
-      "properties" : {
-        "events" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/EpcisEvent"
-          }
+          "type" : "string",
+          "example" : "afcb68c9-bba9-4101-8f3f-ded8a1dbdfba",
+          "description" : "A unique identifier that links this event to other TransformationEvents having an identical value of 'transformationID'."
         }
       }
     },
@@ -2163,6 +2370,7 @@
       "properties" : {
         "parameters" : {
           "type" : "array",
+          "description" : "List of query parameters used to query the EPCIS repository.",
           "items" : {
             "$ref" : "#/definitions/ParameterObject"
           }
@@ -2174,41 +2382,180 @@
       "properties" : {
         "storedId" : {
           "type" : "string",
-          "format" : "uuid"
+          "format" : "uuid",
+          "example" : "138a02fd-a7d2-47bf-81fe-1861dc97fea1",
+          "description" : "Identifier for the event, automatically assigned when the event is stored in the database."
         },
         "declarationTime" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of the error declaration."
         },
         "errorReasonId" : {
           "type" : "string",
-          "enum" : [ "DID_NOT_OCCUR", "INCORRECT_DATA" ]
+          "example" : "urn:epcglobal:cbv:er:incorrect_data",
+          "description" : "Reason of the error declaration."
         }
       }
+    },
+    "ErpStock" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
+          "description" : "Identifier of the ERP stock."
+        },
+        "location" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store that the ERP stock belongs to."
+        },
+        "event_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The time the ERP stock was exported from the ERP system."
+        },
+        "extern_ref" : {
+          "type" : "string",
+          "example" : "export_monday_store-1",
+          "description" : "An external reference for the ERP stock, defined by the 3rd party integrator."
+        },
+        "status" : {
+          "type" : "string",
+          "example" : "ACCEPTED",
+          "description" : "Current status of the ERP stock. 'Validating' means that the stock count is currently being processed and validated. 'Accepted' means that the ERP stock has been validated and processed successfully.",
+          "enum" : [ "ACCEPTED", "VALIDATING" ]
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 6253,
+          "description" : "Total quantity of items in the ERP stock."
+        },
+        "excluded_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 124,
+          "description" : "Total quantity of excluded items in the ERP stock."
+        },
+        "gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 1542,
+          "description" : "Total quantity of GTINs in the ERP stock."
+        },
+        "excluded_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 65,
+          "description" : "Total quantity of excluded GTINs in the ERP stock."
+        },
+        "in_use" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates whether the ERP stock is used in a difference list. If it is used, the ERP stock can not be deleted anymore.",
+          "default" : false
+        },
+        "quantity_list" : {
+          "type" : "array",
+          "description" : "List of GtinQuantity objects; specifying GTIN and the quantity and if the GTIN should be excluded from the expected stock and difference list.",
+          "items" : {
+            "$ref" : "#/definitions/GtinQuantity"
+          }
+        }
+      },
+      "description" : "Provides summary information about an ERP stock."
     },
     "ErpStockCreateResponse" : {
       "type" : "object",
       "properties" : {
         "id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
+          "description" : "Identifier of the created ERP stock."
         }
       }
     },
+    "ErpStockSummary" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
+          "description" : "Identifier of the ERP stock."
+        },
+        "location" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store that the ERP stock belongs to."
+        },
+        "event_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The time the ERP stock was exported from the ERP system."
+        },
+        "extern_ref" : {
+          "type" : "string",
+          "example" : "export_monday_store-1",
+          "description" : "An external reference for the ERP stock, defined by the 3rd party integrator."
+        },
+        "status" : {
+          "type" : "string",
+          "example" : "ACCEPTED",
+          "description" : "Current status of the ERP stock. 'Validating' means that the stock count is currently being processed and validated. 'Accepted' means that the ERP stock has been validated and processed successfully.",
+          "enum" : [ "ACCEPTED", "VALIDATING" ]
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 6253,
+          "description" : "Total quantity of items in the ERP stock."
+        },
+        "excluded_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 124,
+          "description" : "Total quantity of excluded items in the ERP stock."
+        },
+        "gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 1542,
+          "description" : "Total quantity of GTINs in the ERP stock."
+        },
+        "excluded_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 65,
+          "description" : "Total quantity of excluded GTINs in the ERP stock."
+        },
+        "in_use" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates whether the ERP stock is used in a difference list. If it is used, the ERP stock can not be deleted anymore.",
+          "default" : false
+        }
+      },
+      "description" : "Provides summary information about an ERP stock."
+    },
     "ErrorDeclaration" : {
       "type" : "object",
+      "required" : [ "declaration_time" ],
       "properties" : {
         "declaration_time" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "See EPCIS version 1.1"
+          "description" : "The date and time at which the declaration of error is made."
         },
         "reason" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epcglobal:cbv:er:incorrect_data",
+          "description" : "An element from a standard vocabulary that specifies the reason the prior event is considered erroneous."
         },
         "corrective_event_ids" : {
           "type" : "array",
-          "description" : "See EPCIS version 1.1",
+          "description" : "If present, indicates that the events having the specified URIs as the value of their eventID fields are to be considered as \"corrections\" to the event declared erroneous by this event.",
           "items" : {
             "type" : "string"
           }
@@ -2218,19 +2565,24 @@
     },
     "GtinQuantity" : {
       "type" : "object",
+      "required" : [ "gtin", "quantity" ],
       "properties" : {
         "gtin" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "The GTIN for which the quantity is specified."
         },
         "quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "description" : "A number that specifies how many or how much of the specified GTIN is denoted by this GtinQuantity. Negative values are allowed."
         },
         "exclude" : {
           "type" : "boolean",
+          "description" : "When set to true, the GTIN is excluded from the expected stock and the difference list. Default value is set to `false`.",
           "default" : false
         }
-      }
+      },
+      "description" : "A GtinQuantity is a structure that identifies GTIN plus quantity."
     },
     "GtinRfidStock" : {
       "type" : "object",
@@ -2286,33 +2638,45 @@
       "type" : "object",
       "properties" : {
         "id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Unique location identifier."
         },
         "type" : {
           "type" : "string",
-          "enum" : [ "COUNTRY", "GROUP", "SITE", "LOCATION", "LOCATION_INTERNAL", "LOCATION_EXTERNAL" ]
+          "example" : "SITE",
+          "description" : "Type of location."
         },
         "subtype" : {
           "type" : "string",
-          "enum" : [ "DEMO", "DISTRIBUTION_CENTRE", "DIY_SHOP", "ELECTRONICS", "FASHION", "HEALTH_BEAUTY", "OFFICE", "PRINT_SHOP", "PRODUCTION_FACILITY", "SHOPPING_MALL", "SPORT", "SUPERMARKET", "OTHER", "GOODS_RECEIVING_AREA", "STOCK_ROOM", "SALES_FLOOR", "OFFSITE_STORAGE" ]
+          "example" : "FASHION",
+          "description" : "Subtype of store or location."
         },
         "name" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Miss Fashion Amsterdam",
+          "description" : "Name of the store or location."
         },
         "address" : {
+          "description" : "Address details. Only when type equals 'site'.",
           "$ref" : "#/definitions/Address"
         },
         "children" : {
           "type" : "array",
+          "description" : "List of sublocations (if any). Only when type equals 'site'.",
           "items" : {
             "$ref" : "#/definitions/Location"
           }
         },
         "parent_id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of parent (only when type = 'location', 'location_internal'or 'location_external')."
         },
         "store_code" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "001",
+          "description" : "Store code (branch ID) of the store or location (as defined by retailer). Only when type equals 'site'."
         }
       }
     },
@@ -2422,16 +2786,23 @@
       "type" : "object",
       "properties" : {
         "name" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "EQ_source_type",
+          "description" : "Name of the query parameter."
         },
         "type" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "urn:epcglobal:cbv:sdt:location",
+          "description" : "Type of the value querying for."
         },
         "value" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "urn:epc:id:sgln:4012345.00225.0",
+          "description" : "Value to be queried for within the named parameter."
         },
         "values" : {
           "type" : "array",
+          "description" : "Values to be queried for within the named parameter.",
           "items" : {
             "type" : "string"
           }
@@ -2442,41 +2813,53 @@
       "type" : "object",
       "properties" : {
         "currency" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "EUR",
+          "description" : "The currency for the specified region (ISO 4217 currency code)."
         },
         "region" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "NL",
+          "description" : "The country defining the region where this price is used (ISO 3166-1 alpha-2 two letter country code)."
         },
         "amount" : {
           "type" : "number",
-          "format" : "double"
+          "format" : "double",
+          "example" : 11.95,
+          "description" : "Amount of monetary value."
         }
       }
     },
     "QuantityElement" : {
       "type" : "object",
+      "required" : [ "epc_class" ],
       "properties" : {
         "quantity" : {
           "type" : "number",
-          "description" : "See EPCIS version 1.1"
+          "example" : 200.0,
+          "description" : "A number that specifies how many or how much of the specified EPCClass is denoted by this QuantityElement."
         },
         "uom" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "KGM",
+          "description" : "If present, specifies a unit of measure by which the specified quantity is to be interpreted as a physical measure, specifying how much of the specified EPCClass is denoted by this QuantityElement."
         },
         "epc_class" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epc:class:lgtin:4012345.012345.998877",
+          "description" : "A class-level identifier for the class to which the specified quantity of objects belongs."
         }
       },
-      "description" : "A QuantityElement is a structure that identifies a specific quantity of objects identified by a specific class-level identifier."
+      "description" : "A QuantityElement is a structure that identifies objects identified by a specific class-level identifier, either a specific quantity or an unspecified quantity."
     },
     "QuantityResponse" : {
       "type" : "object",
       "properties" : {
         "quantity" : {
           "type" : "integer",
-          "format" : "int64"
+          "format" : "int64",
+          "example" : 849256,
+          "description" : "Number of articles in the database."
         }
       }
     },
@@ -2492,25 +2875,32 @@
       "type" : "object",
       "properties" : {
         "location" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the stock."
         },
         "time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of the stock."
         },
         "quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 6273,
+          "description" : "Quantity of items in the stock."
         },
         "sgtins" : {
           "type" : "array",
+          "description" : "Serialized GTINs in the stock.",
           "items" : {
             "type" : "string"
           }
         },
         "disposition" : {
           "type" : "string",
-          "enum" : [ "ACTIVE", "CONTAINER_CLOSED", "DAMAGED", "DESTROYED", "DISPOSED", "ENCODED", "EXPIRED", "INACTIVE", "IN_PROGRESS", "IN_TRANSIT", "MAYBE_STOLEN", "NO_PEDIGREE_MATCH", "NON_SELLABLE_EXPIRED", "NON_SELLABLE_DAMAGED", "NON_SELLABLE_DISPOSED", "NON_SELLABLE_NO_PEDIGREE_MATCH", "NON_SELLABLE_OTHER", "NON_SELLABLE_RECALLED", "RECALLED", "RESERVED", "RETAIL_SOLD", "RETURNED", "SELLABLE_ACCESSIBLE", "SELLABLE_NOT_ACCESSIBLE", "STOLEN", "UNKNOWN" ]
+          "example" : "urn:epcglobal:cbv:disp:sellable_accessible",
+          "description" : "Disposition of these Serialized GTINs."
         }
       }
     },
@@ -2529,49 +2919,68 @@
       "type" : "object",
       "properties" : {
         "parent_id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "urn:epc:id:sscc:0614141.1234567890",
+          "description" : "Parent ID of the Shipment according to the EPCIS standards. When the shipment is created by an aggregationEvent, the Parent ID is the same as the Parent ID of the aggregationEvent otherwise it's created by the extern_ref from a shipment. When this isn't conform standards, it's converted to match it."
         },
         "extern_ref" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "shipment_dc-17812",
+          "description" : "Reference for the shipment as defined by the retailer, like a shipment number."
         },
         "source" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the source"
         },
         "destination" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-2",
+          "description" : "Location identifier of the destination"
         },
         "created_at" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of creation."
         },
         "last_modified_at" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of last modification. Should not lie before creation time."
         },
         "status" : {
           "type" : "string",
-          "enum" : [ "INTRANSIT", "RECEIVED" ]
+          "example" : "INTRANSIT",
+          "description" : "Status of the shipment. Values: INTRANSIT or RECEIVED "
         },
         "sent_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 123,
+          "description" : "Total number of sent items."
         },
         "received_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 121,
+          "description" : "Total number of received items."
         },
         "received_percentage" : {
           "type" : "number",
-          "format" : "float"
+          "format" : "float",
+          "example" : 98.4,
+          "description" : "Received percentage for the expected (quantity of) GTINs."
         },
         "gtins" : {
           "type" : "array",
+          "description" : "List of GTINs in the shipment.",
           "items" : {
             "type" : "string"
           }
         },
         "sent_quantities" : {
           "type" : "array",
+          "description" : "List of sent quantities, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "integer",
             "format" : "int32"
@@ -2579,6 +2988,7 @@
         },
         "received_quantities" : {
           "type" : "array",
+          "description" : "List of received quantities, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "integer",
             "format" : "int32"
@@ -2586,6 +2996,7 @@
         },
         "articles" : {
           "type" : "array",
+          "description" : "Article details like name, size, etc., corresponding to the GTIN in the GTIN list.",
           "items" : {
             "$ref" : "#/definitions/Article"
           }
@@ -2596,40 +3007,57 @@
       "type" : "object",
       "properties" : {
         "parent_id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "urn:epc:id:sscc:0614141.1234567890",
+          "description" : "Parent ID of the Shipment according to the EPCIS standards. When the shipment is created by an aggregationEvent, the Parent ID is the same as the Parent ID of the aggregationEvent otherwise it's created by the extern_ref from a shipment. When this isn't conform standards, it's converted to match it."
         },
         "extern_ref" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "shipment_dc-17812",
+          "description" : "Reference for the shipment as defined by the retailer, like a shipment number."
         },
         "source" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the source"
         },
         "destination" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-2",
+          "description" : "Location identifier of the destination"
         },
         "created_at" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of creation."
         },
         "last_modified_at" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of last modification. Should not lie before creation time."
         },
         "status" : {
           "type" : "string",
-          "enum" : [ "INTRANSIT", "RECEIVED" ]
+          "example" : "INTRANSIT",
+          "description" : "Status of the shipment. Values: INTRANSIT or RECEIVED "
         },
         "sent_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 123,
+          "description" : "Total number of sent items."
         },
         "received_quantity" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 121,
+          "description" : "Total number of received items."
         },
         "received_percentage" : {
           "type" : "number",
-          "format" : "float"
+          "format" : "float",
+          "example" : 98.4,
+          "description" : "Received percentage for the expected (quantity of) GTINs."
         }
       }
     },
@@ -2637,23 +3065,30 @@
       "type" : "object",
       "properties" : {
         "description" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "XL",
+          "description" : "The size description for the specified region. Can contain both size and length."
         },
         "region" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "NL",
+          "description" : "The country defining the region where this size description is used (ISO 3166-1 alpha-2 two letter country code)."
         }
       }
     },
     "SourceElement" : {
       "type" : "object",
+      "required" : [ "source", "type" ],
       "properties" : {
         "type" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epcglobal:cbv:sdt:location",
+          "description" : "An identifier that indicates what kind of source this Source denotes."
         },
         "source" : {
           "type" : "string",
-          "description" : "See EPCIS version 1.1"
+          "example" : "urn:epc:id:sgln:4012345.00225.0",
+          "description" : "An identifier that denotes a specific source."
         }
       }
     },
@@ -2661,48 +3096,41 @@
       "type" : "object",
       "properties" : {
         "id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
+          "description" : "Identifier of the RFID count."
         },
         "location" : {
-          "type" : "string"
-        },
-        "type" : {
           "type" : "string",
-          "enum" : [ "ERP", "RFID_COUNT", "REALTIME_SNAPSHOT" ]
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store or sublocation that the RFID count belongs to."
         },
         "event_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of the RFID count."
         },
         "start_time" : {
           "type" : "string",
-          "format" : "date-time"
-        },
-        "extern_ref" : {
-          "type" : "string"
-        },
-        "status" : {
-          "type" : "string",
-          "enum" : [ "ACCEPTED", "VALIDATING" ]
+          "format" : "date-time",
+          "description" : "Date and time the RFID count started."
         },
         "quantity" : {
           "type" : "integer",
-          "format" : "int32"
-        },
-        "excluded_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 6253,
+          "description" : "Total quantity of items in the RFID count."
         },
         "gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
-        },
-        "excluded_gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 1542,
+          "description" : "Total quantity of GTINs in the RFID count."
         },
         "in_use" : {
           "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates whether the RFID count is used in a difference list. If it is used, the RFID count can not be deleted anymore.",
           "default" : false
         },
         "client_ids" : {
@@ -2713,6 +3141,8 @@
         },
         "is_complete" : {
           "type" : "boolean",
+          "example" : true,
+          "description" : "Indicates whether the RFID count has been completed.",
           "default" : false
         },
         "quantity_list" : {
@@ -2721,7 +3151,8 @@
             "$ref" : "#/definitions/GtinQuantity"
           }
         }
-      }
+      },
+      "description" : "Provides summary information about an RFID count."
     },
     "StockResponse" : {
       "type" : "object",
@@ -2732,18 +3163,21 @@
         },
         "gtins" : {
           "type" : "array",
+          "description" : "List of GTINs in the stock.",
           "items" : {
             "type" : "string"
           }
         },
         "locations" : {
           "type" : "array",
+          "description" : "List of location identifiers in the stock, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "string"
           }
         },
         "quantities" : {
           "type" : "array",
+          "description" : "Stock quantity, corresponding to the GTIN in the GTIN list.",
           "items" : {
             "type" : "integer",
             "format" : "int32"
@@ -2751,10 +3185,12 @@
         },
         "time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of the stock."
         },
         "articles" : {
           "type" : "array",
+          "description" : "Article details like name, size, etc., corresponding to the GTIN in the GTIN list.",
           "items" : {
             "$ref" : "#/definitions/Article"
           }
@@ -2795,48 +3231,41 @@
       "type" : "object",
       "properties" : {
         "id" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
+          "description" : "Identifier of the RFID count."
         },
         "location" : {
-          "type" : "string"
-        },
-        "type" : {
           "type" : "string",
-          "enum" : [ "ERP", "RFID_COUNT", "REALTIME_SNAPSHOT" ]
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store or sublocation that the RFID count belongs to."
         },
         "event_time" : {
           "type" : "string",
-          "format" : "date-time"
+          "format" : "date-time",
+          "description" : "Date and time of the RFID count."
         },
         "start_time" : {
           "type" : "string",
-          "format" : "date-time"
-        },
-        "extern_ref" : {
-          "type" : "string"
-        },
-        "status" : {
-          "type" : "string",
-          "enum" : [ "ACCEPTED", "VALIDATING" ]
+          "format" : "date-time",
+          "description" : "Date and time the RFID count started."
         },
         "quantity" : {
           "type" : "integer",
-          "format" : "int32"
-        },
-        "excluded_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 6253,
+          "description" : "Total quantity of items in the RFID count."
         },
         "gtin_quantity" : {
           "type" : "integer",
-          "format" : "int32"
-        },
-        "excluded_gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 1542,
+          "description" : "Total quantity of GTINs in the RFID count."
         },
         "in_use" : {
           "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates whether the RFID count is used in a difference list. If it is used, the RFID count can not be deleted anymore.",
           "default" : false
         },
         "client_ids" : {
@@ -2847,9 +3276,12 @@
         },
         "is_complete" : {
           "type" : "boolean",
+          "example" : true,
+          "description" : "Indicates whether the RFID count has been completed.",
           "default" : false
         }
-      }
+      },
+      "description" : "Provides summary information about an RFID count."
     },
     "WorkflowEvent" : {
       "type" : "object",
@@ -2857,37 +3289,40 @@
       "properties" : {
         "type" : {
           "type" : "string",
-          "description" : "Type of the workflow",
-          "enum" : [ "cycle_count_started", "cycle_count_finished", "partial_count_finished", "in-store_replenishment_started" ]
+          "example" : "cycle_count_finished",
+          "description" : "Type of the workflow. Values: cycle_count_started, cycle_count_finished or partial_count_finished."
         },
         "location" : {
           "type" : "string",
-          "description" : "The location for which the stock is defined."
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "The location identifier of the location for which the workflow is defined. Usually this is a store."
         },
         "event_time" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "Client-side date+time of registering that the count was finished.\nThis is not the moment of sending the workflow event nor is it the moment when the last EPC was observed."
+          "description" : "Client-side time when the user decided the event ended.\nThis is not the moment of sending the workflow event nor is it the moment when the last EPC was observed."
         },
         "start_time" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "Optional. This is moment when the first EPC was observed.\n"
+          "description" : "Time when the first EPC was observed.\n"
         },
         "epc_count" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "The total number of EPCs that were counted in the referenced message_ids."
+          "example" : 23463,
+          "description" : "The total number of EPCs that were affected in the referenced message_ids."
         },
         "message_ids" : {
           "type" : "array",
-          "description" : "Array of EPCIS event message IDs. These events contain the actual EPCs that were observed in this count.",
+          "description" : "List of EPCIS event message identifiers, the 'id' field in the EPCIS event.These events contain the actual EPCs that were affected.",
           "items" : {
             "type" : "string"
           }
         },
         "client_id" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "OAuth Client ID of the device generating the workflow event."
         }
       }
     },
@@ -2896,14 +3331,19 @@
       "properties" : {
         "type" : {
           "type" : "string",
-          "enum" : [ "ORGANIZATION", "BUSINESS_PARTNER" ]
+          "example" : "ORGANIZATION",
+          "description" : "Type of the organization. Values: ORGANIZATION or BUSINESS_PARTNER."
         },
         "name" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Miss Fashion",
+          "description" : "Name of the organization."
         },
         "organization_id" : {
           "type" : "integer",
-          "format" : "int64"
+          "format" : "int64",
+          "example" : 2736423,
+          "description" : "Identifier of the organization."
         }
       }
     },
@@ -2911,10 +3351,12 @@
       "type" : "object",
       "properties" : {
         "own" : {
+          "description" : "Own organization.",
           "$ref" : "#/definitions/Organization"
         },
         "linked" : {
           "type" : "array",
+          "description" : "Linked organization, other organization(s) you have access to.",
           "items" : {
             "$ref" : "#/definitions/Organization"
           }
@@ -2938,8 +3380,7 @@
         },
         "target_type" : {
           "type" : "string",
-          "description" : "The type of target in the organizational structure",
-          "enum" : [ "CustomerOrganization", "Division", "Store", "Sublocation" ]
+          "description" : "The type of target in the organizational structure. Values: CustomerOrganization, Division, Store, Sublocation"
         },
         "target_id" : {
           "type" : "integer",

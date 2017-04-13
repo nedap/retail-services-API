@@ -20,8 +20,7 @@ namespace Nedap.Retail.Api.Example
             Console.WriteLine("------------- Create or replace articles");
             List<Article> articlesList = new List<Article>();
             articlesList.Add(CreateArticle());
-            Articles articles = new Articles(articlesList);
-            articleApi.CreateOrReplaceArticles(articles);
+            articleApi.CreateOrReplaceArticles(articlesList);
 
             // get quantity
             Console.WriteLine("------------- Retrieving article quantity");

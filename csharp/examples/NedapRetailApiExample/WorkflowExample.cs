@@ -12,7 +12,7 @@ namespace Nedap.Retail.Api.Example
         {
             string location = "http://location-testing";
 
-            WorkflowEvent workflow = new WorkflowEvent(WorkflowEvent.TypeEnum.Cyclecountfinished, location, DateTime.Now, null, 10, new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+            WorkflowEvent workflow = new WorkflowEvent("cycle_count_finished", location, DateTime.Now, null, 10, new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
 
             try
             {

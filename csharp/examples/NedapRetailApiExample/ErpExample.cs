@@ -25,29 +25,28 @@ namespace Nedap.Retail.Api.Example
 
                 // send stock
                 Console.WriteLine("------------- Uploading stock");
-                Stock stock = new Stock();
+                ErpStock stock = new ErpStock();
                 stock.Location = location;
                 stock.EventTime = DateTime.Now;
                 stock.QuantityList = qList;
-                stock.ExternRef = "testing";
                 string stockId = erpStockApi.CreateErpStock(stock).Id;
                 Console.Write("stock ID = " + stockId);
 
                 // request stock status
                 Console.WriteLine("------------- Getting stock status");
-                StockSummary stockSummary = erpStockApi.RetrieveErpStockSummary(stockId);
+                ErpStockSummary stockSummary = erpStockApi.RetrieveErpStockSummary(stockId);
                 Console.WriteLine(stockSummary.ToString());
 
                 // request stock
                 Console.WriteLine("------------- Retrieving stock");
-                Stock retrievedStock = erpStockApi.RetrieveErpStock(stockId);
+                ErpStock retrievedStock = erpStockApi.RetrieveErpStock(stockId);
                 Console.WriteLine(retrievedStock.ToString());
 
                 // request stock list
                 Console.WriteLine("------------- Retrieving list of available stocks");
-                List<StockSummary> stockSummaryList = erpStockApi.ListErpStocks(location);
+                List<ErpStockSummary> stockSummaryList = erpStockApi.ListErpStocks(location);
                 Console.WriteLine("Got " + stockSummaryList.Count + " stocks:");
-                foreach (StockSummary ss in stockSummaryList)
+                foreach (ErpStockSummary ss in stockSummaryList)
                 {
                     Console.WriteLine(ss.ToString());
                 }
