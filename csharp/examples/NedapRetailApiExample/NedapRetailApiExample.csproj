@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArticleExample.cs" />
-    <Compile Include="EpcExample.cs" />
     <Compile Include="EpcisExample.cs" />
     <Compile Include="ErpExample.cs" />
     <Compile Include="Program.cs" />

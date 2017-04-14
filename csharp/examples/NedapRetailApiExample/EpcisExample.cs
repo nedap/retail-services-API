@@ -26,7 +26,7 @@ namespace Nedap.Retail.Api.Example
                 // query
                 Console.WriteLine("------------- Query epcis events");
                 List<ParameterObject> parameters = new List<ParameterObject>();
-                parameters.Add(new ParameterObject("EQ_read_point", null, null, new List<string>(new string[] { "urn:epc:id:sgln:012345.67890.001" })));
+                parameters.Add(new ParameterObject("GE_event_time", null, "2017-04-14T11:34:21.474Z", null));
                 EpcisQueryParameters queryParameters = new EpcisQueryParameters(parameters);
 
                 List<EpcisEvent> queryResult = epcisApi.QueryEpcisEvents(queryParameters);
@@ -64,14 +64,14 @@ namespace Nedap.Retail.Api.Example
 
         private static List<EpcisEvent> CreateEvents()
         {
+
+            String locationId = "http://nedapretail.com/loc/testing";
             List<EpcisEvent> events = new List<EpcisEvent>();
 
-            events.Add(new EpcisEvent()
+            // "required" : [ "action", "event_time", "event_time_zone_offset", "type" ],
+            events.Add(new EpcisEvent(Type: EpcisEvent.TypeEnum.Objectevent, Action: EpcisEvent.ActionEnum.OBSERVE, EventTime: DateTime.Now, EventTimeZoneOffset: "+01:00")
             {
-                Type = EpcisEvent.TypeEnum.Objectevent,
-                Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a66").ToString(),                
-                EventTime = DateTime.Now, //TODO: Time format
-                EventTimeZoneOffset = "+01:00",
+                Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a66").ToString(),
                 RecordTime = DateTime.Now,
                 EpcList = new List<string>()
                 {
@@ -80,21 +80,17 @@ namespace Nedap.Retail.Api.Example
                     "urn:epc:id:sgtin:1234567.000246.0003",
                     "urn:epc:id:sgtin:1234567.000246.0004"
                 },
-                Action = EpcisEvent.ActionEnum.OBSERVE,
                 BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
                 Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
                 ReadPoint = "urn:epc:id:sgln:012345.67890.001",
-                BizLocation = "urn:epc:id:sgln:012345.67890.001",
+                BizLocation = locationId,
                 BizTransactionList = new List<BizTransactionElement>() {
-                    new BizTransactionElement() { BizTransaction = "123" }
+                    new BizTransactionElement(BizTransaction: "123")
                 }
             });
-            events.Add(new EpcisEvent()
+            events.Add(new EpcisEvent(Type: EpcisEvent.TypeEnum.Objectevent, Action: EpcisEvent.ActionEnum.OBSERVE, EventTime: DateTime.Now, EventTimeZoneOffset: "+01:00")
             {
-                Type = EpcisEvent.TypeEnum.Objectevent,
                 Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a67").ToString(),
-                EventTime = DateTime.Now,
-                EventTimeZoneOffset = "+01:00",
                 RecordTime = DateTime.Now,
                 EpcList = new List<string>()
                 {
@@ -103,21 +99,17 @@ namespace Nedap.Retail.Api.Example
                     "urn:epc:id:sgtin:1234567.000246.0007",
                     "urn:epc:id:sgtin:1234567.000246.0008"
                 },
-                Action = EpcisEvent.ActionEnum.OBSERVE,
                 BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
                 Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
                 ReadPoint = "urn:epc:id:sgln:012345.67890.001",
-                BizLocation = "urn:epc:id:sgln:012345.67890.002",
+                BizLocation = locationId,
                 BizTransactionList = new List<BizTransactionElement>() {
-                    new BizTransactionElement() { BizTransaction = "456" }
+                    new BizTransactionElement(BizTransaction: "456")
                 }
             });
-            events.Add(new EpcisEvent()
+            events.Add(new EpcisEvent(Type: EpcisEvent.TypeEnum.Objectevent, Action: EpcisEvent.ActionEnum.OBSERVE, EventTime: DateTime.Now, EventTimeZoneOffset: "+01:00")
             {
-                Type = EpcisEvent.TypeEnum.Objectevent,
                 Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a68").ToString(),
-                EventTime = DateTime.Now,
-                EventTimeZoneOffset = "+01:00",
                 RecordTime = DateTime.Now,
                 EpcList = new List<string>()
                 {
@@ -126,21 +118,17 @@ namespace Nedap.Retail.Api.Example
                     "urn:epc:id:sgtin:1234567.000246.0011",
                     "urn:epc:id:sgtin:1234567.000246.0012"
                 },
-                Action = EpcisEvent.ActionEnum.OBSERVE,
                 BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
                 Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
                 ReadPoint = "urn:epc:id:sgln:012345.67890.001",
-                BizLocation = "urn:epc:id:sgln:012345.67890.001",
+                BizLocation = locationId,
                 BizTransactionList = new List<BizTransactionElement>() {
-                    new BizTransactionElement() { BizTransaction = "123" }
+                    new BizTransactionElement(BizTransaction: "123")
                 }
             });
-            events.Add(new EpcisEvent()
+            events.Add(new EpcisEvent(Type: EpcisEvent.TypeEnum.Objectevent, Action: EpcisEvent.ActionEnum.OBSERVE, EventTime: DateTime.Now, EventTimeZoneOffset: "+01:00")
             {
-                Type = EpcisEvent.TypeEnum.Objectevent,
                 Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a69").ToString(),
-                EventTime = DateTime.Now,
-                EventTimeZoneOffset = "+01:00",
                 RecordTime = DateTime.Now,
                 EpcList = new List<string>()
                 {
@@ -149,13 +137,12 @@ namespace Nedap.Retail.Api.Example
                     "urn:epc:id:sgtin:1234567.000246.0015",
                     "urn:epc:id:sgtin:1234567.000246.0016"
                 },
-                Action = EpcisEvent.ActionEnum.OBSERVE,
                 BizStep = "urn:epcglobal:cbv:bizstep:cycle_counting",
                 Disposition = "urn:epcglobal:cbv:disp:sellable_accessible",
                 ReadPoint = "urn:epc:id:sgln:012345.67890.001",
-                BizLocation = "urn:epc:id:sgln:012345.67890.002",
+                BizLocation = locationId,
                 BizTransactionList = new List<BizTransactionElement>() {
-                    new BizTransactionElement() { BizTransaction = "456" }
+                    new BizTransactionElement(BizTransaction: "456")
                 }
             });
 

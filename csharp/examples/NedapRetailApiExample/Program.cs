@@ -30,11 +30,12 @@ namespace Nedap.Retail.Api.Example
                 Console.WriteLine("Nedap Retail API examples");
                 Console.WriteLine("-------------------------");
                 Console.WriteLine("Which example do you want to run?");
-                Console.WriteLine("1. ERP API");
-                Console.WriteLine("2. EPC API");
-                Console.WriteLine("3. Article API");
-                Console.WriteLine("4. Epcis API");
-                Console.WriteLine("5. Workflow API");
+                Console.WriteLine("1 : Article API");
+                Console.WriteLine("2 : EPCIS API");
+                Console.WriteLine("3 : ERP API");
+                Console.WriteLine("4 : Workflow API");
+                Console.WriteLine("0 : Quit");
+
                 Console.Write("Your choice: ");
                 ConsoleKeyInfo key = Console.ReadKey();
                 Console.WriteLine();
@@ -42,20 +43,19 @@ namespace Nedap.Retail.Api.Example
                 switch (key.Key)
                 {
                     case ConsoleKey.D1:
-                        ErpExample.RunExample(configuration);
-                        break;
-                    case ConsoleKey.D2:
-                        EpcExample.RunExample(configuration);
-                        break;
-                    case ConsoleKey.D3:
                         ArticleExample.RunExample(configuration);
                         break;
-                    case ConsoleKey.D4:
+                    case ConsoleKey.D2:
                         EpcisExample.RunExample(configuration);
                         break;
-                    case ConsoleKey.D5:
+                    case ConsoleKey.D3:
+                        ErpExample.RunExample(configuration);
+                        break;
+                    case ConsoleKey.D4:
                         WorkflowExample.RunExample(configuration);
                         break;
+                    case ConsoleKey.D0:
+                        return;
                 }
 
             } catch (Exception e)

@@ -37,31 +37,31 @@ namespace Nedap.Retail.Api.Example
 
     private static Article CreateArticle()
     {
-        var article = new Article();
-        article.Gtin = "03327009483366";
-        article.Barcodes = new List<Barcode>()
-            {
-                new Barcode() { Type = "ean_13", Value = "3327009483366" },
-                new Barcode() { Type = "ean_13", Value = "3327009483427" }
-            };
+
+        List<Barcode> barcodes = new List<Barcode>()
+        {
+            new Barcode() { Type = "ean_13", Value = "3327009483366" },
+            new Barcode() { Type = "ean_13", Value = "3327009483427" }
+        };
+
+        var article = new Article(Name: "T-shirt short sleeve, v-neck", Barcodes: barcodes, Gtin: "03327009483366");
         article.Code = "74478-94565";
         article.Brand = "Nedap";
-        article.Season = "Summer 2014";
-        article.Name = "T-shirt short sleeve, v-neck";
+        article.Season = "Summer 2014";       
         article.Option = "T-shirt short sleeve, v-neck, Black";
         article.Style = "T-shirt short sleeve, v-neck";
         article.Color = "Black";
         article.Sizes = new List<Size>()
-            {
-                new Size() { Region = "NL", Description = "32/34" },
-                new Size() { Region = "DE", Description = "33/32" }
-            };
+        {
+            new Size() { Region = "NL", Description = "32/34" },
+            new Size() { Region = "DE", Description = "33/32" }
+        };
         article.Supplier = "Nedap Retail";
         article.Prices = new List<Price>()
-            {
-                new Price() { Currency = "EUR", Region = "NL", Amount = 32.95 },
-                new Price() { Currency = "NOK", Region = "NO", Amount = 3000 }
-            };
+        {
+            new Price() { Currency = "EUR", Region = "NL", Amount = 32.95 },
+            new Price() { Currency = "NOK", Region = "NO", Amount = 3000 }
+        };
         return article;
     }
 }
