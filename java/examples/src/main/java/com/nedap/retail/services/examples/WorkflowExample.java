@@ -5,12 +5,8 @@ import com.nedap.retail.client.ApiException;
 import com.nedap.retail.client.api.EpcisApi;
 import com.nedap.retail.client.api.WorkflowApi;
 import com.nedap.retail.client.model.EpcisEvent;
-import com.nedap.retail.client.model.EpcisEventContainer;
 import com.nedap.retail.client.model.WorkflowEvent;
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.nedap.retail.services.examples.EpcisHelper.createEvents;

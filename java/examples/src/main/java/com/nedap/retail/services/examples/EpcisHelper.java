@@ -3,16 +3,11 @@ package com.nedap.retail.services.examples;
 import static com.nedap.retail.services.examples.PrintHelper.DOT;
 import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
 import static com.nedap.retail.services.examples.PrintHelper.TAB;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import com.nedap.retail.client.model.EpcisEvent;
-import com.nedap.retail.client.model.EpcisEventContainer;
 import org.joda.time.DateTime;
-
-
 
 public class EpcisHelper {
 
