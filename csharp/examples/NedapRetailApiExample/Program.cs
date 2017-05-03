@@ -27,7 +27,7 @@ namespace Nedap.Retail.Api.Example
                 // by default use production server, uncomment this line to use test server
                 //client.SetApiBaseUrl(new Uri("https://api-test.nedapretail.com/"));
 
-                Console.WriteLine("Nedap Retail API examples");
+                Console.WriteLine("Nedap Retail !D Cloud API examples");
                 Console.WriteLine("-------------------------");
                 Console.WriteLine("Which example do you want to run?");
                 Console.WriteLine("1 : Article API");

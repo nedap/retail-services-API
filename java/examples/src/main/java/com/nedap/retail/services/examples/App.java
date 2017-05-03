@@ -10,10 +10,6 @@ import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
 
 /**
  * This tool can be used to test the !D Cloud APIs.
- *
- * usage: java -jar examples.jar -clientid CLIENTID -secret SECRET [-url URL]
- *
- * Exit codes: 0: successfull. 1: not successfull.
  */
 public class App {
 
@@ -21,7 +17,7 @@ public class App {
     private static final int EXIT_CODE_ERROR = 1;
     private static final String OPTION_TOKEN= "token";
     private static final String OPTION_URL_API = "url";
-    private static final String DEFAULT_URL_API = "https://api-test.nedapretail.com";
+    private static final String DEFAULT_URL_API = "https://api.nedapretail.com";
     private final ApiClient apiClient;
 
     public App(final String urlApi, final String accessToken) {
@@ -108,7 +104,7 @@ public class App {
     private static void printMenu() {
         final StringBuilder sb = new StringBuilder();
 
-        sb.append(NEW_LINE).append("*** Nedap Retail API examples ***");
+        sb.append(NEW_LINE).append("*** Nedap Retail !D Cloud API examples ***");
         sb.append(NEW_LINE).append("Choose example you want to run");
         sb.append(NEW_LINE).append("1 : Article API");
         sb.append(NEW_LINE).append("2 : EPCIS API");

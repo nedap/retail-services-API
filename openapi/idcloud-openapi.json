@@ -2,11 +2,11 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "!D Cloud is an RFID integration platform for retail stores. While we provide core functionality for retail companies, a lot of functionality can be added or extended by 3rd party developers. We encourage you to do so!",
-    "version" : "v1",
+    "version" : "20170503",
     "title" : "!D Cloud API",
     "contact" : {
-      "url" : "http://www.nedap-idcloud.com/contact/",
-      "email" : "info@nedap-idcloud.com"
+      "url" : "https://developer.nedap-idcloud.com/",
+      "email" : "support-idcloud@nedap.com"
     },
     "license" : {
       "name" : "The MIT License (MIT)",
