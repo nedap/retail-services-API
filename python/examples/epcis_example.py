@@ -19,10 +19,9 @@ class EpcisExample(object) :
         try:
             # Capture EPCIS events
             print NEW_LINE + "Capturing EPCIS events..."
-            epcisEventsList = EpcisEventContainer()
-            epcisEventsList.events = EpcisExample.createEvents(LOCATION_ID)
+            epcisEventsList = EpcisExample.createEvents(LOCATION_ID)
             api.capture_epcis_events(epcisEventsList)
-            print EpcisExample.printEpcisEvents(epcisEventsList.events)
+            print EpcisExample.printEpcisEvents(epcisEventsList)
 
             time.sleep(2)
 

@@ -13,7 +13,7 @@
     <groupId>com.nedap.retail.client</groupId>
     <artifactId>api-client</artifactId>
     <version>2.0-SNAPSHOT</version>
-    <description>Api client for use with the Nedap Retail APIs</description>
+    <description>API client for use with the Nedap Retail !D Cloud APIs</description>
     <url>http://www.nedap-retail.com/</url>
 
     <properties>
@@ -115,7 +115,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/../../openapi/retail-services-openapi.json</inputSpec>
+                            <inputSpec>${project.basedir}/../../openapi/idcloud-openapi.json</inputSpec>
                             <language>java</language>
                             <apiPackage>com.nedap.retail.client.api</apiPackage>
                             <modelPackage>com.nedap.retail.client.model</modelPackage>

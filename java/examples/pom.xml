@@ -10,9 +10,9 @@
 
     <artifactId>examples</artifactId>
     <packaging>jar</packaging>
-    <name>Nedap Retail API examples</name>
+    <name>Nedap Retail !D Cloud API examples</name>
     <version>2.0-SNAPSHOT</version>
-    <description>Examples on how to use the Nedap Retail APIs</description>
+    <description>Examples on how to use the Nedap Retail !D Cloud APIs</description>
     <url>http://www.nedap-retail.com/</url>
 
     <dependencies>

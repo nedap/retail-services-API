@@ -21,7 +21,7 @@ library and the example project.
 ###Steps
 1. In the directory _java_ run the command `mvn package`.
 2. After completion the directory _java/target_ wil contains the example executable and libraries.
-3. For running the example execute `java -jar examples-2.0-SNAPSHOT.jar -token <access-token> <api-url>`.
+3. For running the example execute `java -jar examples-2.0-SNAPSHOT.jar -token <access-token> -url <api-url>`.
 
 ##C# .NET
 The directory _csharp_ contains an example C# .NET project with build scripts to generate and compile the API client code, API client 

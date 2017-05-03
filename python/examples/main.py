@@ -4,7 +4,7 @@ from epcis_example import *
 from dateutil.tz import tzlocal
 
 def main() :
-    client = nedap_retail_api_client.ApiClient("https://api-test.nedapretail.com")
+    client = nedap_retail_api_client.ApiClient("https://api.nedapretail.com")
     nedap_retail_api_client.Configuration().access_token = ""
     EpcisExample.run_example(client)
 
