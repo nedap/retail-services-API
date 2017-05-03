@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<appSettings>
-    <add key="OauthClientId" value="your OAuth 2.0 client ID" />
-    <add key="OauthSecret" value="your OAuth 2.0 secret" />
-</appSettings>
