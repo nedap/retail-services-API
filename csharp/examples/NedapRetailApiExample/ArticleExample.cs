@@ -65,7 +65,7 @@ namespace Nedap.Retail.Api.Example
         article.Gender = "Male";
         article.AgeGroup = "Adult";
         article.RefillCategory = "Shoes";
-        article.ImageUrl = "http://link.to.image/image.jpg";
+        article.ImageUrl = "http://example.org/image.jpg";
         return article;
     }
 }

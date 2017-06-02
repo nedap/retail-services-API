@@ -103,7 +103,7 @@ public class ArticleExample {
         article.gender("Male");
         article.ageGroup("Adult");
         article.refillCategory("Shoes");
-        article.imageUrl("http://link.to.image/image.jpg");
+        article.imageUrl("http://example.org/image.jpg");
 
         return article;
     }
