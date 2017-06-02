@@ -62,6 +62,10 @@ namespace Nedap.Retail.Api.Example
             new Price() { Currency = "EUR", Region = "NL", Amount = 32.95 },
             new Price() { Currency = "NOK", Region = "NO", Amount = 3000 }
         };
+        article.Gender = "Male";
+        article.AgeGroup = "Adult";
+        article.RefillCategory = "Shoes";
+        article.ImageUrl = "http://link.to.image/image.jpg";
         return article;
     }
 }
