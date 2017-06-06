@@ -100,6 +100,10 @@ public class ArticleExample {
         article.supplier("Nedap Retail");
         article.category("T-shirt");
         article.prices(setArticlePrices());
+        article.gender("Male");
+        article.ageGroup("Adult");
+        article.refillCategory("Shoes");
+        article.imageUrl("http://example.org/image.jpg");
 
         return article;
     }
@@ -163,6 +167,10 @@ public class ArticleExample {
             sb.append(TAB).append("Supplier: ").append(articles.get(i).getSupplier()).append(NEW_LINE);
             sb.append(TAB).append("Category: ").append(articles.get(i).getCategory()).append(NEW_LINE);
             sb.append(TAB).append("Prices: ").append(printPrices(articles.get(i).getPrices())).append(NEW_LINE);
+            sb.append(TAB).append("Gender: ").append(articles.get(i).getGender()).append(NEW_LINE);
+            sb.append(TAB).append("Age group: ").append(articles.get(i).getAgeGroup()).append(NEW_LINE);
+            sb.append(TAB).append("Refill category: ").append(articles.get(i).getRefillCategory()).append(NEW_LINE);
+            sb.append(TAB).append("Image URL: ").append(articles.get(i).getImageUrl()).append(NEW_LINE);
         }
         return sb.toString();
     }

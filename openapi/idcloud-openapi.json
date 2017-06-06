@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "!D Cloud is an RFID integration platform for retail stores. While we provide core functionality for retail companies, a lot of functionality can be added or extended by 3rd party developers. We encourage you to do so!",
-    "version" : "20170503",
+    "version" : "20170530",
     "title" : "!D Cloud API",
     "contact" : {
       "url" : "https://developer.nedap-idcloud.com/",
@@ -957,6 +957,9 @@
           "400" : {
             "description" : "Required field missing: location."
           },
+          "404" : {
+            "description" : "When location could not be found."
+          },
           "412" : {
             "description" : "No RFID count for location."
           }
@@ -1358,44 +1361,6 @@
           "type" : "string",
           "example" : "NL",
           "description" : "ISO 3166-1 alpha-2 two letter country code."
-        }
-      }
-    },
-    "ApprovedDifferenceListCaptureRequest" : {
-      "type" : "object",
-      "properties" : {
-        "location" : {
-          "type" : "string",
-          "example" : "http://nedapretail.com/loc/store-1",
-          "description" : "Location identifier of the store the difference list will be approved for."
-        },
-        "rfid_time" : {
-          "type" : "string",
-          "format" : "date-time",
-          "description" : "The date and time of the RFID count to be used."
-        },
-        "erp_stock_id" : {
-          "type" : "string",
-          "example" : "e8a2a3b8-ea3d-4ab6-857b-db1ae25de2e9",
-          "description" : "The identifier of the ERP stock to use."
-        },
-        "approved_gtins" : {
-          "type" : "array",
-          "description" : "List of GTINs for which the differences will be approved.",
-          "items" : {
-            "type" : "string"
-          }
-        }
-      }
-    },
-    "ApprovedDifferenceListCreateResponse" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "string",
-          "format" : "uuid",
-          "example" : "7ac36dac-49b3-4207-b923-1ca467e96e88",
-          "description" : "Unique identifier for the created approved difference list"
         }
       }
     },
@@ -1845,6 +1810,26 @@
             "$ref" : "#/definitions/Price"
           }
         },
+        "gender" : {
+          "type" : "string",
+          "example" : "Male, Female, Unisex",
+          "description" : "Contains the gender. This is free format, but is intended to contain e.g. Male."
+        },
+        "age_group" : {
+          "type" : "string",
+          "example" : "Child, Youth, Adult, Senior",
+          "description" : "Contains the age group. This is free format, but is intended to contain e.g. Child."
+        },
+        "refill_category" : {
+          "type" : "string",
+          "example" : "Jeans, Men, M",
+          "description" : "The category used as a key for the refill feature. When omitted category, age group, and gender will be used by default for refill."
+        },
+        "image_url" : {
+          "type" : "string",
+          "example" : "http://www.example.org/image.jpg",
+          "description" : "A valid url containing an image. The image should be in JPEG, GIF or PNG format and not too large (maximum 250 kB)."
+        },
         "last_updated" : {
           "type" : "string",
           "format" : "date-time",
@@ -1910,214 +1895,6 @@
           "type" : "string",
           "example" : "http://transaction.acme.com/po/12345678",
           "description" : "An identifier that denotes a specific business transaction."
-        }
-      }
-    },
-    "CountHistory" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "string"
-        },
-        "location" : {
-          "type" : "string"
-        },
-        "event_time" : {
-          "type" : "string",
-          "format" : "date-time"
-        },
-        "counted_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "counted_gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "not_counted_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "not_counted_gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "counted_gtins" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "counted_quantities" : {
-          "type" : "array",
-          "items" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "counted_articles" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Article"
-          }
-        },
-        "not_counted_gtins" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "not_counted_quantities" : {
-          "type" : "array",
-          "items" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "not_counted_articles" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Article"
-          }
-        }
-      }
-    },
-    "DashboardKeyFigures" : {
-      "type" : "object",
-      "properties" : {
-        "differenceListAccuracy" : {
-          "type" : "number",
-          "format" : "double"
-        },
-        "organization_id" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
-        "location_id" : {
-          "type" : "string"
-        },
-        "absolute_difference" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "Absolute difference of this difference list in number of items."
-        },
-        "gross_difference" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Gross difference of this difference list as a percentage."
-        },
-        "not_on_shelf_gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The number of articles (GTINs) that are not available on shelf, but are available in a stock room."
-        },
-        "not_on_shelf_percentage" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Same as above, but as a percentage of the total number of GTINs in the store."
-        },
-        "store_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The number of items in the entire store."
-        },
-        "stock_ratio" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Percentage of items in the entire store that are in stock rooms."
-        },
-        "erp_stock_id" : {
-          "type" : "string",
-          "description" : "ID of ERP stock used to generate the summary."
-        },
-        "erp_stock_time" : {
-          "type" : "string",
-          "format" : "date-time",
-          "description" : "Time of ERP stock used to generate the summary."
-        },
-        "rfid_stock_time" : {
-          "type" : "string",
-          "format" : "date-time",
-          "description" : "Time of RFID stock used to generate the summary."
-        },
-        "erp_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "Number of items in ERP stock"
-        },
-        "rfid_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "Number of items in RFID stock"
-        },
-        "erp_gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "Number of GTINs in ERP stock"
-        },
-        "rfid_gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "Number of GTINs in RFID stock. The number of articles (GTINs) that are available in the store (including sales floors and stock rooms)."
-        },
-        "plus_difference" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "Positive difference of this difference list in number of items (where there is more items in rfid count than in erp import)."
-        },
-        "minus_difference" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "Negative difference of this difference list in number of items (where there is more items in erp import than in rfid count)."
-        },
-        "stock_rooms_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The number of items in all stock rooms."
-        },
-        "sales_floors_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The number of items in all sales floors."
-        },
-        "creation_date" : {
-          "type" : "string",
-          "format" : "date-time"
-        },
-        "difference_list_approved_on" : {
-          "type" : "string",
-          "format" : "date-time"
-        },
-        "difference_list_status" : {
-          "type" : "string"
-        },
-        "shipments_in_transit" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The number of shipments that are in transit"
-        },
-        "shipments_average_received_percentage" : {
-          "type" : "number",
-          "format" : "float",
-          "description" : "The average received percentage over the shipments in the last 10 weeks"
-        }
-      },
-      "description" : "Dashboard summary for one store"
-    },
-    "DashboardListResponse" : {
-      "type" : "object",
-      "properties" : {
-        "stores" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Location"
-          }
-        },
-        "dashboard_key_figures" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/DashboardKeyFigures"
-          }
         }
       }
     },
@@ -2374,27 +2151,6 @@
           "items" : {
             "$ref" : "#/definitions/ParameterObject"
           }
-        }
-      }
-    },
-    "EpcisRetractEvent" : {
-      "type" : "object",
-      "properties" : {
-        "storedId" : {
-          "type" : "string",
-          "format" : "uuid",
-          "example" : "138a02fd-a7d2-47bf-81fe-1861dc97fea1",
-          "description" : "Identifier for the event, automatically assigned when the event is stored in the database."
-        },
-        "declarationTime" : {
-          "type" : "string",
-          "format" : "date-time",
-          "description" : "Date and time of the error declaration."
-        },
-        "errorReasonId" : {
-          "type" : "string",
-          "example" : "urn:epcglobal:cbv:er:incorrect_data",
-          "description" : "Reason of the error declaration."
         }
       }
     },
@@ -2680,108 +2436,6 @@
         }
       }
     },
-    "Movement" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "string"
-        },
-        "to" : {
-          "type" : "string"
-        },
-        "from" : {
-          "type" : "string"
-        },
-        "quantity" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "unregistered" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "gtins" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "quantities" : {
-          "type" : "array",
-          "items" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "articles" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Article"
-          }
-        },
-        "event_time" : {
-          "type" : "string",
-          "format" : "date-time"
-        },
-        "gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32"
-        }
-      }
-    },
-    "NotOnShelfResponse" : {
-      "type" : "object",
-      "properties" : {
-        "rfidStockTime" : {
-          "type" : "string",
-          "format" : "date-time"
-        },
-        "notOnShelfGtinQuantity" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "rfidGtinQuantity" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "notOnShelfPercentage" : {
-          "type" : "number",
-          "format" : "double"
-        },
-        "gtins" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "salesFloorStock" : {
-          "type" : "array",
-          "items" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "stockRoomLocations" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "stockRoomStock" : {
-          "type" : "array",
-          "items" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "articles" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Article"
-          }
-        }
-      }
-    },
     "ParameterObject" : {
       "type" : "object",
       "properties" : {
@@ -2863,14 +2517,6 @@
         }
       }
     },
-    "RfidCountCreateResponse" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "string"
-        }
-      }
-    },
     "SgtinRfidStock" : {
       "type" : "object",
       "properties" : {
@@ -2941,6 +2587,7 @@
         "created_at" : {
           "type" : "string",
           "format" : "date-time",
+          "example" : "2017-05-29T09:56:22Z",
           "description" : "Date and time of creation."
         },
         "last_modified_at" : {
@@ -3029,6 +2676,7 @@
         "created_at" : {
           "type" : "string",
           "format" : "date-time",
+          "example" : "2017-05-29T09:56:22Z",
           "description" : "Date and time of creation."
         },
         "last_modified_at" : {
@@ -3091,68 +2739,6 @@
           "description" : "An identifier that denotes a specific source."
         }
       }
-    },
-    "Stock" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "string",
-          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
-          "description" : "Identifier of the RFID count."
-        },
-        "location" : {
-          "type" : "string",
-          "example" : "http://nedapretail.com/loc/store-1",
-          "description" : "Location identifier of the store or sublocation that the RFID count belongs to."
-        },
-        "event_time" : {
-          "type" : "string",
-          "format" : "date-time",
-          "description" : "Date and time of the RFID count."
-        },
-        "start_time" : {
-          "type" : "string",
-          "format" : "date-time",
-          "description" : "Date and time the RFID count started."
-        },
-        "quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "example" : 6253,
-          "description" : "Total quantity of items in the RFID count."
-        },
-        "gtin_quantity" : {
-          "type" : "integer",
-          "format" : "int32",
-          "example" : 1542,
-          "description" : "Total quantity of GTINs in the RFID count."
-        },
-        "in_use" : {
-          "type" : "boolean",
-          "example" : false,
-          "description" : "Indicates whether the RFID count is used in a difference list. If it is used, the RFID count can not be deleted anymore.",
-          "default" : false
-        },
-        "client_ids" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "is_complete" : {
-          "type" : "boolean",
-          "example" : true,
-          "description" : "Indicates whether the RFID count has been completed.",
-          "default" : false
-        },
-        "quantity_list" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/GtinQuantity"
-          }
-        }
-      },
-      "description" : "Provides summary information about an RFID count."
     },
     "StockResponse" : {
       "type" : "object",
@@ -3224,6 +2810,12 @@
           "items" : {
             "type" : "string"
           }
+        },
+        "is_complete" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "Indicates whether the RFID count has been completed.",
+          "default" : false
         }
       }
     },
@@ -3360,40 +2952,6 @@
           "items" : {
             "$ref" : "#/definitions/Organization"
           }
-        }
-      }
-    },
-    "Setting" : {
-      "type" : "object",
-      "properties" : {
-        "settings" : {
-          "type" : "object",
-          "description" : "Series of key-value pairs representing the actual settings.",
-          "additionalProperties" : {
-            "type" : "string"
-          }
-        },
-        "version" : {
-          "type" : "integer",
-          "format" : "int64",
-          "description" : "The version of the settings: a higher number means newer. Use this to check if your local cache of the settings is outdated."
-        },
-        "target_type" : {
-          "type" : "string",
-          "description" : "The type of target in the organizational structure. Values: CustomerOrganization, Division, Store, Sublocation"
-        },
-        "target_id" : {
-          "type" : "integer",
-          "format" : "int64",
-          "description" : "The numeric identifier for the target."
-        },
-        "target_name" : {
-          "type" : "string",
-          "description" : "Human readable name of the target."
-        },
-        "location_id" : {
-          "type" : "string",
-          "description" : "If present, the location_id of the target."
         }
       }
     }
