@@ -2,6 +2,7 @@ Release notes
 =============
 
 ## 20170530
+* Added example Gradle build file for the Java Examples project.
 * Object _Article_ contains new fields: gender, age_group, refill_category and image_url.
 * Object _StockResponse_ contains a new field: is_complete.
 * Unused objects removed.

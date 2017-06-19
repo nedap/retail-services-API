@@ -2,18 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.nedap.retail.services</groupId>
-        <artifactId>api</artifactId>
-        <version>2.0-SNAPSHOT</version>
-    </parent>
-
+    <groupId>com.nedap.retail.services</groupId>
     <artifactId>examples</artifactId>
+    <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Nedap Retail !D Cloud API examples</name>
-    <version>2.0-SNAPSHOT</version>
     <description>Examples on how to use the Nedap Retail !D Cloud APIs</description>
     <url>http://www.nedap-retail.com/</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jackson-version>2.7.5</jackson-version>
+        <jodatime-version>2.9.4</jodatime-version>
+        <jersey-version>2.24.1</jersey-version>
+        <junit-version>4.12</junit-version>
+        <slf4j-version>1.7.21</slf4j-version>
+        <java-version>1.8</java-version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -29,6 +34,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
+            <version>${slf4j-version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -42,31 +48,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-version}</version>
+                <version>3.6.1</version>
                 <configuration>
                     <source>${java-version}</source>
                     <target>${java-version}</target>
                 </configuration>
             </plugin>
-
-            <!--
-              Usage:
-              mvn package
-
-              This plugin provides the capability to package the artifact in an uber-jar, including its dependencies and
-              to shade - i.e. rename - the packages of some of the dependencies.
-          
-              - Produce a pom.xml file which doesn’t include dependencies for the libraries whose contents are
-                included in the fat JAR.
-              - Exclude all digital signatures from signed JARs. If you don’t, then Java considers the signature
-                invalid and won’t load or run your JAR file.
-              - Collate the various META-INF/services entries in the JARs instead of overwriting them. (Jersey doesn’t
-                work without those.)
-              - Set com.nedap.retail.services.examples.App as the JAR’s MainClass. This will allow you to run
-                the JAR using java -jar.
-  
-              See also http://dropwizard.codahale.com/getting-started/
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -99,45 +86,6 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!--
-              Usage:
-              mvn compile exec:java -Dexec.args="-clientid <CLIENTID> -secret <SECRET>"
-            -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <configuration>
-                    <executable>java</executable>
-                    <mainClass>com.nedap.retail.services.examples.App</mainClass>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-artifact</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>${project.packaging}</type>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>../target</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
