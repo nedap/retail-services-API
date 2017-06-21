@@ -24,14 +24,18 @@ library and the example project.
 2. After completion the directories _java/client/target_ and _java/examples/target_ will contains the example executable and libraries.
 3. For running the example execute `java -jar examples-2.0-SNAPSHOT.jar -token <access-token> -url <api-url>`.
 
-### Usage generated source 
-One approach is to include the generated sources, which after running the previous build steps, can be found in the directory 
-_java/client/target/generated-sources/openapi/src/main/java_.
-Include or copy this directory into your project and mark it in the IDE as Java source.
+### Multi-module Maven project
+To include the build of the !D Cloud API client, in a multi-module Maven project, the following steps are required:
+1. Create a multi-module Maven project.
+2. Copy the _java/client/pom.xml_ to a subdirectory in the project.
+3. Copy the _openapi/idcloud-openapi.json_ to the project.
+4. Add the clients subdirectory to the projects parent pom.xml _modules_ section.
+5. Update the _<swagger-input-file>_ property in the clients pom.xml to the correct location of the idcloud-openapi.json file.
+6. Run `mvn package` and the !D Cloud API client should be built.
 
-### Usage library
+### Including the client library
 Another approach is to include the !D Cloud API client library. After running `mvn install` in the _java/client_ directory the library 
-will be build and installed in the local Maven repository.
+will be built and installed in the local Maven repository.
 
 Add the following code snippet to the pom.xml and the library can be used:
 ```xml
@@ -58,11 +62,11 @@ library and the example project. Tested with VS2015 and Mono.
 3. Configure the access token and API URL in the _target/NedapRetailApiExample.exe.config_ file.
 3. For running the example with Mono execute `mono NedapRetailApiExample.exe` in the _target_ directory.
 
-### Usage generated source
+### Including the generated sources
 After running the previous steps the directory _csharp/target/generated-sources_ will contain the generated sources. Copy or include the 
 directory _Nedap.Retail.Api_ into your project.
 
-### Usage library
+### Including the client .NET assembly
 After running the previous steps the directory _csharp/target/_ will contain the _Nedap.Retail.Api.dll_ .NET assembly which can be 
 included in your .NET project. 
 
