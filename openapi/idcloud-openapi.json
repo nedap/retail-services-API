@@ -1,8 +1,8 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "!D Cloud is an RFID integration platform for retail stores. While we provide core functionality for retail companies, a lot of functionality can be added or extended by 3rd party developers. We encourage you to do so!",
-    "version" : "20170530",
+    "description" : "!D Cloud is an RFID integration platform for retail stores. While we provide core functionality for retail\n                                        companies, a lot of functionality can be added or extended by 3rd party developers. We encourage you to do so!",
+    "version" : "20180713",
     "title" : "!D Cloud API",
     "contact" : {
       "url" : "https://developer.nedap-idcloud.com/",
@@ -25,18 +25,96 @@
   }, {
     "name" : "ErpStock"
   }, {
+    "name" : "Refill"
+  }, {
     "name" : "RfidCount"
   }, {
     "name" : "RfidStock"
   }, {
     "name" : "Shipment"
   }, {
+    "name" : "Transaction"
+  }, {
     "name" : "Workflow"
+  }, {
+    "name" : "Kpi"
   }, {
     "name" : "Organization"
   } ],
   "schemes" : [ "https" ],
   "paths" : {
+    "/transaction/v1/sell" : {
+      "post" : {
+        "tags" : [ "Transaction" ],
+        "summary" : "Mark an item as sold",
+        "description" : "Mark an item as sold to disable EAS alarms and update stock status.",
+        "operationId" : "sellItem",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Information about the item and its new state, exactly one of 'epc_uri', 'epc_hex' or 'gs1_elementstring' should be supplied",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SellRequest"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "403" : {
+            "description" : "Access denied"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+		},
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Transaction API"
+    },
+    "/transaction/v1/return" : {
+      "post" : {
+        "tags" : [ "Transaction" ],
+        "summary" : "Marks an item as returned",
+        "description" : "Mark an item as returned to enable EAS alarms and update stock status.",
+        "operationId" : "returnItem",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Information about the item and its new state, exactly one of 'epc_uri', 'epc_hex' or 'gs1_elementstring' should be supplied",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ReturnRequest"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "403" : {
+            "description" : "Access denied"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+		},
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Transaction API"
+    },
     "/approved_difference_list/v1/export" : {
       "get" : {
         "tags" : [ "ApprovedDifferenceList" ],
@@ -436,39 +514,6 @@
       },
       "x-gelato-group" : "Article API"
     },
-    "/article/v3/create_or_update" : {
-      "post" : {
-        "tags" : [ "Article" ],
-        "summary" : "Create or update articles",
-        "description" : "Creates or updates article(s). Articles are updated using the GTIN as primary key.",
-        "operationId" : "createOrUpdateArticles",
-        "consumes" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "articles",
-          "description" : "A list of articles that should be updated.",
-          "required" : true,
-          "schema" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/definitions/Article"
-            }
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "Success"
-          },
-          "400" : {
-            "description" : "Bad request"
-          }
-        },
-        "security" : [ {
-          "auth" : [ ]
-        } ]
-      },
-      "x-gelato-group" : "Article API"
-    },
     "/article/v3/delete" : {
       "delete" : {
         "tags" : [ "Article" ],
@@ -491,7 +536,7 @@
             "description" : "Success"
           },
           "400" : {
-            "description" : "Missing parameter: gtins"
+            "description" : "Required field missing: gtins"
           }
         },
         "security" : [ {
@@ -559,6 +604,62 @@
             "description" : "successful operation",
             "schema" : {
               "$ref" : "#/definitions/DifferenceListResponse"
+            }
+          },
+          "400" : {
+            "description" : "Required field missing: location"
+          },
+          "412" : {
+            "description" : "No RFID count for location."
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Difference List API"
+    },
+    "/difference_list/v1/retrieve_grouped_by_category" : {
+      "get" : {
+        "tags" : [ "DifferenceList" ],
+        "summary" : "Retrieve difference list grouped by article category",
+        "description" : "Retrieves GTIN-based difference list for a single location. By default, only items with an ERP stock quantity that is different from the RFID count quantity are returned. Items in difference are grouped by category.",
+        "operationId" : "retrieveDifferenceListGroupedByCategory",
+        "produces" : [ "application/json", "application/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ],
+        "parameters" : [ {
+          "name" : "erp_stock_id",
+          "in" : "query",
+          "description" : "Identifier of the ERP stock to use.",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "e8a2a3b8-ea3d-4ab6-857b-db1ae25de2e9"
+        }, {
+          "name" : "time",
+          "in" : "query",
+          "description" : "Date and time of the RFID count to be used.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date-time"
+        }, {
+          "name" : "only_differences",
+          "in" : "query",
+          "description" : "When set to true, only differences will be returned. When set to false, all GTINs in the ERP stock or RFID stock will be returned (except when both are zero).",
+          "required" : false,
+          "type" : "boolean",
+          "default" : true
+        }, {
+          "name" : "include_articles",
+          "in" : "query",
+          "description" : "Whether to include article details like name, size, etc. in the response.",
+          "required" : false,
+          "type" : "boolean",
+          "default" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/DifferenceListByCategoryResponse"
             }
           },
           "400" : {
@@ -777,6 +878,552 @@
       },
       "x-gelato-group" : "ERP Stock API"
     },
+    "/kpi/v1/approved_difference_list_accuracy" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly approved difference list accuracy for organization or division.",
+        "description" : "Provides weekly approved difference list accuracy for organization or division.",
+        "operationId" : "retrieveApprovedDifferenceListAccuracyWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/approved_difference_list_accuracy_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's approved difference list accuracy for organization or division.",
+        "description" : "Provides last week's approved difference list accuracy for organization or division.",
+        "operationId" : "retrieveApprovedDifferenceListAccuracyRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/approved_difference_list_accuracy_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return approved difference list accuracy for organization or division for specific week.",
+        "description" : "Provides approved difference list accuracy for organization or division for specific week.",
+        "operationId" : "retrieveApprovedDifferenceListAccuracySpecificWeek",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/approved_difference_list_category_accuracy" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly approved difference list accuracy per category for organization or division.",
+        "description" : "Provides weekly approved difference list accuracy per category for organization or division.",
+        "operationId" : "retrieveApprovedDifferenceListCategoryAccuracyWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/approved_difference_list_category_accuracy_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's approved difference list accuracy per category for organization of division.",
+        "description" : "Provides last week's approved difference list accuracy per category for organization or division.",
+        "operationId" : "retrieveApprovedDifferenceListCategoryAccuracyRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysCategoryAccuracyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_duration" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly count duration for organization or division.",
+        "description" : "Provides weekly count duration for organization or division.",
+        "operationId" : "retrieveCountDurationWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_duration_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's count duration for organization or division.",
+        "description" : "Provides last week's count duration for organization or division.",
+        "operationId" : "retrieveCountDurationRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_duration_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return count duration for organization or division for specific week.",
+        "description" : "Return count duration for organization or division for specific week.",
+        "operationId" : "retrieveCountDurationSpecificWeek",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_progress" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly count progress for organization or division.",
+        "description" : "Provides weekly count progress for organization or division.",
+        "operationId" : "retrieveCountProgressWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_progress_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's count progress for organization or division.",
+        "description" : "Provides last week's count progress for organization or division.",
+        "operationId" : "retrieveCountProgressRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_progress_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return count progress for organization or division for specific week.",
+        "description" : "Provides count progress for organization or division for specific week.",
+        "operationId" : "retrieveCountProgressSpecificWeek",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_status" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly count status for organization or division.",
+        "description" : "Provides weekly count status for organization or division.",
+        "operationId" : "retrieveCountStatusWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_status_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's count status for organization or division.",
+        "description" : "Provides last week's count status for organization or division.",
+        "operationId" : "retrieveCountStatusRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_status_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return count status for organization or division for specific week.",
+        "description" : "Provides count status for organization or division for specific week.",
+        "operationId" : "retrieveCountStatusSpecificWeek",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_total_duration" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly total count duration for organization or division.",
+        "description" : "Provides weekly total count duration for organization or division.",
+        "operationId" : "retrieveCountTotalDurationWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_total_duration_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's total count duration for organization or division.",
+        "description" : "Provides last week's total count duration for organization or division.",
+        "operationId" : "retrieveCountTotalDurationRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/count_total_duration_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return total count duration for organization or division for specific week.",
+        "description" : "Provides total count duration for organization or division for specific week.",
+        "operationId" : "retrieveCountTotalDurationSpecificWeek",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/difference_list_accuracy" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly difference list accuracy for organization or division.",
+        "description" : "Provides weekly difference list accuracy for organization or division.",
+        "operationId" : "retrieveDifferenceListAccuracyWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/difference_list_accuracy_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's difference list accuracy for organization of division.",
+        "description" : "Provides last week's difference list accuracy for organization or division.",
+        "operationId" : "retrieveDifferenceListAccuracyRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/difference_list_accuracy_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return difference list accuracy for organization of division for specific week.",
+        "description" : "Provides difference list accuracy for organization or division for specific week.",
+        "operationId" : "retrieveDifferenceListAccuracySpecificWeek",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/on_shelf_availability" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly on shelf availability for organization or division.",
+        "description" : "Provides weekly on shelf availability for organization or division.",
+        "operationId" : "retrieveOnShelfAvailabilityWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/on_shelf_availability_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's on shelf availability for organization or division.",
+        "description" : "Provides last week's on shelf availability for organization or division.",
+        "operationId" : "retrieveOnShelfAvailabilityRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/on_shelf_availability_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return on shelf availability for organization or division for specific week.",
+        "description" : "Provides on shelf availability for organization or division for specific week.",
+        "operationId" : "retrieveOnShelfAvailabilitySpecificWeek",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/shipment_reliability" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return weekly shipment reliability for organization or division.",
+        "description" : "Provides weekly shipment reliability for organization or division.",
+        "operationId" : "retrieveShipmentReliabilityWeeklyInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiWeeklyResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/shipment_reliability_last_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return last week's shipment reliability for organization of division.",
+        "description" : "Provides last week's shipment reliability for organization or division.",
+        "operationId" : "retrieveShipmentReliabilityRecentDaysInfo",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
+    "/kpi/v1/shipment_reliability_week" : {
+      "get" : {
+        "tags" : [ "Kpi" ],
+        "summary" : "Return shipment reliability for organization or division for specific week.",
+        "description" : "Provides shipment reliability for organization or division for specific week.",
+        "operationId" : "retrieveShipmentReliabilitySpecificWeek",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/KpiRecentDaysResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Kpi API"
+    },
     "/organization/v1/location" : {
       "get" : {
         "tags" : [ "Organization" ],
@@ -859,6 +1506,49 @@
       },
       "x-gelato-group" : "Organization API"
     },
+    "/refill/v1/retrieve" : {
+      "get" : {
+        "tags" : [ "Refill" ],
+        "summary" : "Calculate Refill suggestion list",
+        "description" : "An actionable list with items which can be replenished from stockroom.",
+        "operationId" : "retrieveRefillSuggestionList",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "from_location",
+          "in" : "query",
+          "description" : "Location ID of stock room sublocation",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "to_location",
+          "in" : "query",
+          "description" : "Location ID of sales floor sublocation",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/RefillResponse"
+            }
+          },
+          "400" : {
+            "description" : "Required field missing."
+          },
+          "404" : {
+            "description" : "No article info available for all counted GTINs."
+          },
+          "412" : {
+            "description" : "No recent RFID counts available."
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Refill API"
+    },
     "/rfid_count/v1/list" : {
       "get" : {
         "tags" : [ "RfidCount" ],
@@ -894,7 +1584,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/StockSummary"
+                "$ref" : "#/definitions/RfidCountSummary"
               }
             }
           },
@@ -987,7 +1677,7 @@
         }, {
           "name" : "location_types[]",
           "in" : "query",
-          "description" : "Filter on sublocation types: only stock on sublocations of the specified types will be returned. Multiple  sublocation types can be specified.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all sublocation types except FOREIGN.",
+          "description" : "Filter on (sub)location types: only stock on (sub)locations of the specified types will be returned. Multiple  (sub)location types can be specified.\nValid (sub)location types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE,\n    FOREIGN and SITE.\nDefault behavior is to return stocks for all (sub)location types except FOREIGN.",
           "required" : false,
           "type" : "array",
           "items" : {
@@ -1027,7 +1717,7 @@
         }, {
           "name" : "location_types[]",
           "in" : "query",
-          "description" : "Filter on sublocation types: only stock on sublocations of the specified types will be returned. Multiple  sublocation types can be specified.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all sublocation types except FOREIGN.",
+          "description" : "Filter on (sub)location types: only stock on (sub)locations of the specified types will be returned. Multiple  (sub)location types can be specified.\nValid (sub)location types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE,\n    FOREIGN and SITE.\nDefault behavior is to return stocks for all (sub)location types except FOREIGN.",
           "required" : false,
           "type" : "array",
           "items" : {
@@ -1074,7 +1764,7 @@
         }, {
           "name" : "location_types[]",
           "in" : "query",
-          "description" : "Filter on sublocation types: only stock on sublocations of the specified types will be returned. Multiple sublocation types can be  specified.\nValid sublocation types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE and\n    FOREIGN.\nDefault behavior is to return stocks for all  sublocation types except FOREIGN.",
+          "description" : "Filter on (sub)location types: only stock on (sub)locations of the specified types will be returned. Multiple (sub)location types can be  specified.\nValid (sub)location types are:\n    STOCK_ROOM, SALES_FLOOR,\n    OFFSITE_STORAGE,\n    FOREIGN and SITE.\nDefault behavior is to return stocks for all  (sub)location types except FOREIGN.",
           "required" : false,
           "type" : "array",
           "items" : {
@@ -1089,8 +1779,7 @@
           "required" : false,
           "type" : "array",
           "items" : {
-            "type" : "string",
-            "enum" : [ "ACTIVE", "CONTAINER_CLOSED", "DAMAGED", "DESTROYED", "DISPOSED", "ENCODED", "EXPIRED", "INACTIVE", "IN_PROGRESS", "IN_TRANSIT", "MAYBE_STOLEN", "NO_PEDIGREE_MATCH", "NON_SELLABLE_EXPIRED", "NON_SELLABLE_DAMAGED", "NON_SELLABLE_DISPOSED", "NON_SELLABLE_NO_PEDIGREE_MATCH", "NON_SELLABLE_OTHER", "NON_SELLABLE_RECALLED", "RECALLED", "RESERVED", "RETAIL_SOLD", "RETURNED", "SELLABLE_ACCESSIBLE", "SELLABLE_NOT_ACCESSIBLE", "STOLEN", "UNKNOWN" ]
+            "type" : "string"
           },
           "collectionFormat" : "multi"
         } ],
@@ -1099,6 +1788,40 @@
             "description" : "successful operation",
             "schema" : {
               "$ref" : "#/definitions/SgtinRfidStockResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "RFID Stock API"
+    },
+    "/rfid_stock/v1/epc_state" : {
+      "get" : {
+        "tags" : [ "RfidStock" ],
+        "summary" : "Retrieve state of an EPC",
+        "description" : "Retrieves state (location, disposition and last update timestamp) of an EPC. Specify the EPC in EPC pure identity (SGTIN) format or hexadecimal format.",
+        "operationId" : "retrieveEpcState",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "epc_uri",
+          "description" : "EPC in EPC pure identity URI (SGTIN) format",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "query",
+          "name" : "epc_hex",
+          "description" : "EPC in hexadecimal format",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/EpcStateResponse"
             }
           }
         },
@@ -1125,8 +1848,11 @@
           }
         } ],
         "responses" : {
-          "default" : {
-            "description" : "successful operation"
+          "400" : {
+            "description" : "Bad request."
+          },
+          "409" : {
+            "description" : "Shipment notice already exists."
           }
         },
         "security" : [ {
@@ -1339,31 +2065,6 @@
     }
   },
   "definitions" : {
-    "Address" : {
-      "type" : "object",
-      "properties" : {
-        "address" : {
-          "type" : "string",
-          "example" : "Dam 4",
-          "description" : "Street name and house number."
-        },
-        "zipcode" : {
-          "type" : "string",
-          "example" : "1012 NP",
-          "description" : "ZIP code."
-        },
-        "city" : {
-          "type" : "string",
-          "example" : "Amsterdam",
-          "description" : "Name of the city."
-        },
-        "country_code" : {
-          "type" : "string",
-          "example" : "NL",
-          "description" : "ISO 3166-1 alpha-2 two letter country code."
-        }
-      }
-    },
     "ApprovedDifferenceListExportResponse" : {
       "type" : "object",
       "properties" : {
@@ -1479,6 +2180,10 @@
           "format" : "double",
           "example" : 98.3,
           "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
+        },
+        "grouping_by" : {
+          "type" : "string",
+          "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_quantity` and `rfid_quantity` fields in `gtin_differences` contains the quantity per GTIN. If `group_by` has value `code`, then `erp_quantity` and `rfid_quantity` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
         },
         "approved_quantity" : {
           "type" : "array",
@@ -1613,6 +2318,10 @@
           "example" : 98.3,
           "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
         },
+        "grouping_by" : {
+          "type" : "string",
+          "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_quantity` and `rfid_quantity` fields in `gtin_differences` contains the quantity per GTIN. If `group_by` has value `code`, then `erp_quantity` and `rfid_quantity` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
+        },
         "erp_stock" : {
           "type" : "array",
           "description" : "ERP stock quantity, corresponding to the GTIN in the GTIN list.",
@@ -1732,6 +2441,10 @@
           "format" : "double",
           "example" : 98.3,
           "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
+        },
+        "grouping_by" : {
+          "type" : "string",
+          "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_quantity` and `rfid_quantity` fields in `gtin_differences` contains the quantity per GTIN. If `group_by` has value `code`, then `erp_quantity` and `rfid_quantity` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
         }
       }
     },
@@ -1834,6 +2547,24 @@
           "type" : "string",
           "format" : "date-time",
           "description" : "The time when the article was last updated. This field will be overwritten when new article data is uploaded."
+        },
+        "rfid_tagged" : {
+          "type" : "string",
+          "example" : "AT_SOURCE",
+          "description" : "Indicates how this article is tagged.",
+          "enum" : [ "NO", "AT_SOURCE", "MANUAL" ]
+        },
+        "custom_label_field1" : {
+          "type" : "string",
+          "description" : "Field used for printing customized RFID labels."
+        },
+        "custom_label_field2" : {
+          "type" : "string",
+          "description" : "Field used for printing customized RFID labels."
+        },
+        "custom_label_field3" : {
+          "type" : "string",
+          "description" : "Field used for printing customized RFID labels."
         }
       }
     },
@@ -1914,6 +2645,95 @@
         }
       }
     },
+    "DifferenceListByCategoryResponse" : {
+      "type" : "object",
+      "properties" : {
+        "categories" : {
+          "type" : "array",
+          "description" : "List of categories, corresponding to the GTIN in the GTIN list.",
+          "items" : {
+            "$ref" : "#/definitions/DifferenceListCategory"
+          }
+        },
+        "accuracy" : {
+          "type" : "number",
+          "format" : "double",
+          "example" : 98.3,
+          "description" : "Accuracy relation between the ERP stock and RFID count, according to the SMAPE definition."
+        },
+        "erp_stock_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time of the ERP stock creation."
+        },
+        "rfid_stock_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time of the RFID count creation."
+        },
+        "erp_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 6272,
+          "description" : "Total quantity of GTINs in the ERP stock."
+        },
+        "rfid_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 6132,
+          "description" : "Total quantity of GTINs in the RFID count."
+        },
+        "grouping_by" : {
+          "type" : "string",
+          "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_stock` and `rfid_stock` fields contains the quantity per GTIN. If `group_by` has value `code`, then `erp_stock` and `rfid_stock` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
+        }
+      }
+    },
+    "DifferenceListCategory" : {
+      "type" : "object",
+      "properties" : {
+        "gtins" : {
+          "type" : "array",
+          "description" : "List of GTINs in the difference list for this category.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "articles" : {
+          "type" : "array",
+          "description" : "Article details like name, size, etc., corresponding to the GTIN in the GTIN list.",
+          "items" : {
+            "$ref" : "#/definitions/Article"
+          }
+        },
+        "category" : {
+          "type" : "string",
+          "description" : "Category name."
+        },
+        "erp_stock" : {
+          "type" : "array",
+          "description" : "ERP stock quantity, corresponding to the GTIN in the GTIN list.",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "rfid_stock" : {
+          "type" : "array",
+          "description" : "RFID count quantity, corresponding to the GTIN in the GTIN list.",
+          "items" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "accuracy" : {
+          "type" : "number",
+          "format" : "double",
+          "example" : 98.3,
+          "description" : "Accuracy relation between the ERP stock and RFID count, according to the SMAPE definition."
+        }
+      }
+    },
     "DifferenceListResponse" : {
       "type" : "object",
       "properties" : {
@@ -1930,6 +2750,11 @@
           "items" : {
             "$ref" : "#/definitions/Article"
           }
+        },
+        "location" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store the difference list is for."
         },
         "erp_stock" : {
           "type" : "array",
@@ -1974,6 +2799,10 @@
           "format" : "double",
           "example" : 98.3,
           "description" : "Accuracy relation between the ERP stock and RFID count, according to the SMAPE definition."
+        },
+        "grouping_by" : {
+          "type" : "string",
+          "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_stock` and `rfid_stock` fields contains the quantity per GTIN. If `group_by` has value `code`, then `erp_stock` and `rfid_stock` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
         }
       }
     },
@@ -2213,6 +3042,10 @@
           "description" : "Indicates whether the ERP stock is used in a difference list. If it is used, the ERP stock can not be deleted anymore.",
           "default" : false
         },
+        "grouping_by" : {
+          "type" : "string",
+          "description" : "(Optional) Specifies how the articles are grouped. By default the `quantity` field in `quantity_list` contains the quantity per GTIN. If `group_by` has value `code`, then `quantity` field contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
+        },
         "quantity_list" : {
           "type" : "array",
           "description" : "List of GtinQuantity objects; specifying GTIN and the quantity and if the GTIN should be excluded from the expected stock and difference list.",
@@ -2291,6 +3124,10 @@
           "example" : false,
           "description" : "Indicates whether the ERP stock is used in a difference list. If it is used, the ERP stock can not be deleted anymore.",
           "default" : false
+        },
+        "grouping_by" : {
+          "type" : "string",
+          "description" : "(Optional) Specifies how the articles are grouped. By default the `quantity` field in `quantity_list` contains the quantity per GTIN. If `group_by` has value `code`, then `quantity` field contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
         }
       },
       "description" : "Provides summary information about an ERP stock."
@@ -2390,52 +3227,6 @@
         }
       }
     },
-    "Location" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "string",
-          "example" : "http://nedapretail.com/loc/store-1",
-          "description" : "Unique location identifier."
-        },
-        "type" : {
-          "type" : "string",
-          "example" : "SITE",
-          "description" : "Type of location."
-        },
-        "subtype" : {
-          "type" : "string",
-          "example" : "FASHION",
-          "description" : "Subtype of store or location."
-        },
-        "name" : {
-          "type" : "string",
-          "example" : "Miss Fashion Amsterdam",
-          "description" : "Name of the store or location."
-        },
-        "address" : {
-          "description" : "Address details. Only when type equals 'site'.",
-          "$ref" : "#/definitions/Address"
-        },
-        "children" : {
-          "type" : "array",
-          "description" : "List of sublocations (if any). Only when type equals 'site'.",
-          "items" : {
-            "$ref" : "#/definitions/Location"
-          }
-        },
-        "parent_id" : {
-          "type" : "string",
-          "example" : "http://nedapretail.com/loc/store-1",
-          "description" : "Location identifier of parent (only when type = 'location', 'location_internal'or 'location_external')."
-        },
-        "store_code" : {
-          "type" : "string",
-          "example" : "001",
-          "description" : "Store code (branch ID) of the store or location (as defined by retailer). Only when type equals 'site'."
-        }
-      }
-    },
     "ParameterObject" : {
       "type" : "object",
       "properties" : {
@@ -2516,6 +3307,119 @@
           "description" : "Number of articles in the database."
         }
       }
+    },
+    "RefillGtin" : {
+      "type" : "object",
+      "properties" : {
+        "gtin" : {
+          "type" : "string"
+        },
+        "stockroom" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "salesfloor" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "RefillOption" : {
+      "type" : "object",
+      "properties" : {
+        "availability" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/RefillGtin"
+          }
+        }
+      }
+    },
+    "RefillResponse" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "time" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "location" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store."
+        },
+        "options" : {
+          "type" : "array",
+          "description" : "Array of options is ordered based on refill priorities that are determined server side. Also, the list only consists of options which are presented on sales floor and for which at least 1 size is missing and can be refilled from stock room. Note that the list of options can be empty if all options on the salesfloor have all available sizes presented.",
+          "items" : {
+            "$ref" : "#/definitions/RefillOption"
+          }
+        },
+        "on_shelf_availability" : {
+          "type" : "number",
+          "format" : "double",
+          "example" : 98.3,
+          "description" : "The on-shelf availability corresponding to this count (refill list)."
+        }
+      }
+    },
+    "RfidCountSummary" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
+          "description" : "Identifier of the RFID count."
+        },
+        "location" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store or sublocation that the RFID count belongs to."
+        },
+        "event_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time of the RFID count."
+        },
+        "start_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time the RFID count started."
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 6253,
+          "description" : "Total quantity of items in the RFID count."
+        },
+        "gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 1542,
+          "description" : "Total quantity of GTINs in the RFID count."
+        },
+        "in_use" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates whether the RFID count is used in a difference list. If it is used, the RFID count can not be deleted anymore.",
+          "default" : false
+        },
+        "client_ids" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "is_complete" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "Indicates whether the RFID count has been completed.",
+          "default" : false
+        }
+      },
+      "description" : "Provides summary information about an RFID count."
     },
     "SgtinRfidStock" : {
       "type" : "object",
@@ -2618,6 +3522,18 @@
           "example" : 98.4,
           "description" : "Received percentage for the expected (quantity of) GTINs."
         },
+        "properties" : {
+          "type" : "object",
+          "description" : "Map with additional properties.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "export_status" : {
+          "type" : "string",
+          "example" : "EXPORTED",
+          "description" : "Transfer status of this shipment towards the ERP system. Values: NOT_EXPORTED, EXPORTED or ERROR"
+        },
         "gtins" : {
           "type" : "array",
           "description" : "List of GTINs in the shipment.",
@@ -2706,6 +3622,18 @@
           "format" : "float",
           "example" : 98.4,
           "description" : "Received percentage for the expected (quantity of) GTINs."
+        },
+        "properties" : {
+          "type" : "object",
+          "description" : "Map with additional properties.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "export_status" : {
+          "type" : "string",
+          "example" : "EXPORTED",
+          "description" : "Transfer status of this shipment towards the ERP system. Values: NOT_EXPORTED, EXPORTED or ERROR"
         }
       }
     },
@@ -2819,61 +3747,78 @@
         }
       }
     },
-    "StockSummary" : {
+    "Store" : {
       "type" : "object",
       "properties" : {
         "id" : {
-          "type" : "string",
-          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
-          "description" : "Identifier of the RFID count."
-        },
-        "location" : {
-          "type" : "string",
-          "example" : "http://nedapretail.com/loc/store-1",
-          "description" : "Location identifier of the store or sublocation that the RFID count belongs to."
-        },
-        "event_time" : {
-          "type" : "string",
-          "format" : "date-time",
-          "description" : "Date and time of the RFID count."
-        },
-        "start_time" : {
-          "type" : "string",
-          "format" : "date-time",
-          "description" : "Date and time the RFID count started."
-        },
-        "quantity" : {
           "type" : "integer",
-          "format" : "int32",
-          "example" : 6253,
-          "description" : "Total quantity of items in the RFID count."
+          "format" : "int64"
         },
-        "gtin_quantity" : {
+        "type" : {
+          "type" : "string",
+          "enum" : [ "CUSTOMERORGANIZATION", "DIVISION", "STORE", "SUBLOCATION" ]
+        },
+        "updatedAt" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "customerOrganizationId" : {
           "type" : "integer",
-          "format" : "int32",
-          "example" : 1542,
-          "description" : "Total quantity of GTINs in the RFID count."
+          "format" : "int64"
         },
-        "in_use" : {
-          "type" : "boolean",
-          "example" : false,
-          "description" : "Indicates whether the RFID count is used in a difference list. If it is used, the RFID count can not be deleted anymore.",
-          "default" : false
-        },
-        "client_ids" : {
+        "parents" : {
           "type" : "array",
           "items" : {
-            "type" : "string"
+            "$ref" : "#/definitions/TargetTypeId"
           }
         },
-        "is_complete" : {
+        "parentNames" : {
+          "type" : "string"
+        },
+        "locationIdentifierTag" : {
+          "type" : "string"
+        },
+        "branchId" : {
+          "type" : "string"
+        },
+        "storeType" : {
+          "type" : "string"
+        },
+        "manager" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "timezone" : {
+          "type" : "string"
+        },
+        "trial" : {
           "type" : "boolean",
-          "example" : true,
-          "description" : "Indicates whether the RFID count has been completed.",
           "default" : false
         }
-      },
-      "description" : "Provides summary information about an RFID count."
+      }
+    },
+    "TargetTypeId" : {
+      "type" : "object",
+      "properties" : {
+        "targetId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "targetType" : {
+          "type" : "string",
+          "enum" : [ "CUSTOMERORGANIZATION", "DIVISION", "STORE", "SUBLOCATION" ]
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "locationIdentifierTag" : {
+          "type" : "string"
+        }
+      }
     },
     "WorkflowEvent" : {
       "type" : "object",
@@ -2918,6 +3863,331 @@
         }
       }
     },
+    "ApprovedDifferenceListAccuracyKpiValue" : {
+      "type" : "object",
+      "properties" : {
+        "accuracy" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "CountDurationKpiValue" : {
+      "type" : "object",
+      "properties" : {
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "clients" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "duration_in_sec" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "duration_calculated" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "CountProgressKpiValue" : {
+      "type" : "object",
+      "properties" : {
+        "progress" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "CountStatusKpiValue" : {
+      "type" : "object",
+      "properties" : {
+        "incomplete" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "complete" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "approved" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "not_counted" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "CountTotalDurationKpiValue" : {
+      "type" : "object",
+      "properties" : {
+        "total_duration" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "DifferenceListAccuracyKpiValue" : {
+      "type" : "object",
+      "properties" : {
+        "accuracy" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "Division" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "KpiRecentDaysCategoryAccuracyResponse" : {
+      "type" : "object",
+      "properties" : {
+        "division" : {
+          "$ref" : "#/definitions/Division"
+        },
+        "data" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }
+      }
+    },
+    "KpiRecentDaysResponse" : {
+      "type" : "object",
+      "properties" : {
+        "division" : {
+          "$ref" : "#/definitions/Division"
+        },
+        "data" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/RecentDaysKpi"
+          }
+        }
+      }
+    },
+    "KpiWeeklyResponse" : {
+      "type" : "object",
+      "properties" : {
+        "division" : {
+          "$ref" : "#/definitions/Division"
+        },
+        "store" : {
+          "$ref" : "#/definitions/Store"
+        },
+        "data" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/WeeklyKpi"
+          }
+        }
+      }
+    },
+    "OnShelfAvailabilityKpiValue" : {
+      "type" : "object",
+      "properties" : {
+        "on_shelf_availability" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "RecentDaysKpi" : {
+      "type" : "object",
+      "properties" : {
+        "division" : {
+          "$ref" : "#/definitions/Division"
+        },
+        "store" : {
+          "$ref" : "#/definitions/Store"
+        },
+        "approved_difference_list_accuracy_kpi_value" : {
+          "$ref" : "#/definitions/ApprovedDifferenceListAccuracyKpiValue"
+        },
+        "count_status_kpi_value" : {
+          "$ref" : "#/definitions/CountStatusKpiValue"
+        },
+        "count_duration_kpi_value" : {
+          "$ref" : "#/definitions/CountDurationKpiValue"
+        },
+        "count_progress_kpi_value" : {
+          "$ref" : "#/definitions/CountProgressKpiValue"
+        },
+        "count_total_duration_kpi_value" : {
+          "$ref" : "#/definitions/CountTotalDurationKpiValue"
+        },
+        "on_shelf_availability_kpi_value" : {
+          "$ref" : "#/definitions/OnShelfAvailabilityKpiValue"
+        },
+        "shipment_reliability_kpi_value" : {
+          "$ref" : "#/definitions/ShipmentReliabilityKpiValue"
+        },
+        "approved_difference_list_category_accuracy_kpi_value" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "difference_list_accuracy_kpi_value" : {
+          "$ref" : "#/definitions/DifferenceListAccuracyKpiValue"
+        }
+      }
+    },
+    "ShipmentReliabilityKpiValue" : {
+      "type" : "object",
+      "properties" : {
+        "percentage" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "WeekInfo" : {
+      "type" : "object",
+      "properties" : {
+        "year" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "week" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "WeeklyKpi" : {
+      "type" : "object",
+      "properties" : {
+        "week_info" : {
+          "$ref" : "#/definitions/WeekInfo"
+        },
+        "approved_difference_list_accuracy_kpi_value" : {
+          "$ref" : "#/definitions/ApprovedDifferenceListAccuracyKpiValue"
+        },
+        "count_status_kpi_value" : {
+          "$ref" : "#/definitions/CountStatusKpiValue"
+        },
+        "count_duration_kpi_value" : {
+          "$ref" : "#/definitions/CountDurationKpiValue"
+        },
+        "count_progress_kpi_value" : {
+          "$ref" : "#/definitions/CountProgressKpiValue"
+        },
+        "count_total_duration_kpi_value" : {
+          "$ref" : "#/definitions/CountTotalDurationKpiValue"
+        },
+        "on_shelf_availability_kpi_value" : {
+          "$ref" : "#/definitions/OnShelfAvailabilityKpiValue"
+        },
+        "shipment_reliability_kpi_value" : {
+          "$ref" : "#/definitions/ShipmentReliabilityKpiValue"
+        },
+        "approved_difference_list_category_accuracy_kpi_value" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "difference_list_accuracy_kpi_value" : {
+          "$ref" : "#/definitions/DifferenceListAccuracyKpiValue"
+        }
+      }
+    },
+    "Address" : {
+      "type" : "object",
+      "properties" : {
+        "city" : {
+          "type" : "string"
+        },
+        "region" : {
+          "type" : "string"
+        },
+        "postalCode" : {
+          "type" : "string"
+        },
+        "countryCode" : {
+          "type" : "string"
+        },
+        "latitude" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "longitude" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "address_line_1" : {
+          "type" : "string"
+        },
+        "address_line_2" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Location" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Unique location identifier."
+        },
+        "type" : {
+          "type" : "string",
+          "example" : "SITE",
+          "description" : "Type of location."
+        },
+        "subtype" : {
+          "type" : "string",
+          "example" : "FASHION",
+          "description" : "Subtype of store or location."
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Miss Fashion Amsterdam",
+          "description" : "Name of the store or location."
+        },
+        "address" : {
+          "description" : "Address details. Only when type equals 'site'.",
+          "$ref" : "#/definitions/Address"
+        },
+        "children" : {
+          "type" : "array",
+          "description" : "List of sublocations (if any). Only when type equals 'site'.",
+          "items" : {
+            "$ref" : "#/definitions/Location"
+          }
+        },
+        "parent_id" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of parent (only when type = 'location', 'location_internal'or 'location_external')."
+        },
+        "store_code" : {
+          "type" : "string",
+          "example" : "001",
+          "description" : "Store code (branch ID) of the store or location (as defined by retailer). Only when type equals 'site'."
+        }
+      }
+    },
     "Organization" : {
       "type" : "object",
       "properties" : {
@@ -2954,6 +4224,128 @@
           }
         }
       }
-    }
+    },
+    "SellRequest" : {
+      "type" : "object",
+	  "description" : "One of epc_uri, epc_hex or gs1_elementstring should be supplied, if multiple elements are set the request will fail",
+	  "required" : ["biz_location", "timestamp"],
+      "properties" : {
+        "epc_uri" : {
+          "type" : "string",
+          "example" : "urn:epc:id:sgtin:0614141.812345.6789",
+          "description" : "EPC pure identity URI"
+        },
+        "epc_hex" : {
+          "type" : "string",
+          "example" : "3074257bf7194e4000001a85",
+          "description" : "EPC (hexadecimal)"
+        },
+        "gs1_elementstring" : {
+          "type" : "string",
+          "example" : "(01)80614141123458(21)6789",
+          "description" : "GS1 element string"
+        },
+        "disposition" : {
+          "type" : "string",
+          "example" : "urn:epcglobal:cbv:disp:retail_sold",
+		  "default": "urn:epcglobal:cbv:disp:retail_sold",
+          "description" : "Disposition"
+        },
+        "biz_location" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store or sublocation"
+        },
+        "read_point" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of readpoint (optional, will be equal to 'biz_location' if omitted)"
+        },
+        "timestamp" : {
+          "type" : "string",
+		  "format" : "date-time",
+          "example" : "2018-07-13T10:35:26Z",
+          "description" : "ISO8601 representation of the date/time the item was sold"
+        },
+        "recorded_timestamp" : {
+          "type" : "string",
+		  "format" : "date-time",
+          "example" : "2018-07-13T10:35:26Z",
+          "description" : "ISO8601 representation of the date/time the transaction was recorded"
+        }
+      }
+	},
+     "EpcStateResponse" : {
+      "type" : "object",
+      "properties" : {
+        "epc" : {
+          "type" : "string",
+		  "description": "EPC formatted as pure identity URI"
+        },
+        "bizLocation" : {
+          "type" : "string",
+		  "description": "Location identifier of the last known location of the item"
+        },
+        "disposition" : {
+          "type" : "string",
+		  "description": "Disposition (status) of the item"
+        },
+        "timestamp" : {
+          "type" : "string",
+          "format" : "date-time",
+		  "description": "ISO8601 representation of the date/time of the last update"
+        }
+      }
+    },
+   "ReturnRequest" : {
+      "type" : "object",
+	  "description" : "One of epc_uri, epc_hex or gs1_elementstring should be supplied, if multiple elements are set the request will fail",
+	  "required" : ["biz_location", "timestamp"],
+      "properties" : {
+        "epc_uri" : {
+          "type" : "string",
+          "example" : "urn:epc:id:sgtin:0614141.812345.6789",
+          "description" : "EPC pure identity URI"
+        },
+        "epc_hex" : {
+          "type" : "string",
+          "example" : "3074257bf7194e4000001a85",
+          "description" : "EPC (hexadecimal)"
+        },
+        "gs1_elementstring" : {
+          "type" : "string",
+          "example" : "(01)80614141123458(21)6789",
+          "description" : "GS1 element string"
+        },
+        "disposition" : {
+          "type" : "string",
+          "example" : "urn:epcglobal:cbv:disp:sellable_accessible",
+		  "default": "urn:epcglobal:cbv:disp:sellable_accessible",
+          "description" : "Disposition"
+        },
+        "biz_location" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store or sublocation"
+        },
+        "read_point" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of readpoint (optional, will be equal to 'biz_location' if omitted)"
+        },
+        "timestamp" : {
+          "type" : "string",
+		  "format" : "date-time",
+          "example" : "2018-07-13T10:35:26Z",
+          "description" : "ISO8601 representation of the date/time the item was returned"
+        },
+        "recorded_timestamp" : {
+          "type" : "string",
+		  "format" : "date-time",
+          "example" : "2018-07-13T10:35:26Z",
+          "description" : "ISO8601 representation of the date/time the transaction was recorded"
+        }  
+      }
+	}	
   }
 }
