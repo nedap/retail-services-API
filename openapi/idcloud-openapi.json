@@ -4282,7 +4282,7 @@
           "type" : "string",
 		  "description": "EPC formatted as pure identity URI"
         },
-        "bizLocation" : {
+        "biz_location" : {
           "type" : "string",
 		  "description": "Location identifier of the last known location of the item"
         },
