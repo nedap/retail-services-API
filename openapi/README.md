@@ -1,11 +1,17 @@
 Release notes
 =============
 
+## 20181204
+* Added Workflow APIs.
+* Added Retrieve RFID count with SGTINs endpoint.
+* Object _Article_ contains new fields: sku_code and option_code.
+* Approved difference list APIs contain extra fields: remarks, ignored_gtin_quantity and differnce_value.
+
 ## 20180713
-* Added Transaction APIs
-* Added KPI APIs
-* Added EPC state API
-* Added Refill API
+* Added Transaction APIs.
+* Added KPI APIs.
+* Added EPC state API.
+* Added Refill API.
 
 ## 20170530
 * Added example Gradle build file for the Java Examples project.

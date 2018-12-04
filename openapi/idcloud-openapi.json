@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "!D Cloud is an RFID integration platform for retail stores. While we provide core functionality for retail\n                                        companies, a lot of functionality can be added or extended by 3rd party developers. We encourage you to do so!",
-    "version" : "20180713",
+    "version" : "20181204",
     "title" : "!D Cloud API",
     "contact" : {
       "url" : "https://developer.nedap-idcloud.com/",
@@ -33,88 +33,18 @@
   }, {
     "name" : "Shipment"
   }, {
-    "name" : "Transaction"
-  }, {
     "name" : "Workflow"
   }, {
     "name" : "Kpi"
   }, {
     "name" : "Organization"
+  }, {
+    "name" : "Webhooks"
+  }, {
+    "name" : "Transaction"
   } ],
   "schemes" : [ "https" ],
   "paths" : {
-    "/transaction/v1/sell" : {
-      "post" : {
-        "tags" : [ "Transaction" ],
-        "summary" : "Mark an item as sold",
-        "description" : "Mark an item as sold to disable EAS alarms and update stock status.",
-        "operationId" : "sellItem",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "body",
-          "description" : "Information about the item and its new state, exactly one of 'epc_uri', 'epc_hex' or 'gs1_elementstring' should be supplied",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/SellRequest"
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "Success"
-          },
-          "400" : {
-            "description" : "Bad request"
-          },
-          "403" : {
-            "description" : "Access denied"
-          },
-          "500" : {
-            "description" : "Internal server error"
-          }
-		},
-        "security" : [ {
-          "auth" : [ ]
-        } ]
-      },
-      "x-gelato-group" : "Transaction API"
-    },
-    "/transaction/v1/return" : {
-      "post" : {
-        "tags" : [ "Transaction" ],
-        "summary" : "Marks an item as returned",
-        "description" : "Mark an item as returned to enable EAS alarms and update stock status.",
-        "operationId" : "returnItem",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "body",
-          "description" : "Information about the item and its new state, exactly one of 'epc_uri', 'epc_hex' or 'gs1_elementstring' should be supplied",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/ReturnRequest"
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "Success"
-          },
-          "400" : {
-            "description" : "Bad request"
-          },
-          "403" : {
-            "description" : "Access denied"
-          },
-          "500" : {
-            "description" : "Internal server error"
-          }
-		},
-        "security" : [ {
-          "auth" : [ ]
-        } ]
-      },
-      "x-gelato-group" : "Transaction API"
-    },
     "/approved_difference_list/v1/export" : {
       "get" : {
         "tags" : [ "ApprovedDifferenceList" ],
@@ -609,8 +539,11 @@
           "400" : {
             "description" : "Required field missing: location"
           },
+          "404" : {
+            "description" : "No RFID count for specified time"
+          },
           "412" : {
-            "description" : "No RFID count for location."
+            "description" : "No RFID count for location"
           }
         },
         "security" : [ {
@@ -665,8 +598,11 @@
           "400" : {
             "description" : "Required field missing: location."
           },
+          "404" : {
+            "description" : "No RFID count for specified time"
+          },
           "412" : {
-            "description" : "No RFID count for location."
+            "description" : "No RFID count for location"
           }
         },
         "security" : [ {
@@ -679,7 +615,7 @@
       "post" : {
         "tags" : [ "Epcis" ],
         "summary" : "Query EPCIS events",
-        "description" : "Queries and retrieves EPCIS event(s) that match the criteria specified in the query parameters.",
+        "description" : "Queries and retrieves EPCIS event(s) that match the criteria specified in the query parameters. When GE_event_time and LT_event_time is omitted, only the last 2 months will be retrieved. When only one of the eventtime parameters is used, a default interval of 2 months will be used when applicable.",
         "operationId" : "queryEpcisEvents",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -1660,6 +1596,40 @@
       },
       "x-gelato-group" : "RFID Count API"
     },
+    "/rfid_count/v1/retrieve_sgtins" : {
+      "get" : {
+        "tags" : [ "RfidCount" ],
+        "summary" : "Retrieve sgtins",
+        "description" : "Retrieves an RFID count with sgtin's by id.",
+        "operationId" : "retrieveRfidCountSgtins",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "Identifier of the RFID count",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/RfidCount"
+            }
+          },
+          "400" : {
+            "description" : "Required field missing: id."
+          },
+          "404" : {
+            "description" : "RFID count could not be found."
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "RFID Count API"
+    },
     "/rfid_stock/v1/retrieve" : {
       "get" : {
         "tags" : [ "RfidStock" ],
@@ -1910,7 +1880,7 @@
         }, {
           "name" : "status",
           "in" : "query",
-          "description" : "Status of the shipment.",
+          "description" : "Status of the shipment. When omitted, the default value 'INTRANSIT' will be used",
           "required" : false,
           "type" : "string",
           "default" : "INTRANSIT",
@@ -1975,6 +1945,311 @@
         } ]
       },
       "x-gelato-group" : "Shipment API"
+    },
+    "/shipment/v1/update_export_status" : {
+      "post" : {
+        "tags" : [ "Shipment" ],
+        "summary" : "Update shipment export status",
+        "description" : "",
+        "operationId" : "updateShipmentExportStatus",
+        "parameters" : [ {
+          "name" : "parent_id",
+          "in" : "query",
+          "description" : "Parent identifier of a shipment.",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "urn:epc:id:sscc:0614141.1234567890"
+        }, {
+          "name" : "export_status",
+          "in" : "query",
+          "description" : "New export status of the shipment.",
+          "required" : true,
+          "type" : "string",
+          "enum" : [ "NOT_EXPORTED", "EXPORTED", "ERROR" ],
+          "x-example" : "NOT_EXPORTED"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Shipment API"
+    },
+    "/transaction/v2/return" : {
+      "post" : {
+        "tags" : [ "Transaction" ],
+        "summary" : "Mark items as returned",
+        "description" : "Mark items as returned to enable EAS alarms and update stock status.",
+        "operationId" : "returnItem",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Information about the items and their new state",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ReturnRequest"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "403" : {
+            "description" : "Access denied"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Transaction API"
+    },
+    "/transaction/v2/sell" : {
+      "post" : {
+        "tags" : [ "Transaction" ],
+        "summary" : "Mark items as sold.",
+        "description" : "Mark items as sold to disable EAS alarms and update stock status.",
+        "operationId" : "sellItem",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Information about the items and their new state",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SellRequest"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "403" : {
+            "description" : "Access denied"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Transaction API"
+    },
+    "/webhook/v1/create_or_replace" : {
+      "post" : {
+        "tags" : [ "Webhooks" ],
+        "summary" : "Create webhook subscription.",
+        "operationId" : "createWebhookSubscription",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "subscription",
+          "description" : "A subscription that should be created or replaced.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Subscription"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          }
+        }
+      },
+      "x-gelato-group" : "Webhook API"
+    },
+    "/webhook/v1/delete" : {
+      "delete" : {
+        "tags" : [ "Webhooks" ],
+        "summary" : "Delete webhook subscription.",
+        "operationId" : "deleteWebhookSubscription",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "Identifier of Subscription to be deleted.",
+          "required" : true,
+          "type" : "string",
+          "format" : "uuid",
+          "x-example" : "a0fedec8-b730-11e8-96f8-529269fb1459"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Bad request"
+          }
+        }
+      },
+      "x-gelato-group" : "Webhook API"
+    },
+    "/webhook/v1/list" : {
+      "get" : {
+        "tags" : [ "Webhooks" ],
+        "summary" : "Return list of webhook subscriptions.",
+        "operationId" : "listWebhookSubscriptions",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Subscription"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Webhook API"
+    },
+    "/webhook/v1/list_deliveries" : {
+      "get" : {
+        "tags" : [ "Webhooks" ],
+        "summary" : "Return list of webhook deliveries (ordered by creation timestamp descending).",
+        "operationId" : "retrieveWebhookDeliveries",
+        "parameters" : [ {
+          "name" : "subscription_id",
+          "in" : "query",
+          "description" : "Identifier of subscription to retrieve webhook deliveries for.",
+          "required" : true,
+          "type" : "string",
+          "format" : "uuid",
+          "x-example" : "a0fedec8-b730-11e8-96f8-529269fb1459"
+        }, {
+          "name" : "from_delivery",
+          "in" : "query",
+          "description" : "Retrieve deliveries older than or same as from_delivery.",
+          "required" : false,
+          "type" : "string",
+          "format" : "uuid",
+          "x-example" : "a4bda38f4-b742-11e8-96f8-529269fb1459"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Identifier of Subscription to retrieve.",
+          "required" : false,
+          "type" : "integer",
+          "default" : 50
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/WebhookDeliverySummary"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Webhook API"
+    },
+    "/webhook/v1/retrieve" : {
+      "get" : {
+        "tags" : [ "Webhooks" ],
+        "summary" : "Retrieve webhook subscription by id.",
+        "operationId" : "retrieveWebhookSubscription",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "Identifier of Subscription to retrieve.",
+          "required" : true,
+          "type" : "string",
+          "format" : "uuid",
+          "x-example" : "a0fedec8-b730-11e8-96f8-529269fb1459"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Subscription"
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "404" : {
+            "description" : "When subscription could not be found"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Webhook API"
+    },
+    "/webhook/v1/retrieve_delivery" : {
+      "get" : {
+        "tags" : [ "Webhooks" ],
+        "summary" : "Retrieve webhook delivery by id.",
+        "operationId" : "retrieveWebhookDelivery",
+        "parameters" : [ {
+          "name" : "subscription_id",
+          "in" : "query",
+          "description" : "Identifier of subscription.",
+          "required" : true,
+          "type" : "string",
+          "format" : "uuid",
+          "x-example" : "a0fedec8-b730-11e8-96f8-529269fb1459"
+        }, {
+          "name" : "delivery",
+          "in" : "query",
+          "description" : "Identifier of webhook delivery to retrieve.",
+          "required" : true,
+          "type" : "string",
+          "format" : "uuid",
+          "x-example" : "a4bda38f4-b742-11e8-96f8-529269fb1459"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/WebhookDelivery"
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "404" : {
+            "description" : "When webhook delivery could not be found"
+          }
+        },
+        "security" : [ {
+          "auth" : [ ]
+        } ]
+      },
+      "x-gelato-group" : "Webhook API"
     },
     "/workflow/v2/capture" : {
       "post" : {
@@ -2181,9 +2456,22 @@
           "example" : 98.3,
           "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
         },
+        "ignored_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of GTINs that are ignored (not approved)"
+        },
+        "difference_value" : {
+          "description" : "Total monetary value of all approved differences",
+          "$ref" : "#/definitions/DifferenceValue"
+        },
         "grouping_by" : {
           "type" : "string",
           "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_quantity` and `rfid_quantity` fields in `gtin_differences` contains the quantity per GTIN. If `group_by` has value `code`, then `erp_quantity` and `rfid_quantity` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
+        },
+        "remarks" : {
+          "type" : "string",
+          "description" : "(Optional) Remarks field"
         },
         "approved_quantity" : {
           "type" : "array",
@@ -2318,9 +2606,22 @@
           "example" : 98.3,
           "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
         },
+        "ignored_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of GTINs that are ignored (not approved)"
+        },
+        "difference_value" : {
+          "description" : "Total monetary value of all approved differences",
+          "$ref" : "#/definitions/DifferenceValue"
+        },
         "grouping_by" : {
           "type" : "string",
           "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_quantity` and `rfid_quantity` fields in `gtin_differences` contains the quantity per GTIN. If `group_by` has value `code`, then `erp_quantity` and `rfid_quantity` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
+        },
+        "remarks" : {
+          "type" : "string",
+          "description" : "(Optional) Remarks field"
         },
         "erp_stock" : {
           "type" : "array",
@@ -2442,9 +2743,22 @@
           "example" : 98.3,
           "description" : "Accuracy relation between the ERP stock and RFID stock, according to the SMAPE definition."
         },
+        "ignored_gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of GTINs that are ignored (not approved)"
+        },
+        "difference_value" : {
+          "description" : "Total monetary value of all approved differences",
+          "$ref" : "#/definitions/DifferenceValue"
+        },
         "grouping_by" : {
           "type" : "string",
           "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_quantity` and `rfid_quantity` fields in `gtin_differences` contains the quantity per GTIN. If `group_by` has value `code`, then `erp_quantity` and `rfid_quantity` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
+        },
+        "remarks" : {
+          "type" : "string",
+          "description" : "(Optional) Remarks field"
         }
       }
     },
@@ -2487,7 +2801,7 @@
         "option" : {
           "type" : "string",
           "example" : "Shirt Awesome, Blue",
-          "description" : "Combination of name and color of an article. When omitted: option is automatically filled with name and color fields."
+          "description" : "Description of the option. The field option_code is used to group articles, refer to options, etc. while this field is shown in user interfaces to describe an option. When omitted: option is automatically filled with the value of the name and color fields."
         },
         "style" : {
           "type" : "string",
@@ -2527,6 +2841,16 @@
           "type" : "string",
           "example" : "Male, Female, Unisex",
           "description" : "Contains the gender. This is free format, but is intended to contain e.g. Male."
+        },
+        "sku_code" : {
+          "type" : "string",
+          "example" : "212345678912",
+          "description" : "Stock Keeping Unit code. When omitted: sku_code is automatically filled with \"GTIN-\" plus value of `gtin` field."
+        },
+        "option_code" : {
+          "type" : "string",
+          "example" : "712",
+          "description" : "Option code of the article. All articles within the same option_code should only differ in size. This field is used to refer to an option in APIs and group relevant articles. The option field is used to refer to an option in user interfaces, the option_code field is not shown in user interfaces. When omitted: option_code is automatically filled with the value of the option field."
         },
         "age_group" : {
           "type" : "string",
@@ -2803,6 +3127,27 @@
         "grouping_by" : {
           "type" : "string",
           "description" : "(Optional) Specifies how the articles are grouped. By default the `erp_stock` and `rfid_stock` fields contains the quantity per GTIN. If `group_by` has value `code`, then `erp_stock` and `rfid_stock` fields contains quantity per article-code. If the article master database contains 2 or more articles with identical article-code (but of course different GTIN), than only 1 GTIN will be randomly chosen from the set. Note that this feature is specifically designed for Celio."
+        }
+      }
+    },
+    "DifferenceValue" : {
+      "type" : "object",
+      "properties" : {
+        "amount" : {
+          "type" : "number",
+          "format" : "double",
+          "example" : 920.5,
+          "description" : "Total monetary value of all approved differences (can be negative)"
+        },
+        "currency" : {
+          "type" : "string",
+          "example" : "EUR",
+          "description" : "Currency of the difference value (ISO 4217 currency code)"
+        },
+        "region" : {
+          "type" : "string",
+          "example" : "EU",
+          "description" : "Region of the difference value (\"EU\", \"World\", or an ISO3166-1 country code)"
         }
       }
     },
@@ -4114,31 +4459,25 @@
     "Address" : {
       "type" : "object",
       "properties" : {
+        "address" : {
+          "type" : "string",
+          "example" : "Dam 4",
+          "description" : "Street name and house number."
+        },
+        "zipcode" : {
+          "type" : "string",
+          "example" : "1012 NP",
+          "description" : "ZIP code."
+        },
         "city" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "Amsterdam",
+          "description" : "Name of the city."
         },
-        "region" : {
-          "type" : "string"
-        },
-        "postalCode" : {
-          "type" : "string"
-        },
-        "countryCode" : {
-          "type" : "string"
-        },
-        "latitude" : {
-          "type" : "number",
-          "format" : "double"
-        },
-        "longitude" : {
-          "type" : "number",
-          "format" : "double"
-        },
-        "address_line_1" : {
-          "type" : "string"
-        },
-        "address_line_2" : {
-          "type" : "string"
+        "country_code" : {
+          "type" : "string",
+          "example" : "NL",
+          "description" : "ISO 3166-1 alpha-2 two letter country code."
         }
       }
     },
@@ -4225,31 +4564,228 @@
         }
       }
     },
+    "Subscription" : {
+      "type" : "object",
+      "required" : [ "event_type", "secret", "url" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "a0fedec8-b730-11e8-96f8-529269fb1459",
+          "description" : "Subscription identifier. Can be ommited when creating subscription."
+        },
+        "url" : {
+          "type" : "string",
+          "format" : "url",
+          "example" : "https://example.com/webhooks/receiver",
+          "description" : "HTTPS POST payloads are delivered to this URL. Note that only https scheme is supported."
+        },
+        "event_type" : {
+          "type" : "array",
+          "description" : "A list of event-types to receive (1 or more).",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "stock_count", "difference_list_approved", "shipment_received" ]
+          }
+        },
+        "secret" : {
+          "type" : "string",
+          "example" : "secret123",
+          "description" : "The secret is used for calculating HMAC hex digest. With that, the receiver can verify that the message originated from Nedap Retail."
+        },
+        "created_on" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Creation timestamp."
+        }
+      }
+    },
+    "RfidCount" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "2f60bac5-c4d7-4ca7-b666-79bdf9b780b7",
+          "description" : "Identifier of the RFID count."
+        },
+        "location" : {
+          "type" : "string",
+          "example" : "http://nedapretail.com/loc/store-1",
+          "description" : "Location identifier of the store or sublocation that the RFID count belongs to."
+        },
+        "event_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time of the RFID count."
+        },
+        "start_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date and time the RFID count started."
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 6253,
+          "description" : "Total quantity of items in the RFID count."
+        },
+        "gtin_quantity" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 1542,
+          "description" : "Total quantity of GTINs in the RFID count."
+        },
+        "in_use" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates whether the RFID count is used in a difference list. If it is used, the RFID count can not be deleted anymore.",
+          "default" : false
+        },
+        "client_ids" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "is_complete" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "Indicates whether the RFID count has been completed.",
+          "default" : false
+        },
+        "quantity_list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/GtinQuantity"
+          }
+        },
+        "sgtins" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      },
+      "description" : "Provides information about an RFID count."
+    },
+    "WebhookDeliverySummary" : {
+      "type" : "object",
+      "properties" : {
+        "delivery" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "4bda38f4-b742-11e8-96f8-529269fb1459",
+          "description" : "Identifies the delivery."
+        },
+        "created_on" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Creation timestamp."
+        },
+        "successful" : {
+          "type" : "boolean",
+          "description" : "Indicates if the webhook request was delivered successfully."
+        }
+      }
+    },
+    "WebhookDeliveryRequest" : {
+      "type" : "object",
+      "properties" : {
+        "subscription_id" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "a0fedec8-b730-11e8-96f8-529269fb1459"
+        },
+        "delivery" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "a4bda38f4-b742-11e8-96f8-529269fb1459"
+        },
+        "url" : {
+          "type" : "string",
+          "format" : "url",
+          "example" : "https://example.com/webhooks/receiver"
+        },
+        "payload" : {
+          "type" : "string",
+          "example" : "{\"location\":\"https://api.nedapretail.com/rfid_count/v1/retrieve_sgtins?id=abc\"}"
+        },
+        "headers" : {
+          "type" : "object",
+          "description" : "Request headers (content-type, X-Delivery, X-Hub-Signature, X-Event, etc.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "created_on" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      }
+    },
+    "WebhookDeliveryResponse" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "example" : 200,
+          "description" : "HTTP response status code. If there was no response (i.e. exception) than code contains negative value."
+        },
+        "message" : {
+          "type" : "string",
+          "example" : "OK",
+          "description" : "HTTP response message."
+        },
+        "headers" : {
+          "type" : "object",
+          "description" : "Response headers.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "WebhookDelivery" : {
+      "type" : "object",
+      "properties" : {
+        "request" : {
+          "$ref" : "#/definitions/WebhookDeliveryRequest"
+        },
+        "response" : {
+          "$ref" : "#/definitions/WebhookDeliveryResponse"
+        },
+        "processing_time" : {
+          "type" : "integer",
+          "example" : 84,
+          "description" : "Time it took to send the POST request in milliseconds."
+        },
+        "retry_count" : {
+          "type" : "integer",
+          "description" : "How often a failed webhook POST request has been retried."
+        }
+      }
+    },
     "SellRequest" : {
       "type" : "object",
-	  "description" : "One of epc_uri, epc_hex or gs1_elementstring should be supplied, if multiple elements are set the request will fail",
-	  "required" : ["biz_location", "timestamp"],
+      "required" : [ "biz_location", "identifiers", "identifiers_type", "timestamp" ],
       "properties" : {
-        "epc_uri" : {
-          "type" : "string",
-          "example" : "urn:epc:id:sgtin:0614141.812345.6789",
-          "description" : "EPC pure identity URI"
+        "identifiers" : {
+          "type" : "array",
+          "description" : "Identifier of the item that is to be marked sold. The identifiers_type field determines how this value is interpreted",
+          "items" : {
+            "type" : "string"
+          }
         },
-        "epc_hex" : {
+        "identifiers_type" : {
           "type" : "string",
-          "example" : "3074257bf7194e4000001a85",
-          "description" : "EPC (hexadecimal)"
-        },
-        "gs1_elementstring" : {
-          "type" : "string",
-          "example" : "(01)80614141123458(21)6789",
-          "description" : "GS1 element string"
+          "description" : "Determines how the identifiers values should be interpreted",
+          "enum" : [ "epc_uri", "epc_hex", "gs1_elementstring" ]
         },
         "disposition" : {
           "type" : "string",
           "example" : "urn:epcglobal:cbv:disp:retail_sold",
-		  "default": "urn:epcglobal:cbv:disp:retail_sold",
-          "description" : "Disposition"
+          "description" : "Disposition",
+          "default" : "urn:epcglobal:cbv:disp:retail_sold"
         },
         "biz_location" : {
           "type" : "string",
@@ -4263,19 +4799,20 @@
         },
         "timestamp" : {
           "type" : "string",
-		  "format" : "date-time",
+          "format" : "date-time",
           "example" : "2018-07-13T10:35:26Z",
           "description" : "ISO8601 representation of the date/time the item was sold"
         },
         "recorded_timestamp" : {
           "type" : "string",
-		  "format" : "date-time",
+          "format" : "date-time",
           "example" : "2018-07-13T10:35:26Z",
           "description" : "ISO8601 representation of the date/time the transaction was recorded"
         }
-      }
-	},
-     "EpcStateResponse" : {
+      },
+      "description" : ""
+    },
+    "EpcStateResponse" : {
       "type" : "object",
       "properties" : {
         "epc" : {
@@ -4297,31 +4834,27 @@
         }
       }
     },
-   "ReturnRequest" : {
+    "ReturnRequest" : {
       "type" : "object",
-	  "description" : "One of epc_uri, epc_hex or gs1_elementstring should be supplied, if multiple elements are set the request will fail",
-	  "required" : ["biz_location", "timestamp"],
+      "required" : [ "biz_location", "identifiers", "identifiers_type", "timestamp" ],
       "properties" : {
-        "epc_uri" : {
-          "type" : "string",
-          "example" : "urn:epc:id:sgtin:0614141.812345.6789",
-          "description" : "EPC pure identity URI"
+        "identifiers" : {
+          "type" : "array",
+          "description" : "Identifier of the item that is to be marked returned to store. The identifiers_type field determines how this value is interpreted",
+          "items" : {
+            "type" : "string"
+          }
         },
-        "epc_hex" : {
+        "identifiers_type" : {
           "type" : "string",
-          "example" : "3074257bf7194e4000001a85",
-          "description" : "EPC (hexadecimal)"
-        },
-        "gs1_elementstring" : {
-          "type" : "string",
-          "example" : "(01)80614141123458(21)6789",
-          "description" : "GS1 element string"
+          "description" : "Determines how the identifiers values should be interpreted",
+          "enum" : [ "epc_uri", "epc_hex", "gs1_elementstring" ]
         },
         "disposition" : {
           "type" : "string",
           "example" : "urn:epcglobal:cbv:disp:sellable_accessible",
-		  "default": "urn:epcglobal:cbv:disp:sellable_accessible",
-          "description" : "Disposition"
+          "description" : "Disposition",
+          "default" : "urn:epcglobal:cbv:disp:sellable_accessible"
         },
         "biz_location" : {
           "type" : "string",
@@ -4335,17 +4868,18 @@
         },
         "timestamp" : {
           "type" : "string",
-		  "format" : "date-time",
+          "format" : "date-time",
           "example" : "2018-07-13T10:35:26Z",
-          "description" : "ISO8601 representation of the date/time the item was returned"
+          "description" : "ISO8601 representation of the date/time the item was sold"
         },
         "recorded_timestamp" : {
           "type" : "string",
-		  "format" : "date-time",
+          "format" : "date-time",
           "example" : "2018-07-13T10:35:26Z",
           "description" : "ISO8601 representation of the date/time the transaction was recorded"
-        }  
-      }
-	}	
+        }
+      },
+      "description" : ""
+    }
   }
 }
