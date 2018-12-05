@@ -17,12 +17,12 @@ import static com.nedap.retail.services.examples.PrintHelper.*;
 
 import org.joda.time.DateTime;
 
-public class EpcisExample {
+class EpcisExample {
 
     private EpcisExample() {
     }
 
-    public static void runExample(final ApiClient client) {
+    static void runExample(final ApiClient client) {
         System.out.println(NEW_LINE + "*** EPCIS API example ***");
 
         EpcisApi api = new EpcisApi(client);

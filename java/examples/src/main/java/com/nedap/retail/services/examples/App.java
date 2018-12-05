@@ -3,7 +3,6 @@ package com.nedap.retail.services.examples;
 import com.nedap.retail.client.*;
 import org.apache.commons.cli.*;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import static com.nedap.retail.services.examples.PrintHelper.NEW_LINE;
@@ -20,16 +19,16 @@ public class App {
     private static final String DEFAULT_URL_API = "https://api.nedapretail.com";
     private final ApiClient apiClient;
 
-    public App(final String urlApi, final String accessToken) {
+    private App(final String urlApi, final String accessToken) {
         apiClient = createApiClient(urlApi, accessToken);
     }
 
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
 
         final Options options = createCliOption();
         try {
             // Parse command-line parameters.
-            final CommandLineParser parser = new BasicParser();
+            final CommandLineParser parser = new DefaultParser();
             final CommandLine cmd = parser.parse(options, args);
 
             // Get command-line parameters.
@@ -40,7 +39,6 @@ public class App {
             final App app = new App(urlApi, accessToken);
             app.loop();
             System.exit(EXIT_CODE_OK);
-
         } catch (final ParseException ex) {
             System.out.println(ex.getMessage());
             // Automatically generate the help statement.
@@ -53,16 +51,16 @@ public class App {
     @SuppressWarnings("static-access")
     private static Options createCliOption() {
         final Options options = new Options();
-        options.addOption(OptionBuilder.isRequired().hasArg().withArgName(OPTION_TOKEN).withDescription("OAuth 2.0 access token")
-                .create(OPTION_TOKEN));
-        options.addOption(OptionBuilder.hasArg().withArgName(OPTION_URL_API)
-                .withDescription("(Optional) Default is " + DEFAULT_URL_API).create(OPTION_URL_API));
+
+        options.addOption(Option.builder().required().hasArg().longOpt(OPTION_TOKEN).desc("OAuth 2.0 access token")
+                .build());
+        options.addOption(Option.builder().hasArg().longOpt(OPTION_URL_API)
+                .desc("(Optional) Default is " + DEFAULT_URL_API).build());
         return options;
     }
 
-    private void loop() throws IOException {
-        try {
-            final Scanner scanner = new Scanner(System.in);
+    private void loop() {
+        try (final Scanner scanner = new Scanner(System.in)) {
             boolean quit = false;
 
             while (!quit) {
@@ -94,10 +92,6 @@ public class App {
                     System.err.println(ex.getMessage());
                 }
             }
-            scanner.close();
-
-        } finally {
-
         }
     }
 
@@ -116,7 +110,7 @@ public class App {
         System.out.println(sb);
     }
 
-    public static ApiClient createApiClient(final String apiUrl, final String accessToken) {
+    private static ApiClient createApiClient(final String apiUrl, final String accessToken) {
         final ApiClient apiClient = new ApiClient();
         apiClient.setBasePath(apiUrl);
         apiClient.setAccessToken(accessToken);

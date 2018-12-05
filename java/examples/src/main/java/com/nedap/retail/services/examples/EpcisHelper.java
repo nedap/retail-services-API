@@ -9,12 +9,12 @@ import java.util.UUID;
 import com.nedap.retail.client.model.EpcisEvent;
 import org.joda.time.DateTime;
 
-public class EpcisHelper {
+class EpcisHelper {
 
     private EpcisHelper() {
     }
 
-    public static List<EpcisEvent> createEvents(final String locationId) {
+    static List<EpcisEvent> createEvents(final String locationId) {
         final List<EpcisEvent> events = new ArrayList<>();
         events.add(createEpcisEvent1(locationId));
         events.add(createEpcisEvent2(locationId));
@@ -69,7 +69,7 @@ public class EpcisHelper {
         return epcList;
     }
 
-    public static String printCaptureEpcisEvents(final List<EpcisEvent> events) {
+    static String printCaptureEpcisEvents(final List<EpcisEvent> events) {
         final StringBuilder sb = new StringBuilder("Captured EPCIS object events with ids:");
         for (int i = 0; i < events.size(); i++) {
             sb.append(NEW_LINE).append(TAB);

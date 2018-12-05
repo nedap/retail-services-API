@@ -22,12 +22,12 @@ import com.nedap.retail.client.api.ArticleApi;
 import com.nedap.retail.client.model.*;
 import org.apache.commons.collections4.CollectionUtils;
 
-public class ArticleExample {
+class ArticleExample {
 
     private ArticleExample() {
     }
 
-    public static void runExample(final ApiClient client) {
+    static void runExample(final ApiClient client) {
         System.out.println(NEW_LINE + "*** Article API example ***");
 
         ArticleApi api = new ArticleApi(client);
