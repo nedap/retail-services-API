@@ -14,12 +14,12 @@ import java.util.List;
 
 import static com.nedap.retail.services.examples.PrintHelper.*;
 
-public class ErpExample {
+class ErpExample {
 
     private ErpExample() {
     }
 
-    public static void runExample(final ApiClient client) {
+    static void runExample(final ApiClient client) {
         System.out.println(NEW_LINE + "*** ERP API example ***");
 
         final String locationId = "http://nedapretail.com/loc/testing";
@@ -76,7 +76,6 @@ public class ErpExample {
         sb.append(NEW_LINE).append(TAB).append("Excluded quantity: ").append(stock.getExcludedQuantity());
         sb.append(NEW_LINE).append(TAB).append("Gtin quantity: ").append(stock.getGtinQuantity());
         sb.append(NEW_LINE).append(TAB).append("Excluded gtin quantity: ").append(stock.getExcludedGtinQuantity());
-        sb.append(NEW_LINE).append(TAB).append("In use: ").append(stock.getInUse());
         if (!CollectionUtils.isEmpty(stock.getQuantityList())) {
             sb.append(NEW_LINE).append(TAB).append("Quantity list:");
             sb.append(printQuantityList(stock.getQuantityList()));
@@ -104,7 +103,6 @@ public class ErpExample {
         stock.excludedQuantity(summary.getExcludedQuantity());
         stock.gtinQuantity(summary.getGtinQuantity());
         stock.excludedGtinQuantity(summary.getExcludedGtinQuantity());
-        stock.inUse(summary.getInUse());
         return stock;
     }
 

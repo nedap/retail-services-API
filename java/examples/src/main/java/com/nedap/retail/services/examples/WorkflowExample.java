@@ -13,14 +13,14 @@ import static com.nedap.retail.services.examples.EpcisHelper.createEvents;
 import static com.nedap.retail.services.examples.EpcisHelper.printCaptureEpcisEvents;
 import static com.nedap.retail.services.examples.PrintHelper.*;
 
-public class WorkflowExample {
+class WorkflowExample {
 
     private static List<String> MESSAGE_IDS = new ArrayList<>();
 
     private WorkflowExample() {
     }
 
-    public static void runExample(final ApiClient client) {
+    static void runExample(final ApiClient client) {
         System.out.println(NEW_LINE + "*** Workflow API example ***");
 
         final String locationId = "http://nedapretail.com/loc/testing";
@@ -76,7 +76,7 @@ public class WorkflowExample {
         for (final EpcisEvent epcisEvent : events) {
             counter += epcisEvent.getEpcList().size();
         }
-        return Long.valueOf(counter);
+        return counter;
     }
 
     private static String printWorkflow(final WorkflowEvent workflow) {
