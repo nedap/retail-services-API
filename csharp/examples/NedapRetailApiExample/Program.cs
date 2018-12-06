@@ -12,20 +12,16 @@ namespace Nedap.Retail.Api.Example
             string accessToken = System.Configuration.ConfigurationManager.AppSettings.Get("AccessToken");
             string apiUrl = System.Configuration.ConfigurationManager.AppSettings.Get("ApiUrl");
             
-            if (apiUrl == null || accessToken == null)
+            if (String.IsNullOrEmpty(apiUrl) || String.IsNullOrEmpty(accessToken))
             {
-                Console.WriteLine("Invalid configuration!");
+                Console.WriteLine("Invalid configuration, please add configuration in the NedapRetailApiExample.exe.config file!");
                 Console.ReadKey();
                 return;
             }
 
             try {
-              
                 Configuration configuration = new Configuration(new ApiClient(apiUrl));
                 configuration.AccessToken = accessToken;
-
-                // by default use production server, uncomment this line to use test server
-                //client.SetApiBaseUrl(new Uri("https://api-test.nedapretail.com/"));
 
                 Console.WriteLine("Nedap Retail !D Cloud API examples");
                 Console.WriteLine("-------------------------");

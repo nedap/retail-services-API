@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export TERM=xterm
 rm -rf target &> /dev/null
 sh client/bin/generate.sh
 (cd target/generated-sources && exec sh build.sh)
