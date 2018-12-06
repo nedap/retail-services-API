@@ -26,7 +26,8 @@ namespace Nedap.Retail.Api.Example
                 // query
                 Console.WriteLine("------------- Query epcis events");
                 List<ParameterObject> parameters = new List<ParameterObject>();
-                parameters.Add(new ParameterObject("GE_event_time", null, "2017-04-14T11:34:21.474Z", null));
+                parameters.Add(new ParameterObject("GE_event_time", null, DateTime.Now.AddMinutes(-5).ToString("o"), null));
+                parameters.Add(new ParameterObject("event_type", null, "object_event", null));
                 EpcisQueryParameters queryParameters = new EpcisQueryParameters(parameters);
 
                 List<EpcisEvent> queryResult = epcisApi.QueryEpcisEvents(queryParameters);
@@ -59,6 +60,7 @@ namespace Nedap.Retail.Api.Example
                 Console.WriteLine(e.ToString());
             }
 
+            Console.WriteLine("Press a key to continue...");
             Console.ReadKey();
         }
 
@@ -71,8 +73,7 @@ namespace Nedap.Retail.Api.Example
             // "required" : [ "action", "event_time", "event_time_zone_offset", "type" ],
             events.Add(new EpcisEvent(Type: EpcisEvent.TypeEnum.Objectevent, Action: EpcisEvent.ActionEnum.OBSERVE, EventTime: DateTime.Now, EventTimeZoneOffset: "+01:00")
             {
-                Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a66").ToString(),
-                RecordTime = DateTime.Now,
+                Id = Guid.NewGuid().ToString(),
                 EpcList = new List<string>()
                 {
                     "urn:epc:id:sgtin:1234567.000246.0001",
@@ -90,8 +91,7 @@ namespace Nedap.Retail.Api.Example
             });
             events.Add(new EpcisEvent(Type: EpcisEvent.TypeEnum.Objectevent, Action: EpcisEvent.ActionEnum.OBSERVE, EventTime: DateTime.Now, EventTimeZoneOffset: "+01:00")
             {
-                Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a67").ToString(),
-                RecordTime = DateTime.Now,
+                Id = Guid.NewGuid().ToString(),
                 EpcList = new List<string>()
                 {
                     "urn:epc:id:sgtin:1234567.000246.0005",
@@ -109,8 +109,7 @@ namespace Nedap.Retail.Api.Example
             });
             events.Add(new EpcisEvent(Type: EpcisEvent.TypeEnum.Objectevent, Action: EpcisEvent.ActionEnum.OBSERVE, EventTime: DateTime.Now, EventTimeZoneOffset: "+01:00")
             {
-                Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a68").ToString(),
-                RecordTime = DateTime.Now,
+                Id = Guid.NewGuid().ToString(),
                 EpcList = new List<string>()
                 {
                     "urn:epc:id:sgtin:1234567.000246.0009",
@@ -128,8 +127,7 @@ namespace Nedap.Retail.Api.Example
             });
             events.Add(new EpcisEvent(Type: EpcisEvent.TypeEnum.Objectevent, Action: EpcisEvent.ActionEnum.OBSERVE, EventTime: DateTime.Now, EventTimeZoneOffset: "+01:00")
             {
-                Id = new Guid("12f03260-c56f-11e3-9c1a-0800200c9a69").ToString(),
-                RecordTime = DateTime.Now,
+                Id = Guid.NewGuid().ToString(),
                 EpcList = new List<string>()
                 {
                     "urn:epc:id:sgtin:1234567.000246.0013",

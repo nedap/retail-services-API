@@ -10,7 +10,7 @@ namespace Nedap.Retail.Api.Example
     {
         public static void RunExample(Configuration confgiration)
         {
-            string location = "http://location-testing";
+            string location = "http://nedapretail.com/loc/testing";
 
             WorkflowEvent workflow = new WorkflowEvent("cycle_count_finished", location, DateTime.Now, null, 10, new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
 
@@ -27,6 +27,7 @@ namespace Nedap.Retail.Api.Example
                 Console.WriteLine(e);
             }
 
+            Console.WriteLine("Press a key to continue...");
             Console.ReadKey();
         }
     }

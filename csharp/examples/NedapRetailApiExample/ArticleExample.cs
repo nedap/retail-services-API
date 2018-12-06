@@ -32,6 +32,7 @@ namespace Nedap.Retail.Api.Example
                 Console.WriteLine(e);
         }
 
+        Console.WriteLine("Press a key to continue...");
         Console.ReadKey();
     }
 

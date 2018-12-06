@@ -10,7 +10,7 @@ namespace Nedap.Retail.Api.Example
     {
         public static void RunExample(Configuration configuration)
         {
-            string location = "http://location-testing";
+            string location = "http://nedapretail.com/loc/testing";
 
             List<GtinQuantity> qList = new List<GtinQuantity>();
             qList.Add(new GtinQuantity("12345678901231", 23));
@@ -56,6 +56,7 @@ namespace Nedap.Retail.Api.Example
                 Console.WriteLine(e);
             }
 
+            Console.WriteLine("Press a key to continue...");
             Console.ReadKey();
         }
     }
