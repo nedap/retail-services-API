@@ -2,7 +2,7 @@ Release notes
 =============
 
 ## 20181204
-* Added Workflow APIs.
+* Added Webhook APIs.
 * Added Retrieve RFID count with SGTINs endpoint.
 * Object _Article_ contains new fields: sku_code and option_code.
 * Approved difference list APIs contain extra fields: remarks, ignored_gtin_quantity and differnce_value.
